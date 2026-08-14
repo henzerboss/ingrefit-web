@@ -1,0 +1,133 @@
+{
+  "metadata": {
+    "title": "IngreFit — AI Food Scanner for Your Goals",
+    "description": "Scan a barcode or food label and get a factual, personalized 10-point fit score for your nutrition goals."
+  },
+  "nav": {
+    "how": "How it works",
+    "principle": "Facts first",
+    "pricing": "Pricing",
+    "cta": "Get the app"
+  },
+  "hero": {
+    "eyebrow": "YOUR PERSONAL FOOD COMPASS",
+    "title": "A food scanner that asks one useful question:",
+    "accent": "does this fit you?",
+    "subtitle": "Scan a barcode. IngreFit reads available product facts and explains them for your goals on a clear 10-point scale.",
+    "cta": "Join the early access list",
+    "secondary": "See how it works",
+    "proof1": "Barcode + label scan",
+    "proof2": "Personal goals",
+    "proof3": "No invented facts"
+  },
+  "demo": {
+    "scanning": "Product found",
+    "product": "Greek yogurt, natural",
+    "brand": "Example label · 400 g",
+    "scoreLabel": "Your fit score",
+    "verdict": "Great fit",
+    "signal1": "High protein density",
+    "signal2": "Low added complexity",
+    "signal3": "Milk is declared",
+    "source": "Source: declared package facts"
+  },
+  "how": {
+    "eyebrow": "THREE EVIDENCE-FIRST STEPS",
+    "title": "Point, read, understand",
+    "subtitle": "The app uses the fastest reliable source first, then asks for evidence when the database is incomplete.",
+    "step1Title": "Scan the barcode",
+    "step1Body": "We check Open Food Facts for identity, ingredients, nutrition, allergens, Nutri-Score and NOVA data.",
+    "step2Title": "Add label photos if needed",
+    "step2Body": "If the product is missing or incomplete, photograph the front, ingredients and nutrition table.",
+    "step3Title": "Get your score",
+    "step3Body": "A deterministic 1–10 score uses only available facts and the goals you selected. AI explains the result in your device language."
+  },
+  "principle": {
+    "eyebrow": "THE INGREFIT RULE",
+    "title": "AI reads and explains. It never fills the blanks.",
+    "body": "Unknown stays unknown. Nutrition values are never guessed. Allergens are never marked absent just because the field is empty. The score and its evidence remain visible together.",
+    "fact1Title": "Facts are separated from commentary",
+    "fact1Body": "Open Food Facts or visible package text creates the factual layer. AI cannot add to it.",
+    "fact2Title": "The number is reproducible",
+    "fact2Body": "Goal rules calculate the score before AI writes a single sentence.",
+    "fact3Title": "Evidence follows every adjustment",
+    "fact3Body": "You see the exact declared number, classification or ingredient behind each plus or minus."
+  },
+  "personal": {
+    "eyebrow": "ONE PRODUCT, DIFFERENT PEOPLE",
+    "title": "Personal beats generic",
+    "body": "The same cereal may score well for a high-fiber goal and poorly for someone limiting sugar. Your goals, eating pattern, allergens and avoid list change the explanation — never the underlying facts.",
+    "goal1": "Less sugar",
+    "goal2": "More protein",
+    "goal3": "Gluten-free",
+    "goal4": "Less processed"
+  },
+  "features": {
+    "title": "Made for the supermarket aisle",
+    "f1Title": "Fast barcode lookup",
+    "f1Body": "Open Food Facts first, with backend caching that respects public API limits.",
+    "f2Title": "Label fallback",
+    "f2Body": "Three guided photos give AI only the evidence it needs to transcribe the package.",
+    "f3Title": "Editable goals",
+    "f3Body": "Update your goals, diet and flagged ingredients any time from Profile.",
+    "f4Title": "Local history",
+    "f4Body": "Recent product results stay on your device for quick comparison.",
+    "f5Title": "English and Russian UI",
+    "f5Body": "The interface follows the device; explanations request the full device language tag.",
+    "f6Title": "Transparent limits",
+    "f6Body": "See today’s used and remaining analyses before you scan."
+  },
+  "pricing": {
+    "eyebrow": "SIMPLE DAILY LIMITS",
+    "title": "Start free. Scan more when you need it.",
+    "free": "Free",
+    "premium": "Premium",
+    "perDay": "product analyses / day",
+    "freeFeature1": "5 personalized analyses every day",
+    "freeFeature2": "Barcode and label scanning",
+    "freeFeature3": "Goals, warnings and local history",
+    "premiumFeature1": "50 personalized analyses every day",
+    "premiumFeature2": "Same evidence-first quality",
+    "premiumFeature3": "Built for frequent shopping and comparisons",
+    "freeCta": "Start with Free",
+    "premiumCta": "Choose Premium",
+    "note": "Limits reset daily. Store pricing will be displayed in the app before purchase."
+  },
+  "cta": {
+    "title": "Read the package. Understand the choice.",
+    "body": "IngreFit is being prepared for iOS and Android. Leave your email to hear when early access opens.",
+    "placeholder": "you@example.com",
+    "button": "Notify me",
+    "privacy": "No spam. Product updates only."
+  },
+  "footer": {
+    "tagline": "Personal food clarity, grounded in visible facts.",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "disclaimer": "IngreFit provides general information, not medical advice. Always verify the package for allergies and medical conditions.",
+    "off": "Product data may come from Open Food Facts, a crowdsourced database whose data is not guaranteed to be complete or accurate."
+  },
+  "legal": {
+    "privacyTitle": "Privacy Policy",
+    "privacyIntro": "This starter policy describes the intended IngreFit data flow. Replace the controller details and have counsel review it before release.",
+    "privacyDataTitle": "Data we process",
+    "privacyDataBody": "Goals, diet preferences and scan history are stored locally by default. The server receives an installation identifier, selected goals, a device language tag and either a barcode or package images required for the requested analysis.",
+    "privacyImagesTitle": "Package images",
+    "privacyImagesBody": "Label images are sent to the configured AI provider only to extract visible product facts and produce the requested result. Define and disclose your production retention period before launch.",
+    "privacyThirdTitle": "Service providers",
+    "privacyThirdBody": "The backend may contact Open Food Facts, Google Gemini, hosting, quota storage and billing providers. Their terms and privacy practices also apply.",
+    "privacyRightsTitle": "Your choices",
+    "privacyRightsBody": "Users can remove local history by clearing application data. Add account deletion and data-request contact workflows if user accounts are introduced.",
+    "termsTitle": "Terms of Use",
+    "termsIntro": "These starter terms must be adapted to your company, billing terms and launch countries before publication.",
+    "termsInfoTitle": "Informational use",
+    "termsInfoBody": "Scores and explanations are general product information and are not medical, dietary or professional advice. Users must verify product packaging, especially for allergies or health conditions.",
+    "termsDataTitle": "Third-party data",
+    "termsDataBody": "Open Food Facts is crowdsourced and may be incomplete, outdated or inaccurate. Product packaging is the controlling source.",
+    "termsBillingTitle": "Plans and limits",
+    "termsBillingBody": "Free includes up to 5 completed product analyses per day; Premium includes up to 50. Final store prices, renewal, cancellation and refund terms must be shown before purchase.",
+    "termsAcceptTitle": "Acceptable use",
+    "termsAcceptBody": "Do not automate abusive traffic, evade quotas, probe protected routes, upload unrelated or unlawful images, or interfere with the service.",
+    "back": "Back to IngreFit"
+  }
+}
