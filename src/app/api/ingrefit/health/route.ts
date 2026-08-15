@@ -7,7 +7,9 @@ export function GET() {
     configured: {
       gemini: Boolean(process.env.GEMINI_API_KEY),
       openFoodFactsUserAgent: Boolean(process.env.OPEN_FOOD_FACTS_USER_AGENT),
-      durableQuota: Boolean(process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN),
+      revenueCat: Boolean(process.env.REVENUECAT_SECRET_API_KEY),
+      expoGoPreview: Boolean(process.env.INGREFIT_EXPO_GO_PREVIEW_TOKEN),
+      demoPremium: process.env.INGREFIT_ALLOW_DEMO_PREMIUM === 'true',
     },
   });
 }

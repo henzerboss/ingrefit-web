@@ -6,9 +6,12 @@ export type GoalId =
   | 'low_sugar'
   | 'low_sodium'
   | 'high_fiber'
-  | 'minimally_processed';
+  | 'minimally_processed'
+  | 'heart_health'
+  | 'steady_energy'
+  | 'digestive_wellness';
 
-export type DietId = 'none' | 'vegetarian' | 'vegan' | 'pescatarian' | 'gluten_free';
+export type DietId = 'none' | 'vegetarian' | 'vegan' | 'pescatarian' | 'gluten_free' | 'dairy_free' | 'low_carb' | 'mediterranean';
 export type Plan = 'free' | 'premium';
 
 export interface AnalysisProfile {
@@ -32,7 +35,7 @@ export interface NutritionFacts {
 }
 
 export interface ProductFacts {
-  source: 'openfoodfacts' | 'ai_label';
+  source: 'openfoodfacts' | 'ai_label' | 'ai_photo';
   barcode: string | null;
   name: string | null;
   brand: string | null;
@@ -50,6 +53,7 @@ export interface ProductFacts {
   nutrition: NutritionFacts;
   completeness: number;
   unknownFields: string[];
+  identificationConfidence?: number | null;
 }
 
 export interface ScoreSignal {
@@ -68,6 +72,8 @@ export interface ProductAssessment {
   cautions: string[];
   signals: ScoreSignal[];
   dataNotice: string;
+  aiEnhanced?: boolean;
+  translated?: boolean;
 }
 
 export interface UsageSnapshot {
@@ -79,7 +85,7 @@ export interface UsageSnapshot {
 }
 
 export interface LabelPhoto {
-  kind: 'front' | 'ingredients' | 'nutrition';
+  kind: 'front' | 'ingredients' | 'nutrition' | 'food';
   base64: string;
   mimeType: 'image/jpeg';
 }

@@ -3,12 +3,16 @@ import type { NutritionFacts, ProductFacts } from './types';
 interface OpenFoodFactsProduct {
   code?: string;
   product_name?: string;
+  product_name_en?: string;
+  product_name_ru?: string;
   generic_name?: string;
   brands?: string;
   quantity?: string;
   image_front_url?: string;
   image_front_small_url?: string;
   ingredients_text?: string;
+  ingredients_text_en?: string;
+  ingredients_text_ru?: string;
   ingredients?: Array<{ text?: string; id?: string }>;
   allergens_tags?: string[];
   traces_tags?: string[];
@@ -31,12 +35,16 @@ interface OpenFoodFactsResponse {
 const fields = [
   'code',
   'product_name',
+  'product_name_en',
+  'product_name_ru',
   'generic_name',
   'brands',
   'quantity',
   'image_front_url',
   'image_front_small_url',
   'ingredients_text',
+  'ingredients_text_en',
+  'ingredients_text_ru',
   'ingredients',
   'allergens_tags',
   'traces_tags',
@@ -55,8 +63,8 @@ function text(value: unknown): string | null {
 }
 
 function number(value: unknown): number | null {
-  if (typeof value === 'number' && Number.isFinite(value)) return value;
-  if (typeof value === 'string' && value.trim() && Number.isFinite(Number(value))) return Number(value);
+  if (typeof value === 'number' && Number.isFinite(value)) return Math.round(value * 1000) / 1000;
+  if (typeof value === 'string' && value.trim() && Number.isFinite(Number(value))) return Math.round(Number(value) * 1000) / 1000;
   return null;
 }
 
@@ -121,7 +129,7 @@ export function hasEnoughFacts(product: ProductFacts): boolean {
   return Boolean(product.name && (product.ingredientsText || nutritionCount >= 4));
 }
 
-export async function findProductByBarcode(barcode: string): Promise<ProductFacts | null> {
+export async function findProductByBarcode(barcode: string, locale = 'en'): Promise<ProductFacts | null> {
   const userAgent = process.env.OPEN_FOOD_FACTS_USER_AGENT;
   if (!userAgent && process.env.NODE_ENV === 'production') {
     throw new Error('OPEN_FOOD_FACTS_USER_AGENT must be configured in production');
@@ -141,15 +149,18 @@ export async function findProductByBarcode(barcode: string): Promise<ProductFact
   const payload = (await response.json()) as OpenFoodFactsResponse;
   if (!payload.product || payload.status === 0 || payload.status === 'failure') return null;
   const raw = payload.product;
+  const language = locale.toLowerCase().startsWith('ru') ? 'ru' : 'en';
+  const localizedName = language === 'ru' ? raw.product_name_ru : raw.product_name_en;
+  const localizedIngredients = language === 'ru' ? raw.ingredients_text_ru : raw.ingredients_text_en;
   const nutrition = normalizeNutrition(raw);
   const facts: ProductFacts = {
     source: 'openfoodfacts',
     barcode: text(raw.code) ?? text(payload.code) ?? barcode,
-    name: text(raw.product_name) ?? text(raw.generic_name),
+    name: text(localizedName) ?? text(raw.product_name) ?? text(raw.generic_name),
     brand: text(raw.brands),
     quantity: text(raw.quantity),
     imageUrl: text(raw.image_front_url) ?? text(raw.image_front_small_url),
-    ingredientsText: text(raw.ingredients_text),
+    ingredientsText: text(localizedIngredients) ?? text(raw.ingredients_text),
     ingredients: Array.isArray(raw.ingredients)
       ? raw.ingredients.map((item) => text(item.text) ?? text(item.id)).filter((item): item is string => Boolean(item))
       : [],

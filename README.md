@@ -1,75 +1,44 @@
 # IngreFit.com website and API
 
-Next.js 16.3 project containing the English/Russian landing page and the backend used by the Expo app. The API route layout is intentionally compatible with the `evsi.store` App Router structure.
+Next.js 16.3 project with English/Russian landing and legal pages plus the API used by the Expo application.
 
-## Run
-
-Requirements: Node.js 22.13 or newer.
+## Run and deploy
 
 ```bash
-cp .env.example .env.local
-npm install
-npm run dev
+cp .env.example .env
+npm ci
+npm run typecheck
+npm run build
+PORT=3020 npm start
 ```
 
-At minimum, configure `GEMINI_API_KEY`, `INGREFIT_CLIENT_TOKENS`, `OPEN_FOOD_FACTS_USER_AGENT` and a 32+ character `INGREFIT_ENTITLEMENT_SECRET`. For production, also configure Upstash Redis REST credentials so daily limits remain durable and atomic across serverless instances.
+Required production values: `GEMINI_API_KEY`, `INGREFIT_CLIENT_TOKENS`, `OPEN_FOOD_FACTS_USER_AGENT`, `REVENUECAT_SECRET_API_KEY` and `REVENUECAT_ENTITLEMENT_ID`.
 
 ## Routes
 
-- `POST /api/ingrefit/analyze` — barcode lookup or three-photo label recognition, deterministic scoring, localized explanation.
-- `GET /api/ingrefit/usage` — current server-side daily allowance.
-- `GET /api/ingrefit/health` — configuration health without exposing secret values.
-- `/en` and `/ru` — localized landing pages.
-- `/en/privacy`, `/ru/privacy`, `/en/terms`, `/ru/terms` — starter legal pages that require counsel review.
-
-See [docs/API.md](docs/API.md) for request and response contracts.
+- `POST /api/ingrefit/analyze` — barcode, Premium label-photo or Premium unpackaged-food analysis.
+- `GET /api/ingrefit/usage` — compatibility snapshot; barcode scans have no daily quota.
+- `GET /api/ingrefit/health` — configuration health without secret values.
+- `/en`, `/ru` — localized landing pages.
+- `/en/privacy`, `/ru/privacy`, `/en/terms`, `/ru/terms` — localized legal pages.
 
 ## Evidence-first pipeline
 
-1. Barcode-only request checks Open Food Facts v3 with a custom User-Agent and a 24-hour Next.js fetch cache.
-2. A missing or insufficient product returns `needs_photos` without consuming the daily quota.
-3. Three package photos are passed to a strict Gemini transcription prompt. Scalar unknowns must be `null`; claims and allergens cannot be inferred.
-4. `scoring.ts` calculates the 1–10 score from immutable facts and user goals. Allergy/avoid-list conflicts cap the result.
-5. A second Gemini prompt receives only normalized facts, fixed score and fixed signals. It localizes/explains them in the supplied device language and cannot change the number.
-6. If explanation generation fails, a factual English/Russian fallback is returned instead of fabricating copy.
+1. Barcode mode checks Open Food Facts v3. English/Russian localized OFF fields are preferred when present.
+2. Missing or insufficient barcode data returns `needs_photos`; the app offers the Premium label flow.
+3. Label mode sends front, ingredients and nutrition-table images to an English strict transcription prompt. Missing or unreadable fields stay `null`/empty.
+4. Unpackaged mode identifies only the visibly present food and returns confidence. It intentionally leaves exact ingredients, allergens and nutrition unknown.
+5. Deterministic `scoring.ts` calculates the number before AI writes anything. All 11 goals and supported diet modes have explicit rules tied to declared fields.
+6. Free barcode results use a deterministic English/Russian explanation. Premium can translate source strings and generate a longer explanation; prompts receive the full selected/device language tag.
 
-All Gemini prompts are written in English. The request’s full `locale` tag is included explicitly in the explanation prompt.
+## Premium verification
 
-## Daily limits
+RevenueCat is configured in the mobile app with the persistent installation UUID as App User ID. The server requests that same subscriber from RevenueCat using `REVENUECAT_SECRET_API_KEY` and checks the configured entitlement. Client-provided plan headers are not trusted.
 
-- Free: 5 completed product analyses per UTC day.
-- Premium: 50 completed product analyses per UTC day.
+`INGREFIT_EXPO_GO_PREVIEW_TOKEN` is an optional development-only escape hatch because Expo Go purchases are mocks and cannot create a real server entitlement. Use that temporary value as the app's `EXPO_PUBLIC_CLIENT_TOKEN` while testing photo flows; the server automatically accepts it as a client token. Remove it before distributing the app. `INGREFIT_ALLOW_DEMO_PREMIUM=true` is a broader convenience switch for preview servers; it must be set back to `false` before distribution.
 
-When Upstash is configured, a Lua operation checks and increments usage atomically. Without it, the app uses a process-local map for development only; this is not durable in serverless production.
+Legacy HMAC entitlements remain supported for migrations via `INGREFIT_ENTITLEMENT_SECRET`.
 
-The plan header is not trusted in production. Premium requires an HMAC-SHA256 entitlement bound to an installation id and expiry. The included helper can produce a test token:
+## Important product rule
 
-```bash
-INGREFIT_ENTITLEMENT_SECRET="your-32-character-or-longer-secret" \
-node scripts/create-entitlement.mjs INSTALLATION_ID 30
-```
-
-In production, issue tokens from a verified billing webhook, not from a public route.
-
-## Merge into evsi.store
-
-The standalone project can be deployed as `IngreFit.com`. To host the routes inside `evsi.store` instead:
-
-1. Copy `src/app/api/ingrefit` into the existing project’s `src/app/api` directory.
-2. Copy `src/lib/ingrefit` into its `src/lib` directory.
-3. Add `zod` if the existing project does not already include it.
-4. Merge the variables from `.env.example` into the deployment environment.
-5. Keep the existing project’s authentication/middleware rules from intercepting native API requests, or explicitly allow `/api/ingrefit/*`.
-
-The Gemini helper follows the supplied `evsi.store` pattern: Google `generateContent` REST calls, JSON response MIME type/schema, an English system instruction and an ordered fallback model chain.
-
-## Production checklist
-
-- Register the app/use case with Open Food Facts and use a real contact in the User-Agent.
-- Configure Upstash and verify quotas in a multi-instance preview.
-- Replace demo subscription handling with verified store webhooks.
-- Add account-based identity or device attestation if reinstall-resistant quotas are required.
-- Decide and document image/log retention; redact request bodies from platform logs.
-- Add abuse controls at the edge (IP/device throttling and body-size limits).
-- Replace the early-access `mailto:` CTA with your mailing-list provider.
-- Replace the legal placeholders and contact details after legal review.
+**AI reads, translates and explains; it does not invent product facts.** Empty allergen data never means allergen-free. Visual food identification never supplies hidden recipes or precise nutrition. IngreFit provides general information, not medical advice; users must verify packaging for allergies and medical conditions.

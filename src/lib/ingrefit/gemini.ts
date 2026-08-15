@@ -20,7 +20,7 @@ interface GeminiResponse {
 }
 
 function models(): string[] {
-  return (process.env.INGREFIT_GEMINI_MODELS ?? 'gemini-2.5-flash,gemini-2.0-flash')
+  return (process.env.INGREFIT_GEMINI_MODELS ?? 'gemini-3.5-flash,gemini-2.5-flash,gemini-2.5-flash-lite')
     .split(',')
     .map((model) => model.trim())
     .filter(Boolean);

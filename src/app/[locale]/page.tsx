@@ -134,8 +134,8 @@ function Landing({ locale }: { locale: string }) {
               <h2>{pricing('title')}</h2>
             </div>
             <div className="pricing-grid">
-              <PriceCard title={pricing('free')} count="5" perDay={pricing('perDay')} features={[pricing('freeFeature1'), pricing('freeFeature2'), pricing('freeFeature3')]} cta={pricing('freeCta')} />
-              <PriceCard premium title={pricing('premium')} count="50" perDay={pricing('perDay')} features={[pricing('premiumFeature1'), pricing('premiumFeature2'), pricing('premiumFeature3')]} cta={pricing('premiumCta')} />
+              <PriceCard title={pricing('free')} count="∞" perDay={pricing('perDay')} features={[pricing('freeFeature1'), pricing('freeFeature2'), pricing('freeFeature3')]} cta={pricing('freeCta')} />
+              <PriceCard premium title={pricing('premium')} count="AI" perDay={pricing('premiumLabel')} features={[pricing('premiumFeature1'), pricing('premiumFeature2'), pricing('premiumFeature3')]} cta={pricing('premiumCta')} />
             </div>
             <p className="pricing-note">{pricing('note')}</p>
           </div>

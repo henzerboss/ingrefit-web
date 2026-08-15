@@ -17,11 +17,12 @@ function includesTerm(haystack: string, term: string): boolean {
   return Boolean(needle && source.includes(` ${needle} `));
 }
 
-const dietConflicts: Record<Exclude<AnalysisProfile['diet'], 'none'>, string[]> = {
+const dietConflicts: Partial<Record<Exclude<AnalysisProfile['diet'], 'none'>, string[]>> = {
   vegan: ['milk', 'whey', 'casein', 'butter', 'cream', 'cheese', 'egg', 'eggs', 'honey', 'gelatin', 'fish', 'chicken', 'beef', 'pork', 'молоко', 'сыворотка', 'казеин', 'сливочное масло', 'сыр', 'яйцо', 'яйца', 'мёд', 'мед', 'желатин', 'рыба', 'курица', 'говядина', 'свинина'],
   vegetarian: ['gelatin', 'fish', 'anchovy', 'anchovies', 'chicken', 'beef', 'pork', 'lard', 'желатин', 'рыба', 'анчоус', 'анчоусы', 'курица', 'говядина', 'свинина', 'сало'],
   pescatarian: ['chicken', 'beef', 'pork', 'lard', 'turkey', 'курица', 'говядина', 'свинина', 'сало', 'индейка'],
   gluten_free: ['wheat', 'barley', 'rye', 'gluten', 'пшеница', 'ячмень', 'рожь', 'глютен'],
+  dairy_free: ['milk', 'whey', 'casein', 'butter', 'cream', 'cheese', 'lactose', 'молоко', 'сыворотка', 'казеин', 'сливочное масло', 'сливки', 'сыр', 'лактоза'],
 };
 
 const allergenAliases: Record<string, string[]> = {
@@ -32,8 +33,13 @@ const allergenAliases: Record<string, string[]> = {
   soy: ['soy', 'soya', 'soybeans', 'соя'],
   wheat: ['wheat', 'пшеница'],
   fish: ['fish', 'рыба'],
-  shellfish: ['shellfish', 'crustaceans', 'molluscs', 'ракообразные', 'моллюски'],
+  crustaceans: ['crustaceans', 'crab', 'shrimp', 'prawn', 'lobster', 'ракообразные', 'краб', 'креветка', 'омар'],
   sesame: ['sesame', 'кунжут'],
+  celery: ['celery', 'сельдерей'],
+  mustard: ['mustard', 'горчица'],
+  sulphites: ['sulphite', 'sulphites', 'sulfite', 'sulfites', 'сульфит', 'сульфиты'],
+  lupin: ['lupin', 'люпин'],
+  molluscs: ['mollusc', 'molluscs', 'mollusk', 'mollusks', 'моллюск', 'моллюски'],
 };
 
 function declaredAllergenMatch(declared: string[], selected: string): string | undefined {
@@ -81,7 +87,7 @@ export function scoreProduct(facts: ProductFacts, profile: AnalysisProfile): Sco
   }
 
   if (profile.diet !== 'none') {
-    const conflict = dietConflicts[profile.diet].find((term) => includesTerm(ingredientsText, term));
+    const conflict = dietConflicts[profile.diet]?.find((term) => includesTerm(ingredientsText, term));
     if (conflict) {
       add({
         id: `diet:${profile.diet}`,
@@ -148,6 +154,41 @@ export function scoreProduct(facts: ProductFacts, profile: AnalysisProfile): Sco
       if (energy <= 150) add({ id: 'energy-lower', impact: 0.5, label: 'Lower energy density', evidence: `${energy} kcal per 100 g is declared.`, severity: 'positive' });
       else if (energy > 400) add({ id: 'energy-high', impact: -0.8, label: 'High energy density', evidence: `${energy} kcal per 100 g is declared.`, severity: 'caution' });
     }
+  }
+
+  if (profile.diet === 'low_carb' && facts.nutrition.carbohydrates100g !== null) {
+    const carbs = facts.nutrition.carbohydrates100g;
+    if (carbs <= 10) add({ id: 'diet-low-carb-fit', impact: 0.8, label: 'Lower carbohydrate density', evidence: `${carbs} g carbohydrates per 100 g is declared.`, severity: 'positive' });
+    else if (carbs > 20) add({ id: 'diet-low-carb-conflict', impact: -1.2, label: 'High for your low-carb pattern', evidence: `${carbs} g carbohydrates per 100 g is declared.`, severity: 'caution' });
+  }
+
+  if (profile.diet === 'mediterranean') {
+    if (fiber !== null && fiber >= 3) add({ id: 'diet-mediterranean-fiber', impact: 0.5, label: 'Fiber supports your selected pattern', evidence: `${fiber} g fiber per 100 g is declared.`, severity: 'positive' });
+    if (facts.novaGroup === 4) add({ id: 'diet-mediterranean-nova', impact: -0.6, label: 'Less aligned with your selected pattern', evidence: 'Open Food Facts reports NOVA group 4.', severity: 'caution' });
+  }
+
+  if (profile.goals.includes('heart_health')) {
+    const saturated = facts.nutrition.saturatedFat100g;
+    if (saturated !== null) {
+      if (saturated <= 1.5) add({ id: 'heart-saturated-low', impact: 0.6, label: 'Lower saturated fat', evidence: `${saturated} g saturated fat per 100 g is declared.`, severity: 'positive' });
+      else if (saturated > 5) add({ id: 'heart-saturated-high', impact: -1, label: 'High saturated fat for your goal', evidence: `${saturated} g saturated fat per 100 g is declared.`, severity: 'caution' });
+    }
+    if (salt !== null) {
+      if (salt <= 0.3) add({ id: 'heart-salt-low', impact: 0.4, label: 'Lower salt', evidence: `${salt.toFixed(2)} g salt equivalent per 100 g is declared or derived from declared sodium.`, severity: 'positive' });
+      else if (salt > 1.5) add({ id: 'heart-salt-high', impact: -0.7, label: 'High salt for your goal', evidence: `${salt.toFixed(2)} g salt equivalent per 100 g is declared or derived from declared sodium.`, severity: 'caution' });
+    }
+    if (fiber !== null && fiber >= 3) add({ id: 'heart-fiber', impact: 0.4, label: 'Useful fiber density', evidence: `${fiber} g fiber per 100 g is declared.`, severity: 'positive' });
+  }
+
+  if (profile.goals.includes('steady_energy')) {
+    if (sugars !== null && sugars > 15) add({ id: 'steady-sugar-high', impact: -0.8, label: 'High sugar for your steady-energy goal', evidence: `${sugars} g sugars per 100 g is declared.`, severity: 'caution' });
+    if (fiber !== null && fiber >= 3) add({ id: 'steady-fiber', impact: 0.5, label: 'Useful fiber for your goal', evidence: `${fiber} g fiber per 100 g is declared.`, severity: 'positive' });
+    if (protein !== null && protein >= 10) add({ id: 'steady-protein', impact: 0.4, label: 'Useful protein for your goal', evidence: `${protein} g protein per 100 g is declared.`, severity: 'positive' });
+  }
+
+  if (profile.goals.includes('digestive_wellness') && fiber !== null) {
+    if (fiber >= 6) add({ id: 'digestive-fiber-high', impact: 1, label: 'High fiber for your goal', evidence: `${fiber} g fiber per 100 g is declared.`, severity: 'positive' });
+    else if (fiber < 2) add({ id: 'digestive-fiber-low', impact: -0.5, label: 'Low fiber for your goal', evidence: `${fiber} g fiber per 100 g is declared.`, severity: 'caution' });
   }
 
   if (!signals.length) {

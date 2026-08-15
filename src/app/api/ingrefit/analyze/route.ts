@@ -12,7 +12,7 @@ export const maxDuration = 60;
 export async function POST(request: NextRequest) {
   try {
     const installationId = requireClient(request);
-    const plan = resolvePlan(request, installationId);
+    const plan = await resolvePlan(request, installationId);
     const raw = await request.json().catch(() => null);
     const parsed = analyzeRequestSchema.safeParse(raw);
     if (!parsed.success) {
