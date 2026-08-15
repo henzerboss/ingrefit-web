@@ -50,12 +50,16 @@ function declaredAllergenMatch(declared: string[], selected: string): string | u
 export function scoreProduct(facts: ProductFacts, profile: AnalysisProfile): ScoredProduct {
   let score = 5.5;
   let critical = false;
+  const reference = facts.nutritionReference === '100ml' ? '100 ml' : facts.nutritionReference === 'serving' ? 'serving' : '100 g';
   const signals: ScoreSignal[] = [];
   const add = (signal: ScoreSignal) => {
     if (signals.some((item) => item.id === signal.id)) return;
-    signals.push(signal);
-    score += signal.impact;
-    if (signal.severity === 'critical') critical = true;
+    const adjusted = facts.nutritionBasis === 'estimated_visual' && signal.impact !== 0
+      ? { ...signal, impact: Math.round(signal.impact * 0.6 * 10) / 10, evidence: `AI visual estimate: ${signal.evidence}` }
+      : signal;
+    signals.push(adjusted);
+    score += adjusted.impact;
+    if (adjusted.severity === 'critical') critical = true;
   };
 
   const ingredientsText = [facts.ingredientsText, ...facts.ingredients].filter(Boolean).join(' ');
@@ -101,36 +105,36 @@ export function scoreProduct(facts: ProductFacts, profile: AnalysisProfile): Sco
 
   const protein = facts.nutrition.protein100g;
   if ((profile.goals.includes('high_protein') || profile.goals.includes('muscle_gain')) && protein !== null) {
-    if (protein >= 20) add({ id: 'protein-high', impact: 1.5, label: 'High protein density', evidence: `${protein} g protein per 100 g is declared.`, severity: 'positive' });
-    else if (protein >= 10) add({ id: 'protein-moderate', impact: 0.8, label: 'Useful protein', evidence: `${protein} g protein per 100 g is declared.`, severity: 'positive' });
-    else if (protein < 5) add({ id: 'protein-low', impact: -0.7, label: 'Low for your protein goal', evidence: `Only ${protein} g protein per 100 g is declared.`, severity: 'caution' });
+    if (protein >= 20) add({ id: 'protein-high', impact: 1.5, label: 'High protein density', evidence: `${protein} g protein per ${reference} is declared.`, severity: 'positive' });
+    else if (protein >= 10) add({ id: 'protein-moderate', impact: 0.8, label: 'Useful protein', evidence: `${protein} g protein per ${reference} is declared.`, severity: 'positive' });
+    else if (protein < 5) add({ id: 'protein-low', impact: -0.7, label: 'Low for your protein goal', evidence: `Only ${protein} g protein per ${reference} is declared.`, severity: 'caution' });
   }
 
   const sugars = facts.nutrition.sugars100g;
   if (profile.goals.includes('low_sugar') && sugars !== null) {
-    if (sugars <= 5) add({ id: 'sugars-low', impact: 1.2, label: 'Low sugar for your goal', evidence: `${sugars} g sugars per 100 g is declared.`, severity: 'positive' });
-    else if (sugars <= 10) add({ id: 'sugars-moderate', impact: 0.4, label: 'Moderate sugar', evidence: `${sugars} g sugars per 100 g is declared.`, severity: 'neutral' });
-    else if (sugars > 25) add({ id: 'sugars-very-high', impact: -2, label: 'Very high sugar for your goal', evidence: `${sugars} g sugars per 100 g is declared.`, severity: 'caution' });
-    else if (sugars > 15) add({ id: 'sugars-high', impact: -1.3, label: 'High sugar for your goal', evidence: `${sugars} g sugars per 100 g is declared.`, severity: 'caution' });
+    if (sugars <= 5) add({ id: 'sugars-low', impact: 1.2, label: 'Low sugar for your goal', evidence: `${sugars} g sugars per ${reference} is declared.`, severity: 'positive' });
+    else if (sugars <= 10) add({ id: 'sugars-moderate', impact: 0.4, label: 'Moderate sugar', evidence: `${sugars} g sugars per ${reference} is declared.`, severity: 'neutral' });
+    else if (sugars > 25) add({ id: 'sugars-very-high', impact: -2, label: 'Very high sugar for your goal', evidence: `${sugars} g sugars per ${reference} is declared.`, severity: 'caution' });
+    else if (sugars > 15) add({ id: 'sugars-high', impact: -1.3, label: 'High sugar for your goal', evidence: `${sugars} g sugars per ${reference} is declared.`, severity: 'caution' });
   }
 
   const fiber = facts.nutrition.fiber100g;
   if (profile.goals.includes('high_fiber') && fiber !== null) {
-    if (fiber >= 6) add({ id: 'fiber-high', impact: 1.2, label: 'High fiber density', evidence: `${fiber} g fiber per 100 g is declared.`, severity: 'positive' });
-    else if (fiber >= 3) add({ id: 'fiber-source', impact: 0.5, label: 'Some fiber', evidence: `${fiber} g fiber per 100 g is declared.`, severity: 'positive' });
-    else if (fiber < 2) add({ id: 'fiber-low', impact: -0.5, label: 'Low for your fiber goal', evidence: `${fiber} g fiber per 100 g is declared.`, severity: 'caution' });
+    if (fiber >= 6) add({ id: 'fiber-high', impact: 1.2, label: 'High fiber density', evidence: `${fiber} g fiber per ${reference} is declared.`, severity: 'positive' });
+    else if (fiber >= 3) add({ id: 'fiber-source', impact: 0.5, label: 'Some fiber', evidence: `${fiber} g fiber per ${reference} is declared.`, severity: 'positive' });
+    else if (fiber < 2) add({ id: 'fiber-low', impact: -0.5, label: 'Low for your fiber goal', evidence: `${fiber} g fiber per ${reference} is declared.`, severity: 'caution' });
   }
 
   const salt = facts.nutrition.salt100g ?? (facts.nutrition.sodium100g !== null ? facts.nutrition.sodium100g * 2.5 : null);
   if (profile.goals.includes('low_sodium') && salt !== null) {
-    if (salt <= 0.3) add({ id: 'salt-low', impact: 0.8, label: 'Low salt for your goal', evidence: `${salt.toFixed(2)} g salt equivalent per 100 g is declared or derived from declared sodium.`, severity: 'positive' });
-    else if (salt > 1.5) add({ id: 'salt-high', impact: -1.2, label: 'High salt for your goal', evidence: `${salt.toFixed(2)} g salt equivalent per 100 g is declared or derived from declared sodium.`, severity: 'caution' });
+    if (salt <= 0.3) add({ id: 'salt-low', impact: 0.8, label: 'Low salt for your goal', evidence: `${salt.toFixed(2)} g salt equivalent per ${reference} is declared or derived from declared sodium.`, severity: 'positive' });
+    else if (salt > 1.5) add({ id: 'salt-high', impact: -1.2, label: 'High salt for your goal', evidence: `${salt.toFixed(2)} g salt equivalent per ${reference} is declared or derived from declared sodium.`, severity: 'caution' });
   }
 
   if (profile.goals.includes('minimally_processed') && facts.novaGroup !== null) {
-    if (facts.novaGroup === 1) add({ id: 'nova-1', impact: 1.2, label: 'Minimally processed classification', evidence: 'Open Food Facts reports NOVA group 1.', severity: 'positive' });
-    else if (facts.novaGroup === 2) add({ id: 'nova-2', impact: 0.5, label: 'Processed culinary ingredient', evidence: 'Open Food Facts reports NOVA group 2.', severity: 'neutral' });
-    else if (facts.novaGroup === 4) add({ id: 'nova-4', impact: -1.5, label: 'Ultra-processed classification', evidence: 'Open Food Facts reports NOVA group 4.', severity: 'caution' });
+    if (facts.novaGroup === 1) add({ id: 'nova-1', impact: 1.2, label: 'Minimally processed for your goal', evidence: 'For your less-processing goal, Open Food Facts reports NOVA group 1.', severity: 'positive' });
+    else if (facts.novaGroup === 2) add({ id: 'nova-2', impact: 0.5, label: 'Processed culinary ingredient', evidence: 'For your less-processing goal, Open Food Facts reports NOVA group 2.', severity: 'neutral' });
+    else if (facts.novaGroup === 4) add({ id: 'nova-4', impact: -1.5, label: 'Highly processed for your goal', evidence: 'For your less-processing goal, Open Food Facts reports NOVA group 4.', severity: 'caution' });
   }
 
   if (profile.goals.includes('balanced') && facts.nutriScore) {
@@ -141,64 +145,82 @@ export function scoreProduct(facts: ProductFacts, profile: AnalysisProfile): Sco
       add({
         id: `nutriscore-${grade}`,
         impact,
-        label: `Nutri-Score ${grade.toUpperCase()}`,
-        evidence: `Open Food Facts reports Nutri-Score ${grade.toUpperCase()}.`,
+        label: `Nutri-Score ${grade.toUpperCase()} for your balanced-eating goal`,
+        evidence: `For your balanced-eating goal, Open Food Facts reports Nutri-Score ${grade.toUpperCase()}; this affects the personal fit score.`,
         severity: impact > 0 ? 'positive' : impact < 0 ? 'caution' : 'neutral',
       });
+    }
+  }
+
+  if (profile.goals.includes('balanced') && !facts.nutriScore) {
+    const considerations: string[] = [];
+    let impact = 0;
+    const balancedSugar = facts.nutrition.sugars100g;
+    const balancedSaturated = facts.nutrition.saturatedFat100g;
+    const balancedSalt = facts.nutrition.salt100g;
+    const balancedFiber = facts.nutrition.fiber100g;
+    const balancedProtein = facts.nutrition.protein100g;
+    if (balancedSugar !== null && balancedSugar > 15) { impact -= 0.7; considerations.push(`${balancedSugar} g sugars per ${reference}`); }
+    if (balancedSaturated !== null && balancedSaturated > 5) { impact -= 0.6; considerations.push(`${balancedSaturated} g saturated fat per ${reference}`); }
+    if (balancedSalt !== null && balancedSalt > 1.5) { impact -= 0.5; considerations.push(`${balancedSalt} g salt per ${reference}`); }
+    if (balancedFiber !== null && balancedFiber >= 3) { impact += 0.3; considerations.push(`${balancedFiber} g fiber per ${reference}`); }
+    if (balancedProtein !== null && balancedProtein >= 10) { impact += 0.3; considerations.push(`${balancedProtein} g protein per ${reference}`); }
+    if (considerations.length) {
+      add({ id: 'balanced-nutrients', impact: Math.max(-1.5, Math.min(1, impact)), label: 'Nutrition profile for your balanced-eating goal', evidence: `${considerations.join('; ')}. These available values are compared with your balanced-eating goal.`, severity: impact < 0 ? 'caution' : impact > 0 ? 'positive' : 'neutral' });
     }
   }
 
   if (profile.goals.includes('weight_loss')) {
     const energy = facts.nutrition.energyKcal100g;
     if (energy !== null) {
-      if (energy <= 150) add({ id: 'energy-lower', impact: 0.5, label: 'Lower energy density', evidence: `${energy} kcal per 100 g is declared.`, severity: 'positive' });
-      else if (energy > 400) add({ id: 'energy-high', impact: -0.8, label: 'High energy density', evidence: `${energy} kcal per 100 g is declared.`, severity: 'caution' });
+      if (energy <= 150) add({ id: 'energy-lower', impact: 0.5, label: 'Lower energy density', evidence: `${energy} kcal per ${reference} is declared.`, severity: 'positive' });
+      else if (energy > 400) add({ id: 'energy-high', impact: -0.8, label: 'High energy density', evidence: `${energy} kcal per ${reference} is declared.`, severity: 'caution' });
     }
   }
 
   if (profile.diet === 'low_carb' && facts.nutrition.carbohydrates100g !== null) {
     const carbs = facts.nutrition.carbohydrates100g;
-    if (carbs <= 10) add({ id: 'diet-low-carb-fit', impact: 0.8, label: 'Lower carbohydrate density', evidence: `${carbs} g carbohydrates per 100 g is declared.`, severity: 'positive' });
-    else if (carbs > 20) add({ id: 'diet-low-carb-conflict', impact: -1.2, label: 'High for your low-carb pattern', evidence: `${carbs} g carbohydrates per 100 g is declared.`, severity: 'caution' });
+    if (carbs <= 10) add({ id: 'diet-low-carb-fit', impact: 0.8, label: 'Lower carbohydrate density', evidence: `${carbs} g carbohydrates per ${reference} is declared.`, severity: 'positive' });
+    else if (carbs > 20) add({ id: 'diet-low-carb-conflict', impact: -1.2, label: 'High for your low-carb pattern', evidence: `${carbs} g carbohydrates per ${reference} is declared.`, severity: 'caution' });
   }
 
   if (profile.diet === 'mediterranean') {
-    if (fiber !== null && fiber >= 3) add({ id: 'diet-mediterranean-fiber', impact: 0.5, label: 'Fiber supports your selected pattern', evidence: `${fiber} g fiber per 100 g is declared.`, severity: 'positive' });
+    if (fiber !== null && fiber >= 3) add({ id: 'diet-mediterranean-fiber', impact: 0.5, label: 'Fiber supports your selected pattern', evidence: `${fiber} g fiber per ${reference} is declared.`, severity: 'positive' });
     if (facts.novaGroup === 4) add({ id: 'diet-mediterranean-nova', impact: -0.6, label: 'Less aligned with your selected pattern', evidence: 'Open Food Facts reports NOVA group 4.', severity: 'caution' });
   }
 
   if (profile.goals.includes('heart_health')) {
     const saturated = facts.nutrition.saturatedFat100g;
     if (saturated !== null) {
-      if (saturated <= 1.5) add({ id: 'heart-saturated-low', impact: 0.6, label: 'Lower saturated fat', evidence: `${saturated} g saturated fat per 100 g is declared.`, severity: 'positive' });
-      else if (saturated > 5) add({ id: 'heart-saturated-high', impact: -1, label: 'High saturated fat for your goal', evidence: `${saturated} g saturated fat per 100 g is declared.`, severity: 'caution' });
+      if (saturated <= 1.5) add({ id: 'heart-saturated-low', impact: 0.6, label: 'Lower saturated fat', evidence: `${saturated} g saturated fat per ${reference} is declared.`, severity: 'positive' });
+      else if (saturated > 5) add({ id: 'heart-saturated-high', impact: -1, label: 'High saturated fat for your goal', evidence: `${saturated} g saturated fat per ${reference} is declared.`, severity: 'caution' });
     }
     if (salt !== null) {
-      if (salt <= 0.3) add({ id: 'heart-salt-low', impact: 0.4, label: 'Lower salt', evidence: `${salt.toFixed(2)} g salt equivalent per 100 g is declared or derived from declared sodium.`, severity: 'positive' });
-      else if (salt > 1.5) add({ id: 'heart-salt-high', impact: -0.7, label: 'High salt for your goal', evidence: `${salt.toFixed(2)} g salt equivalent per 100 g is declared or derived from declared sodium.`, severity: 'caution' });
+      if (salt <= 0.3) add({ id: 'heart-salt-low', impact: 0.4, label: 'Lower salt', evidence: `${salt.toFixed(2)} g salt equivalent per ${reference} is declared or derived from declared sodium.`, severity: 'positive' });
+      else if (salt > 1.5) add({ id: 'heart-salt-high', impact: -0.7, label: 'High salt for your goal', evidence: `${salt.toFixed(2)} g salt equivalent per ${reference} is declared or derived from declared sodium.`, severity: 'caution' });
     }
-    if (fiber !== null && fiber >= 3) add({ id: 'heart-fiber', impact: 0.4, label: 'Useful fiber density', evidence: `${fiber} g fiber per 100 g is declared.`, severity: 'positive' });
+    if (fiber !== null && fiber >= 3) add({ id: 'heart-fiber', impact: 0.4, label: 'Useful fiber density', evidence: `${fiber} g fiber per ${reference} is declared.`, severity: 'positive' });
   }
 
   if (profile.goals.includes('steady_energy')) {
-    if (sugars !== null && sugars > 15) add({ id: 'steady-sugar-high', impact: -0.8, label: 'High sugar for your steady-energy goal', evidence: `${sugars} g sugars per 100 g is declared.`, severity: 'caution' });
-    if (fiber !== null && fiber >= 3) add({ id: 'steady-fiber', impact: 0.5, label: 'Useful fiber for your goal', evidence: `${fiber} g fiber per 100 g is declared.`, severity: 'positive' });
-    if (protein !== null && protein >= 10) add({ id: 'steady-protein', impact: 0.4, label: 'Useful protein for your goal', evidence: `${protein} g protein per 100 g is declared.`, severity: 'positive' });
+    if (sugars !== null && sugars > 15) add({ id: 'steady-sugar-high', impact: -0.8, label: 'High sugar for your steady-energy goal', evidence: `${sugars} g sugars per ${reference} is declared.`, severity: 'caution' });
+    if (fiber !== null && fiber >= 3) add({ id: 'steady-fiber', impact: 0.5, label: 'Useful fiber for your goal', evidence: `${fiber} g fiber per ${reference} is declared.`, severity: 'positive' });
+    if (protein !== null && protein >= 10) add({ id: 'steady-protein', impact: 0.4, label: 'Useful protein for your goal', evidence: `${protein} g protein per ${reference} is declared.`, severity: 'positive' });
   }
 
   if (profile.goals.includes('digestive_wellness') && fiber !== null) {
-    if (fiber >= 6) add({ id: 'digestive-fiber-high', impact: 1, label: 'High fiber for your goal', evidence: `${fiber} g fiber per 100 g is declared.`, severity: 'positive' });
-    else if (fiber < 2) add({ id: 'digestive-fiber-low', impact: -0.5, label: 'Low fiber for your goal', evidence: `${fiber} g fiber per 100 g is declared.`, severity: 'caution' });
+    if (fiber >= 6) add({ id: 'digestive-fiber-high', impact: 1, label: 'High fiber for your goal', evidence: `${fiber} g fiber per ${reference} is declared.`, severity: 'positive' });
+    else if (fiber < 2) add({ id: 'digestive-fiber-low', impact: -0.5, label: 'Low fiber for your goal', evidence: `${fiber} g fiber per ${reference} is declared.`, severity: 'caution' });
   }
 
   const saturatedFat = facts.nutrition.saturatedFat100g;
   if (profile.goals.includes('low_saturated_fat') && saturatedFat !== null) {
-    if (saturatedFat <= 1.5) add({ id: 'saturated-fat-low', impact: 0.8, label: 'Low saturated fat for your goal', evidence: `${saturatedFat} g saturated fat per 100 g is declared.`, severity: 'positive' });
-    else if (saturatedFat > 5) add({ id: 'saturated-fat-high', impact: -1.2, label: 'High saturated fat for your goal', evidence: `${saturatedFat} g saturated fat per 100 g is declared.`, severity: 'caution' });
+    if (saturatedFat <= 1.5) add({ id: 'saturated-fat-low', impact: 0.8, label: 'Low saturated fat for your goal', evidence: `${saturatedFat} g saturated fat per ${reference} is declared.`, severity: 'positive' });
+    else if (saturatedFat > 5) add({ id: 'saturated-fat-high', impact: -1.2, label: 'High saturated fat for your goal', evidence: `${saturatedFat} g saturated fat per ${reference} is declared.`, severity: 'caution' });
   }
 
   if (!signals.length) {
-    signals.push({ id: 'limited-goal-data', impact: 0, label: 'Limited goal-specific data', evidence: 'No available declared field triggered a goal-specific adjustment.', severity: 'neutral' });
+    signals.push({ id: 'limited-goal-data', impact: 0, label: 'Limited data for your selected goals', evidence: 'The available declared or estimated fields are not enough to adjust the score for your selected goals.', severity: 'neutral' });
   }
 
   score = Math.max(1, Math.min(10, score));

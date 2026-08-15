@@ -29,8 +29,8 @@ Required production values: `GEMINI_API_KEY`, `INGREFIT_CLIENT_TOKENS`, `OPEN_FO
 1. Barcode mode checks Open Food Facts v3. English/Russian localized OFF fields are preferred when present.
 2. Missing or insufficient barcode data returns `needs_photos`; the app offers the Premium label flow.
 3. Label mode sends front, ingredients and nutrition-table images to an English strict transcription prompt. Missing or unreadable fields stay `null`/empty.
-4. Unpackaged mode identifies only the visibly present food and returns confidence. It intentionally leaves exact ingredients, allergens and nutrition unknown.
-5. Deterministic `scoring.ts` calculates the number before AI writes anything. All 12 goals and supported diet modes have explicit rules tied to declared fields.
+4. Unpackaged mode identifies the visibly present food, returns confidence and may provide a rounded approximate nutrient profile per 100 g from general food-composition knowledge. Exact ingredients, allergens and nutrition remain unknown; every estimate is explicitly marked as an estimate.
+5. Deterministic `scoring.ts` calculates the number before AI writes anything. All 12 goals and supported diet modes have explicit rules tied to available fields; visual nutrition estimates receive reduced weight.
 6. Free barcode results use a deterministic English/Russian explanation. Premium translates source strings and generates a longer explanation in the exact active app language (`en` or `ru`).
 
 ## Store links and analytics
@@ -52,4 +52,4 @@ Legacy HMAC entitlements remain supported for migrations via `INGREFIT_ENTITLEME
 
 ## Important product rule
 
-**AI reads, translates and explains; it does not invent product facts.** Empty allergen data never means allergen-free. Visual food identification never supplies hidden recipes or precise nutrition. IngreFit provides general information, not medical advice; users must verify packaging for allergies and medical conditions.
+**AI reads, translates and explains; it does not invent product facts.** Empty allergen data never means allergen-free. Visual identification can provide only clearly labelled approximate nutrition, never hidden recipes, declared allergens or precise values. IngreFit provides general information, not medical advice; users must verify packaging for allergies and medical conditions.

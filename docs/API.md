@@ -29,11 +29,11 @@ Use `mode: label`, `premiumFeatures: true`, optional barcode and exactly three J
 
 ## Premium food without packaging
 
-Use `mode: unpackaged`, `premiumFeatures: true`, a null barcode and exactly one JPEG image with kind `food`. The response source is `ai_photo`; `identificationConfidence` is 0–1. Ingredients, allergens and nutrition remain unknown because appearance cannot prove them.
+Use `mode: unpackaged`, `premiumFeatures: true`, a null barcode and exactly one JPEG image with kind `food`. The response source is `ai_photo`; `identificationConfidence` is 0–1. The response may include a rounded approximate nutrient profile per 100 g with `nutritionBasis: "estimated_visual"` and `nutritionEstimateConfidence`. Ingredients, allergens and exact nutrition remain unknown because appearance cannot prove them.
 
 ## Complete response
 
-The response contains normalized `product`, deterministic `assessment` and a compatibility `usage` snapshot. `assessment.aiEnhanced` and `assessment.translated` say whether the two Premium enhancements were applied. Nutrition numbers are per 100 g only when the source explicitly provides them.
+The response contains normalized `product`, deterministic `assessment` and a compatibility `usage` snapshot. `assessment.aiEnhanced` and `assessment.translated` say whether the two Premium enhancements were applied. `nutritionReference` identifies 100 g, 100 ml or serving; `nutritionBasis` separates declared values from visual estimates.
 
 ## Errors
 

@@ -24,6 +24,7 @@ interface OpenFoodFactsProduct {
   nova_group?: number;
   nutriments?: Record<string, unknown>;
   serving_size?: string;
+  nutrition_data_per?: string;
 }
 
 interface OpenFoodFactsResponse {
@@ -56,6 +57,7 @@ const fields = [
   'nova_group',
   'nutriments',
   'serving_size',
+  'nutrition_data_per',
 ].join(',');
 
 function text(value: unknown): string | null {
@@ -172,6 +174,8 @@ export async function findProductByBarcode(barcode: string, locale = 'en'): Prom
     nutriScore: text(raw.nutriscore_grade) ?? text(raw.nutrition_grades),
     novaGroup: number(raw.nova_group),
     nutrition,
+    nutritionReference: raw.nutrition_data_per?.toLowerCase() === '100ml' ? '100ml' : '100g',
+    nutritionBasis: 'declared',
     completeness: 0,
     unknownFields: [],
   };
