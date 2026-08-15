@@ -4,6 +4,7 @@ import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server
 import { notFound } from 'next/navigation';
 
 import { routing } from '@/i18n/routing';
+import { GoogleAnalytics } from '@/components/GoogleAnalytics';
 
 import '../globals.css';
 
@@ -21,6 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     metadataBase: new URL('https://ingrefit.com'),
     alternates: { canonical: `/${locale}`, languages: { en: '/en', ru: '/ru' } },
     openGraph: { title: t('title'), description: t('description'), type: 'website', siteName: 'IngreFit' },
+    icons: { icon: '/brand/icon.png', apple: '/brand/app-icon.png' },
   };
 }
 
@@ -34,6 +36,7 @@ export default async function LocaleLayout({ children, params }: Readonly<{ chil
     <html lang={locale}>
       <body>
         <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
+        <GoogleAnalytics />
       </body>
     </html>
   );

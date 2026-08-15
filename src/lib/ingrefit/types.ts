@@ -9,7 +9,8 @@ export type GoalId =
   | 'minimally_processed'
   | 'heart_health'
   | 'steady_energy'
-  | 'digestive_wellness';
+  | 'digestive_wellness'
+  | 'low_saturated_fat';
 
 export type DietId = 'none' | 'vegetarian' | 'vegan' | 'pescatarian' | 'gluten_free' | 'dairy_free' | 'low_carb' | 'mediterranean';
 export type Plan = 'free' | 'premium';
@@ -54,6 +55,8 @@ export interface ProductFacts {
   completeness: number;
   unknownFields: string[];
   identificationConfidence?: number | null;
+  visualDescription?: string | null;
+  possibleAlternatives?: string[];
 }
 
 export interface ScoreSignal {

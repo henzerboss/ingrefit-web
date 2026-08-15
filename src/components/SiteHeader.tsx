@@ -3,6 +3,7 @@ import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 
 import { Logo } from './Logo';
+import { TrackedLink } from './TrackedLink';
 
 export function SiteHeader({ locale }: { locale: string }) {
   const t = useTranslations('nav');
@@ -20,7 +21,7 @@ export function SiteHeader({ locale }: { locale: string }) {
           <Link aria-label={`Switch to ${alternateLocale}`} className="language" href="/" locale={alternateLocale}>
             {alternateLocale.toUpperCase()}
           </Link>
-          <a className="button button-small" href="#download">{t('cta')}</a>
+          <TrackedLink className="button button-small" eventName="nav_download_click" eventParams={{ locale }} href="#download">{t('cta')}</TrackedLink>
         </div>
       </div>
     </header>

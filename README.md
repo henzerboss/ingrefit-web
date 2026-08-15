@@ -12,6 +12,8 @@ npm run build
 PORT=3020 npm start
 ```
 
+For CloudPanel/Nginx, allow AI photo payloads in the site vhost (for example `client_max_body_size 15M;`) before the proxy location, then reload Nginx. Three compressed label images are sent in one JSON request.
+
 Required production values: `GEMINI_API_KEY`, `INGREFIT_CLIENT_TOKENS`, `OPEN_FOOD_FACTS_USER_AGENT`, `REVENUECAT_SECRET_API_KEY` and `REVENUECAT_ENTITLEMENT_ID`.
 
 ## Routes
@@ -28,8 +30,17 @@ Required production values: `GEMINI_API_KEY`, `INGREFIT_CLIENT_TOKENS`, `OPEN_FO
 2. Missing or insufficient barcode data returns `needs_photos`; the app offers the Premium label flow.
 3. Label mode sends front, ingredients and nutrition-table images to an English strict transcription prompt. Missing or unreadable fields stay `null`/empty.
 4. Unpackaged mode identifies only the visibly present food and returns confidence. It intentionally leaves exact ingredients, allergens and nutrition unknown.
-5. Deterministic `scoring.ts` calculates the number before AI writes anything. All 11 goals and supported diet modes have explicit rules tied to declared fields.
-6. Free barcode results use a deterministic English/Russian explanation. Premium can translate source strings and generate a longer explanation; prompts receive the full selected/device language tag.
+5. Deterministic `scoring.ts` calculates the number before AI writes anything. All 12 goals and supported diet modes have explicit rules tied to declared fields.
+6. Free barcode results use a deterministic English/Russian explanation. Premium translates source strings and generates a longer explanation in the exact active app language (`en` or `ru`).
+
+## Store links and analytics
+
+- App Store: `https://apps.apple.com/app/id6801561360`
+- Google Play: `https://play.google.com/store/apps/details?id=store.evsi.ingrefit`
+- Google Analytics: `G-P2ZSBZ3YST`
+- Landing goals include hero/navigation/pricing CTA clicks and separate iOS/Android download clicks.
+
+The emitted goal events are `hero_download_click`, `hero_how_click`, `pricing_cta_click`, `download_ios_click` and `download_android_click`. Mark the three download/pricing events as key events in Google Analytics after they first appear in the property.
 
 ## Premium verification
 

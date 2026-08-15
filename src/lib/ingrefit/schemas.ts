@@ -12,10 +12,11 @@ const goalSchema = z.enum([
   'heart_health',
   'steady_energy',
   'digestive_wellness',
+  'low_saturated_fat',
 ]);
 
 const profileSchema = z.object({
-  goals: z.array(goalSchema).min(1).max(11),
+  goals: z.array(goalSchema).min(1).max(12),
   diet: z.enum(['none', 'vegetarian', 'vegan', 'pescatarian', 'gluten_free', 'dairy_free', 'low_carb', 'mediterranean']),
   allergens: z.array(z.string().trim().min(1).max(80)).max(30),
   avoidedIngredients: z.array(z.string().trim().min(1).max(100)).max(30),

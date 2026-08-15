@@ -191,6 +191,12 @@ export function scoreProduct(facts: ProductFacts, profile: AnalysisProfile): Sco
     else if (fiber < 2) add({ id: 'digestive-fiber-low', impact: -0.5, label: 'Low fiber for your goal', evidence: `${fiber} g fiber per 100 g is declared.`, severity: 'caution' });
   }
 
+  const saturatedFat = facts.nutrition.saturatedFat100g;
+  if (profile.goals.includes('low_saturated_fat') && saturatedFat !== null) {
+    if (saturatedFat <= 1.5) add({ id: 'saturated-fat-low', impact: 0.8, label: 'Low saturated fat for your goal', evidence: `${saturatedFat} g saturated fat per 100 g is declared.`, severity: 'positive' });
+    else if (saturatedFat > 5) add({ id: 'saturated-fat-high', impact: -1.2, label: 'High saturated fat for your goal', evidence: `${saturatedFat} g saturated fat per 100 g is declared.`, severity: 'caution' });
+  }
+
   if (!signals.length) {
     signals.push({ id: 'limited-goal-data', impact: 0, label: 'Limited goal-specific data', evidence: 'No available declared field triggered a goal-specific adjustment.', severity: 'neutral' });
   }

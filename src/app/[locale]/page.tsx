@@ -3,6 +3,10 @@ import { setRequestLocale } from 'next-intl/server';
 
 import { SiteFooter } from '@/components/SiteFooter';
 import { SiteHeader } from '@/components/SiteHeader';
+import { TrackedLink } from '@/components/TrackedLink';
+
+const APP_STORE_URL = 'https://apps.apple.com/app/id6801561360';
+const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=store.evsi.ingrefit';
 
 export default async function LandingPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -33,8 +37,8 @@ function Landing({ locale }: { locale: string }) {
               <h1>{hero('title')} <em>{hero('accent')}</em></h1>
               <p className="hero-subtitle">{hero('subtitle')}</p>
               <div className="hero-actions">
-                <a className="button" href="#download">{hero('cta')}</a>
-                <a className="text-link" href="#how">{hero('secondary')} <span>↓</span></a>
+                <TrackedLink className="button" eventName="hero_download_click" eventParams={{ locale }} href="#download">{hero('cta')}</TrackedLink>
+                <TrackedLink className="text-link" eventName="hero_how_click" eventParams={{ locale }} href="#how">{hero('secondary')} <span>↓</span></TrackedLink>
               </div>
               <div className="proof-row">
                 <span>▦ {hero('proof1')}</span>
@@ -47,7 +51,7 @@ function Landing({ locale }: { locale: string }) {
               <div className="leaf leaf-two">✓</div>
               <div className="phone">
                 <div className="phone-top"><span>9:41</span><span>● ◒</span></div>
-                <div className="phone-brand"><span className="logo-mark logo-mark-small">if</span><strong>IngreFit</strong></div>
+                <div className="phone-brand"><img alt="" className="logo-image logo-image-small" height="26" src="/brand/icon.png" width="26" /><strong>IngreFit</strong></div>
                 <div className="found-pill"><span>✓</span>{demo('scanning')}</div>
                 <div className="product-mini">
                   <div className="product-art">🥣</div>
@@ -134,8 +138,8 @@ function Landing({ locale }: { locale: string }) {
               <h2>{pricing('title')}</h2>
             </div>
             <div className="pricing-grid">
-              <PriceCard title={pricing('free')} count="∞" perDay={pricing('perDay')} features={[pricing('freeFeature1'), pricing('freeFeature2'), pricing('freeFeature3')]} cta={pricing('freeCta')} />
-              <PriceCard premium title={pricing('premium')} count="AI" perDay={pricing('premiumLabel')} features={[pricing('premiumFeature1'), pricing('premiumFeature2'), pricing('premiumFeature3')]} cta={pricing('premiumCta')} />
+              <PriceCard locale={locale} title={pricing('free')} count="∞" perDay={pricing('perDay')} features={[pricing('freeFeature1'), pricing('freeFeature2'), pricing('freeFeature3')]} cta={pricing('freeCta')} />
+              <PriceCard locale={locale} premium title={pricing('premium')} count="AI" perDay={pricing('premiumLabel')} features={[pricing('premiumFeature1'), pricing('premiumFeature2'), pricing('premiumFeature3')]} cta={pricing('premiumCta')} />
             </div>
             <p className="pricing-note">{pricing('note')}</p>
           </div>
@@ -145,7 +149,8 @@ function Landing({ locale }: { locale: string }) {
           <div className="container download-card">
             <div><h2>{cta('title')}</h2><p>{cta('body')}</p></div>
             <div className="download-action">
-              <a className="button button-lime" href="mailto:hello@ingrefit.com?subject=IngreFit%20early%20access">{cta('button')}</a>
+              <TrackedLink className="button button-lime store-button" eventName="download_ios_click" eventParams={{ locale }} href={APP_STORE_URL} rel="noreferrer" target="_blank"> {cta('ios')}</TrackedLink>
+              <TrackedLink className="button store-button" eventName="download_android_click" eventParams={{ locale }} href={PLAY_STORE_URL} rel="noreferrer" target="_blank">▶ {cta('android')}</TrackedLink>
               <small>{cta('privacy')}</small>
             </div>
           </div>
@@ -168,13 +173,13 @@ function Feature({ icon, title, body }: { icon: string; title: string; body: str
   return <article className="feature-card"><div className="feature-icon">{icon}</div><h3>{title}</h3><p>{body}</p></article>;
 }
 
-function PriceCard({ title, count, perDay, features: items, cta, premium = false }: { title: string; count: string; perDay: string; features: string[]; cta: string; premium?: boolean }) {
+function PriceCard({ title, count, perDay, features: items, cta, locale, premium = false }: { title: string; count: string; perDay: string; features: string[]; cta: string; locale: string; premium?: boolean }) {
   return (
     <article className={`price-card${premium ? ' price-card-premium' : ''}`}>
       {premium ? <span className="premium-spark">✦</span> : null}
       <h3>{title}</h3><strong className="price-count">{count}</strong><p className="per-day">{perDay}</p>
       <ul>{items.map((item) => <li key={item}><span>✓</span>{item}</li>)}</ul>
-      <a className={`button${premium ? ' button-lime' : ' button-outline'}`} href="#download">{cta}</a>
+      <TrackedLink className={`button${premium ? ' button-lime' : ' button-outline'}`} eventName="pricing_cta_click" eventParams={{ locale, plan: premium ? 'premium' : 'free' }} href="#download">{cta}</TrackedLink>
     </article>
   );
 }

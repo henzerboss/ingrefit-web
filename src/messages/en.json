@@ -14,7 +14,7 @@
     "title": "A food scanner that asks one useful question:",
     "accent": "does this fit you?",
     "subtitle": "Scan any barcode free, or use Premium photo recognition. IngreFit compares available facts with your goals on a clear 10-point scale.",
-    "cta": "Join the early access list",
+    "cta": "Download IngreFit",
     "secondary": "See how it works",
     "proof1": "Barcode + label scan",
     "proof2": "Personal goals",
@@ -40,7 +40,7 @@
     "step2Title": "Use a photo when needed",
     "step2Body": "Premium can read a missing package label from three photos or cautiously identify food without packaging from one photo.",
     "step3Title": "Get your score",
-    "step3Body": "A deterministic 1–10 score uses only available facts and the goals you selected. AI explains the result in your device language."
+    "step3Body": "A deterministic 1–10 score uses only available facts and the goals you selected. AI explains the result in the active app language."
   },
   "principle": {
     "eyebrow": "THE INGREFIT RULE",
@@ -73,7 +73,7 @@
     "f4Title": "Local history",
     "f4Body": "Recent product results stay on your device for quick comparison.",
     "f5Title": "English and Russian UI",
-    "f5Body": "The interface follows the device; explanations request the full device language tag.",
+    "f5Body": "The interface follows your app setting; explanations use that exact language.",
     "f6Title": "Unlimited barcode scans",
     "f6Body": "Core barcode lookup and the personal evidence-based score stay free."
   },
@@ -96,10 +96,10 @@
   },
   "cta": {
     "title": "Read the package. Understand the choice.",
-    "body": "IngreFit is being prepared for iOS and Android. Leave your email to hear when early access opens.",
-    "placeholder": "you@example.com",
-    "button": "Notify me",
-    "privacy": "No spam. Product updates only."
+    "body": "Download IngreFit for iPhone or Android and check your next product before you buy it.",
+    "ios": "Download on the App Store",
+    "android": "Get it on Google Play",
+    "privacy": "Store availability can vary by country."
   },
   "footer": {
     "tagline": "Personal food clarity, grounded in visible facts.",
@@ -112,11 +112,11 @@
     "privacyTitle": "Privacy Policy",
     "privacyIntro": "Effective August 15, 2026. This policy explains how IngreFit processes information when you use the website and mobile application.",
     "privacyDataTitle": "Data we process",
-    "privacyDataBody": "Goals, diet preferences and scan history are stored locally by default. The server receives an installation identifier, selected goals, a device language tag and either a barcode, package images or a food photo required for the requested analysis.",
+    "privacyDataBody": "Goals, diet preferences, scan history and the scan photo shown in history are stored in the app's private local storage. The server receives an installation identifier, selected goals, the active app language and either a barcode, package images or a food photo required for the requested analysis. Local app data normally survives updates but is removed when the app is uninstalled or its data is cleared.",
     "privacyImagesTitle": "Package images",
     "privacyImagesBody": "Label and food images are sent to the configured AI provider only for the analysis requested by the user. The IngreFit backend processes them during the request and intentionally stores no copies. Package facts are transcribed only from visible text; a food photo identification is marked as uncertain and does not confirm ingredients, allergens or nutrition. Processing by the AI provider is governed by its policy.",
     "privacyThirdTitle": "Service providers",
-    "privacyThirdBody": "The backend may contact Open Food Facts, Google Gemini, hosting and RevenueCat/store billing providers. Their terms and privacy practices also apply.",
+    "privacyThirdBody": "The backend may contact Open Food Facts, Google Gemini, hosting and RevenueCat/store billing providers. The website uses Google Analytics for page and CTA activity, and native builds use Google Firebase Analytics for product events such as onboarding completion, scan type and purchase flow; app analytics events do not include photos, barcodes, ingredient text or product names. Their terms and privacy practices also apply.",
     "privacyRightsTitle": "Your choices",
     "privacyRightsBody": "You can remove local history by clearing application data. Privacy questions and data requests can be sent to support@evsi.store.",
     "termsTitle": "Terms of Use",
