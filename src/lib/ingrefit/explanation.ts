@@ -164,10 +164,16 @@ export function renderAssessment(
   };
 }
 
-interface CachedExplanation {
+/**
+ * Declared as a type alias, not an interface, on purpose: Prisma's Json input
+ * requires an index signature, and TypeScript gives implicit index signatures
+ * to type aliases but never to interfaces. As an interface this fails to
+ * compile against the generated client.
+ */
+type CachedExplanation = {
   summary: string;
   tip: string;
-}
+};
 
 async function readExplanationCache(fingerprint: string, language: string): Promise<CachedExplanation | null> {
   const key = `${fingerprint}:${language}`;

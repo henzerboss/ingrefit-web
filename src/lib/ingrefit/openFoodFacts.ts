@@ -268,11 +268,16 @@ async function readCachedRaw(barcode: string): Promise<OpenFoodFactsProduct | nu
 }
 
 async function writeCachedRaw(barcode: string, raw: OpenFoodFactsProduct): Promise<void> {
+  // Round-trip through JSON before storing. This both satisfies Prisma's Json
+  // input type and guarantees the value is plain JSON: the upstream payload can
+  // carry `undefined` entries that would otherwise be silently dropped or
+  // rejected at the driver level.
+  const facts = JSON.parse(JSON.stringify(raw));
   await safeDb((db) =>
     db.productCache.upsert({
       where: { barcode },
-      create: { barcode, facts: raw as object },
-      update: { facts: raw as object },
+      create: { barcode, facts },
+      update: { facts },
     }),
   );
 }
