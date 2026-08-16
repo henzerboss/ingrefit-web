@@ -27,10 +27,10 @@ Required production values: `GEMINI_API_KEY`, `INGREFIT_CLIENT_TOKENS`, `OPEN_FO
 ## Evidence-first pipeline
 
 1. Barcode mode checks Open Food Facts v3. English/Russian localized OFF fields are preferred when present.
-2. Missing or insufficient barcode data returns `needs_photos`; the app offers the Premium label flow.
-3. Label mode sends front, ingredients and nutrition-table images to an English strict transcription prompt. Missing or unreadable fields stay `null`/empty.
+2. A result is complete only when it has an identifiable product and a useful nutrient set. For Premium, a sparse record with an ingredient statement is cleaned and missing nutrition is cautiously estimated in a separate `estimated_text` layer. If that is still not useful, the API returns `needs_photos`.
+3. Label mode sends front, ingredients and nutrition-table images to an English strict transcription prompt. If the visible ingredient statement is usable but the nutrition table remains incomplete, the same clearly marked text-estimation layer may fill the practical nutrient profile; otherwise the app asks for clearer photos.
 4. Unpackaged mode identifies the visibly present food, returns confidence and may provide a rounded approximate nutrient profile per 100 g from general food-composition knowledge. Exact ingredients, allergens and nutrition remain unknown; every estimate is explicitly marked as an estimate.
-5. Deterministic `scoring.ts` calculates the number before AI writes anything. All 12 goals and supported diet modes have explicit rules tied to available fields; visual nutrition estimates receive reduced weight.
+5. Deterministic `scoring.ts` calculates the number before AI writes any explanation. All 12 goals and supported diet modes have explicit rules tied to available fields; visual and text-based nutrition estimates receive reduced weight.
 6. Free barcode results use a deterministic English/Russian explanation. Premium translates source strings and generates a longer explanation in the exact active app language (`en` or `ru`).
 
 ## Store links and analytics
@@ -52,4 +52,4 @@ Legacy HMAC entitlements remain supported for migrations via `INGREFIT_ENTITLEME
 
 ## Important product rule
 
-**AI reads, translates and explains; it does not invent product facts.** Empty allergen data never means allergen-free. Visual identification can provide only clearly labelled approximate nutrition, never hidden recipes, declared allergens or precise values. IngreFit provides general information, not medical advice; users must verify packaging for allergies and medical conditions.
+**Declared facts and estimates are never mixed silently.** Empty allergen data never means allergen-free. AI may provide clearly labelled approximate nutrition from a visible food or a credible product/ingredient identity, but never turns estimates into package claims or invents allergens. IngreFit provides general information, not medical advice; users must verify packaging for allergies and medical conditions.

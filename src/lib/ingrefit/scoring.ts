@@ -54,8 +54,9 @@ export function scoreProduct(facts: ProductFacts, profile: AnalysisProfile): Sco
   const signals: ScoreSignal[] = [];
   const add = (signal: ScoreSignal) => {
     if (signals.some((item) => item.id === signal.id)) return;
-    const adjusted = facts.nutritionBasis === 'estimated_visual' && signal.impact !== 0
-      ? { ...signal, impact: Math.round(signal.impact * 0.6 * 10) / 10, evidence: `AI visual estimate: ${signal.evidence}` }
+    const estimateMultiplier = facts.nutritionBasis === 'estimated_visual' ? 0.6 : facts.nutritionBasis === 'estimated_text' ? 0.7 : 1;
+    const adjusted = estimateMultiplier < 1 && signal.impact !== 0
+      ? { ...signal, impact: Math.round(signal.impact * estimateMultiplier * 10) / 10, evidence: `AI estimate: ${signal.evidence}` }
       : signal;
     signals.push(adjusted);
     score += adjusted.impact;

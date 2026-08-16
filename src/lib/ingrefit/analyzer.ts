@@ -1,8 +1,8 @@
 import { HttpError } from './http';
 import { explainScore } from './explanation';
 import { localizeProductFacts } from './localization';
-import { findProductByBarcode, hasEnoughFacts } from './openFoodFacts';
-import { recognizeFoodPhoto, recognizeLabel } from './recognition';
+import { findProductByBarcode, hasContaminatedIngredients, hasEnoughFacts } from './openFoodFacts';
+import { enrichProductFromText, recognizeFoodPhoto, recognizeLabel } from './recognition';
 import { scoreProduct } from './scoring';
 import type { AnalyzeRequest } from './schemas';
 import type { Plan, ProductFacts, UsageSnapshot } from './types';
@@ -20,8 +20,18 @@ export async function analyzeProduct(request: AnalyzeRequest, _installationId: s
   let product: ProductFacts;
   if (request.mode === 'unpackaged') {
     product = await recognizeFoodPhoto(request.photos![0]!, request.locale);
+    if (!hasEnoughFacts(product)) {
+      throw new HttpError(422, 'INSUFFICIENT_PHOTO_DATA', 'The supplied photo does not support a useful food and nutrition estimate.');
+    }
   } else if (request.mode === 'label') {
     product = await recognizeLabel(request.barcode ?? null, request.photos!, request.locale);
+    if (!hasEnoughFacts(product) && (product.ingredientsText || product.ingredients.length)) {
+      try {
+        product = await enrichProductFromText(product, request.locale);
+      } catch (error) {
+        console.error('[ingrefit] Label text enrichment failed', error);
+      }
+    }
     if (!hasEnoughFacts(product)) {
       throw new HttpError(422, 'INSUFFICIENT_LABEL_DATA', 'The supplied photos do not contain enough legible product facts.', { unknownFields: product.unknownFields });
     }
@@ -32,6 +42,14 @@ export async function analyzeProduct(request: AnalyzeRequest, _installationId: s
     } catch (error) {
       console.error('[ingrefit] Open Food Facts lookup failed', error);
       throw new HttpError(502, 'OPEN_FOOD_FACTS_UNAVAILABLE', 'The product database is temporarily unavailable.');
+    }
+    const canEnrichFromText = Boolean(found && (found.ingredientsText || found.ingredients.length || found.categories.length));
+    if (found && request.premiumFeatures && canEnrichFromText && (!hasEnoughFacts(found) || hasContaminatedIngredients(found.ingredientsText))) {
+      try {
+        found = await enrichProductFromText(found, request.locale);
+      } catch (error) {
+        console.error('[ingrefit] Text-based product enrichment failed; requesting label photos', error);
+      }
     }
     if (!found || !hasEnoughFacts(found)) {
       return { status: 'needs_photos' as const, barcode: request.barcode!, reason: found ? ('insufficient_data' as const) : ('not_found' as const), requiredPhotos: ['front', 'ingredients', 'nutrition'] as const };

@@ -78,6 +78,24 @@ function cleanTags(value: unknown): string[] {
     .filter(Boolean);
 }
 
+function structuredIngredients(product: OpenFoodFactsProduct): string[] {
+  if (!Array.isArray(product.ingredients)) return [];
+  return product.ingredients
+    .map((item) => text(item.text) ?? text(item.id)?.replace(/^[a-z]{2}:/i, '').replaceAll('-', ' ') ?? null)
+    .filter((item): item is string => Boolean(item));
+}
+
+export function hasContaminatedIngredients(value: string | null): boolean {
+  if (!value) return false;
+  return value.length > 1_200 || /(?:https?:\/\/|www\.|\b(?:infoline|distributor|recommended retail price|best before|consumir preferentemente|produced by|manufactured by)\b|[\w.+-]+@[\w.-]+\.[a-z]{2,})/i.test(value);
+}
+
+export function nutritionFieldCount(product: ProductFacts): number {
+  return Object.entries(product.nutrition)
+    .filter(([key]) => key !== 'servingSize')
+    .filter(([, value]) => typeof value === 'number').length;
+}
+
 function normalizeNutrition(product: OpenFoodFactsProduct): NutritionFacts {
   const nutrients = product.nutriments ?? {};
   return {
@@ -125,10 +143,10 @@ function unknownFields(product: ProductFacts): string[] {
 }
 
 export function hasEnoughFacts(product: ProductFacts): boolean {
-  const nutritionCount = Object.entries(product.nutrition)
-    .filter(([key]) => key !== 'servingSize')
-    .filter(([, value]) => typeof value === 'number').length;
-  return Boolean(product.name && (product.ingredientsText || nutritionCount >= 4));
+  // An ingredient string alone cannot support weight, protein, sugar, salt or
+  // heart-related goals. Do not turn a sparse database record into a neutral
+  // 5.5/10 result: require an identifiable product and a useful nutrient set.
+  return Boolean(product.name && nutritionFieldCount(product) >= 4);
 }
 
 export async function findProductByBarcode(barcode: string, locale = 'en'): Promise<ProductFacts | null> {
@@ -155,6 +173,11 @@ export async function findProductByBarcode(barcode: string, locale = 'en'): Prom
   const localizedName = language === 'ru' ? raw.product_name_ru : raw.product_name_en;
   const localizedIngredients = language === 'ru' ? raw.ingredients_text_ru : raw.ingredients_text_en;
   const nutrition = normalizeNutrition(raw);
+  const ingredientItems = structuredIngredients(raw);
+  const rawIngredientsText = text(localizedIngredients) ?? text(raw.ingredients_text);
+  const cleanIngredientsText = hasContaminatedIngredients(rawIngredientsText) && ingredientItems.length >= 2
+    ? ingredientItems.join(', ')
+    : rawIngredientsText;
   const facts: ProductFacts = {
     source: 'openfoodfacts',
     barcode: text(raw.code) ?? text(payload.code) ?? barcode,
@@ -162,10 +185,8 @@ export async function findProductByBarcode(barcode: string, locale = 'en'): Prom
     brand: text(raw.brands),
     quantity: text(raw.quantity),
     imageUrl: text(raw.image_front_url) ?? text(raw.image_front_small_url),
-    ingredientsText: text(localizedIngredients) ?? text(raw.ingredients_text),
-    ingredients: Array.isArray(raw.ingredients)
-      ? raw.ingredients.map((item) => text(item.text) ?? text(item.id)).filter((item): item is string => Boolean(item))
-      : [],
+    ingredientsText: cleanIngredientsText,
+    ingredients: ingredientItems,
     allergens: cleanTags(raw.allergens_tags),
     traces: cleanTags(raw.traces_tags),
     additives: cleanTags(raw.additives_tags),

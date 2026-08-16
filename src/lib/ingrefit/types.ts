@@ -53,7 +53,7 @@ export interface ProductFacts {
   novaGroup: number | null;
   nutrition: NutritionFacts;
   nutritionReference?: '100g' | '100ml' | 'serving';
-  nutritionBasis?: 'declared' | 'estimated_visual';
+  nutritionBasis?: 'declared' | 'estimated_visual' | 'estimated_text';
   nutritionEstimateConfidence?: number | null;
   completeness: number;
   unknownFields: string[];

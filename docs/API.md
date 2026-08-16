@@ -21,11 +21,11 @@ Protected requests require `Authorization: Bearer <client token>` and `X-IngreFi
 }
 ```
 
-Known products return `status: complete`. Missing/insufficient products return `status: needs_photos` with required photo kinds and do not fail the barcode flow.
+Known products return `status: complete` only when the record has an identifiable product and at least four useful nutrient values. For verified Premium requests, a sparse record with an ingredient statement may be cleaned and completed with clearly marked approximate values (`nutritionBasis: "estimated_text"`). If the enriched record is still insufficient, the response is `status: needs_photos` with required photo kinds.
 
 ## Premium package label
 
-Use `mode: label`, `premiumFeatures: true`, optional barcode and exactly three JPEG base64 images with kinds `front`, `ingredients`, `nutrition`.
+Use `mode: label`, `premiumFeatures: true`, optional barcode and exactly three JPEG base64 images with kinds `front`, `ingredients`, `nutrition`. A readable ingredient statement can support a clearly marked approximate nutrient profile when the nutrition table remains incomplete; otherwise `422 INSUFFICIENT_LABEL_DATA` asks for clearer photos.
 
 ## Premium food without packaging
 
@@ -33,7 +33,7 @@ Use `mode: unpackaged`, `premiumFeatures: true`, a null barcode and exactly one 
 
 ## Complete response
 
-The response contains normalized `product`, deterministic `assessment` and a compatibility `usage` snapshot. `assessment.aiEnhanced` and `assessment.translated` say whether the two Premium enhancements were applied. `nutritionReference` identifies 100 g, 100 ml or serving; `nutritionBasis` separates declared values from visual estimates.
+The response contains normalized `product`, deterministic `assessment` and a compatibility `usage` snapshot. `assessment.aiEnhanced` and `assessment.translated` say whether the two Premium enhancements were applied. `nutritionReference` identifies 100 g, 100 ml or serving; `nutritionBasis` is `declared`, `estimated_visual` or `estimated_text` and always separates package facts from estimates.
 
 ## Errors
 
@@ -41,5 +41,6 @@ The response contains normalized `product`, deterministic `assessment` and a com
 - `401 UNAUTHORIZED` — client token or installation id is invalid.
 - `402 PREMIUM_REQUIRED` — photo/AI/translation was requested without a verified entitlement.
 - `422 INSUFFICIENT_LABEL_DATA` — the three label photos remain illegible or incomplete.
+- `422 INSUFFICIENT_PHOTO_DATA` — the unpackaged-food photo does not support a useful identification and nutrition estimate.
 - `502 AI_UNAVAILABLE` — configured Gemini models failed during a required Premium operation.
 - `503 AI_NOT_CONFIGURED` — Gemini is not configured.
