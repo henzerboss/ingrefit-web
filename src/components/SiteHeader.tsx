@@ -4,6 +4,7 @@ import { Link } from '@/i18n/navigation';
 
 import { Logo } from './Logo';
 import { TrackedLink } from './TrackedLink';
+import { ThemeSwitcher } from './ThemeSwitcher';
 
 export function SiteHeader({ locale }: { locale: string }) {
   const t = useTranslations('nav');
@@ -18,6 +19,7 @@ export function SiteHeader({ locale }: { locale: string }) {
           <a href="#pricing">{t('pricing')}</a>
         </nav>
         <div className="nav-actions">
+          <ThemeSwitcher labels={{ system: t('themeSystem'), light: t('themeLight'), dark: t('themeDark') }} />
           <Link aria-label={`Switch to ${alternateLocale}`} className="language" href="/" locale={alternateLocale}>
             {alternateLocale.toUpperCase()}
           </Link>

@@ -6,21 +6,30 @@ interface GeminiImage {
 }
 
 interface GeminiRequest<T> {
+  operation: string;
   systemInstruction: string;
   prompt: string;
   responseSchema: Record<string, unknown>;
   images?: GeminiImage[];
   temperature?: number;
+  maxOutputTokens?: number;
   validate: (value: unknown) => T;
 }
 
 interface GeminiResponse {
   candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
   error?: { message?: string };
+  usageMetadata?: {
+    promptTokenCount?: number;
+    candidatesTokenCount?: number;
+    thoughtsTokenCount?: number;
+    cachedContentTokenCount?: number;
+    totalTokenCount?: number;
+  };
 }
 
 function models(): string[] {
-  return (process.env.INGREFIT_GEMINI_MODELS ?? 'gemini-3.5-flash,gemini-2.5-flash,gemini-2.5-flash-lite')
+  return (process.env.INGREFIT_GEMINI_MODELS ?? 'gemini-3.1-flash-lite,gemini-2.5-flash-lite')
     .split(',')
     .map((model) => model.trim())
     .filter(Boolean);
@@ -37,6 +46,9 @@ async function attempt<T>(model: string, input: GeminiRequest<T>, apiKey: string
     parts.push({ inlineData: { mimeType: image.mimeType, data: image.base64 } });
   }
 
+  const thinkingConfig = model.startsWith('gemini-3')
+    ? { thinkingLevel: 'minimal' }
+    : model.includes('2.5') ? { thinkingBudget: 0 } : undefined;
   const response = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`,
     {
@@ -47,8 +59,10 @@ async function attempt<T>(model: string, input: GeminiRequest<T>, apiKey: string
         contents: [{ role: 'user', parts }],
         generationConfig: {
           temperature: input.temperature ?? 0.1,
+          maxOutputTokens: input.maxOutputTokens ?? 1_800,
           responseMimeType: 'application/json',
           responseSchema: input.responseSchema,
+          ...(thinkingConfig ? { thinkingConfig } : {}),
         },
       }),
       signal: AbortSignal.timeout(35_000),
@@ -57,6 +71,25 @@ async function attempt<T>(model: string, input: GeminiRequest<T>, apiKey: string
   );
   const payload = (await response.json().catch(() => ({}))) as GeminiResponse;
   if (!response.ok) throw new Error(payload.error?.message ?? `Gemini ${model} returned HTTP ${response.status}`);
+  const usage = payload.usageMetadata;
+  if (usage) {
+    const promptTokens = usage.promptTokenCount ?? 0;
+    const outputTokens = usage.candidatesTokenCount ?? 0;
+    const thoughtTokens = usage.thoughtsTokenCount ?? 0;
+    const estimatedCostUsd = model === 'gemini-3.1-flash-lite'
+      ? (promptTokens * 0.25 + (outputTokens + thoughtTokens) * 1.5) / 1_000_000
+      : null;
+    console.info('[ingrefit] Gemini usage', JSON.stringify({
+      operation: input.operation,
+      model,
+      promptTokens,
+      outputTokens,
+      thoughtTokens,
+      cachedTokens: usage.cachedContentTokenCount ?? 0,
+      totalTokens: usage.totalTokenCount ?? promptTokens + outputTokens + thoughtTokens,
+      estimatedCostUsd,
+    }));
+  }
   const text = payload.candidates?.[0]?.content?.parts?.map((part) => part.text ?? '').join('').trim();
   if (!text) throw new Error(`Gemini ${model} returned an empty response`);
   return input.validate(parseJson(text));

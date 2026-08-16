@@ -47,6 +47,10 @@ function declaredAllergenMatch(declared: string[], selected: string): string | u
   return declared.find((item) => aliases.some((alias) => includesTerm(item, alias)));
 }
 
+function isEstimateSensitiveSignal(id: string): boolean {
+  return /^(protein-|sugars-|fiber-|salt-|balanced-nutrients$|energy-|diet-low-carb-|diet-mediterranean-fiber$|heart-|steady-|digestive-|saturated-fat-)/.test(id);
+}
+
 export function scoreProduct(facts: ProductFacts, profile: AnalysisProfile): ScoredProduct {
   let score = 5.5;
   let critical = false;
@@ -54,7 +58,9 @@ export function scoreProduct(facts: ProductFacts, profile: AnalysisProfile): Sco
   const signals: ScoreSignal[] = [];
   const add = (signal: ScoreSignal) => {
     if (signals.some((item) => item.id === signal.id)) return;
-    const estimateMultiplier = facts.nutritionBasis === 'estimated_visual' ? 0.6 : facts.nutritionBasis === 'estimated_text' ? 0.7 : 1;
+    const estimateMultiplier = isEstimateSensitiveSignal(signal.id)
+      ? facts.nutritionBasis === 'estimated_visual' ? 0.6 : facts.nutritionBasis === 'estimated_text' ? 0.7 : 1
+      : 1;
     const adjusted = estimateMultiplier < 1 && signal.impact !== 0
       ? { ...signal, impact: Math.round(signal.impact * estimateMultiplier * 10) / 10, evidence: `AI estimate: ${signal.evidence}` }
       : signal;
@@ -102,6 +108,14 @@ export function scoreProduct(facts: ProductFacts, profile: AnalysisProfile): Sco
         severity: 'critical',
       });
     }
+  }
+
+  const alcohol = facts.alcoholPercent;
+  if (alcohol !== null && alcohol > 0) {
+    if (alcohol <= 1.2) add({ id: 'alcohol-very-low', impact: -0.5, label: 'Contains alcohol', evidence: `The product declares ${alcohol}% alcohol by volume.`, severity: 'caution' });
+    else if (alcohol <= 6) add({ id: 'alcohol-moderate', impact: -1.5, label: 'Alcohol content', evidence: `The product declares ${alcohol}% alcohol by volume.`, severity: 'caution' });
+    else if (alcohol <= 15) add({ id: 'alcohol-high', impact: -2.2, label: 'High alcohol content', evidence: `The product declares ${alcohol}% alcohol by volume.`, severity: 'caution' });
+    else add({ id: 'alcohol-very-high', impact: -3, label: 'Very high alcohol content', evidence: `The product declares ${alcohol}% alcohol by volume.`, severity: 'caution' });
   }
 
   const protein = facts.nutrition.protein100g;

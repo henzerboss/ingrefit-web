@@ -33,7 +33,8 @@ export default async function LocaleLayout({ children, params }: Readonly<{ chil
   const messages = await getMessages();
 
   return (
-    <html lang={locale}>
+    <html lang={locale} suppressHydrationWarning>
+      <head><script dangerouslySetInnerHTML={{ __html: "try{const t=localStorage.getItem('ingrefit-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}" }} /></head>
       <body>
         <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
         <GoogleAnalytics />

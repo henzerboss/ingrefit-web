@@ -21,8 +21,11 @@ Required production values: `GEMINI_API_KEY`, `INGREFIT_CLIENT_TOKENS`, `OPEN_FO
 - `POST /api/ingrefit/analyze` — barcode, Premium label-photo or Premium unpackaged-food analysis.
 - `GET /api/ingrefit/usage` — compatibility snapshot; barcode scans have no daily quota.
 - `GET /api/ingrefit/health` — configuration health without secret values.
+- `GET /api/ingrefit/version` — platform-specific latest/minimum version and store URL for the launch update prompt.
 - `/en`, `/ru` — localized landing pages.
 - `/en/privacy`, `/ru/privacy`, `/en/terms`, `/ru/terms` — localized legal pages.
+
+The landing page supports system, light and dark themes and links directly to the configured App Store and Google Play listings.
 
 ## Evidence-first pipeline
 
@@ -32,6 +35,12 @@ Required production values: `GEMINI_API_KEY`, `INGREFIT_CLIENT_TOKENS`, `OPEN_FO
 4. Unpackaged mode identifies the visibly present food, returns confidence and may provide a rounded approximate nutrient profile per 100 g from general food-composition knowledge. Exact ingredients, allergens and nutrition remain unknown; every estimate is explicitly marked as an estimate.
 5. Deterministic `scoring.ts` calculates the number before AI writes any explanation. All 12 goals and supported diet modes have explicit rules tied to available fields; visual and text-based nutrition estimates receive reduced weight.
 6. Free barcode results use a deterministic English/Russian explanation. Premium translates source strings and generates a longer explanation in the exact active app language (`en` or `ru`).
+
+The exact score thresholds and adjustments, including the explicit alcohol penalty, are documented in [`docs/SCORING.md`](docs/SCORING.md). Gemini request budgets and operation-level cost logging are documented in [`docs/GEMINI_COSTS.md`](docs/GEMINI_COSTS.md).
+
+## App update prompt
+
+The app checks `GET /api/ingrefit/version` at launch. Set the four `INGREFIT_*_LATEST_VERSION` and `INGREFIT_*_MINIMUM_VERSION` values in `.env`, rebuild/restart the server, and raise a `LATEST` value only after that store release is available. Raising `MINIMUM` makes the prompt non-dismissible for older builds.
 
 ## Store links and analytics
 

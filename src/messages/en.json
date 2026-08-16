@@ -7,7 +7,10 @@
     "how": "How it works",
     "principle": "Facts first",
     "pricing": "Pricing",
-    "cta": "Get the app"
+    "cta": "Get the app",
+    "themeSystem": "Use system theme",
+    "themeLight": "Use light theme",
+    "themeDark": "Use dark theme"
   },
   "hero": {
     "eyebrow": "YOUR PERSONAL FOOD COMPASS",
@@ -24,7 +27,7 @@
     "scanning": "Product found",
     "product": "Greek yogurt, natural",
     "brand": "Example label · 400 g",
-    "scoreLabel": "Your fit score",
+    "scoreLabel": "Personal fit score",
     "verdict": "Great fit",
     "signal1": "High protein density",
     "signal2": "Low added complexity",
@@ -44,10 +47,10 @@
   },
   "principle": {
     "eyebrow": "THE INGREFIT RULE",
-    "title": "AI reads and explains. It never fills the blanks.",
-    "body": "Unknown stays unknown. Nutrition values are never guessed. Allergens are never marked absent just because the field is empty. The score and its evidence remain visible together.",
+    "title": "Declared facts stay separate from AI estimates.",
+    "body": "Package facts are never invented. For food without packaging or sparse records, AI may provide clearly labelled approximate nutrition. Unknown allergens still stay unknown, and every score adjustment remains visible.",
     "fact1Title": "Facts are separated from commentary",
-    "fact1Body": "Open Food Facts or visible package text creates the factual layer. AI cannot add to it.",
+    "fact1Body": "Open Food Facts and visible package text create the declared layer. AI estimates are stored and displayed separately.",
     "fact2Title": "The number is reproducible",
     "fact2Body": "Goal rules calculate the score before AI writes a single sentence.",
     "fact3Title": "Evidence follows every adjustment",
@@ -67,7 +70,7 @@
     "f1Title": "Fast barcode lookup",
     "f1Body": "Open Food Facts first, with backend caching that respects public API limits.",
     "f2Title": "Two photo modes",
-    "f2Body": "Read a complete package label or identify visible food without pretending its hidden ingredients or nutrition are known.",
+    "f2Body": "Read a complete package label or identify visible food. Approximate nutrition is clearly marked as an AI estimate, never as a package fact.",
     "f3Title": "Editable goals",
     "f3Body": "Update your goals, diet and flagged ingredients any time from Profile.",
     "f4Title": "Local history",

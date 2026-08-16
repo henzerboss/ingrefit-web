@@ -2,6 +2,10 @@
 
 Protected requests require `Authorization: Bearer <client token>` and `X-IngreFit-Installation: <persistent UUID>`. `X-IngreFit-Plan` is a UI hint only; Premium is verified server-side with RevenueCat or a legacy signed entitlement.
 
+## App version
+
+`GET /api/ingrefit/version?platform=ios&currentVersion=1.5.0` returns `latestVersion`, `updateAvailable`, `required` and the official platform store URL. The route is authenticated like the analysis API and does not expose server secrets. `LATEST_VERSION` controls the optional prompt; `MINIMUM_VERSION` controls whether it can be dismissed.
+
 ## Barcode
 
 `POST /api/ingrefit/analyze`

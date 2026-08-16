@@ -22,6 +22,9 @@ interface OpenFoodFactsProduct {
   nutriscore_grade?: string;
   nutrition_grades?: string;
   nova_group?: number;
+  alcohol_by_volume?: number | string;
+  alcohol_value?: number | string;
+  alcohol_unit?: string;
   nutriments?: Record<string, unknown>;
   serving_size?: string;
   nutrition_data_per?: string;
@@ -55,6 +58,9 @@ const fields = [
   'nutriscore_grade',
   'nutrition_grades',
   'nova_group',
+  'alcohol_by_volume',
+  'alcohol_value',
+  'alcohol_unit',
   'nutriments',
   'serving_size',
   'nutrition_data_per',
@@ -76,6 +82,18 @@ function cleanTags(value: unknown): string[] {
     .filter((item): item is string => typeof item === 'string')
     .map((item) => item.replace(/^[a-z]{2}:/i, '').replaceAll('-', ' ').trim())
     .filter(Boolean);
+}
+
+function extractAlcoholPercent(product: OpenFoodFactsProduct): number | null {
+  const direct = number(product.alcohol_by_volume) ?? number(product.nutriments?.alcohol_100g);
+  if (direct !== null) return direct;
+  const alcoholValue = number(product.alcohol_value);
+  if (alcoholValue !== null && /%|vol/i.test(product.alcohol_unit ?? '')) return alcoholValue;
+  const searchable = [product.ingredients_text, product.ingredients_text_en, product.ingredients_text_ru, ...(product.labels_tags ?? [])]
+    .filter((value): value is string => typeof value === 'string')
+    .join(' ');
+  const contextual = searchable.match(/(?:alc(?:ohol)?\.?|алк(?:оголь)?\.?)\s*[:/]?\s*(\d+(?:[.,]\d+)?)\s*%|(?:\b(\d+(?:[.,]\d+)?)\s*%\s*(?:vol|об\.?))/i);
+  return number((contextual?.[1] ?? contextual?.[2])?.replace(',', '.'));
 }
 
 function structuredIngredients(product: OpenFoodFactsProduct): string[] {
@@ -194,6 +212,7 @@ export async function findProductByBarcode(barcode: string, locale = 'en'): Prom
     categories: cleanTags(raw.categories_tags),
     nutriScore: text(raw.nutriscore_grade) ?? text(raw.nutrition_grades),
     novaGroup: number(raw.nova_group),
+    alcoholPercent: extractAlcoholPercent(raw),
     nutrition,
     nutritionReference: raw.nutrition_data_per?.toLowerCase() === '100ml' ? '100ml' : '100g',
     nutritionBasis: 'declared',

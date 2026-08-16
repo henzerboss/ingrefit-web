@@ -4,6 +4,8 @@ import { setRequestLocale } from 'next-intl/server';
 import { SiteFooter } from '@/components/SiteFooter';
 import { SiteHeader } from '@/components/SiteHeader';
 import { TrackedLink } from '@/components/TrackedLink';
+import { SiteIcon, type SiteIconName } from '@/components/SiteIcon';
+import { StoreButton } from '@/components/StoreButton';
 
 const APP_STORE_URL = 'https://apps.apple.com/app/id6801561360';
 const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=store.evsi.ingrefit';
@@ -36,14 +38,17 @@ function Landing({ locale }: { locale: string }) {
               <p className="eyebrow">{hero('eyebrow')}</p>
               <h1>{hero('title')} <em>{hero('accent')}</em></h1>
               <p className="hero-subtitle">{hero('subtitle')}</p>
-              <div className="hero-actions">
-                <TrackedLink className="button" eventName="hero_download_click" eventParams={{ locale }} href="#download">{hero('cta')}</TrackedLink>
+              <div className="hero-store-row">
+                <StoreButton compact href={APP_STORE_URL} label={cta('ios')} locale={locale} store="apple" />
+                <StoreButton compact href={PLAY_STORE_URL} label={cta('android')} locale={locale} store="google" />
+              </div>
+              <div className="hero-actions hero-actions-secondary">
                 <TrackedLink className="text-link" eventName="hero_how_click" eventParams={{ locale }} href="#how">{hero('secondary')} <span>↓</span></TrackedLink>
               </div>
               <div className="proof-row">
-                <span>▦ {hero('proof1')}</span>
-                <span>◎ {hero('proof2')}</span>
-                <span>✓ {hero('proof3')}</span>
+                <span><SiteIcon name="barcode" />{hero('proof1')}</span>
+                <span><SiteIcon name="target" />{hero('proof2')}</span>
+                <span><SiteIcon name="shield" />{hero('proof3')}</span>
               </div>
             </div>
             <div className="phone-stage" aria-label="Example IngreFit result">
@@ -54,7 +59,7 @@ function Landing({ locale }: { locale: string }) {
                 <div className="phone-brand"><img alt="" className="logo-image logo-image-small" height="26" src="/brand/icon.png" width="26" /><strong>IngreFit</strong></div>
                 <div className="found-pill"><span>✓</span>{demo('scanning')}</div>
                 <div className="product-mini">
-                  <div className="product-art">🥣</div>
+                  <div className="product-art"><SiteIcon name="food" /></div>
                   <div><strong>{demo('product')}</strong><small>{demo('brand')}</small></div>
                 </div>
                 <div className="score-panel">
@@ -78,9 +83,9 @@ function Landing({ locale }: { locale: string }) {
               <p>{how('subtitle')}</p>
             </div>
             <div className="steps-grid">
-              <Step number="01" icon="▦" title={how('step1Title')} body={how('step1Body')} />
-              <Step number="02" icon="▣" title={how('step2Title')} body={how('step2Body')} />
-              <Step number="03" icon="◎" title={how('step3Title')} body={how('step3Body')} />
+              <Step number="01" icon="barcode" title={how('step1Title')} body={how('step1Body')} />
+              <Step number="02" icon="camera" title={how('step2Title')} body={how('step2Body')} />
+              <Step number="03" icon="target" title={how('step3Title')} body={how('step3Body')} />
             </div>
           </div>
         </section>
@@ -103,7 +108,7 @@ function Landing({ locale }: { locale: string }) {
         <section className="section personal-section">
           <div className="container personal-grid">
             <div className="personal-visual">
-              <div className="product-circle">🥣</div>
+              <div className="product-circle"><SiteIcon name="food" /></div>
               <div className="score-chip chip-one"><span>{personal('goal1')}</span><strong>4.1</strong></div>
               <div className="score-chip chip-two"><span>{personal('goal2')}</span><strong>8.4</strong></div>
               <div className="score-chip chip-three"><span>{personal('goal3')}</span><strong>2.0</strong></div>
@@ -121,12 +126,12 @@ function Landing({ locale }: { locale: string }) {
           <div className="container">
             <div className="section-heading centered"><h2>{features('title')}</h2></div>
             <div className="features-grid">
-              <Feature icon="▦" title={features('f1Title')} body={features('f1Body')} />
-              <Feature icon="▣" title={features('f2Title')} body={features('f2Body')} />
-              <Feature icon="◎" title={features('f3Title')} body={features('f3Body')} />
-              <Feature icon="◷" title={features('f4Title')} body={features('f4Body')} />
-              <Feature icon="文" title={features('f5Title')} body={features('f5Body')} />
-              <Feature icon="◔" title={features('f6Title')} body={features('f6Body')} />
+              <Feature icon="barcode" title={features('f1Title')} body={features('f1Body')} />
+              <Feature icon="camera" title={features('f2Title')} body={features('f2Body')} />
+              <Feature icon="target" title={features('f3Title')} body={features('f3Body')} />
+              <Feature icon="history" title={features('f4Title')} body={features('f4Body')} />
+              <Feature icon="language" title={features('f5Title')} body={features('f5Body')} />
+              <Feature icon="infinity" title={features('f6Title')} body={features('f6Body')} />
             </div>
           </div>
         </section>
@@ -149,8 +154,8 @@ function Landing({ locale }: { locale: string }) {
           <div className="container download-card">
             <div><h2>{cta('title')}</h2><p>{cta('body')}</p></div>
             <div className="download-action">
-              <TrackedLink className="button button-lime store-button" eventName="download_ios_click" eventParams={{ locale }} href={APP_STORE_URL} rel="noreferrer" target="_blank"> {cta('ios')}</TrackedLink>
-              <TrackedLink className="button store-button" eventName="download_android_click" eventParams={{ locale }} href={PLAY_STORE_URL} rel="noreferrer" target="_blank">▶ {cta('android')}</TrackedLink>
+              <StoreButton href={APP_STORE_URL} label={cta('ios')} locale={locale} store="apple" />
+              <StoreButton href={PLAY_STORE_URL} label={cta('android')} locale={locale} store="google" />
               <small>{cta('privacy')}</small>
             </div>
           </div>
@@ -161,16 +166,16 @@ function Landing({ locale }: { locale: string }) {
   );
 }
 
-function Step({ number, icon, title, body }: { number: string; icon: string; title: string; body: string }) {
-  return <article className="step-card"><span className="step-number">{number}</span><div className="feature-icon">{icon}</div><h3>{title}</h3><p>{body}</p></article>;
+function Step({ number, icon, title, body }: { number: string; icon: SiteIconName; title: string; body: string }) {
+  return <article className="step-card"><span className="step-number">{number}</span><div className="feature-icon"><SiteIcon name={icon} /></div><h3>{title}</h3><p>{body}</p></article>;
 }
 
 function Fact({ icon, title, body }: { icon: string; title: string; body: string }) {
   return <article className="fact-card"><span>{icon}</span><div><h3>{title}</h3><p>{body}</p></div></article>;
 }
 
-function Feature({ icon, title, body }: { icon: string; title: string; body: string }) {
-  return <article className="feature-card"><div className="feature-icon">{icon}</div><h3>{title}</h3><p>{body}</p></article>;
+function Feature({ icon, title, body }: { icon: SiteIconName; title: string; body: string }) {
+  return <article className="feature-card"><div className="feature-icon"><SiteIcon name={icon} /></div><h3>{title}</h3><p>{body}</p></article>;
 }
 
 function PriceCard({ title, count, perDay, features: items, cta, locale, premium = false }: { title: string; count: string; perDay: string; features: string[]; cta: string; locale: string; premium?: boolean }) {

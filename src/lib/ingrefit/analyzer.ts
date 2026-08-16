@@ -18,8 +18,10 @@ export async function analyzeProduct(request: AnalyzeRequest, _installationId: s
   }
 
   let product: ProductFacts;
+  let alreadyLocalized = false;
   if (request.mode === 'unpackaged') {
     product = await recognizeFoodPhoto(request.photos![0]!, request.locale);
+    alreadyLocalized = true;
     if (!hasEnoughFacts(product)) {
       throw new HttpError(422, 'INSUFFICIENT_PHOTO_DATA', 'The supplied photo does not support a useful food and nutrition estimate.');
     }
@@ -28,6 +30,7 @@ export async function analyzeProduct(request: AnalyzeRequest, _installationId: s
     if (!hasEnoughFacts(product) && (product.ingredientsText || product.ingredients.length)) {
       try {
         product = await enrichProductFromText(product, request.locale);
+        alreadyLocalized = true;
       } catch (error) {
         console.error('[ingrefit] Label text enrichment failed', error);
       }
@@ -47,6 +50,7 @@ export async function analyzeProduct(request: AnalyzeRequest, _installationId: s
     if (found && request.premiumFeatures && canEnrichFromText && (!hasEnoughFacts(found) || hasContaminatedIngredients(found.ingredientsText))) {
       try {
         found = await enrichProductFromText(found, request.locale);
+        alreadyLocalized = true;
       } catch (error) {
         console.error('[ingrefit] Text-based product enrichment failed; requesting label photos', error);
       }
@@ -57,8 +61,8 @@ export async function analyzeProduct(request: AnalyzeRequest, _installationId: s
     product = found;
   }
 
-  let translated = false;
-  if (request.premiumFeatures) {
+  let translated = request.premiumFeatures && alreadyLocalized;
+  if (request.premiumFeatures && !alreadyLocalized) {
     const localized = await localizeProductFacts(product, request.locale);
     product = localized.product;
     translated = localized.translated;

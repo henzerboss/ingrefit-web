@@ -51,6 +51,7 @@ export interface ProductFacts {
   categories: string[];
   nutriScore: string | null;
   novaGroup: number | null;
+  alcoholPercent: number | null;
   nutrition: NutritionFacts;
   nutritionReference?: '100g' | '100ml' | 'serving';
   nutritionBasis?: 'declared' | 'estimated_visual' | 'estimated_text';
