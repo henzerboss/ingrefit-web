@@ -56,7 +56,7 @@ export async function analyzeProduct(request: AnalyzeRequest, _installationId: s
       }
     }
     if (!found || !hasEnoughFacts(found)) {
-      return { status: 'needs_photos' as const, barcode: request.barcode!, reason: found ? ('insufficient_data' as const) : ('not_found' as const), requiredPhotos: ['front', 'ingredients', 'nutrition'] as const };
+      return { status: 'needs_photos' as const, barcode: request.barcode!, reason: found ? ('insufficient_data' as const) : ('not_found' as const), requiredPhotos: ['front', 'label'] as const };
     }
     product = found;
   }

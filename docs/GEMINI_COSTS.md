@@ -17,7 +17,7 @@ The backend defaults to `gemini-3.1-flash-lite`, with `gemini-2.5-flash-lite` as
 | Text enrichment | 1,200 |
 | Focused ingredient translation retry | 1,200 |
 | Score explanation | 1,400 |
-| Label recognition (three photos) | 1,800 |
+| Label recognition (two photos) | 1,800 |
 | Product fact localization | 1,800 |
 
 ## Usage logging

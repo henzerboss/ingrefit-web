@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
     }
 
     const prefix = platform === 'ios' ? 'INGREFIT_IOS' : 'INGREFIT_ANDROID';
-    const latestVersion = process.env[`${prefix}_LATEST_VERSION`]?.trim() || '1.5.0';
+    const latestVersion = process.env[`${prefix}_LATEST_VERSION`]?.trim() || '1.6.0';
     const minimumVersion = process.env[`${prefix}_MINIMUM_VERSION`]?.trim() || '1.0.0';
     return NextResponse.json({
       latestVersion,

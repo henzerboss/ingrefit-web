@@ -92,7 +92,7 @@ export interface UsageSnapshot {
 }
 
 export interface LabelPhoto {
-  kind: 'front' | 'ingredients' | 'nutrition' | 'food';
+  kind: 'front' | 'label' | 'ingredients' | 'nutrition' | 'food';
   base64: string;
   mimeType: 'image/jpeg';
 }

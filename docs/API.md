@@ -29,7 +29,7 @@ Known products return `status: complete` only when the record has an identifiabl
 
 ## Premium package label
 
-Use `mode: label`, `premiumFeatures: true`, optional barcode and exactly three JPEG base64 images with kinds `front`, `ingredients`, `nutrition`. A readable ingredient statement can support a clearly marked approximate nutrient profile when the nutrition table remains incomplete; otherwise `422 INSUFFICIENT_LABEL_DATA` asks for clearer photos.
+Use `mode: label`, `premiumFeatures: true`, optional barcode and exactly two JPEG base64 images with kinds `front` and `label`. The `label` image should include the full ingredient/allergen statement and nutrition table. A readable ingredient statement can support a clearly marked approximate nutrient profile when the nutrition table remains incomplete; otherwise `422 INSUFFICIENT_LABEL_DATA` asks for a clearer information-label photo. During migration the API also accepts the former `front` + `ingredients` + `nutrition` three-image request, but new clients should always use the two-image contract.
 
 ## Premium food without packaging
 
@@ -44,7 +44,7 @@ The response contains normalized `product`, deterministic `assessment` and a com
 - `400 INVALID_REQUEST` — request/profile/image shape is invalid.
 - `401 UNAUTHORIZED` — client token or installation id is invalid.
 - `402 PREMIUM_REQUIRED` — photo/AI/translation was requested without a verified entitlement.
-- `422 INSUFFICIENT_LABEL_DATA` — the three label photos remain illegible or incomplete.
+- `422 INSUFFICIENT_LABEL_DATA` — the two label photos remain illegible or incomplete.
 - `422 INSUFFICIENT_PHOTO_DATA` — the unpackaged-food photo does not support a useful identification and nutrition estimate.
 - `502 AI_UNAVAILABLE` — configured Gemini models failed during a required Premium operation.
 - `503 AI_NOT_CONFIGURED` — Gemini is not configured.

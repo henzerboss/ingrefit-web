@@ -6,6 +6,7 @@ import { SiteHeader } from '@/components/SiteHeader';
 import { TrackedLink } from '@/components/TrackedLink';
 import { SiteIcon, type SiteIconName } from '@/components/SiteIcon';
 import { StoreButton } from '@/components/StoreButton';
+import type { LocaleCode } from '@/i18n/locales';
 
 const APP_STORE_URL = 'https://apps.apple.com/app/id6801561360';
 const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=store.evsi.ingrefit';
@@ -13,10 +14,10 @@ const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=store.evsi
 export default async function LandingPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <Landing locale={locale} />;
+  return <Landing locale={locale as LocaleCode} />;
 }
 
-function Landing({ locale }: { locale: string }) {
+function Landing({ locale }: { locale: LocaleCode }) {
   const hero = useTranslations('hero');
   const demo = useTranslations('demo');
   const how = useTranslations('how');

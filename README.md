@@ -1,6 +1,6 @@
 # IngreFit.com website and API
 
-Next.js 16.3 project with English/Russian landing and legal pages plus the API used by the Expo application.
+Next.js 16.3 project with a 68-locale landing/legal structure plus the API used by the Expo application. English and Russian are translated; other locale JSON files currently contain the English source copy.
 
 ## Run and deploy
 
@@ -12,7 +12,7 @@ npm run build
 PORT=3020 npm start
 ```
 
-For CloudPanel/Nginx, allow AI photo payloads in the site vhost (for example `client_max_body_size 15M;`) before the proxy location, then reload Nginx. Three compressed label images are sent in one JSON request.
+For CloudPanel/Nginx, allow AI photo payloads in the site vhost (for example `client_max_body_size 15M;`) before the proxy location, then reload Nginx. Two compressed label images are sent in one JSON request.
 
 Required production values: `GEMINI_API_KEY`, `INGREFIT_CLIENT_TOKENS`, `OPEN_FOOD_FACTS_USER_AGENT`, `REVENUECAT_SECRET_API_KEY` and `REVENUECAT_ENTITLEMENT_ID`.
 
@@ -22,8 +22,8 @@ Required production values: `GEMINI_API_KEY`, `INGREFIT_CLIENT_TOKENS`, `OPEN_FO
 - `GET /api/ingrefit/usage` — compatibility snapshot; barcode scans have no daily quota.
 - `GET /api/ingrefit/health` — configuration health without secret values.
 - `GET /api/ingrefit/version` — platform-specific latest/minimum version and store URL for the launch update prompt.
-- `/en`, `/ru` — localized landing pages.
-- `/en/privacy`, `/ru/privacy`, `/en/terms`, `/ru/terms` — localized legal pages.
+- `/{locale}` — landing page for every locale listed in `src/i18n/locales.ts`.
+- `/{locale}/privacy`, `/{locale}/terms` — localized legal routes.
 
 The landing page supports system, light and dark themes and links directly to the configured App Store and Google Play listings.
 
@@ -31,10 +31,10 @@ The landing page supports system, light and dark themes and links directly to th
 
 1. Barcode mode checks Open Food Facts v3. English/Russian localized OFF fields are preferred when present.
 2. A result is complete only when it has an identifiable product and a useful nutrient set. For Premium, a sparse record with an ingredient statement is cleaned and missing nutrition is cautiously estimated in a separate `estimated_text` layer. If that is still not useful, the API returns `needs_photos`.
-3. Label mode sends front, ingredients and nutrition-table images to an English strict transcription prompt. If the visible ingredient statement is usable but the nutrition table remains incomplete, the same clearly marked text-estimation layer may fill the practical nutrient profile; otherwise the app asks for clearer photos.
+3. Label mode sends two images — the package front and one complete information label containing ingredients, allergens and nutrition — to an English strict transcription prompt. If the visible ingredient statement is usable but the nutrition table remains incomplete, the same clearly marked text-estimation layer may fill the practical nutrient profile; otherwise the app asks for a clearer information-label photo. The API temporarily accepts the former three-image request so already-installed clients keep working during rollout.
 4. Unpackaged mode identifies the visibly present food, returns confidence and may provide a rounded approximate nutrient profile per 100 g from general food-composition knowledge. Exact ingredients, allergens and nutrition remain unknown; every estimate is explicitly marked as an estimate.
 5. Deterministic `scoring.ts` calculates the number before AI writes any explanation. All 12 goals and supported diet modes have explicit rules tied to available fields; visual and text-based nutrition estimates receive reduced weight.
-6. Free barcode results use a deterministic English/Russian explanation. Premium translates source strings and generates a longer explanation in the exact active app language (`en` or `ru`).
+6. Free barcode results use a deterministic fallback explanation. Premium translates source strings and generates a longer explanation in the exact active app language. Arabic and Hebrew pages use RTL direction.
 
 The exact score thresholds and adjustments, including the explicit alcohol penalty, are documented in [`docs/SCORING.md`](docs/SCORING.md). Gemini request budgets and operation-level cost logging are documented in [`docs/GEMINI_COSTS.md`](docs/GEMINI_COSTS.md).
 

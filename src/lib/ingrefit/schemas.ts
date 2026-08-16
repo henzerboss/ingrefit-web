@@ -23,7 +23,7 @@ const profileSchema = z.object({
 });
 
 const photoSchema = z.object({
-  kind: z.enum(['front', 'ingredients', 'nutrition', 'food']),
+  kind: z.enum(['front', 'label', 'ingredients', 'nutrition', 'food']),
   base64: z.string().min(100).max(6_000_000),
   mimeType: z.literal('image/jpeg'),
 });
@@ -40,15 +40,21 @@ export const analyzeRequestSchema = z
   .superRefine((value, context) => {
     if (value.mode === 'barcode' && (!value.barcode || value.photos)) context.addIssue({ code: 'custom', message: 'barcode mode requires only a barcode' });
     if (value.mode === 'label') {
-      if (!value.photos || value.photos.length !== 3) {
-        context.addIssue({ code: 'custom', message: 'label mode requires three photos' });
+      if (!value.photos) {
+        context.addIssue({ code: 'custom', message: 'label mode requires package photos' });
         return;
       }
       const kinds = new Set(value.photos.map((photo) => photo.kind));
-      for (const required of ['front', 'ingredients', 'nutrition'] as const) {
-        if (!kinds.has(required)) {
-          context.addIssue({ code: 'custom', message: `missing ${required} photo` });
-        }
+      const currentTwoPhotoFlow = value.photos.length === 2 && kinds.has('front') && kinds.has('label');
+      const legacyThreePhotoFlow = value.photos.length === 3
+        && kinds.has('front')
+        && kinds.has('ingredients')
+        && kinds.has('nutrition');
+      if (!currentTwoPhotoFlow && !legacyThreePhotoFlow) {
+        context.addIssue({
+          code: 'custom',
+          message: 'label mode requires front + label photos',
+        });
       }
     }
     if (value.mode === 'unpackaged' && (!value.photos || value.photos.length !== 1 || value.photos[0]?.kind !== 'food')) context.addIssue({ code: 'custom', message: 'unpackaged mode requires one food photo' });

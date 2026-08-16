@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 
 import { routing } from '@/i18n/routing';
 import { GoogleAnalytics } from '@/components/GoogleAnalytics';
+import { isRtlLocale } from '@/i18n/locales';
 
 import '../globals.css';
 
@@ -20,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     title: t('title'),
     description: t('description'),
     metadataBase: new URL('https://ingrefit.com'),
-    alternates: { canonical: `/${locale}`, languages: { en: '/en', ru: '/ru' } },
+    alternates: { canonical: `/${locale}`, languages: Object.fromEntries(routing.locales.map((code) => [code, `/${code}`])) },
     openGraph: { title: t('title'), description: t('description'), type: 'website', siteName: 'IngreFit' },
     icons: { icon: '/brand/icon.png', apple: '/brand/app-icon.png' },
   };
@@ -33,7 +34,7 @@ export default async function LocaleLayout({ children, params }: Readonly<{ chil
   const messages = await getMessages();
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html dir={isRtlLocale(locale) ? 'rtl' : 'ltr'} lang={locale} suppressHydrationWarning>
       <head><script dangerouslySetInnerHTML={{ __html: "try{const t=localStorage.getItem('ingrefit-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}" }} /></head>
       <body>
         <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>

@@ -212,6 +212,9 @@ export async function recognizeLabel(
   photos: LabelPhoto[],
   locale: string,
 ): Promise<ProductFacts> {
+  const captureGuide = photos.some((photo) => photo.kind === 'label')
+    ? 'The first image shows the package front. The second is one information-label image that should contain the ingredient statement, explicit allergen/traces statement and nutrition table. Read every legible section from both images.'
+    : 'This is a legacy three-image capture ordered as package front, ingredients/allergens, then nutrition table. Read every legible section from all supplied images.';
   const result = await callGemini({
     operation: 'label_recognition',
     systemInstruction: [
@@ -229,7 +232,7 @@ export async function recognizeLabel(
       `User device language tag: ${locale}. This is supplied for context only; factual transcriptions must stay in the language printed on the package.`,
       `Known barcode: ${barcode ?? 'not available'}. Do not derive product facts from the barcode itself.`,
       `The attached images are ordered as: ${photos.map((photo) => photo.kind).join(', ')}.`,
-      'Read the front, full ingredient statement, explicit allergen/traces statement, and nutrition table.',
+      captureGuide,
       'For unknownFields, list the important requested fields that could not be read.',
     ].join('\n'),
     responseSchema,
