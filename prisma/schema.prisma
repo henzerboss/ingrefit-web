@@ -1,0 +1,83 @@
+// IngreFit persistence layer.
+//
+// PostgreSQL is used because the same instance later hosts the imported
+// Open Food Facts dataset (see docs/DATABASE.md). Everything in this file is a
+// cache or a counter: no user account, no scan history and no photo is stored
+// server-side, so a full wipe only costs money in re-generated Gemini calls.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// Normalized product facts keyed by barcode.
+/// `facts` holds the source-language ProductFacts exactly as normalized from
+/// Open Food Facts. Localized variants live in ProductLocalization.
+model ProductCache {
+  barcode     String   @id
+  facts       Json
+  fetchedAt   DateTime @default(now())
+  refreshedAt DateTime @updatedAt
+
+  localizations ProductLocalization[]
+
+  @@index([refreshedAt])
+}
+
+/// Translated user-facing strings for one product in one language.
+/// Saves one Gemini call per Premium scan of an already-seen product.
+model ProductLocalization {
+  barcode   String
+  language  String
+  strings   Json
+  createdAt DateTime @default(now())
+
+  product ProductCache @relation(fields: [barcode], references: [barcode], onDelete: Cascade)
+
+  @@id([barcode, language])
+}
+
+/// Generated explanation keyed by the deterministic signal fingerprint.
+/// Identical signal sets in the same language reuse the same text, so popular
+/// products converge to zero explanation cost.
+model ExplanationCache {
+  fingerprint String   @id
+  language    String
+  payload     Json
+  hits        Int      @default(0)
+  createdAt   DateTime @default(now())
+  lastUsedAt  DateTime @updatedAt
+
+  @@index([lastUsedAt])
+}
+
+/// Fixed-window request counters. One row per (scope, key, window).
+model RateLimitWindow {
+  id          String   @id
+  scope       String
+  windowStart DateTime
+  count       Int      @default(0)
+  expiresAt   DateTime
+
+  @@index([expiresAt])
+}
+
+/// Optional local mirror of the Open Food Facts dataset.
+/// Populated by `scripts/import-openfoodfacts.mjs`. When present and enabled by
+/// OPEN_FOOD_FACTS_LOCAL=true, barcode lookups never leave the server, which
+/// removes the upstream rate limit from the critical path entirely.
+///
+/// The dataset is licensed under the Open Database License (ODbL). Attribution
+/// and the share-alike obligation apply to anything derived from it.
+model OffProduct {
+  barcode      String   @id
+  data         Json
+  lastModified DateTime
+  importedAt   DateTime @default(now())
+
+  @@index([lastModified])
+}

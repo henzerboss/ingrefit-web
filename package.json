@@ -1,14 +1,20 @@
 {
   "name": "ingrefit-web",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "db:generate": "prisma generate",
+    "db:deploy": "prisma migrate deploy",
+    "db:push": "prisma db push",
+    "postinstall": "prisma generate",
+    "test:scoring": "tsx scripts/scoring-cases.ts"
   },
   "dependencies": {
+    "@prisma/client": "^6.12.0",
     "next": "16.3.1",
     "next-intl": "4.13.6",
     "react": "19.2.4",
@@ -19,6 +25,8 @@
     "@types/node": "^24.10.0",
     "@types/react": "~19.2.2",
     "@types/react-dom": "~19.2.2",
+    "prisma": "^6.12.0",
+    "tsx": "^4.23.12",
     "typescript": "~5.9.2"
   },
   "engines": {

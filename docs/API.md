@@ -25,11 +25,17 @@ Protected requests require `Authorization: Bearer <client token>` and `X-IngreFi
 }
 ```
 
-Known products return `status: complete` only when the record has an identifiable product and at least four useful nutrient values. For verified Premium requests, a sparse record with an ingredient statement may be cleaned and completed with clearly marked approximate values (`nutritionBasis: "estimated_text"`). If the enriched record is still insufficient, the response is `status: needs_photos` with required photo kinds.
+Known products return `status: complete` only when the record has an identifiable product and at least four useful nutrient values. For verified Premium requests, a sparse record with an ingredient statement may be cleaned and completed with clearly marked approximate values (`nutritionBasis: "estimated_text"`). If the enriched record is still insufficient, the response is `status: needs_photos` with `requiredPhotos: ["label"]`.
+
+Barcode lookups are served from the product cache, then the optional local Open Food Facts mirror, then the public API (see `docs/DATABASE.md`).
 
 ## Premium package label
 
-Use `mode: label`, `premiumFeatures: true`, optional barcode and exactly two JPEG base64 images with kinds `front` and `label`. The `label` image should include the full ingredient/allergen statement and nutrition table. A readable ingredient statement can support a clearly marked approximate nutrient profile when the nutrition table remains incomplete; otherwise `422 INSUFFICIENT_LABEL_DATA` asks for a clearer information-label photo. During migration the API also accepts the former `front` + `ingredients` + `nutrition` three-image request, but new clients should always use the two-image contract.
+Use `mode: label`, `premiumFeatures: true`, an optional barcode and **at least one** JPEG base64 image whose kind is `label` (or the legacy `ingredients` / `nutrition`). That image should include the full ingredient/allergen statement and nutrition table.
+
+A `front` photo is accepted for backwards compatibility but is **ignored and never sent to the model**: the package front carries no extractable facts and would cost roughly a third of the request's vision tokens. Current clients keep it on the device as a result thumbnail and do not upload it.
+
+A readable ingredient statement can support a clearly marked approximate nutrient profile when the nutrition table is incomplete; otherwise `422 INSUFFICIENT_LABEL_DATA` asks for a clearer photo.
 
 ## Premium food without packaging
 
@@ -37,7 +43,26 @@ Use `mode: unpackaged`, `premiumFeatures: true`, a null barcode and exactly one 
 
 ## Complete response
 
-The response contains normalized `product`, deterministic `assessment` and a compatibility `usage` snapshot. `assessment.aiEnhanced` and `assessment.translated` say whether the two Premium enhancements were applied. `nutritionReference` identifies 100 g, 100 ml or serving; `nutritionBasis` is `declared`, `estimated_visual` or `estimated_text` and always separates package facts from estimates.
+The response contains normalized `product`, deterministic `assessment` and a compatibility `usage` snapshot.
+
+`assessment` fields:
+
+| Field | Meaning |
+| --- | --- |
+| `score`, `verdict` | Final 1–10 score and verdict. `verdict` may be `blocked`. |
+| `baseScore` | Universal product quality before personalization. |
+| `personalDelta` | Normalized adjustment from the user's goals, bounded to ±2.5. |
+| `confidence` | 0–1 confidence in the underlying data. |
+| `blocked` | True when a hard restriction applies. Clients must show a status, not a number. |
+| `summary`, `tip` | Personal explanation and one actionable line. |
+| `signals[]` | Each carries `scope` (`blocker` / `base` / `personal`), `code`, `impact`, `severity`, `label`, `evidence`. |
+| `cached` | The explanation text came from the cache. |
+
+`product` now also carries `additives[]` (code, localized name, `risk`, `basis`, `basisText`), `allergenTags` / `traceTags` (canonical `en:` tags for matching), `nutrientLevels`, `ingredientAnalysis`, `fruitsVegetablesNuts100g`, `ecoScore` and `organic`.
+
+`nutritionReference` identifies 100 g, 100 ml or serving; `nutritionBasis` is `declared`, `estimated_visual` or `estimated_text` and always separates package facts from estimates.
+
+Signal labels and evidence are rendered server-side in the user's language for every tier, including free.
 
 ## Errors
 
@@ -46,5 +71,7 @@ The response contains normalized `product`, deterministic `assessment` and a com
 - `402 PREMIUM_REQUIRED` — photo/AI/translation was requested without a verified entitlement.
 - `422 INSUFFICIENT_LABEL_DATA` — the two label photos remain illegible or incomplete.
 - `422 INSUFFICIENT_PHOTO_DATA` — the unpackaged-food photo does not support a useful identification and nutrition estimate.
+- `413 PAYLOAD_TOO_LARGE` — the request body exceeds 16 MB.
+- `429 RATE_LIMITED` — per-installation or per-IP limit reached. `Retry-After` and `retryAfterSeconds` say when to retry; `X-RateLimit-*` headers are on successful responses.
 - `502 AI_UNAVAILABLE` — configured Gemini models failed during a required Premium operation.
 - `503 AI_NOT_CONFIGURED` — Gemini is not configured.

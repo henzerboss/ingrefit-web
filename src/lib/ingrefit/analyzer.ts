@@ -3,6 +3,7 @@ import { explainScore } from './explanation';
 import { localizeProductFacts } from './localization';
 import { findProductByBarcode, hasContaminatedIngredients, hasEnoughFacts } from './openFoodFacts';
 import { enrichProductFromText, recognizeFoodPhoto, recognizeLabel } from './recognition';
+import { enforceLimit } from './rateLimit';
 import { scoreProduct } from './scoring';
 import type { AnalyzeRequest } from './schemas';
 import type { Plan, ProductFacts, UsageSnapshot } from './types';
@@ -11,14 +12,21 @@ function unlimitedUsage(plan: Plan): UsageSnapshot {
   return { used: 0, limit: 0, remaining: 0, plan, resetsAt: new Date(0).toISOString() };
 }
 
-export async function analyzeProduct(request: AnalyzeRequest, _installationId: string, plan: Plan) {
+export async function analyzeProduct(request: AnalyzeRequest, installationId: string, plan: Plan) {
   const photoMode = request.mode === 'label' || request.mode === 'unpackaged';
   if ((photoMode || request.premiumFeatures) && plan !== 'premium') {
     throw new HttpError(402, 'PREMIUM_REQUIRED', 'This analysis requires an active Premium entitlement.');
   }
 
+  // Vision calls are the expensive path; they get their own tighter budget on
+  // top of the per-request limit already applied in the route.
+  if (photoMode) {
+    await enforceLimit('ai:installation', installationId, plan === 'premium');
+  }
+
   let product: ProductFacts;
   let alreadyLocalized = false;
+
   if (request.mode === 'unpackaged') {
     product = await recognizeFoodPhoto(request.photos![0]!, request.locale);
     alreadyLocalized = true;
@@ -36,7 +44,9 @@ export async function analyzeProduct(request: AnalyzeRequest, _installationId: s
       }
     }
     if (!hasEnoughFacts(product)) {
-      throw new HttpError(422, 'INSUFFICIENT_LABEL_DATA', 'The supplied photos do not contain enough legible product facts.', { unknownFields: product.unknownFields });
+      throw new HttpError(422, 'INSUFFICIENT_LABEL_DATA', 'The supplied photos do not contain enough legible product facts.', {
+        unknownFields: product.unknownFields,
+      });
     }
   } else {
     let found: ProductFacts | null = null;
@@ -49,6 +59,7 @@ export async function analyzeProduct(request: AnalyzeRequest, _installationId: s
     const canEnrichFromText = Boolean(found && (found.ingredientsText || found.ingredients.length || found.categories.length));
     if (found && request.premiumFeatures && canEnrichFromText && (!hasEnoughFacts(found) || hasContaminatedIngredients(found.ingredientsText))) {
       try {
+        await enforceLimit('ai:installation', installationId, plan === 'premium');
         found = await enrichProductFromText(found, request.locale);
         alreadyLocalized = true;
       } catch (error) {
@@ -56,7 +67,12 @@ export async function analyzeProduct(request: AnalyzeRequest, _installationId: s
       }
     }
     if (!found || !hasEnoughFacts(found)) {
-      return { status: 'needs_photos' as const, barcode: request.barcode!, reason: found ? ('insufficient_data' as const) : ('not_found' as const), requiredPhotos: ['front', 'label'] as const };
+      return {
+        status: 'needs_photos' as const,
+        barcode: request.barcode!,
+        reason: found ? ('insufficient_data' as const) : ('not_found' as const),
+        requiredPhotos: ['label'] as const,
+      };
     }
     product = found;
   }
@@ -70,6 +86,7 @@ export async function analyzeProduct(request: AnalyzeRequest, _installationId: s
 
   const scored = scoreProduct(product, request.profile);
   const assessment = await explainScore(product, request.profile, scored, request.locale, request.premiumFeatures);
+
   return {
     status: 'complete' as const,
     product,

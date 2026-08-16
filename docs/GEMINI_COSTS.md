@@ -1,39 +1,80 @@
 # Gemini usage and cost controls
 
-The backend defaults to `gemini-3.1-flash-lite`, with `gemini-2.5-flash-lite` as a fallback. Each request records only operation-level token counts and an estimated USD cost; it does not log photos, barcodes, product names or ingredient text.
+The backend defaults to `gemini-3.1-flash-lite`, with `gemini-2.5-flash-lite` as
+a fallback. Each request logs operation-level token counts and an estimated USD
+cost; it never logs photos, barcodes, product names or ingredient text.
 
-## Current controls
+## What changed in 1.7
 
-- Images are resized before upload to fit inside 1024×1024 without upscaling.
-- Gemini 3.1 uses the minimal thinking level; the 2.5 fallback uses a zero thinking budget.
-- Every operation has a bounded output budget.
-- Product explanations receive a compact fact object rather than the full product record.
-- Already-localized photo results skip a redundant translation call.
-- Sparse barcode data is enriched only when Premium is active and useful source text exists.
+| Control | Before | After |
+| --- | --- | --- |
+| Calls per Premium barcode scan | 2 (translate + explain), always | 0–2; both are cached and translation is skipped when unnecessary |
+| Explanation prompt | ~2,500 in / 1,400 out | ~450 in / 350 out |
+| Label recognition images | 2 (front + label) | 1+ (front photo is never uploaded) |
+| Model fallback | retried on every error, including schema failures | retries only on 429/5xx/timeout/network |
+| Free tier | English text in 64 of 66 languages | fully rendered locally, no model call |
+
+### Translation is now conditional
+
+`needsTranslation()` inspects the product strings before spending anything.
+Open Food Facts already stores localized name and ingredient fields for many
+products, so a Russian user scanning a Russian product now costs nothing to
+localize. Results are additionally cached per `barcode + language` forever, so
+each product is translated at most once across all users.
+
+### Explanations are cached by signal fingerprint
+
+The scorer emits a SHA-256 fingerprint over the signal set, impacts and verdict.
+Two scans producing the same signals in the same language reuse the same text.
+Popular products converge towards zero explanation cost. Watch the `hits` column
+on `ExplanationCache` after launch — a low hit rate means the fingerprint is too
+specific.
+
+### The model no longer writes the signal list
+
+Signal labels and evidence are rendered deterministically from
+`signalCatalog.ts`. Gemini is asked for exactly two strings — a summary and one
+tip — which removed most output tokens and, more importantly, removed the
+possibility of the model contradicting a number the scorer already computed.
+
+## Output budgets
 
 | Operation | Max output tokens |
 | --- | ---: |
+| Score explanation | 400 |
 | Food photo recognition | 900 |
 | Text enrichment | 1,200 |
-| Focused ingredient translation retry | 1,200 |
-| Score explanation | 1,400 |
-| Label recognition (two photos) | 1,800 |
-| Product fact localization | 1,800 |
+| Label recognition | 1,600 |
+| Product fact localization | 1,600 |
+
+Images are resized to fit 1024×1024 before upload. Gemini 3.1 runs at the
+minimal thinking level; the 2.5 fallback uses a zero thinking budget.
+
+## Rate limits
+
+Vision calls are metered separately from ordinary requests, because they are the
+expensive path. Defaults (per hour, override via env):
+
+| Scope | Free | Premium |
+| --- | ---: | ---: |
+| `analyze` per installation | 120 | 300 |
+| AI/vision per installation | 10 | 60 |
+| `analyze` per IP | 600 | 600 |
+
+The client token ships inside the mobile bundle and can be extracted, so it
+authenticates the app, not the user. Without these limits one extracted token
+can drain the Gemini budget.
 
 ## Usage logging
 
-For every successful Gemini call, the server writes a structured line such as:
-
 ```text
-[ingrefit] Gemini usage {"operation":"score_explanation","model":"gemini-3.1-flash-lite","promptTokens":2100,"outputTokens":620,"thoughtTokens":90,"totalTokens":2810,"estimatedCostUsd":0.00159}
+[ingrefit] Gemini usage {"operation":"score_explanation","model":"gemini-3.1-flash-lite","promptTokens":460,"outputTokens":210,"thoughtTokens":40,"totalTokens":710,"estimatedCostUsd":0.00049}
 ```
 
-This makes production cost measurable per operation. Use actual PM2 logs to calculate average and percentile costs before changing prompts or limits.
-
-The price constants in `gemini.ts` reflect the Gemini 3.1 Flash-Lite standard API rates current at the time of this release: **$0.25 per million input tokens** and **$1.50 per million output tokens including thinking**. Recheck the official pricing page before financial planning because model pricing can change.
-
-Official references:
+The price constants in `gemini.ts` reflect Gemini 3.1 Flash-Lite standard rates
+at release: **$0.25 per million input tokens** and **$1.50 per million output
+tokens including thinking**. Recheck the official pricing page before financial
+planning.
 
 - https://ai.google.dev/gemini-api/docs/pricing
 - https://ai.google.dev/gemini-api/docs/tokens
-- https://ai.google.dev/gemini-api/docs/models/gemini-3.1-flash-lite

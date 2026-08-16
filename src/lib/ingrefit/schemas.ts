@@ -44,16 +44,16 @@ export const analyzeRequestSchema = z
         context.addIssue({ code: 'custom', message: 'label mode requires package photos' });
         return;
       }
+      // Only information-label photos carry extractable facts. The package
+      // front is a preview thumbnail and must stay on the device, so a request
+      // that contains nothing but a front photo is rejected. Older clients that
+      // still upload a front photo remain accepted; it is simply ignored.
       const kinds = new Set(value.photos.map((photo) => photo.kind));
-      const currentTwoPhotoFlow = value.photos.length === 2 && kinds.has('front') && kinds.has('label');
-      const legacyThreePhotoFlow = value.photos.length === 3
-        && kinds.has('front')
-        && kinds.has('ingredients')
-        && kinds.has('nutrition');
-      if (!currentTwoPhotoFlow && !legacyThreePhotoFlow) {
+      const hasReadableLabel = kinds.has('label') || kinds.has('ingredients') || kinds.has('nutrition');
+      if (!hasReadableLabel) {
         context.addIssue({
           code: 'custom',
-          message: 'label mode requires front + label photos',
+          message: 'label mode requires at least one information-label photo',
         });
       }
     }

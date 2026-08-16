@@ -14,9 +14,13 @@ export class HttpError extends Error {
 
 export function errorResponse(error: unknown): NextResponse {
   if (error instanceof HttpError) {
+    const retryAfter = error.details.retryAfterSeconds;
     return NextResponse.json(
       { code: error.code, message: error.message, ...error.details },
-      { status: error.status },
+      {
+        status: error.status,
+        headers: typeof retryAfter === 'number' ? { 'Retry-After': String(retryAfter) } : undefined,
+      },
     );
   }
 

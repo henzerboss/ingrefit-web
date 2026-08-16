@@ -1,7 +1,27 @@
 import { z } from 'zod';
 
+import { HttpError } from './http';
+
+import { classifyAdditives } from './additives';
 import { callGemini } from './gemini';
-import type { LabelPhoto, NutritionFacts, ProductFacts } from './types';
+import { additiveBasisText, catalogLanguage } from './signalCatalog';
+import type { LabelPhoto, NutritionFacts, ProductAdditive, ProductFacts } from './types';
+
+const EMPTY_ANALYSIS = { vegan: null, vegetarian: null, palmOil: null } as const;
+const EMPTY_LEVELS = { fat: null, saturatedFat: null, sugars: null, salt: null } as const;
+
+/** AI-read additive names/E-numbers get the same classification as database tags. */
+function toAdditives(raw: string[], locale: string): ProductAdditive[] {
+  const language = catalogLanguage(locale);
+  return classifyAdditives(raw).map((additive) => ({
+    code: additive.code,
+    name: language === 'ru' ? additive.nameRu : additive.nameEn,
+    risk: additive.risk,
+    basis: additive.basis,
+    basisText: additiveBasisText(additive.basis, language),
+    known: additive.known,
+  }));
+}
 
 const nullableNumber = z.number().finite().nonnegative().nullable();
 const extractedSchema = z.object({
@@ -212,9 +232,17 @@ export async function recognizeLabel(
   photos: LabelPhoto[],
   locale: string,
 ): Promise<ProductFacts> {
-  const captureGuide = photos.some((photo) => photo.kind === 'label')
-    ? 'The first image shows the package front. The second is one information-label image that should contain the ingredient statement, explicit allergen/traces statement and nutrition table. Read every legible section from both images.'
-    : 'This is a legacy three-image capture ordered as package front, ingredients/allergens, then nutrition table. Read every legible section from all supplied images.';
+  // The package front carries no extractable facts: the ingredient statement,
+  // allergen declaration and nutrition table are all on the information label.
+  // Sending it would cost roughly a third of the request's input tokens for
+  // nothing, so the front photo stays on the device as a preview thumbnail.
+  const readablePhotos = photos.filter((photo) => photo.kind !== 'front');
+  if (!readablePhotos.length) {
+    throw new HttpError(400, 'MISSING_LABEL_PHOTO', 'At least one information-label photo is required.');
+  }
+  const captureGuide = readablePhotos.length === 1
+    ? 'The supplied image is one information-label photo that should contain the ingredient statement, explicit allergen/traces statement and nutrition table. Read every legible section.'
+    : 'The supplied images are label sections ordered as ingredients/allergens, then nutrition table. Read every legible section from all of them.';
   const result = await callGemini({
     operation: 'label_recognition',
     systemInstruction: [
@@ -231,14 +259,14 @@ export async function recognizeLabel(
     prompt: [
       `User device language tag: ${locale}. This is supplied for context only; factual transcriptions must stay in the language printed on the package.`,
       `Known barcode: ${barcode ?? 'not available'}. Do not derive product facts from the barcode itself.`,
-      `The attached images are ordered as: ${photos.map((photo) => photo.kind).join(', ')}.`,
+      `The attached images are ordered as: ${readablePhotos.map((photo) => photo.kind).join(', ')}.`,
       captureGuide,
       'For unknownFields, list the important requested fields that could not be read.',
     ].join('\n'),
     responseSchema,
-    images: photos.map(({ base64, mimeType }) => ({ base64, mimeType })),
+    images: readablePhotos.map(({ base64, mimeType }) => ({ base64, mimeType })),
     temperature: 0,
-    maxOutputTokens: 1_800,
+    maxOutputTokens: 1_600,
     validate: (value) => extractedSchema.parse(value),
   });
 
@@ -253,11 +281,19 @@ export async function recognizeLabel(
     ingredients: result.ingredients,
     allergens: result.allergens,
     traces: result.traces,
-    additives: result.additives,
+    allergenTags: [],
+    traceTags: [],
+    additives: toAdditives(result.additives, locale),
     labels: result.labels,
+    labelTags: [],
     categories: [],
+    ingredientAnalysis: { ...EMPTY_ANALYSIS },
+    nutrientLevels: { ...EMPTY_LEVELS },
+    fruitsVegetablesNuts100g: null,
     nutriScore: null,
     novaGroup: null,
+    ecoScore: null,
+    organic: result.labels.some((label) => /organic|bio|эко|орган/i.test(label)),
     alcoholPercent: result.alcoholPercent,
     nutrition: result.nutrition,
     nutritionReference: result.nutritionReference ?? undefined,
@@ -328,8 +364,10 @@ export async function recognizeFoodPhoto(photo: LabelPhoto, locale: string): Pro
   const nutrition: NutritionFacts = { ...result.estimatedNutritionPer100g, sodium100g: null, servingSize: null };
   return {
     source: 'ai_photo', barcode: null, name: result.name, brand: null, quantity: null, imageUrl: null,
-    ingredientsText: null, ingredients: [], allergens: [], traces: [], additives: [], labels: [], categories: [...result.visualCategories, ...result.visibleComponents],
-    nutriScore: null, novaGroup: null, alcoholPercent: null, nutrition, nutritionReference: '100g', nutritionBasis: 'estimated_visual', nutritionEstimateConfidence: result.nutritionEstimateConfidence, completeness: 18,
+    ingredientsText: null, ingredients: [], allergens: [], traces: [], allergenTags: [], traceTags: [], additives: [], labels: [], labelTags: [],
+    categories: [...result.visualCategories, ...result.visibleComponents],
+    ingredientAnalysis: { ...EMPTY_ANALYSIS }, nutrientLevels: { ...EMPTY_LEVELS }, fruitsVegetablesNuts100g: null,
+    nutriScore: null, novaGroup: null, ecoScore: null, organic: false, alcoholPercent: null, nutrition, nutritionReference: '100g', nutritionBasis: 'estimated_visual', nutritionEstimateConfidence: result.nutritionEstimateConfidence, completeness: 18,
     unknownFields: ['exact ingredients', 'declared allergens', 'declared nutrition', 'quantity'], identificationConfidence: result.confidence,
     visualDescription: result.visualDescription, possibleAlternatives: result.possibleAlternatives,
   };
