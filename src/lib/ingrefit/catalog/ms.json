@@ -1,0 +1,285 @@
+{
+  "_comment": "Translatable strings for product assessments. Copy en.json, translate values only, keep every {placeholder} intact.",
+  "decimalSeparator": ".",
+  "quotes": [
+    "“",
+    "”"
+  ],
+  "references": {
+    "100g": "100 g",
+    "100ml": "100 ml",
+    "serving": "satu hidangan"
+  },
+  "nutrients": {
+    "sugars": {
+      "name": "gula",
+      "unit": "g"
+    },
+    "saturated_fat": {
+      "name": "lemak tepu",
+      "unit": "g"
+    },
+    "salt": {
+      "name": "setara garam",
+      "unit": "g"
+    },
+    "fiber": {
+      "name": "serat",
+      "unit": "g"
+    },
+    "protein": {
+      "name": "protein",
+      "unit": "g"
+    },
+    "carbs": {
+      "name": "karbohidrat",
+      "unit": "g"
+    },
+    "energy": {
+      "name": "tenaga",
+      "unit": "kcal"
+    }
+  },
+  "goals": {
+    "balanced": "pemakanan seimbang",
+    "weight_loss": "pengurusan berat badan",
+    "muscle_gain": "penambahan otot",
+    "high_protein": "lebih protein",
+    "low_sugar": "kurang gula",
+    "low_sodium": "kurang garam",
+    "high_fiber": "lebih serat",
+    "minimally_processed": "kurang pemprosesan",
+    "heart_health": "pilihan yang mengambil kira jantung",
+    "steady_energy": "tenaga stabil",
+    "digestive_wellness": "keselesaan pencernaan",
+    "low_saturated_fat": "kurang lemak tepu"
+  },
+  "diets": {
+    "none": "tiada diet khusus",
+    "vegetarian": "vegetarian",
+    "vegan": "vegan",
+    "pescatarian": "peskatarian",
+    "gluten_free": "bebas gluten",
+    "dairy_free": "bebas tenusu",
+    "low_carb": "rendah karbohidrat",
+    "mediterranean": "Mediterranean"
+  },
+  "allergens": {
+    "milk": "susu",
+    "eggs": "telur",
+    "peanuts": "kacang tanah",
+    "tree_nuts": "kacang pokok",
+    "soy": "soya",
+    "wheat": "gandum",
+    "gluten": "gluten",
+    "fish": "ikan",
+    "crustaceans": "krustasea",
+    "sesame": "bijan",
+    "celery": "saderi",
+    "mustard": "mustard",
+    "sulphites": "sulfit",
+    "lupin": "lupin",
+    "molluscs": "moluska"
+  },
+  "labels": {
+    "en:organic": "organik",
+    "en:eu-organic": "organik EU",
+    "en:gluten-free": "bebas gluten",
+    "en:no-gluten": "bebas gluten",
+    "en:lactose-free": "bebas laktosa",
+    "en:no-lactose": "bebas laktosa",
+    "en:vegan": "vegan",
+    "en:vegetarian": "vegetarian",
+    "en:sugar-free": "bebas gula",
+    "en:no-added-sugar": "tiada gula tambahan",
+    "en:no-preservatives": "tiada pengawet",
+    "en:no-colorings": "tiada pewarna",
+    "en:no-gmos": "bukan GMO",
+    "en:fair-trade": "perdagangan adil",
+    "en:halal": "halal",
+    "en:kosher": "kosher",
+    "en:palm-oil-free": "bebas minyak sawit",
+    "en:high-protein": "tinggi protein",
+    "en:whole-grain": "bijirin penuh"
+  },
+  "additiveBasis": {
+    "eu_not_authorised": "tidak lagi dibenarkan sebagai bahan tambahan makanan di EU",
+    "eu_child_attention_warning": "undang-undang EU mewajibkan amaran bahawa bahan ini mungkin menjejaskan aktiviti dan perhatian kanak-kanak",
+    "iarc_2a": "dikaitkan oleh IARC dengan klasifikasi group 2A bagi nitrat/nitrit yang dimakan dalam keadaan yang membawa kepada nitrosasi",
+    "iarc_2b": "diklasifikasikan oleh IARC dalam group 2B",
+    "efsa_group_adi": "dilindungi oleh pengambilan harian yang boleh diterima oleh EFSA",
+    "efsa_adi_lowered": "tertakluk pada had pengambilan EFSA yang telah disemak ke bawah",
+    "mandatory_allergen_labelling": "mesti diisytiharkan sebagai alergen melebihi 10 mg/kg",
+    "use_restricted": "dibenarkan hanya untuk penggunaan terhad",
+    "authorised_routine": "dibenarkan dan digunakan secara rutin"
+  },
+  "nova": {
+    "1": "tidak diproses atau diproses minimum",
+    "2": "bahan masakan diproses",
+    "3": "makanan diproses",
+    "4": "makanan ultra-proses",
+    "unknown": "tahap pemprosesan"
+  },
+  "estimatePrefix": "Anggaran AI secara kasar. {text}",
+  "signals": {
+    "fallback": {
+      "label": "Faktor tambahan",
+      "evidence": "Faktor ini mempengaruhi skor."
+    },
+    "blocker.allergen_declared": {
+      "label": "Alergen yang diisytiharkan",
+      "evidence": "Data pada bungkusan menyatakan dengan jelas {allergen}, yang ada dalam senarai alergen anda."
+    },
+    "blocker.allergen_ingredient": {
+      "label": "Alergen ditemui dalam ramuan",
+      "evidence": "“{match}” muncul dalam senarai ramuan dan sepadan dengan alergen {allergen} anda."
+    },
+    "blocker.avoid_ingredient": {
+      "label": "Ramuan dalam senarai elak anda",
+      "evidence": "“{ingredient}” muncul dalam senarai ramuan."
+    },
+    "blocker.diet_conflict": {
+      "label": "Bercanggah dengan diet anda",
+      "evidence": "Analisis ramuan menandakan produk ini tidak serasi dengan {diet} ({evidence})."
+    },
+    "warning.allergen_traces": {
+      "label": "Mungkin mengandungi kesan",
+      "evidence": "Bungkusan menyatakan kemungkinan kesan {allergen}. Ini ialah amaran pengilang, bukan ramuan."
+    },
+    "warning.diet_uncertain": {
+      "label": "Status diet tidak jelas",
+      "evidence": "Sesetengah ramuan tidak dapat dipastikan serasi dengan {diet}. Semak bungkusan sebelum membeli."
+    },
+    "warning.allergen_data_missing": {
+      "label": "Data alergen tidak lengkap",
+      "evidence": "Tiada pengisytiharan alergen tersedia untuk produk ini, jadi senarai alergen anda tidak dapat diperiksa. Senarai kosong tidak pernah membuktikan bahawa produk bebas daripada alergen tersebut."
+    },
+    "base.nutriscore": {
+      "label": "Nutri-Score {grade}",
+      "evidence": "Open Food Facts menerbitkan Nutri-Score {grade} untuk produk ini; ia menetapkan kualiti pemakanan asas sebelum matlamat anda digunakan."
+    },
+    "base.nutrition_profile": {
+      "label": "Profil pemakanan",
+      "evidence": "Tiada Nutri-Score diterbitkan, jadi penilaian asas diperoleh daripada nilai yang diisytiharkan: {detail}."
+    },
+    "base.nutrition_unknown": {
+      "label": "Kualiti asas tidak diketahui",
+      "evidence": "Data pemakanan tidak mencukupi untuk menilai kualiti asas, jadi skor bermula daripada titik tengah neutral."
+    },
+    "base.nova": {
+      "label": "{novaLabel}",
+      "evidence": "Open Food Facts mengklasifikasikan produk ini dalam NOVA group {group}."
+    },
+    "base.additive_high": {
+      "label": "Bahan tambahan yang perlu diberi perhatian",
+      "evidence": "{names}: {basis}. IngreFit menilainya sebagai memerlukan perhatian tinggi, jadi produk tidak boleh mencapai skor asas yang tinggi."
+    },
+    "base.additive_moderate": {
+      "label": "Bahan tambahan yang patut diketahui",
+      "evidence": "Terdapat {count} bahan tambahan dengan had pengambilan atau klasifikasi yang ditetapkan: {names}."
+    },
+    "base.additives_clean": {
+      "label": "Tiada bahan tambahan yang ditandakan",
+      "evidence": "Senarai bahan tambahan yang diisytiharkan tidak mengandungi apa-apa yang ditandakan IngreFit untuk perhatian tambahan."
+    },
+    "base.fruit_veg": {
+      "label": "Kandungan buah, sayur, kekacang dan kacang",
+      "evidence": "Open Food Facts menganggarkan {percent}% kandungan buah, sayur, kekacang dan kacang daripada senarai ramuan."
+    },
+    "base.palm_oil": {
+      "label": "Mengandungi minyak sawit",
+      "evidence": "Analisis ramuan mengesan minyak sawit, yang meningkatkan beban lemak tepu dan mempunyai kebimbangan sumber yang diketahui."
+    },
+    "base.organic": {
+      "label": "Organik diperakui",
+      "evidence": "Produk mempunyai label organik rasmi. IngreFit merekodkannya tetapi hanya memberi pemberat kecil, kerana status organik sahaja tidak meningkatkan kualiti pemakanan."
+    },
+    "base.alcohol": {
+      "label": "Mengandungi alkohol",
+      "evidence": "Produk menyatakan {percent}% alkohol mengikut isipadu."
+    },
+    "personal.nutrientEvidence": "{nutrient}: {value} {unit} bagi setiap {reference}, dinilai berbanding matlamat “{goal}” anda.",
+    "personal.protein": {
+      "label": {
+        "good": "Ketumpatan protein tinggi",
+        "ok": "Ada sedikit protein",
+        "bad": "Protein rendah untuk matlamat anda"
+      }
+    },
+    "personal.sugars": {
+      "label": {
+        "good": "Gula rendah untuk matlamat anda",
+        "ok": "Gula sederhana",
+        "bad": "Gula tinggi untuk matlamat anda"
+      }
+    },
+    "personal.fiber": {
+      "label": {
+        "good": "Ketumpatan serat baik",
+        "ok": "Ada sedikit serat",
+        "bad": "Serat rendah untuk matlamat anda"
+      }
+    },
+    "personal.salt": {
+      "label": {
+        "good": "Garam rendah untuk matlamat anda",
+        "ok": "Garam sederhana",
+        "bad": "Garam tinggi untuk matlamat anda"
+      }
+    },
+    "personal.saturated_fat": {
+      "label": {
+        "good": "Lemak tepu rendah",
+        "ok": "Lemak tepu sederhana",
+        "bad": "Lemak tepu tinggi untuk matlamat anda"
+      }
+    },
+    "personal.carbs": {
+      "label": {
+        "good": "Ketumpatan karbohidrat rendah",
+        "ok": "Karbohidrat sederhana",
+        "bad": "Karbohidrat tinggi untuk corak anda"
+      }
+    },
+    "personal.energy": {
+      "label": {
+        "good": "Ketumpatan tenaga rendah",
+        "ok": "Ketumpatan tenaga sederhana",
+        "bad": "Ketumpatan tenaga tinggi"
+      }
+    },
+    "personal.processing": {
+      "label": {
+        "good": "Diproses minimum seperti yang anda minta",
+        "ok": "Diproses sederhana",
+        "bad": "Sangat diproses untuk matlamat anda"
+      },
+      "evidence": "NOVA group {group} dinilai berbanding matlamat “{goal}” anda."
+    },
+    "personal.no_data": {
+      "label": "Data tidak mencukupi untuk matlamat anda",
+      "evidence": "Tiada nilai yang diperlukan untuk matlamat pilihan anda tersedia, jadi skor hanya mencerminkan kualiti umum produk."
+    }
+  },
+  "summary": {
+    "blocked": "Produk ini diketepikan oleh sekatan tegas dalam profil anda: {blocker}. Kualiti adalah perkara kedua di sini; sekatan kekal berkuat kuasa tanpa mengira angka lain.",
+    "blockedFallback": "sekatan profil",
+    "personalUp": "matlamat anda ({goals}) menaikkannya sebanyak {delta}",
+    "personalDown": "matlamat anda ({goals}) menurunkannya sebanyak {delta}",
+    "personalFlat": "matlamat anda ({goals}) hampir tidak mengubahnya",
+    "withSignals": "Kualiti asas produk ialah {base} daripada 10, dan {personal}. Pengaruh terkuat ialah {strongest}. Ini mengukur kesesuaian dengan profil anda, bukan tahap kesihatan sejagat.",
+    "withoutSignals": "Kualiti asas produk ialah {base} daripada 10, dan {personal}. Data tidak mencukupi untuk pecahan yang lebih terperinci."
+  },
+  "dataNotice": {
+    "aiPhoto": "Sumber: pengenalpastian visual AI. Maklumat pemakanan ialah anggaran berdasarkan rupa; ramuan, alergen dan nilai tepat masih tidak diketahui. Keyakinan skor: {confidence}%.",
+    "estimatedText": "Sumber fakta: {source}. Nilai yang tiada dianggarkan oleh AI daripada nama dan ramuan, bukan dibaca daripada bungkusan. Keyakinan skor: {confidence}%.",
+    "declared": "Sumber: {source}. Kelengkapan data: {completeness}%. Keyakinan skor: {confidence}%.",
+    "sourcePackage": "teks yang kelihatan pada bungkusan"
+  },
+  "tip": {
+    "blocked": "Sentiasa semak bungkusan sebelum membeli: resipi boleh berubah tanpa pangkalan data dikemas kini.",
+    "highRiskAdditive": "Untuk mengelakkan {code}, cari produk jenis yang sama dengan senarai ramuan yang lebih pendek.",
+    "ultraProcessed": "Ini ialah produk ultra-proses. Produk setara yang kurang diproses biasanya mendapat skor asas yang ketara lebih tinggi.",
+    "default": "Skor terikat pada profil anda ({diet}). Tukar matlamat anda dan hasil akan dikira semula."
+  }
+}

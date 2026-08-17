@@ -1,0 +1,285 @@
+{
+  "_comment": "Translatable strings for product assessments. Copy en.json, translate values only, keep every {placeholder} intact.",
+  "decimalSeparator": ",",
+  "quotes": [
+    "„",
+    "”"
+  ],
+  "references": {
+    "100g": "100 g",
+    "100ml": "100 ml",
+    "serving": "porcję"
+  },
+  "nutrients": {
+    "sugars": {
+      "name": "cukry",
+      "unit": "g"
+    },
+    "saturated_fat": {
+      "name": "tłuszcze nasycone",
+      "unit": "g"
+    },
+    "salt": {
+      "name": "ekwiwalent soli",
+      "unit": "g"
+    },
+    "fiber": {
+      "name": "błonnik",
+      "unit": "g"
+    },
+    "protein": {
+      "name": "białko",
+      "unit": "g"
+    },
+    "carbs": {
+      "name": "węglowodany",
+      "unit": "g"
+    },
+    "energy": {
+      "name": "energia",
+      "unit": "kcal"
+    }
+  },
+  "goals": {
+    "balanced": "zbilansowane odżywianie",
+    "weight_loss": "kontrola masy ciała",
+    "muscle_gain": "budowa mięśni",
+    "high_protein": "więcej białka",
+    "low_sugar": "mniej cukru",
+    "low_sodium": "mniej soli",
+    "high_fiber": "więcej błonnika",
+    "minimally_processed": "mniej przetworzenia",
+    "heart_health": "wybory z myślą o sercu",
+    "steady_energy": "stabilna energia",
+    "digestive_wellness": "dobrostan trawienny",
+    "low_saturated_fat": "mniej tłuszczów nasyconych"
+  },
+  "diets": {
+    "none": "brak konkretnej diety",
+    "vegetarian": "wegetariańska",
+    "vegan": "wegańska",
+    "pescatarian": "pescetariańska",
+    "gluten_free": "bezglutenowa",
+    "dairy_free": "bez nabiału",
+    "low_carb": "niskowęglowodanowa",
+    "mediterranean": "śródziemnomorska"
+  },
+  "allergens": {
+    "milk": "mleko",
+    "eggs": "jaja",
+    "peanuts": "orzeszki ziemne",
+    "tree_nuts": "orzechy",
+    "soy": "soja",
+    "wheat": "pszenica",
+    "gluten": "gluten",
+    "fish": "ryby",
+    "crustaceans": "skorupiaki",
+    "sesame": "sezam",
+    "celery": "seler",
+    "mustard": "gorczyca",
+    "sulphites": "siarczyny",
+    "lupin": "łubin",
+    "molluscs": "mięczaki"
+  },
+  "labels": {
+    "en:organic": "ekologiczny",
+    "en:eu-organic": "ekologiczny UE",
+    "en:gluten-free": "bezglutenowy",
+    "en:no-gluten": "bezglutenowy",
+    "en:lactose-free": "bez laktozy",
+    "en:no-lactose": "bez laktozy",
+    "en:vegan": "wegański",
+    "en:vegetarian": "wegetariański",
+    "en:sugar-free": "bez cukru",
+    "en:no-added-sugar": "bez dodatku cukru",
+    "en:no-preservatives": "bez konserwantów",
+    "en:no-colorings": "bez barwników",
+    "en:no-gmos": "bez GMO",
+    "en:fair-trade": "sprawiedliwy handel",
+    "en:halal": "halal",
+    "en:kosher": "koszerny",
+    "en:palm-oil-free": "bez oleju palmowego",
+    "en:high-protein": "wysokobiałkowy",
+    "en:whole-grain": "pełnoziarnisty"
+  },
+  "additiveBasis": {
+    "eu_not_authorised": "nie jest już dopuszczony jako dodatek do żywności w EU",
+    "eu_child_attention_warning": "prawo EU wymaga ostrzeżenia, że może wpływać na aktywność i uwagę dzieci",
+    "iarc_2a": "powiązany przez IARC z klasyfikacją do group 2A dla spożytych azotanów/azotynów w warunkach prowadzących do nitrozowania",
+    "iarc_2b": "sklasyfikowany przez IARC w group 2B",
+    "efsa_group_adi": "objęty dopuszczalnym dziennym spożyciem ustalonym przez EFSA",
+    "efsa_adi_lowered": "podlega limitowi spożycia EFSA, który został obniżony",
+    "mandatory_allergen_labelling": "musi być deklarowany jako alergen powyżej 10 mg/kg",
+    "use_restricted": "dopuszczony wyłącznie do ograniczonych zastosowań",
+    "authorised_routine": "dopuszczony i rutynowo stosowany"
+  },
+  "nova": {
+    "1": "Nieprzetworzony lub minimalnie przetworzony",
+    "2": "Przetworzony składnik kulinarny",
+    "3": "Żywność przetworzona",
+    "4": "Żywność ultraprzetworzona",
+    "unknown": "Poziom przetworzenia"
+  },
+  "estimatePrefix": "Przybliżone oszacowanie AI. {text}",
+  "signals": {
+    "fallback": {
+      "label": "Dodatkowy czynnik",
+      "evidence": "Ten czynnik wpłynął na wynik."
+    },
+    "blocker.allergen_declared": {
+      "label": "Zadeklarowany alergen",
+      "evidence": "Dane z opakowania wyraźnie wskazują {allergen}, który znajduje się na Twojej liście alergenów."
+    },
+    "blocker.allergen_ingredient": {
+      "label": "Alergen znaleziony w składzie",
+      "evidence": "„{match}” występuje na liście składników i odpowiada Twojemu alergenowi {allergen}."
+    },
+    "blocker.avoid_ingredient": {
+      "label": "Składnik z listy produktów do unikania",
+      "evidence": "„{ingredient}” występuje na liście składników."
+    },
+    "blocker.diet_conflict": {
+      "label": "Niezgodny z Twoją dietą",
+      "evidence": "Analiza składników oznacza ten produkt jako niezgodny z {diet} ({evidence})."
+    },
+    "warning.allergen_traces": {
+      "label": "Może zawierać śladowe ilości",
+      "evidence": "Na opakowaniu podano możliwą obecność śladowych ilości {allergen}. To ostrzeżenie producenta, a nie składnik."
+    },
+    "warning.diet_uncertain": {
+      "label": "Zgodność z dietą niejasna",
+      "evidence": "Nie można potwierdzić zgodności niektórych składników z {diet}. Sprawdź opakowanie przed zakupem."
+    },
+    "warning.allergen_data_missing": {
+      "label": "Dane o alergenach są niepełne",
+      "evidence": "Dla tego produktu nie ma dostępnej deklaracji alergenów, więc nie można było sprawdzić Twojej listy. Pusta lista nigdy nie dowodzi, że produkt jest wolny od danego alergenu."
+    },
+    "base.nutriscore": {
+      "label": "Nutri-Score {grade}",
+      "evidence": "Open Food Facts publikuje dla tego produktu Nutri-Score {grade}; określa on bazową jakość odżywczą przed zastosowaniem Twoich celów."
+    },
+    "base.nutrition_profile": {
+      "label": "Profil odżywczy",
+      "evidence": "Nie opublikowano Nutri-Score, więc baza jest wyliczana z zadeklarowanych wartości: {detail}."
+    },
+    "base.nutrition_unknown": {
+      "label": "Bazowa jakość nieznana",
+      "evidence": "Brakuje danych żywieniowych potrzebnych do oceny bazowej jakości, dlatego wynik startuje z neutralnego punktu środkowego."
+    },
+    "base.nova": {
+      "label": "{novaLabel}",
+      "evidence": "Open Food Facts klasyfikuje ten produkt w grupie NOVA {group}."
+    },
+    "base.additive_high": {
+      "label": "Dodatek wymagający uwagi",
+      "evidence": "{names}: {basis}. IngreFit ocenia to jako czynnik wymagający dużej uwagi, dlatego produkt nie może osiągnąć wysokiego wyniku bazowego."
+    },
+    "base.additive_moderate": {
+      "label": "Dodatki, na które warto zwrócić uwagę",
+      "evidence": "{count} dodatek/dodatki z określonym limitem spożycia lub klasyfikacją: {names}."
+    },
+    "base.additives_clean": {
+      "label": "Brak oznaczonych dodatków",
+      "evidence": "Zadeklarowana lista dodatków nie zawiera niczego, co IngreFit oznacza jako wymagające dodatkowej uwagi."
+    },
+    "base.fruit_veg": {
+      "label": "Zawartość owoców, warzyw i orzechów",
+      "evidence": "Open Food Facts szacuje na podstawie listy składników {percent}% owoców, warzyw, roślin strączkowych i orzechów."
+    },
+    "base.palm_oil": {
+      "label": "Zawiera olej palmowy",
+      "evidence": "Analiza składników wykrywa olej palmowy, który zwiększa ilość tłuszczów nasyconych i wiąże się ze znanymi kwestiami dotyczącymi pochodzenia."
+    },
+    "base.organic": {
+      "label": "Certyfikowany ekologiczny",
+      "evidence": "Produkt ma oficjalne oznaczenie ekologiczne. IngreFit je rejestruje, ale nadaje mu niewielką wagę, ponieważ status ekologiczny sam w sobie nie poprawia jakości odżywczej."
+    },
+    "base.alcohol": {
+      "label": "Zawiera alkohol",
+      "evidence": "Produkt deklaruje {percent}% alkoholu objętościowo."
+    },
+    "personal.nutrientEvidence": "{nutrient}: {value} {unit} na {reference}, oceniono względem Twojego celu „{goal}”.",
+    "personal.protein": {
+      "label": {
+        "good": "Wysoka gęstość białka",
+        "ok": "Pewna ilość białka",
+        "bad": "Mało białka dla Twojego celu"
+      }
+    },
+    "personal.sugars": {
+      "label": {
+        "good": "Mało cukru dla Twojego celu",
+        "ok": "Umiarkowana ilość cukru",
+        "bad": "Dużo cukru dla Twojego celu"
+      }
+    },
+    "personal.fiber": {
+      "label": {
+        "good": "Dobra gęstość błonnika",
+        "ok": "Pewna ilość błonnika",
+        "bad": "Mało błonnika dla Twojego celu"
+      }
+    },
+    "personal.salt": {
+      "label": {
+        "good": "Mało soli dla Twojego celu",
+        "ok": "Umiarkowana ilość soli",
+        "bad": "Dużo soli dla Twojego celu"
+      }
+    },
+    "personal.saturated_fat": {
+      "label": {
+        "good": "Mało tłuszczów nasyconych",
+        "ok": "Umiarkowana ilość tłuszczów nasyconych",
+        "bad": "Dużo tłuszczów nasyconych dla Twojego celu"
+      }
+    },
+    "personal.carbs": {
+      "label": {
+        "good": "Niska gęstość węglowodanów",
+        "ok": "Umiarkowana ilość węglowodanów",
+        "bad": "Dużo węglowodanów dla Twojego sposobu odżywiania"
+      }
+    },
+    "personal.energy": {
+      "label": {
+        "good": "Niska gęstość energetyczna",
+        "ok": "Umiarkowana gęstość energetyczna",
+        "bad": "Wysoka gęstość energetyczna"
+      }
+    },
+    "personal.processing": {
+      "label": {
+        "good": "Minimalnie przetworzony, zgodnie z Twoim wyborem",
+        "ok": "Umiarkowanie przetworzony",
+        "bad": "Wysoko przetworzony dla Twojego celu"
+      },
+      "evidence": "Grupa NOVA {group} jest oceniana względem Twojego celu „{goal}”."
+    },
+    "personal.no_data": {
+      "label": "Za mało danych dla Twoich celów",
+      "evidence": "Żadna z wartości potrzebnych dla wybranych celów nie jest dostępna, więc wynik odzwierciedla tylko ogólną jakość produktu."
+    }
+  },
+  "summary": {
+    "blocked": "Ten produkt zostaje wykluczony przez twarde ograniczenie w Twoim profilu: {blocker}. Jakość ma tutaj znaczenie drugorzędne; ograniczenie obowiązuje niezależnie od pozostałych wartości.",
+    "blockedFallback": "ograniczenie profilu",
+    "personalUp": "Twoje cele ({goals}) podniosły wynik o {delta}",
+    "personalDown": "Twoje cele ({goals}) obniżyły wynik o {delta}",
+    "personalFlat": "Twoje cele ({goals}) prawie nie zmieniły wyniku",
+    "withSignals": "Bazowa jakość produktu to {base} na 10, a {personal}. Najsilniejsze wpływy to {strongest}. To mierzy dopasowanie do Twojego profilu, a nie uniwersalną „zdrowotność”.",
+    "withoutSignals": "Bazowa jakość produktu to {base} na 10, a {personal}. Brakuje danych do dokładniejszego rozbicia."
+  },
+  "dataNotice": {
+    "aiPhoto": "Źródło: wizualna identyfikacja przez AI. Wartości odżywcze są przybliżonym oszacowaniem na podstawie wyglądu; składniki, alergeny i dokładne wartości pozostają nieznane. Pewność wyniku: {confidence}%.",
+    "estimatedText": "Źródło faktów: {source}. Brakujące wartości zostały oszacowane przez AI na podstawie nazwy i składników, a nie odczytane z opakowania. Pewność wyniku: {confidence}%.",
+    "declared": "Źródło: {source}. Kompletność danych: {completeness}%. Pewność wyniku: {confidence}%.",
+    "sourcePackage": "widoczny tekst na opakowaniu"
+  },
+  "tip": {
+    "blocked": "Zawsze sprawdzaj opakowanie przed zakupem: receptura może się zmienić bez aktualizacji bazy danych.",
+    "highRiskAdditive": "Aby uniknąć {code}, poszukaj tego samego rodzaju produktu z krótszą listą składników.",
+    "ultraProcessed": "To produkt ultraprzetworzony. Mniej przetworzony odpowiednik zwykle uzyskuje zauważalnie wyższy wynik bazowy.",
+    "default": "Wynik jest powiązany z Twoim profilem ({diet}). Zmień cele, a wynik zostanie przeliczony."
+  }
+}

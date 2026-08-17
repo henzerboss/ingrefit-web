@@ -1,0 +1,285 @@
+{
+  "_comment": "Translatable strings for product assessments. Copy en.json, translate values only, keep every {placeholder} intact.",
+  "decimalSeparator": ",",
+  "quotes": [
+    "„",
+    "“"
+  ],
+  "references": {
+    "100g": "100 g",
+    "100ml": "100 ml",
+    "serving": "porciją"
+  },
+  "nutrients": {
+    "sugars": {
+      "name": "cukrūs",
+      "unit": "g"
+    },
+    "saturated_fat": {
+      "name": "sotieji riebalai",
+      "unit": "g"
+    },
+    "salt": {
+      "name": "druskos ekvivalentas",
+      "unit": "g"
+    },
+    "fiber": {
+      "name": "skaidulos",
+      "unit": "g"
+    },
+    "protein": {
+      "name": "baltymai",
+      "unit": "g"
+    },
+    "carbs": {
+      "name": "angliavandeniai",
+      "unit": "g"
+    },
+    "energy": {
+      "name": "energija",
+      "unit": "kcal"
+    }
+  },
+  "goals": {
+    "balanced": "subalansuota mityba",
+    "weight_loss": "svorio kontrolė",
+    "muscle_gain": "raumenų auginimas",
+    "high_protein": "daugiau baltymų",
+    "low_sugar": "mažiau cukraus",
+    "low_sodium": "mažiau druskos",
+    "high_fiber": "daugiau skaidulų",
+    "minimally_processed": "mažiau perdirbimo",
+    "heart_health": "širdžiai sąmoningi pasirinkimai",
+    "steady_energy": "stabili energija",
+    "digestive_wellness": "gera virškinimo savijauta",
+    "low_saturated_fat": "mažiau sočiųjų riebalų"
+  },
+  "diets": {
+    "none": "be konkrečios dietos",
+    "vegetarian": "vegetariška",
+    "vegan": "veganiška",
+    "pescatarian": "pesketariška",
+    "gluten_free": "be glitimo",
+    "dairy_free": "be pieno produktų",
+    "low_carb": "mažai angliavandenių",
+    "mediterranean": "Viduržemio jūros"
+  },
+  "allergens": {
+    "milk": "pienas",
+    "eggs": "kiaušiniai",
+    "peanuts": "žemės riešutai",
+    "tree_nuts": "riešutai",
+    "soy": "soja",
+    "wheat": "kviečiai",
+    "gluten": "glitimas",
+    "fish": "žuvis",
+    "crustaceans": "vėžiagyviai",
+    "sesame": "sezamas",
+    "celery": "salierai",
+    "mustard": "garstyčios",
+    "sulphites": "sulfitai",
+    "lupin": "lubinai",
+    "molluscs": "moliuskai"
+  },
+  "labels": {
+    "en:organic": "ekologiškas",
+    "en:eu-organic": "ES ekologiškas",
+    "en:gluten-free": "be glitimo",
+    "en:no-gluten": "be glitimo",
+    "en:lactose-free": "be laktozės",
+    "en:no-lactose": "be laktozės",
+    "en:vegan": "veganiškas",
+    "en:vegetarian": "vegetariškas",
+    "en:sugar-free": "be cukraus",
+    "en:no-added-sugar": "be pridėtinio cukraus",
+    "en:no-preservatives": "be konservantų",
+    "en:no-colorings": "be dažiklių",
+    "en:no-gmos": "be GMO",
+    "en:fair-trade": "sąžininga prekyba",
+    "en:halal": "halal",
+    "en:kosher": "košerinis",
+    "en:palm-oil-free": "be palmių aliejaus",
+    "en:high-protein": "daug baltymų",
+    "en:whole-grain": "viso grūdo"
+  },
+  "additiveBasis": {
+    "eu_not_authorised": "EU nebėra leidžiamas kaip maisto priedas",
+    "eu_child_attention_warning": "EU teisė reikalauja įspėjimo, kad jis gali paveikti vaikų aktyvumą ir dėmesį",
+    "iarc_2a": "IARC sieja su group 2A klasifikacija suvartotam nitratui/nitritui sąlygomis, kurios lemia nitrozaciją",
+    "iarc_2b": "IARC klasifikuoja į group 2B",
+    "efsa_group_adi": "jam taikoma EFSA nustatyta leistina paros norma",
+    "efsa_adi_lowered": "jam taikoma EFSA suvartojimo riba, kuri buvo sumažinta",
+    "mandatory_allergen_labelling": "virš 10 mg/kg turi būti deklaruojamas kaip alergenas",
+    "use_restricted": "leidžiamas tik ribotam naudojimui",
+    "authorised_routine": "leidžiamas ir įprastai naudojamas"
+  },
+  "nova": {
+    "1": "Neperdirbtas arba minimaliai perdirbtas",
+    "2": "Perdirbtas kulinarinis ingredientas",
+    "3": "Perdirbtas maistas",
+    "4": "Itin perdirbtas maistas",
+    "unknown": "Perdirbimo lygis"
+  },
+  "estimatePrefix": "Apytikslis AI įvertis. {text}",
+  "signals": {
+    "fallback": {
+      "label": "Papildomas veiksnys",
+      "evidence": "Šis veiksnys paveikė balą."
+    },
+    "blocker.allergen_declared": {
+      "label": "Deklaruotas alergenas",
+      "evidence": "Pakuotės duomenyse aiškiai nurodytas {allergen}, kuris yra jūsų alergenų sąraše."
+    },
+    "blocker.allergen_ingredient": {
+      "label": "Ingrediente rastas alergenas",
+      "evidence": "„{match}“ yra ingredientų sąraše ir atitinka jūsų alergeną {allergen}."
+    },
+    "blocker.avoid_ingredient": {
+      "label": "Ingredientas iš vengiamų sąrašo",
+      "evidence": "„{ingredient}“ yra ingredientų sąraše."
+    },
+    "blocker.diet_conflict": {
+      "label": "Nesuderinama su jūsų dieta",
+      "evidence": "Ingredientų analizė pažymi šį produktą kaip nesuderinamą su {diet} ({evidence})."
+    },
+    "warning.allergen_traces": {
+      "label": "Gali būti pėdsakų",
+      "evidence": "Pakuotėje nurodomi galimi {allergen} pėdsakai. Tai gamintojo įspėjimas, o ne ingredientas."
+    },
+    "warning.diet_uncertain": {
+      "label": "Dietos atitiktis neaiški",
+      "evidence": "Negalima patvirtinti, kad kai kurie ingredientai tinka {diet}. Prieš pirkdami patikrinkite pakuotę."
+    },
+    "warning.allergen_data_missing": {
+      "label": "Duomenys apie alergenus neišsamūs",
+      "evidence": "Šiam produktui nėra alergenų deklaracijos, todėl jūsų alergenų sąrašo nepavyko patikrinti. Tuščias sąrašas niekada neįrodo, kad produkto alergene nėra."
+    },
+    "base.nutriscore": {
+      "label": "Nutri-Score {grade}",
+      "evidence": "Open Food Facts skelbia šio produkto Nutri-Score {grade}; jis nustato bazinę maistinę kokybę prieš pritaikant jūsų tikslus."
+    },
+    "base.nutrition_profile": {
+      "label": "Mitybos profilis",
+      "evidence": "Nutri-Score nepaskelbtas, todėl bazė nustatoma pagal deklaruotas vertes: {detail}."
+    },
+    "base.nutrition_unknown": {
+      "label": "Bazinė kokybė nežinoma",
+      "evidence": "Nepakanka mitybos duomenų bazinei kokybei įvertinti, todėl balas pradedamas nuo neutralaus vidurio taško."
+    },
+    "base.nova": {
+      "label": "{novaLabel}",
+      "evidence": "Open Food Facts priskiria šį produktą NOVA group {group}."
+    },
+    "base.additive_high": {
+      "label": "Dėmesio reikalaujantis priedas",
+      "evidence": "{names}: {basis}. IngreFit tai vertina kaip didesnio dėmesio reikalaujantį veiksnį, todėl produktas negali pasiekti aukšto bazinio balo."
+    },
+    "base.additive_moderate": {
+      "label": "Priedai, kuriuos verta žinoti",
+      "evidence": "{count} priedas(-ai), kuriems nustatyta vartojimo riba arba klasifikacija: {names}."
+    },
+    "base.additives_clean": {
+      "label": "Pažymėtų priedų nėra",
+      "evidence": "Deklaruotame priedų sąraše nėra nieko, ką IngreFit pažymi kaip reikalaujantį papildomo dėmesio."
+    },
+    "base.fruit_veg": {
+      "label": "Vaisių, daržovių ir riešutų kiekis",
+      "evidence": "Open Food Facts pagal ingredientų sąrašą apskaičiuoja {percent}% vaisių, daržovių, ankštinių ir riešutų."
+    },
+    "base.palm_oil": {
+      "label": "Sudėtyje yra palmių aliejaus",
+      "evidence": "Ingredientų analizė aptinka palmių aliejų, kuris didina sočiųjų riebalų kiekį ir kelia žinomų klausimų dėl kilmės."
+    },
+    "base.organic": {
+      "label": "Sertifikuotas ekologiškas",
+      "evidence": "Produktas turi oficialų ekologiškumo ženklą. IngreFit jį registruoja, bet suteikia nedidelį svorį, nes ekologiškas statusas savaime nepagerina maistinės kokybės."
+    },
+    "base.alcohol": {
+      "label": "Sudėtyje yra alkoholio",
+      "evidence": "Produkte deklaruojama {percent}% alkoholio tūrio."
+    },
+    "personal.nutrientEvidence": "{nutrient}: {value} {unit} per {reference}, palyginta su jūsų tikslu „{goal}“.",
+    "personal.protein": {
+      "label": {
+        "good": "Didelis baltymų tankis",
+        "ok": "Šiek tiek baltymų",
+        "bad": "Mažai baltymų jūsų tikslui"
+      }
+    },
+    "personal.sugars": {
+      "label": {
+        "good": "Mažai cukraus jūsų tikslui",
+        "ok": "Vidutinis cukraus kiekis",
+        "bad": "Daug cukraus jūsų tikslui"
+      }
+    },
+    "personal.fiber": {
+      "label": {
+        "good": "Geras skaidulų tankis",
+        "ok": "Šiek tiek skaidulų",
+        "bad": "Mažai skaidulų jūsų tikslui"
+      }
+    },
+    "personal.salt": {
+      "label": {
+        "good": "Mažai druskos jūsų tikslui",
+        "ok": "Vidutinis druskos kiekis",
+        "bad": "Daug druskos jūsų tikslui"
+      }
+    },
+    "personal.saturated_fat": {
+      "label": {
+        "good": "Mažai sočiųjų riebalų",
+        "ok": "Vidutinis sočiųjų riebalų kiekis",
+        "bad": "Daug sočiųjų riebalų jūsų tikslui"
+      }
+    },
+    "personal.carbs": {
+      "label": {
+        "good": "Mažas angliavandenių tankis",
+        "ok": "Vidutinis angliavandenių kiekis",
+        "bad": "Daug angliavandenių jūsų mitybos modeliui"
+      }
+    },
+    "personal.energy": {
+      "label": {
+        "good": "Mažas energijos tankis",
+        "ok": "Vidutinis energijos tankis",
+        "bad": "Didelis energijos tankis"
+      }
+    },
+    "personal.processing": {
+      "label": {
+        "good": "Minimaliai perdirbtas, kaip prašėte",
+        "ok": "Vidutiniškai perdirbtas",
+        "bad": "Labai perdirbtas jūsų tikslui"
+      },
+      "evidence": "NOVA group {group} palyginama su jūsų tikslu „{goal}“."
+    },
+    "personal.no_data": {
+      "label": "Nepakanka duomenų jūsų tikslams",
+      "evidence": "Nė viena jūsų pasirinktiems tikslams reikalinga vertė nėra prieinama, todėl balas atspindi tik bendrą produkto kokybę."
+    }
+  },
+  "summary": {
+    "blocked": "Šis produktas atmetamas dėl griežto jūsų profilio apribojimo: {blocker}. Kokybė čia antraeilė; apribojimas galioja nepaisant kitų verčių.",
+    "blockedFallback": "profilio apribojimas",
+    "personalUp": "jūsų tikslai ({goals}) padidino balą {delta}",
+    "personalDown": "jūsų tikslai ({goals}) sumažino balą {delta}",
+    "personalFlat": "jūsų tikslai ({goals}) beveik nepakeitė balo",
+    "withSignals": "Bazinė produkto kokybė yra {base} iš 10, o {personal}. Didžiausią įtaką turėjo {strongest}. Tai matuoja atitikimą jūsų profiliui, o ne universalią sveikumo vertę.",
+    "withoutSignals": "Bazinė produkto kokybė yra {base} iš 10, o {personal}. Išsamesniam suskirstymui nepakanka duomenų."
+  },
+  "dataNotice": {
+    "aiPhoto": "Šaltinis: vizualinis atpažinimas naudojant AI. Maistinė vertė yra apytikslė pagal išvaizdą; ingredientai, alergenai ir tikslios vertės lieka nežinomi. Balų patikimumas: {confidence}%.",
+    "estimatedText": "Faktų šaltinis: {source}. Trūkstamas vertes AI įvertino pagal pavadinimą ir ingredientus, jos nebuvo nuskaitytos nuo pakuotės. Balų patikimumas: {confidence}%.",
+    "declared": "Šaltinis: {source}. Duomenų išsamumas: {completeness}%. Balų patikimumas: {confidence}%.",
+    "sourcePackage": "matomas tekstas ant pakuotės"
+  },
+  "tip": {
+    "blocked": "Prieš pirkdami visada patikrinkite pakuotę: receptūra gali pasikeisti neatnaujinus duomenų bazės.",
+    "highRiskAdditive": "Norėdami išvengti {code}, ieškokite tokio pat tipo produkto su trumpesniu ingredientų sąrašu.",
+    "ultraProcessed": "Tai itin perdirbtas produktas. Mažiau perdirbtas atitikmuo paprastai gauna pastebimai aukštesnį bazinį balą.",
+    "default": "Balas susietas su jūsų profiliu ({diet}). Pakeiskite tikslus ir rezultatas bus perskaičiuotas."
+  }
+}

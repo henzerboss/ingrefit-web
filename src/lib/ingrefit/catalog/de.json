@@ -1,0 +1,285 @@
+{
+  "_comment": "Translatable strings for product assessments. Copy en.json, translate values only, keep every {placeholder} intact.",
+  "decimalSeparator": ",",
+  "quotes": [
+    "„",
+    "“"
+  ],
+  "references": {
+    "100g": "100 g",
+    "100ml": "100 ml",
+    "serving": "Portion"
+  },
+  "nutrients": {
+    "sugars": {
+      "name": "zucker",
+      "unit": "g"
+    },
+    "saturated_fat": {
+      "name": "gesättigte fettsäuren",
+      "unit": "g"
+    },
+    "salt": {
+      "name": "salzäquivalent",
+      "unit": "g"
+    },
+    "fiber": {
+      "name": "ballaststoffe",
+      "unit": "g"
+    },
+    "protein": {
+      "name": "eiweiß",
+      "unit": "g"
+    },
+    "carbs": {
+      "name": "kohlenhydrate",
+      "unit": "g"
+    },
+    "energy": {
+      "name": "energie",
+      "unit": "kcal"
+    }
+  },
+  "goals": {
+    "balanced": "ausgewogene ernährung",
+    "weight_loss": "gewichtsmanagement",
+    "muscle_gain": "muskelaufbau",
+    "high_protein": "mehr eiweiß",
+    "low_sugar": "weniger zucker",
+    "low_sodium": "weniger salz",
+    "high_fiber": "mehr ballaststoffe",
+    "minimally_processed": "weniger verarbeitung",
+    "heart_health": "herzbewusste auswahl",
+    "steady_energy": "gleichmäßige energie",
+    "digestive_wellness": "verdauungswohlbefinden",
+    "low_saturated_fat": "weniger gesättigte fettsäuren"
+  },
+  "diets": {
+    "none": "keine bestimmte ernährungsweise",
+    "vegetarian": "vegetarisch",
+    "vegan": "vegan",
+    "pescatarian": "pescetarisch",
+    "gluten_free": "glutenfrei",
+    "dairy_free": "milchfrei",
+    "low_carb": "kohlenhydratarm",
+    "mediterranean": "mediterran"
+  },
+  "allergens": {
+    "milk": "milch",
+    "eggs": "eier",
+    "peanuts": "erdnüsse",
+    "tree_nuts": "schalenfrüchte",
+    "soy": "soja",
+    "wheat": "weizen",
+    "gluten": "gluten",
+    "fish": "fisch",
+    "crustaceans": "krebstiere",
+    "sesame": "sesam",
+    "celery": "sellerie",
+    "mustard": "senf",
+    "sulphites": "sulfite",
+    "lupin": "lupine",
+    "molluscs": "weichtiere"
+  },
+  "labels": {
+    "en:organic": "bio",
+    "en:eu-organic": "EU-bio",
+    "en:gluten-free": "glutenfrei",
+    "en:no-gluten": "glutenfrei",
+    "en:lactose-free": "laktosefrei",
+    "en:no-lactose": "laktosefrei",
+    "en:vegan": "vegan",
+    "en:vegetarian": "vegetarisch",
+    "en:sugar-free": "zuckerfrei",
+    "en:no-added-sugar": "ohne zuckerzusatz",
+    "en:no-preservatives": "ohne konservierungsstoffe",
+    "en:no-colorings": "ohne farbstoffe",
+    "en:no-gmos": "ohne GVO",
+    "en:fair-trade": "fairer handel",
+    "en:halal": "halal",
+    "en:kosher": "koscher",
+    "en:palm-oil-free": "ohne palmöl",
+    "en:high-protein": "proteinreich",
+    "en:whole-grain": "vollkorn"
+  },
+  "additiveBasis": {
+    "eu_not_authorised": "nicht mehr als lebensmittelzusatzstoff in der EU zugelassen",
+    "eu_child_attention_warning": "nach EU-Recht ist ein warnhinweis erforderlich, dass aktivität und aufmerksamkeit bei kindern beeinträchtigt werden können",
+    "iarc_2a": "von IARC mit einer einstufung in group 2A für aufgenommenes nitrat/nitrit unter bedingungen verbunden, die zur nitrosierung führen",
+    "iarc_2b": "von IARC in group 2B eingestuft",
+    "efsa_group_adi": "von einer durch EFSA festgelegten akzeptablen täglichen aufnahmemenge erfasst",
+    "efsa_adi_lowered": "unterliegt einem EFSA-aufnahmelimit, das nach unten revidiert wurde",
+    "mandatory_allergen_labelling": "muss oberhalb von 10 mg/kg als allergen deklariert werden",
+    "use_restricted": "nur für eingeschränkte verwendungen zugelassen",
+    "authorised_routine": "zugelassen und routinemäßig verwendet"
+  },
+  "nova": {
+    "1": "Unverarbeitet oder minimal verarbeitet",
+    "2": "Verarbeitete kulinarische Zutat",
+    "3": "Verarbeitetes Lebensmittel",
+    "4": "Hochverarbeitetes Lebensmittel",
+    "unknown": "Verarbeitungsgrad"
+  },
+  "estimatePrefix": "Ungefähre AI-Schätzung. {text}",
+  "signals": {
+    "fallback": {
+      "label": "Zusätzlicher Faktor",
+      "evidence": "Dieser Faktor hat die Bewertung beeinflusst."
+    },
+    "blocker.allergen_declared": {
+      "label": "Deklariertes Allergen",
+      "evidence": "Die Verpackungsdaten weisen ausdrücklich {allergen} aus, das auf deiner Allergenliste steht."
+    },
+    "blocker.allergen_ingredient": {
+      "label": "Allergen in den Zutaten gefunden",
+      "evidence": "„{match}“ steht in der Zutatenliste und entspricht deinem Allergen {allergen}."
+    },
+    "blocker.avoid_ingredient": {
+      "label": "Zutat auf deiner Meiden-Liste",
+      "evidence": "„{ingredient}“ steht in der Zutatenliste."
+    },
+    "blocker.diet_conflict": {
+      "label": "Konflikt mit deiner Ernährungsweise",
+      "evidence": "Die Zutatenanalyse stuft dieses Produkt als nicht mit {diet} vereinbar ein ({evidence})."
+    },
+    "warning.allergen_traces": {
+      "label": "Kann Spuren enthalten",
+      "evidence": "Die Verpackung weist auf mögliche Spuren von {allergen} hin. Dies ist ein Herstellerhinweis, keine Zutat."
+    },
+    "warning.diet_uncertain": {
+      "label": "Ernährungsstatus unklar",
+      "evidence": "Bei einigen Zutaten lässt sich nicht bestätigen, dass sie zu {diet} passen. Prüfe vor dem Kauf die Verpackung."
+    },
+    "warning.allergen_data_missing": {
+      "label": "Allergendaten sind unvollständig",
+      "evidence": "Für dieses Produkt liegt keine Allergenkennzeichnung vor, daher konnte deine Allergenliste nicht geprüft werden. Eine leere Liste beweist niemals, dass das Produkt frei davon ist."
+    },
+    "base.nutriscore": {
+      "label": "Nutri-Score {grade}",
+      "evidence": "Open Food Facts veröffentlicht für dieses Produkt den Nutri-Score {grade}; er legt die grundlegende Nährwertqualität fest, bevor deine Ziele berücksichtigt werden."
+    },
+    "base.nutrition_profile": {
+      "label": "Nährwertprofil",
+      "evidence": "Es ist kein Nutri-Score veröffentlicht, daher wird die Basisbewertung aus den deklarierten Werten abgeleitet: {detail}."
+    },
+    "base.nutrition_unknown": {
+      "label": "Grundqualität unbekannt",
+      "evidence": "Es liegen nicht genügend Nährwertdaten vor, um die Grundqualität zu beurteilen, daher startet die Bewertung an einem neutralen Mittelwert."
+    },
+    "base.nova": {
+      "label": "{novaLabel}",
+      "evidence": "Open Food Facts ordnet dieses Produkt der NOVA-Gruppe {group} zu."
+    },
+    "base.additive_high": {
+      "label": "Zusatzstoff mit erhöhtem Aufmerksamkeitsbedarf",
+      "evidence": "{names}: {basis}. IngreFit bewertet dies als besonders zu beachten, daher kann das Produkt keine hohe Basisbewertung erreichen."
+    },
+    "base.additive_moderate": {
+      "label": "Zusatzstoffe, die zu beachten sind",
+      "evidence": "{count} Zusatzstoff(e) mit festgelegtem Aufnahmelimit oder einer Klassifizierung: {names}."
+    },
+    "base.additives_clean": {
+      "label": "Keine markierten Zusatzstoffe",
+      "evidence": "Die deklarierte Zusatzstoffliste enthält nichts, das IngreFit für zusätzliche Aufmerksamkeit markiert."
+    },
+    "base.fruit_veg": {
+      "label": "Anteil an Obst, Gemüse und Nüssen",
+      "evidence": "Open Food Facts schätzt anhand der Zutatenliste einen Anteil von {percent}% Obst, Gemüse, Hülsenfrüchten und Nüssen."
+    },
+    "base.palm_oil": {
+      "label": "Enthält Palmöl",
+      "evidence": "Die Zutatenanalyse erkennt Palmöl, das den Anteil gesättigter Fettsäuren erhöht und bekannte Bedenken hinsichtlich der Herkunft mit sich bringt."
+    },
+    "base.organic": {
+      "label": "Bio-zertifiziert",
+      "evidence": "Das Produkt trägt ein offizielles Bio-Siegel. IngreFit erfasst dies, gewichtet es aber nur gering, da der Bio-Status allein die Nährwertqualität nicht verbessert."
+    },
+    "base.alcohol": {
+      "label": "Enthält Alkohol",
+      "evidence": "Das Produkt deklariert {percent}% Alkohol nach Volumen."
+    },
+    "personal.nutrientEvidence": "{nutrient}: {value} {unit} pro {reference}, im Verhältnis zu deinem Ziel „{goal}“ bewertet.",
+    "personal.protein": {
+      "label": {
+        "good": "Hohe Proteindichte",
+        "ok": "Etwas Protein",
+        "bad": "Wenig Protein für dein Ziel"
+      }
+    },
+    "personal.sugars": {
+      "label": {
+        "good": "Wenig Zucker für dein Ziel",
+        "ok": "Mäßig Zucker",
+        "bad": "Viel Zucker für dein Ziel"
+      }
+    },
+    "personal.fiber": {
+      "label": {
+        "good": "Gute Ballaststoffdichte",
+        "ok": "Etwas Ballaststoffe",
+        "bad": "Wenig Ballaststoffe für dein Ziel"
+      }
+    },
+    "personal.salt": {
+      "label": {
+        "good": "Wenig Salz für dein Ziel",
+        "ok": "Mäßig Salz",
+        "bad": "Viel Salz für dein Ziel"
+      }
+    },
+    "personal.saturated_fat": {
+      "label": {
+        "good": "Wenig gesättigte Fettsäuren",
+        "ok": "Mäßig gesättigte Fettsäuren",
+        "bad": "Viele gesättigte Fettsäuren für dein Ziel"
+      }
+    },
+    "personal.carbs": {
+      "label": {
+        "good": "Niedrige Kohlenhydratdichte",
+        "ok": "Mäßig Kohlenhydrate",
+        "bad": "Viele Kohlenhydrate für deine Ernährungsweise"
+      }
+    },
+    "personal.energy": {
+      "label": {
+        "good": "Niedrige Energiedichte",
+        "ok": "Mäßige Energiedichte",
+        "bad": "Hohe Energiedichte"
+      }
+    },
+    "personal.processing": {
+      "label": {
+        "good": "Minimal verarbeitet, wie von dir gewünscht",
+        "ok": "Mäßig verarbeitet",
+        "bad": "Für dein Ziel stark verarbeitet"
+      },
+      "evidence": "Die NOVA-Gruppe {group} wird im Verhältnis zu deinem Ziel „{goal}“ bewertet."
+    },
+    "personal.no_data": {
+      "label": "Nicht genügend Daten für deine Ziele",
+      "evidence": "Keiner der für deine ausgewählten Ziele benötigten Werte ist verfügbar, daher spiegelt die Bewertung nur die allgemeine Produktqualität wider."
+    }
+  },
+  "summary": {
+    "blocked": "Dieses Produkt wird durch eine harte Einschränkung in deinem Profil ausgeschlossen: {blocker}. Die Qualität ist hier zweitrangig; die Einschränkung gilt unabhängig von den anderen Werten.",
+    "blockedFallback": "Profileinschränkung",
+    "personalUp": "deine Ziele ({goals}) haben die Bewertung um {delta} erhöht",
+    "personalDown": "deine Ziele ({goals}) haben die Bewertung um {delta} gesenkt",
+    "personalFlat": "deine Ziele ({goals}) haben die Bewertung kaum verändert",
+    "withSignals": "Die grundlegende Produktqualität liegt bei {base} von 10, und {personal}. Die stärksten Einflüsse waren {strongest}. Dies misst die Passung zu deinem Profil, nicht eine allgemeingültige Gesundheitseinstufung.",
+    "withoutSignals": "Die grundlegende Produktqualität liegt bei {base} von 10, und {personal}. Für eine feinere Aufschlüsselung sind nicht genügend Daten vorhanden."
+  },
+  "dataNotice": {
+    "aiPhoto": "Quelle: visuelle AI-Erkennung. Die Nährwerte sind eine ungefähre Schätzung anhand des Aussehens; Zutaten, Allergene und genaue Werte bleiben unbekannt. Vertrauensniveau der Bewertung: {confidence}%.",
+    "estimatedText": "Faktenquelle: {source}. Fehlende Werte wurden von AI anhand von Name und Zutaten geschätzt und nicht von der Verpackung abgelesen. Vertrauensniveau der Bewertung: {confidence}%.",
+    "declared": "Quelle: {source}. Datenvollständigkeit: {completeness}%. Vertrauensniveau der Bewertung: {confidence}%.",
+    "sourcePackage": "sichtbarer Verpackungstext"
+  },
+  "tip": {
+    "blocked": "Prüfe vor dem Kauf immer die Verpackung: Rezepturen können sich ändern, ohne dass die Datenbank aktualisiert wird.",
+    "highRiskAdditive": "Wenn du {code} vermeiden möchtest, suche nach derselben Produktart mit einer kürzeren Zutatenliste.",
+    "ultraProcessed": "Dies ist ein hochverarbeitetes Produkt. Eine weniger verarbeitete Alternative erzielt bei der Basisbewertung in der Regel deutlich mehr Punkte.",
+    "default": "Die Bewertung ist an dein Profil ({diet}) gebunden. Ändere deine Ziele, und das Ergebnis wird neu berechnet."
+  }
+}

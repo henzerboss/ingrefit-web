@@ -1,0 +1,285 @@
+{
+  "_comment": "Translatable strings for product assessments. Copy en.json, translate values only, keep every {placeholder} intact.",
+  "decimalSeparator": ".",
+  "quotes": [
+    "„",
+    "”"
+  ],
+  "references": {
+    "100g": "100 גרם",
+    "100ml": "100 מ״ל",
+    "serving": "מנה"
+  },
+  "nutrients": {
+    "sugars": {
+      "name": "סוכרים",
+      "unit": "גרם"
+    },
+    "saturated_fat": {
+      "name": "שומן רווי",
+      "unit": "גרם"
+    },
+    "salt": {
+      "name": "שווה ערך למלח",
+      "unit": "גרם"
+    },
+    "fiber": {
+      "name": "סיבים תזונתיים",
+      "unit": "גרם"
+    },
+    "protein": {
+      "name": "חלבון",
+      "unit": "גרם"
+    },
+    "carbs": {
+      "name": "פחמימות",
+      "unit": "גרם"
+    },
+    "energy": {
+      "name": "אנרגיה",
+      "unit": "קק״ל"
+    }
+  },
+  "goals": {
+    "balanced": "אכילה מאוזנת",
+    "weight_loss": "ניהול משקל",
+    "muscle_gain": "עלייה במסת שריר",
+    "high_protein": "יותר חלבון",
+    "low_sugar": "פחות סוכר",
+    "low_sodium": "פחות מלח",
+    "high_fiber": "יותר סיבים",
+    "minimally_processed": "פחות עיבוד",
+    "heart_health": "בחירות שמתחשבות בלב",
+    "steady_energy": "אנרגיה יציבה",
+    "digestive_wellness": "נוחות עיכול",
+    "low_saturated_fat": "פחות שומן רווי"
+  },
+  "diets": {
+    "none": "ללא תזונה מסוימת",
+    "vegetarian": "צמחונית",
+    "vegan": "טבעונית",
+    "pescatarian": "פסקטריאנית",
+    "gluten_free": "ללא גלוטן",
+    "dairy_free": "ללא מוצרי חלב",
+    "low_carb": "דלת פחמימות",
+    "mediterranean": "ים־תיכונית"
+  },
+  "allergens": {
+    "milk": "חלב",
+    "eggs": "ביצים",
+    "peanuts": "בוטנים",
+    "tree_nuts": "אגוזים",
+    "soy": "סויה",
+    "wheat": "חיטה",
+    "gluten": "גלוטן",
+    "fish": "דגים",
+    "crustaceans": "סרטנים",
+    "sesame": "שומשום",
+    "celery": "סלרי",
+    "mustard": "חרדל",
+    "sulphites": "סולפיטים",
+    "lupin": "תורמוס",
+    "molluscs": "רכיכות"
+  },
+  "labels": {
+    "en:organic": "אורגני",
+    "en:eu-organic": "אורגני EU",
+    "en:gluten-free": "ללא גלוטן",
+    "en:no-gluten": "ללא גלוטן",
+    "en:lactose-free": "ללא לקטוז",
+    "en:no-lactose": "ללא לקטוז",
+    "en:vegan": "טבעוני",
+    "en:vegetarian": "צמחוני",
+    "en:sugar-free": "ללא סוכר",
+    "en:no-added-sugar": "ללא תוספת סוכר",
+    "en:no-preservatives": "ללא חומרים משמרים",
+    "en:no-colorings": "ללא צבעי מאכל",
+    "en:no-gmos": "ללא GMO",
+    "en:fair-trade": "סחר הוגן",
+    "en:halal": "חלאל",
+    "en:kosher": "כשר",
+    "en:palm-oil-free": "ללא שמן דקלים",
+    "en:high-protein": "עשיר בחלבון",
+    "en:whole-grain": "דגנים מלאים"
+  },
+  "additiveBasis": {
+    "eu_not_authorised": "אינו מורשה עוד כתוסף מזון ב-EU",
+    "eu_child_attention_warning": "חוק EU מחייב אזהרה שלפיה הוא עלול להשפיע על פעילות וקשב אצל ילדים",
+    "iarc_2a": "נקשר על ידי IARC לסיווג group 2A של ניטראט/ניטריט שנצרכו בתנאים המובילים לניטרוזציה",
+    "iarc_2b": "מסווג על ידי IARC ב-group 2B",
+    "efsa_group_adi": "נכלל במסגרת צריכה יומית מקובלת שקבעה EFSA",
+    "efsa_adi_lowered": "כפוף למגבלת צריכה של EFSA שעודכנה כלפי מטה",
+    "mandatory_allergen_labelling": "חובה להצהיר עליו כאלרגן מעל 10 mg/kg",
+    "use_restricted": "מורשה רק לשימושים מוגבלים",
+    "authorised_routine": "מורשה ונמצא בשימוש שגרתי"
+  },
+  "nova": {
+    "1": "לא מעובד או מעובד במידה מינימלית",
+    "2": "מרכיב קולינרי מעובד",
+    "3": "מזון מעובד",
+    "4": "מזון אולטרה־מעובד",
+    "unknown": "רמת עיבוד"
+  },
+  "estimatePrefix": "הערכת AI משוערת. {text}",
+  "signals": {
+    "fallback": {
+      "label": "גורם נוסף",
+      "evidence": "גורם זה השפיע על הציון."
+    },
+    "blocker.allergen_declared": {
+      "label": "אלרגן מוצהר",
+      "evidence": "נתוני האריזה מצהירים במפורש על {allergen}, שנמצא ברשימת האלרגנים שלך."
+    },
+    "blocker.allergen_ingredient": {
+      "label": "אלרגן נמצא ברכיבים",
+      "evidence": "„{match}” מופיע ברשימת הרכיבים ותואם לאלרגן {allergen} שלך."
+    },
+    "blocker.avoid_ingredient": {
+      "label": "רכיב ברשימת ההימנעות שלך",
+      "evidence": "„{ingredient}” מופיע ברשימת הרכיבים."
+    },
+    "blocker.diet_conflict": {
+      "label": "מתנגש עם התזונה שלך",
+      "evidence": "ניתוח הרכיבים מסמן את המוצר כלא תואם ל-{diet} ({evidence})."
+    },
+    "warning.allergen_traces": {
+      "label": "עלול להכיל עקבות",
+      "evidence": "האריזה מצהירה על אפשרות לעקבות של {allergen}. זו אזהרת יצרן, לא רכיב."
+    },
+    "warning.diet_uncertain": {
+      "label": "התאמה לתזונה אינה ברורה",
+      "evidence": "אי אפשר לאשר שחלק מהרכיבים מתאימים ל-{diet}. בדוק את האריזה לפני הקנייה."
+    },
+    "warning.allergen_data_missing": {
+      "label": "נתוני האלרגנים חלקיים",
+      "evidence": "אין הצהרת אלרגנים זמינה למוצר הזה, ולכן לא ניתן היה לבדוק את רשימת האלרגנים שלך. רשימה ריקה לעולם אינה מוכיחה שהמוצר אינו מכיל את האלרגן."
+    },
+    "base.nutriscore": {
+      "label": "Nutri-Score {grade}",
+      "evidence": "Open Food Facts מפרסם Nutri-Score {grade} למוצר הזה; הוא קובע את איכות התזונה הבסיסית לפני החלת היעדים שלך."
+    },
+    "base.nutrition_profile": {
+      "label": "פרופיל תזונתי",
+      "evidence": "לא פורסם Nutri-Score, לכן ציון הבסיס נגזר מהערכים המוצהרים: {detail}."
+    },
+    "base.nutrition_unknown": {
+      "label": "איכות הבסיס אינה ידועה",
+      "evidence": "אין מספיק נתונים תזונתיים כדי להעריך את איכות הבסיס, ולכן הציון מתחיל מנקודת אמצע ניטרלית."
+    },
+    "base.nova": {
+      "label": "{novaLabel}",
+      "evidence": "Open Food Facts מסווג את המוצר הזה ב-NOVA group {group}."
+    },
+    "base.additive_high": {
+      "label": "תוסף שדורש תשומת לב",
+      "evidence": "{names}: {basis}. IngreFit מדרג זאת כדורש תשומת לב גבוהה, ולכן המוצר אינו יכול להגיע לציון בסיס גבוה."
+    },
+    "base.additive_moderate": {
+      "label": "תוספים שכדאי לשים לב אליהם",
+      "evidence": "יש {count} תוסף/ים עם מגבלת צריכה או סיווג מוגדרים: {names}."
+    },
+    "base.additives_clean": {
+      "label": "אין תוספים מסומנים",
+      "evidence": "רשימת התוספים המוצהרת אינה כוללת דבר ש-IngreFit מסמן כדורש תשומת לב נוספת."
+    },
+    "base.fruit_veg": {
+      "label": "תכולת פירות, ירקות, קטניות ואגוזים",
+      "evidence": "Open Food Facts מעריך {percent}% פירות, ירקות, קטניות ואגוזים על סמך רשימת הרכיבים."
+    },
+    "base.palm_oil": {
+      "label": "מכיל שמן דקלים",
+      "evidence": "ניתוח הרכיבים מזהה שמן דקלים, שמעלה את עומס השומן הרווי וכרוך בחששות מוכרים בנוגע למקורו."
+    },
+    "base.organic": {
+      "label": "אורגני מוסמך",
+      "evidence": "המוצר נושא תווית אורגנית רשמית. IngreFit מתעד זאת אך נותן לכך משקל קטן בלבד, משום שמעמד אורגני כשלעצמו אינו משפר את האיכות התזונתית."
+    },
+    "base.alcohol": {
+      "label": "מכיל אלכוהול",
+      "evidence": "המוצר מצהיר על {percent}% אלכוהול בנפח."
+    },
+    "personal.nutrientEvidence": "{nutrient}: {value} {unit} לכל {reference}, בהשוואה ליעד „{goal}” שלך.",
+    "personal.protein": {
+      "label": {
+        "good": "צפיפות חלבון גבוהה",
+        "ok": "כמות מסוימת של חלבון",
+        "bad": "מעט חלבון ביחס ליעד שלך"
+      }
+    },
+    "personal.sugars": {
+      "label": {
+        "good": "מעט סוכר ביחס ליעד שלך",
+        "ok": "כמות סוכר בינונית",
+        "bad": "הרבה סוכר ביחס ליעד שלך"
+      }
+    },
+    "personal.fiber": {
+      "label": {
+        "good": "צפיפות סיבים טובה",
+        "ok": "כמות מסוימת של סיבים",
+        "bad": "מעט סיבים ביחס ליעד שלך"
+      }
+    },
+    "personal.salt": {
+      "label": {
+        "good": "מעט מלח ביחס ליעד שלך",
+        "ok": "כמות מלח בינונית",
+        "bad": "הרבה מלח ביחס ליעד שלך"
+      }
+    },
+    "personal.saturated_fat": {
+      "label": {
+        "good": "מעט שומן רווי",
+        "ok": "כמות שומן רווי בינונית",
+        "bad": "הרבה שומן רווי ביחס ליעד שלך"
+      }
+    },
+    "personal.carbs": {
+      "label": {
+        "good": "צפיפות פחמימות נמוכה",
+        "ok": "כמות פחמימות בינונית",
+        "bad": "הרבה פחמימות ביחס לדפוס שלך"
+      }
+    },
+    "personal.energy": {
+      "label": {
+        "good": "צפיפות אנרגטית נמוכה",
+        "ok": "צפיפות אנרגטית בינונית",
+        "bad": "צפיפות אנרגטית גבוהה"
+      }
+    },
+    "personal.processing": {
+      "label": {
+        "good": "עיבוד מינימלי, כפי שביקשת",
+        "ok": "עיבוד בינוני",
+        "bad": "מעובד מאוד ביחס ליעד שלך"
+      },
+      "evidence": "NOVA group {group} נשקל מול היעד „{goal}” שלך."
+    },
+    "personal.no_data": {
+      "label": "אין מספיק נתונים ליעדים שלך",
+      "evidence": "אף אחד מהערכים הדרושים ליעדים שבחרת אינו זמין, ולכן הציון משקף רק את האיכות הכללית של המוצר."
+    }
+  },
+  "summary": {
+    "blocked": "המוצר הזה נפסל בגלל מגבלה קשיחה בפרופיל שלך: {blocker}. האיכות משנית כאן; המגבלה חלה ללא קשר לשאר המספרים.",
+    "blockedFallback": "מגבלת פרופיל",
+    "personalUp": "היעדים שלך ({goals}) העלו את הציון ב-{delta}",
+    "personalDown": "היעדים שלך ({goals}) הורידו את הציון ב-{delta}",
+    "personalFlat": "היעדים שלך ({goals}) כמעט לא שינו את הציון",
+    "withSignals": "איכות הבסיס של המוצר היא {base} מתוך 10, ו-{personal}. ההשפעות החזקות ביותר היו {strongest}. זה מודד התאמה לפרופיל שלך, לא בריאות אוניברסלית.",
+    "withoutSignals": "איכות הבסיס של המוצר היא {base} מתוך 10, ו-{personal}. אין מספיק נתונים לפירוט מדויק יותר."
+  },
+  "dataNotice": {
+    "aiPhoto": "מקור: זיהוי חזותי באמצעות AI. נתוני התזונה הם הערכה משוערת לפי המראה; הרכיבים, האלרגנים והערכים המדויקים עדיין אינם ידועים. ודאות הציון: {confidence}%.",
+    "estimatedText": "מקור העובדות: {source}. ערכים חסרים הוערכו על ידי AI לפי השם והרכיבים, ולא נקראו מהאריזה. ודאות הציון: {confidence}%.",
+    "declared": "מקור: {source}. שלמות הנתונים: {completeness}%. ודאות הציון: {confidence}%.",
+    "sourcePackage": "טקסט גלוי על האריזה"
+  },
+  "tip": {
+    "blocked": "תמיד בדוק את האריזה לפני הקנייה: מתכונים יכולים להשתנות בלי שהמסד יתעדכן.",
+    "highRiskAdditive": "כדי להימנע מ-{code}, חפש מוצר מאותו סוג עם רשימת רכיבים קצרה יותר.",
+    "ultraProcessed": "זהו מוצר אולטרה־מעובד. מקבילה פחות מעובדת מקבלת בדרך כלל ציון בסיס גבוה יותר באופן ניכר.",
+    "default": "הציון קשור לפרופיל שלך ({diet}). שינוי היעדים מחשב את התוצאה מחדש."
+  }
+}

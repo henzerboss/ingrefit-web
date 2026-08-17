@@ -1,0 +1,285 @@
+{
+  "_comment": "Translatable strings for product assessments. Copy en.json, translate values only, keep every {placeholder} intact.",
+  "decimalSeparator": ",",
+  "quotes": [
+    "„",
+    "“"
+  ],
+  "references": {
+    "100g": "100 g",
+    "100ml": "100 ml",
+    "serving": "porciju"
+  },
+  "nutrients": {
+    "sugars": {
+      "name": "cukuri",
+      "unit": "g"
+    },
+    "saturated_fat": {
+      "name": "piesātinātie tauki",
+      "unit": "g"
+    },
+    "salt": {
+      "name": "sāls ekvivalents",
+      "unit": "g"
+    },
+    "fiber": {
+      "name": "šķiedrvielas",
+      "unit": "g"
+    },
+    "protein": {
+      "name": "olbaltumvielas",
+      "unit": "g"
+    },
+    "carbs": {
+      "name": "ogļhidrāti",
+      "unit": "g"
+    },
+    "energy": {
+      "name": "enerģija",
+      "unit": "kcal"
+    }
+  },
+  "goals": {
+    "balanced": "sabalansēts uzturs",
+    "weight_loss": "svara kontrole",
+    "muscle_gain": "muskuļu masas palielināšana",
+    "high_protein": "vairāk olbaltumvielu",
+    "low_sugar": "mazāk cukura",
+    "low_sodium": "mazāk sāls",
+    "high_fiber": "vairāk šķiedrvielu",
+    "minimally_processed": "mazāk apstrādes",
+    "heart_health": "sirdij apzinātas izvēles",
+    "steady_energy": "vienmērīga enerģija",
+    "digestive_wellness": "gremošanas labsajūta",
+    "low_saturated_fat": "mazāk piesātināto tauku"
+  },
+  "diets": {
+    "none": "bez konkrētas diētas",
+    "vegetarian": "veģetāra",
+    "vegan": "vegāna",
+    "pescatarian": "pesketāra",
+    "gluten_free": "bez glutēna",
+    "dairy_free": "bez piena produktiem",
+    "low_carb": "ar zemu ogļhidrātu saturu",
+    "mediterranean": "Vidusjūras"
+  },
+  "allergens": {
+    "milk": "piens",
+    "eggs": "olas",
+    "peanuts": "zemesrieksti",
+    "tree_nuts": "rieksti",
+    "soy": "soja",
+    "wheat": "kvieši",
+    "gluten": "glutēns",
+    "fish": "zivis",
+    "crustaceans": "vēžveidīgie",
+    "sesame": "sezams",
+    "celery": "selerija",
+    "mustard": "sinepes",
+    "sulphites": "sulfīti",
+    "lupin": "lupīna",
+    "molluscs": "gliemji"
+  },
+  "labels": {
+    "en:organic": "bioloģisks",
+    "en:eu-organic": "ES bioloģisks",
+    "en:gluten-free": "bez glutēna",
+    "en:no-gluten": "bez glutēna",
+    "en:lactose-free": "bez laktozes",
+    "en:no-lactose": "bez laktozes",
+    "en:vegan": "vegāns",
+    "en:vegetarian": "veģetārs",
+    "en:sugar-free": "bez cukura",
+    "en:no-added-sugar": "bez pievienota cukura",
+    "en:no-preservatives": "bez konservantiem",
+    "en:no-colorings": "bez krāsvielām",
+    "en:no-gmos": "bez ĢMO",
+    "en:fair-trade": "godīga tirdzniecība",
+    "en:halal": "halal",
+    "en:kosher": "košers",
+    "en:palm-oil-free": "bez palmu eļļas",
+    "en:high-protein": "daudz olbaltumvielu",
+    "en:whole-grain": "pilngraudu"
+  },
+  "additiveBasis": {
+    "eu_not_authorised": "EU vairs nav atļauts kā pārtikas piedeva",
+    "eu_child_attention_warning": "EU tiesību akti pieprasa brīdinājumu, ka tas var ietekmēt bērnu aktivitāti un uzmanību",
+    "iarc_2a": "IARC saista ar group 2A klasifikāciju uzņemtam nitrātam/nitrītam apstākļos, kas izraisa nitrozāciju",
+    "iarc_2b": "IARC klasificēts group 2B",
+    "efsa_group_adi": "uz to attiecas EFSA noteikta pieļaujamā dienas deva",
+    "efsa_adi_lowered": "uz to attiecas EFSA uzņemšanas limits, kas tika samazināts",
+    "mandatory_allergen_labelling": "virs 10 mg/kg tas jānorāda kā alergēns",
+    "use_restricted": "atļauts tikai ierobežotai lietošanai",
+    "authorised_routine": "atļauts un regulāri izmantots"
+  },
+  "nova": {
+    "1": "Neapstrādāts vai minimāli apstrādāts",
+    "2": "Apstrādāta kulinārijas sastāvdaļa",
+    "3": "Apstrādāts pārtikas produkts",
+    "4": "Ultrapārstrādāts pārtikas produkts",
+    "unknown": "Apstrādes līmenis"
+  },
+  "estimatePrefix": "Aptuvens AI novērtējums. {text}",
+  "signals": {
+    "fallback": {
+      "label": "Papildu faktors",
+      "evidence": "Šis faktors ietekmēja vērtējumu."
+    },
+    "blocker.allergen_declared": {
+      "label": "Deklarēts alergēns",
+      "evidence": "Iepakojuma datos skaidri norādīts {allergen}, kas ir jūsu alergēnu sarakstā."
+    },
+    "blocker.allergen_ingredient": {
+      "label": "Sastāvdaļās atrasts alergēns",
+      "evidence": "„{match}“ ir sastāvdaļu sarakstā un atbilst jūsu alergēnam {allergen}."
+    },
+    "blocker.avoid_ingredient": {
+      "label": "Sastāvdaļa no izvairīšanās saraksta",
+      "evidence": "„{ingredient}“ ir sastāvdaļu sarakstā."
+    },
+    "blocker.diet_conflict": {
+      "label": "Pretrunā ar jūsu diētu",
+      "evidence": "Sastāvdaļu analīze atzīmē šo produktu kā nesaderīgu ar {diet} ({evidence})."
+    },
+    "warning.allergen_traces": {
+      "label": "Var saturēt pēdas",
+      "evidence": "Uz iepakojuma norādītas iespējamas {allergen} pēdas. Tas ir ražotāja brīdinājums, nevis sastāvdaļa."
+    },
+    "warning.diet_uncertain": {
+      "label": "Diētas atbilstība nav skaidra",
+      "evidence": "Dažu sastāvdaļu atbilstību {diet} nevar apstiprināt. Pirms pirkšanas pārbaudiet iepakojumu."
+    },
+    "warning.allergen_data_missing": {
+      "label": "Dati par alergēniem ir nepilnīgi",
+      "evidence": "Šim produktam nav pieejama alergēnu deklarācija, tāpēc jūsu alergēnu sarakstu nevarēja pārbaudīt. Tukšs saraksts nekad nepierāda, ka produkts nesatur alergēnu."
+    },
+    "base.nutriscore": {
+      "label": "Nutri-Score {grade}",
+      "evidence": "Open Food Facts publicē šim produktam Nutri-Score {grade}; tas nosaka pamata uzturvērtības kvalitāti pirms jūsu mērķu piemērošanas."
+    },
+    "base.nutrition_profile": {
+      "label": "Uzturvērtības profils",
+      "evidence": "Nutri-Score nav publicēts, tāpēc pamata vērtējums tiek iegūts no deklarētajām vērtībām: {detail}."
+    },
+    "base.nutrition_unknown": {
+      "label": "Pamata kvalitāte nav zināma",
+      "evidence": "Nav pietiekami daudz uzturvērtības datu, lai novērtētu pamata kvalitāti, tāpēc vērtējums sākas no neitrāla viduspunkta."
+    },
+    "base.nova": {
+      "label": "{novaLabel}",
+      "evidence": "Open Food Facts klasificē šo produktu NOVA group {group}."
+    },
+    "base.additive_high": {
+      "label": "Piedeva, kam jāpievērš uzmanība",
+      "evidence": "{names}: {basis}. IngreFit to vērtē kā faktoru, kam vajadzīga liela uzmanība, tāpēc produkts nevar sasniegt augstu pamata vērtējumu."
+    },
+    "base.additive_moderate": {
+      "label": "Piedevas, kas jāņem vērā",
+      "evidence": "{count} piedeva(-as) ar noteiktu uzņemšanas limitu vai klasifikāciju: {names}."
+    },
+    "base.additives_clean": {
+      "label": "Nav atzīmētu piedevu",
+      "evidence": "Deklarētajā piedevu sarakstā nav nekā, ko IngreFit atzīmē papildu uzmanībai."
+    },
+    "base.fruit_veg": {
+      "label": "Augļu, dārzeņu un riekstu saturs",
+      "evidence": "Open Food Facts pēc sastāvdaļu saraksta lēš {percent}% augļu, dārzeņu, pākšaugu un riekstu."
+    },
+    "base.palm_oil": {
+      "label": "Satur palmu eļļu",
+      "evidence": "Sastāvdaļu analīze konstatē palmu eļļu, kas palielina piesātināto tauku daudzumu un rada zināmus jautājumus par izcelsmi."
+    },
+    "base.organic": {
+      "label": "Sertificēts bioloģisks",
+      "evidence": "Produktam ir oficiāls bioloģiskais marķējums. IngreFit to reģistrē, bet piešķir nelielu svaru, jo bioloģiskais statuss pats par sevi neuzlabo uzturvērtības kvalitāti."
+    },
+    "base.alcohol": {
+      "label": "Satur alkoholu",
+      "evidence": "Produktā deklarēti {percent}% alkohola pēc tilpuma."
+    },
+    "personal.nutrientEvidence": "{nutrient}: {value} {unit} uz {reference}, salīdzināts ar jūsu mērķi „{goal}“.",
+    "personal.protein": {
+      "label": {
+        "good": "Augsts olbaltumvielu blīvums",
+        "ok": "Nedaudz olbaltumvielu",
+        "bad": "Maz olbaltumvielu jūsu mērķim"
+      }
+    },
+    "personal.sugars": {
+      "label": {
+        "good": "Maz cukura jūsu mērķim",
+        "ok": "Mērens cukura daudzums",
+        "bad": "Daudz cukura jūsu mērķim"
+      }
+    },
+    "personal.fiber": {
+      "label": {
+        "good": "Labs šķiedrvielu blīvums",
+        "ok": "Nedaudz šķiedrvielu",
+        "bad": "Maz šķiedrvielu jūsu mērķim"
+      }
+    },
+    "personal.salt": {
+      "label": {
+        "good": "Maz sāls jūsu mērķim",
+        "ok": "Mērens sāls daudzums",
+        "bad": "Daudz sāls jūsu mērķim"
+      }
+    },
+    "personal.saturated_fat": {
+      "label": {
+        "good": "Maz piesātināto tauku",
+        "ok": "Mērens piesātināto tauku daudzums",
+        "bad": "Daudz piesātināto tauku jūsu mērķim"
+      }
+    },
+    "personal.carbs": {
+      "label": {
+        "good": "Zems ogļhidrātu blīvums",
+        "ok": "Mērens ogļhidrātu daudzums",
+        "bad": "Daudz ogļhidrātu jūsu uztura modelim"
+      }
+    },
+    "personal.energy": {
+      "label": {
+        "good": "Zems enerģijas blīvums",
+        "ok": "Mērens enerģijas blīvums",
+        "bad": "Augsts enerģijas blīvums"
+      }
+    },
+    "personal.processing": {
+      "label": {
+        "good": "Minimāli apstrādāts, kā lūdzāt",
+        "ok": "Mēreni apstrādāts",
+        "bad": "Stipri apstrādāts jūsu mērķim"
+      },
+      "evidence": "NOVA group {group} tiek salīdzināta ar jūsu mērķi „{goal}“."
+    },
+    "personal.no_data": {
+      "label": "Nepietiek datu jūsu mērķiem",
+      "evidence": "Neviena no atlasītajiem mērķiem nepieciešamajām vērtībām nav pieejama, tāpēc vērtējums atspoguļo tikai produkta vispārējo kvalitāti."
+    }
+  },
+  "summary": {
+    "blocked": "Šo produktu izslēdz stingrs ierobežojums jūsu profilā: {blocker}. Kvalitāte šeit ir sekundāra; ierobežojums ir spēkā neatkarīgi no pārējām vērtībām.",
+    "blockedFallback": "profila ierobežojums",
+    "personalUp": "jūsu mērķi ({goals}) paaugstināja vērtējumu par {delta}",
+    "personalDown": "jūsu mērķi ({goals}) pazemināja vērtējumu par {delta}",
+    "personalFlat": "jūsu mērķi ({goals}) gandrīz nemainīja vērtējumu",
+    "withSignals": "Produkta pamata kvalitāte ir {base} no 10, un {personal}. Spēcīgākās ietekmes bija {strongest}. Tas mēra atbilstību jūsu profilam, nevis universālu veselīguma vērtējumu.",
+    "withoutSignals": "Produkta pamata kvalitāte ir {base} no 10, un {personal}. Smalkākam sadalījumam nepietiek datu."
+  },
+  "dataNotice": {
+    "aiPhoto": "Avots: vizuāla identificēšana ar AI. Uzturvērtība ir aptuvens novērtējums pēc izskata; sastāvdaļas, alergēni un precīzas vērtības paliek nezināmas. Vērtējuma pārliecība: {confidence}%.",
+    "estimatedText": "Faktu avots: {source}. Trūkstošās vērtības AI novērtēja pēc nosaukuma un sastāvdaļām, nevis nolasīja no iepakojuma. Vērtējuma pārliecība: {confidence}%.",
+    "declared": "Avots: {source}. Datu pilnīgums: {completeness}%. Vērtējuma pārliecība: {confidence}%.",
+    "sourcePackage": "redzamais teksts uz iepakojuma"
+  },
+  "tip": {
+    "blocked": "Pirms pirkšanas vienmēr pārbaudiet iepakojumu: recepte var mainīties bez datubāzes atjauninājuma.",
+    "highRiskAdditive": "Lai izvairītos no {code}, meklējiet tāda paša veida produktu ar īsāku sastāvdaļu sarakstu.",
+    "ultraProcessed": "Šis ir ultrapārstrādāts produkts. Mazāk apstrādāts analogs parasti iegūst ievērojami augstāku pamata vērtējumu.",
+    "default": "Vērtējums ir saistīts ar jūsu profilu ({diet}). Mainiet mērķus, un rezultāts tiks pārrēķināts."
+  }
+}

@@ -1,0 +1,285 @@
+{
+  "_comment": "Translatable strings for product assessments. Copy en.json, translate values only, keep every {placeholder} intact.",
+  "decimalSeparator": ",",
+  "quotes": [
+    "«",
+    "»"
+  ],
+  "references": {
+    "100g": "100 g",
+    "100ml": "100 ml",
+    "serving": "une portion"
+  },
+  "nutrients": {
+    "sugars": {
+      "name": "sucres",
+      "unit": "g"
+    },
+    "saturated_fat": {
+      "name": "graisses saturées",
+      "unit": "g"
+    },
+    "salt": {
+      "name": "équivalent sel",
+      "unit": "g"
+    },
+    "fiber": {
+      "name": "fibres",
+      "unit": "g"
+    },
+    "protein": {
+      "name": "protéines",
+      "unit": "g"
+    },
+    "carbs": {
+      "name": "glucides",
+      "unit": "g"
+    },
+    "energy": {
+      "name": "énergie",
+      "unit": "kcal"
+    }
+  },
+  "goals": {
+    "balanced": "alimentation équilibrée",
+    "weight_loss": "gestion du poids",
+    "muscle_gain": "prise de muscle",
+    "high_protein": "plus de protéines",
+    "low_sugar": "moins de sucre",
+    "low_sodium": "moins de sel",
+    "high_fiber": "plus de fibres",
+    "minimally_processed": "moins de transformation",
+    "heart_health": "choix attentifs au cœur",
+    "steady_energy": "énergie stable",
+    "digestive_wellness": "bien-être digestif",
+    "low_saturated_fat": "moins de graisses saturées"
+  },
+  "diets": {
+    "none": "aucun régime particulier",
+    "vegetarian": "végétarien",
+    "vegan": "végan",
+    "pescatarian": "pescétarien",
+    "gluten_free": "sans gluten",
+    "dairy_free": "sans produits laitiers",
+    "low_carb": "pauvre en glucides",
+    "mediterranean": "méditerranéen"
+  },
+  "allergens": {
+    "milk": "lait",
+    "eggs": "œufs",
+    "peanuts": "arachides",
+    "tree_nuts": "fruits à coque",
+    "soy": "soja",
+    "wheat": "blé",
+    "gluten": "gluten",
+    "fish": "poisson",
+    "crustaceans": "crustacés",
+    "sesame": "sésame",
+    "celery": "céleri",
+    "mustard": "moutarde",
+    "sulphites": "sulfites",
+    "lupin": "lupin",
+    "molluscs": "mollusques"
+  },
+  "labels": {
+    "en:organic": "biologique",
+    "en:eu-organic": "biologique UE",
+    "en:gluten-free": "sans gluten",
+    "en:no-gluten": "sans gluten",
+    "en:lactose-free": "sans lactose",
+    "en:no-lactose": "sans lactose",
+    "en:vegan": "végan",
+    "en:vegetarian": "végétarien",
+    "en:sugar-free": "sans sucre",
+    "en:no-added-sugar": "sans sucres ajoutés",
+    "en:no-preservatives": "sans conservateurs",
+    "en:no-colorings": "sans colorants",
+    "en:no-gmos": "sans OGM",
+    "en:fair-trade": "commerce équitable",
+    "en:halal": "halal",
+    "en:kosher": "casher",
+    "en:palm-oil-free": "sans huile de palme",
+    "en:high-protein": "riche en protéines",
+    "en:whole-grain": "complet"
+  },
+  "additiveBasis": {
+    "eu_not_authorised": "n’est plus autorisé comme additif alimentaire dans l’EU",
+    "eu_child_attention_warning": "la législation de l’EU exige un avertissement indiquant qu’il peut affecter l’activité et l’attention des enfants",
+    "iarc_2a": "lié par IARC à une classification en group 2A pour les nitrates/nitrites ingérés dans des conditions conduisant à la nitrosation",
+    "iarc_2b": "classé par IARC dans le group 2B",
+    "efsa_group_adi": "couvert par une dose journalière admissible de l’EFSA",
+    "efsa_adi_lowered": "soumis à une limite d’apport de l’EFSA qui a été révisée à la baisse",
+    "mandatory_allergen_labelling": "doit être déclaré comme allergène au-dessus de 10 mg/kg",
+    "use_restricted": "autorisé uniquement pour des usages restreints",
+    "authorised_routine": "autorisé et couramment utilisé"
+  },
+  "nova": {
+    "1": "Non transformé ou peu transformé",
+    "2": "Ingrédient culinaire transformé",
+    "3": "Aliment transformé",
+    "4": "Aliment ultra-transformé",
+    "unknown": "Niveau de transformation"
+  },
+  "estimatePrefix": "Estimation AI approximative. {text}",
+  "signals": {
+    "fallback": {
+      "label": "Facteur supplémentaire",
+      "evidence": "Ce facteur a influencé le score."
+    },
+    "blocker.allergen_declared": {
+      "label": "Allergène déclaré",
+      "evidence": "Les données de l’emballage déclarent explicitement {allergen}, qui figure dans votre liste d’allergènes."
+    },
+    "blocker.allergen_ingredient": {
+      "label": "Allergène trouvé dans les ingrédients",
+      "evidence": "« {match} » apparaît dans la liste des ingrédients et correspond à votre allergène {allergen}."
+    },
+    "blocker.avoid_ingredient": {
+      "label": "Ingrédient dans votre liste à éviter",
+      "evidence": "« {ingredient} » apparaît dans la liste des ingrédients."
+    },
+    "blocker.diet_conflict": {
+      "label": "Incompatible avec votre régime",
+      "evidence": "L’analyse des ingrédients indique que ce produit est incompatible avec {diet} ({evidence})."
+    },
+    "warning.allergen_traces": {
+      "label": "Peut contenir des traces",
+      "evidence": "L’emballage déclare des traces possibles de {allergen}. Il s’agit d’un avertissement du fabricant, pas d’un ingrédient."
+    },
+    "warning.diet_uncertain": {
+      "label": "Compatibilité avec le régime incertaine",
+      "evidence": "Il n’est pas possible de confirmer que certains ingrédients conviennent à {diet}. Vérifiez l’emballage avant l’achat."
+    },
+    "warning.allergen_data_missing": {
+      "label": "Données sur les allergènes incomplètes",
+      "evidence": "Aucune déclaration d’allergènes n’est disponible pour ce produit, votre liste d’allergènes n’a donc pas pu être vérifiée. Une liste vide ne prouve jamais que le produit en est exempt."
+    },
+    "base.nutriscore": {
+      "label": "Nutri-Score {grade}",
+      "evidence": "Open Food Facts publie un Nutri-Score {grade} pour ce produit ; il définit la qualité nutritionnelle de base avant l’application de vos objectifs."
+    },
+    "base.nutrition_profile": {
+      "label": "Profil nutritionnel",
+      "evidence": "Aucun Nutri-Score n’est publié ; la base est donc dérivée des valeurs déclarées : {detail}."
+    },
+    "base.nutrition_unknown": {
+      "label": "Qualité de base inconnue",
+      "evidence": "Les données nutritionnelles sont insuffisantes pour juger la qualité de base ; le score part donc d’un point médian neutre."
+    },
+    "base.nova": {
+      "label": "{novaLabel}",
+      "evidence": "Open Food Facts classe ce produit dans le groupe NOVA {group}."
+    },
+    "base.additive_high": {
+      "label": "Additif à surveiller",
+      "evidence": "{names} : {basis}. IngreFit le considère comme nécessitant une attention élevée ; le produit ne peut donc pas atteindre un score de base élevé."
+    },
+    "base.additive_moderate": {
+      "label": "Additifs à prendre en compte",
+      "evidence": "{count} additif(s) avec une limite d’apport ou une classification définie : {names}."
+    },
+    "base.additives_clean": {
+      "label": "Aucun additif signalé",
+      "evidence": "La liste d’additifs déclarée ne contient rien qu’IngreFit signale comme nécessitant une attention supplémentaire."
+    },
+    "base.fruit_veg": {
+      "label": "Teneur en fruits, légumes et fruits à coque",
+      "evidence": "Open Food Facts estime à {percent}% la teneur en fruits, légumes, légumineuses et fruits à coque à partir de la liste des ingrédients."
+    },
+    "base.palm_oil": {
+      "label": "Contient de l’huile de palme",
+      "evidence": "L’analyse des ingrédients détecte de l’huile de palme, qui augmente la charge en graisses saturées et soulève des préoccupations connues liées à l’approvisionnement."
+    },
+    "base.organic": {
+      "label": "Certifié biologique",
+      "evidence": "Le produit porte un label biologique officiel. IngreFit l’enregistre mais lui accorde un faible poids, car le statut biologique n’améliore pas à lui seul la qualité nutritionnelle."
+    },
+    "base.alcohol": {
+      "label": "Contient de l’alcool",
+      "evidence": "Le produit déclare {percent}% d’alcool en volume."
+    },
+    "personal.nutrientEvidence": "{nutrient} : {value} {unit} pour {reference}, comparé à votre objectif « {goal} ».",
+    "personal.protein": {
+      "label": {
+        "good": "Forte densité en protéines",
+        "ok": "Un peu de protéines",
+        "bad": "Peu de protéines pour votre objectif"
+      }
+    },
+    "personal.sugars": {
+      "label": {
+        "good": "Peu de sucre pour votre objectif",
+        "ok": "Quantité modérée de sucre",
+        "bad": "Beaucoup de sucre pour votre objectif"
+      }
+    },
+    "personal.fiber": {
+      "label": {
+        "good": "Bonne densité en fibres",
+        "ok": "Un peu de fibres",
+        "bad": "Peu de fibres pour votre objectif"
+      }
+    },
+    "personal.salt": {
+      "label": {
+        "good": "Peu de sel pour votre objectif",
+        "ok": "Quantité modérée de sel",
+        "bad": "Beaucoup de sel pour votre objectif"
+      }
+    },
+    "personal.saturated_fat": {
+      "label": {
+        "good": "Peu de graisses saturées",
+        "ok": "Quantité modérée de graisses saturées",
+        "bad": "Beaucoup de graisses saturées pour votre objectif"
+      }
+    },
+    "personal.carbs": {
+      "label": {
+        "good": "Faible densité en glucides",
+        "ok": "Quantité modérée de glucides",
+        "bad": "Beaucoup de glucides pour votre profil alimentaire"
+      }
+    },
+    "personal.energy": {
+      "label": {
+        "good": "Faible densité énergétique",
+        "ok": "Densité énergétique modérée",
+        "bad": "Forte densité énergétique"
+      }
+    },
+    "personal.processing": {
+      "label": {
+        "good": "Peu transformé, comme demandé",
+        "ok": "Modérément transformé",
+        "bad": "Très transformé pour votre objectif"
+      },
+      "evidence": "Le groupe NOVA {group} est comparé à votre objectif « {goal} »."
+    },
+    "personal.no_data": {
+      "label": "Pas assez de données pour vos objectifs",
+      "evidence": "Aucune des valeurs nécessaires à vos objectifs sélectionnés n’est disponible ; le score reflète donc uniquement la qualité générale du produit."
+    }
+  },
+  "summary": {
+    "blocked": "Ce produit est exclu par une restriction stricte de votre profil : {blocker}. La qualité est secondaire ici ; la restriction s’applique quels que soient les autres chiffres.",
+    "blockedFallback": "restriction du profil",
+    "personalUp": "vos objectifs ({goals}) l’ont augmenté de {delta}",
+    "personalDown": "vos objectifs ({goals}) l’ont diminué de {delta}",
+    "personalFlat": "vos objectifs ({goals}) l’ont à peine modifié",
+    "withSignals": "La qualité de base du produit est de {base} sur 10, et {personal}. Les influences les plus fortes étaient {strongest}. Cela mesure l’adéquation à votre profil, pas une qualité « santé » universelle.",
+    "withoutSignals": "La qualité de base du produit est de {base} sur 10, et {personal}. Les données sont insuffisantes pour une analyse plus fine."
+  },
+  "dataNotice": {
+    "aiPhoto": "Source : identification visuelle par AI. Les valeurs nutritionnelles sont une estimation approximative d’après l’apparence ; les ingrédients, les allergènes et les valeurs exactes restent inconnus. Confiance du score : {confidence}%.",
+    "estimatedText": "Source des faits : {source}. Les valeurs manquantes ont été estimées par AI à partir du nom et des ingrédients, et non lues sur l’emballage. Confiance du score : {confidence}%.",
+    "declared": "Source : {source}. Complétude des données : {completeness}%. Confiance du score : {confidence}%.",
+    "sourcePackage": "texte visible sur l’emballage"
+  },
+  "tip": {
+    "blocked": "Vérifiez toujours l’emballage avant l’achat : les recettes peuvent changer sans mise à jour de la base de données.",
+    "highRiskAdditive": "Pour éviter {code}, recherchez le même type de produit avec une liste d’ingrédients plus courte.",
+    "ultraProcessed": "Il s’agit d’un produit ultra-transformé. Un équivalent moins transformé obtient généralement un score de base nettement supérieur.",
+    "default": "Le score est lié à votre profil ({diet}). Modifiez vos objectifs et le résultat sera recalculé."
+  }
+}

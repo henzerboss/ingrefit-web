@@ -1,0 +1,285 @@
+{
+  "_comment": "Translatable strings for product assessments. Copy en.json, translate values only, keep every {placeholder} intact.",
+  "decimalSeparator": ",",
+  "quotes": [
+    "«",
+    "»"
+  ],
+  "references": {
+    "100g": "100 g",
+    "100ml": "100 ml",
+    "serving": "una ració"
+  },
+  "nutrients": {
+    "sugars": {
+      "name": "sucres",
+      "unit": "g"
+    },
+    "saturated_fat": {
+      "name": "greixos saturats",
+      "unit": "g"
+    },
+    "salt": {
+      "name": "equivalent de sal",
+      "unit": "g"
+    },
+    "fiber": {
+      "name": "fibra",
+      "unit": "g"
+    },
+    "protein": {
+      "name": "proteïna",
+      "unit": "g"
+    },
+    "carbs": {
+      "name": "hidrats de carboni",
+      "unit": "g"
+    },
+    "energy": {
+      "name": "energia",
+      "unit": "kcal"
+    }
+  },
+  "goals": {
+    "balanced": "alimentació equilibrada",
+    "weight_loss": "gestió del pes",
+    "muscle_gain": "guany muscular",
+    "high_protein": "més proteïna",
+    "low_sugar": "menys sucre",
+    "low_sodium": "menys sal",
+    "high_fiber": "més fibra",
+    "minimally_processed": "menys processament",
+    "heart_health": "opcions conscients per al cor",
+    "steady_energy": "energia estable",
+    "digestive_wellness": "benestar digestiu",
+    "low_saturated_fat": "menys greixos saturats"
+  },
+  "diets": {
+    "none": "cap dieta específica",
+    "vegetarian": "vegetariana",
+    "vegan": "vegana",
+    "pescatarian": "pescetariana",
+    "gluten_free": "sense gluten",
+    "dairy_free": "sense lactis",
+    "low_carb": "baixa en hidrats de carboni",
+    "mediterranean": "mediterrània"
+  },
+  "allergens": {
+    "milk": "llet",
+    "eggs": "ous",
+    "peanuts": "cacauets",
+    "tree_nuts": "fruits de closca",
+    "soy": "soja",
+    "wheat": "blat",
+    "gluten": "gluten",
+    "fish": "peix",
+    "crustaceans": "crustacis",
+    "sesame": "sèsam",
+    "celery": "api",
+    "mustard": "mostassa",
+    "sulphites": "sulfits",
+    "lupin": "tramús",
+    "molluscs": "mol·luscs"
+  },
+  "labels": {
+    "en:organic": "ecològic",
+    "en:eu-organic": "ecològic UE",
+    "en:gluten-free": "sense gluten",
+    "en:no-gluten": "sense gluten",
+    "en:lactose-free": "sense lactosa",
+    "en:no-lactose": "sense lactosa",
+    "en:vegan": "vegà",
+    "en:vegetarian": "vegetarià",
+    "en:sugar-free": "sense sucre",
+    "en:no-added-sugar": "sense sucres afegits",
+    "en:no-preservatives": "sense conservants",
+    "en:no-colorings": "sense colorants",
+    "en:no-gmos": "sense OMG",
+    "en:fair-trade": "comerç just",
+    "en:halal": "halal",
+    "en:kosher": "kosher",
+    "en:palm-oil-free": "sense oli de palma",
+    "en:high-protein": "alt en proteïna",
+    "en:whole-grain": "integral"
+  },
+  "additiveBasis": {
+    "eu_not_authorised": "ja no està autoritzat com a additiu alimentari a la EU",
+    "eu_child_attention_warning": "la legislació de la EU exigeix un avís que pot afectar l’activitat i l’atenció dels infants",
+    "iarc_2a": "vinculat per IARC a una classificació del group 2A per a nitrat/nitrit ingerit en condicions que condueixen a la nitrosació",
+    "iarc_2b": "classificat per IARC en el group 2B",
+    "efsa_group_adi": "cobert per una ingesta diària admissible d’EFSA",
+    "efsa_adi_lowered": "subjecte a un límit d’ingesta d’EFSA que es va revisar a la baixa",
+    "mandatory_allergen_labelling": "s’ha de declarar com a al·lergen per sobre de 10 mg/kg",
+    "use_restricted": "autoritzat només per a usos restringits",
+    "authorised_routine": "autoritzat i utilitzat habitualment"
+  },
+  "nova": {
+    "1": "Sense processar o mínimament processat",
+    "2": "Ingredient culinari processat",
+    "3": "Aliment processat",
+    "4": "Aliment ultraprocessat",
+    "unknown": "Nivell de processament"
+  },
+  "estimatePrefix": "Estimació aproximada d’AI. {text}",
+  "signals": {
+    "fallback": {
+      "label": "Factor addicional",
+      "evidence": "Aquest factor ha influït en la puntuació."
+    },
+    "blocker.allergen_declared": {
+      "label": "Al·lergen declarat",
+      "evidence": "Les dades de l’envàs declaren explícitament {allergen}, que figura a la teva llista d’al·lèrgens."
+    },
+    "blocker.allergen_ingredient": {
+      "label": "Al·lergen trobat als ingredients",
+      "evidence": "«{match}» apareix a la llista d’ingredients i coincideix amb el teu al·lergen {allergen}."
+    },
+    "blocker.avoid_ingredient": {
+      "label": "Ingredient de la teva llista a evitar",
+      "evidence": "«{ingredient}» apareix a la llista d’ingredients."
+    },
+    "blocker.diet_conflict": {
+      "label": "En conflicte amb la teva dieta",
+      "evidence": "L’anàlisi d’ingredients marca aquest product com a incompatible amb {diet} ({evidence})."
+    },
+    "warning.allergen_traces": {
+      "label": "Pot contenir traces",
+      "evidence": "L’envàs declara possibles traces de {allergen}. És un avís del fabricant, no un ingredient."
+    },
+    "warning.diet_uncertain": {
+      "label": "Compatibilitat amb la dieta no clara",
+      "evidence": "No es pot confirmar que alguns ingredients siguin compatibles amb {diet}. Comprova l’envàs abans de comprar."
+    },
+    "warning.allergen_data_missing": {
+      "label": "Les dades d’al·lèrgens són incompletes",
+      "evidence": "No hi ha cap declaració d’al·lèrgens disponible per a aquest product, de manera que no s’ha pogut comprovar la teva llista. Una llista buida mai no demostra que el producte n’estigui lliure."
+    },
+    "base.nutriscore": {
+      "label": "Nutri-Score {grade}",
+      "evidence": "Open Food Facts publica un Nutri-Score {grade} per a aquest producte; estableix la qualitat nutricional de base abans d’aplicar els teus objectius."
+    },
+    "base.nutrition_profile": {
+      "label": "Perfil nutricional",
+      "evidence": "No hi ha cap Nutri-Score publicat, així que la base es deriva dels valors declarats: {detail}."
+    },
+    "base.nutrition_unknown": {
+      "label": "Qualitat de base desconeguda",
+      "evidence": "No hi ha prou dades nutricionals per valorar la qualitat de base, així que la puntuació parteix d’un punt mitjà neutre."
+    },
+    "base.nova": {
+      "label": "{novaLabel}",
+      "evidence": "Open Food Facts classifica aquest producte en el grup NOVA {group}."
+    },
+    "base.additive_high": {
+      "label": "Additiu que requereix atenció",
+      "evidence": "{names}: {basis}. IngreFit ho considera d’atenció alta, de manera que el producte no pot assolir una puntuació de base alta."
+    },
+    "base.additive_moderate": {
+      "label": "Additius a tenir en compte",
+      "evidence": "{count} additiu(s) amb un límit d’ingesta o una classificació definits: {names}."
+    },
+    "base.additives_clean": {
+      "label": "Sense additius assenyalats",
+      "evidence": "La llista d’additius declarats no conté res que IngreFit assenyali per a una atenció addicional."
+    },
+    "base.fruit_veg": {
+      "label": "Contingut de fruita, verdura i fruits de closca",
+      "evidence": "Open Food Facts estima un {percent}% de fruita, verdura, llegums i fruits de closca a partir de la llista d’ingredients."
+    },
+    "base.palm_oil": {
+      "label": "Conté oli de palma",
+      "evidence": "L’anàlisi d’ingredients detecta oli de palma, que augmenta la càrrega de greixos saturats i comporta preocupacions conegudes sobre l’origen."
+    },
+    "base.organic": {
+      "label": "Ecològic certificat",
+      "evidence": "El producte porta una etiqueta ecològica oficial. IngreFit la registra però li dona poc pes, perquè l’estatus ecològic per si sol no millora la qualitat nutricional."
+    },
+    "base.alcohol": {
+      "label": "Conté alcohol",
+      "evidence": "El producte declara un {percent}% d’alcohol per volum."
+    },
+    "personal.nutrientEvidence": "{nutrient}: {value} {unit} per {reference}, comparat amb el teu objectiu «{goal}».",
+    "personal.protein": {
+      "label": {
+        "good": "Alta densitat de proteïna",
+        "ok": "Una mica de proteïna",
+        "bad": "Poca proteïna per al teu objectiu"
+      }
+    },
+    "personal.sugars": {
+      "label": {
+        "good": "Poc sucre per al teu objectiu",
+        "ok": "Quantitat moderada de sucre",
+        "bad": "Molt sucre per al teu objectiu"
+      }
+    },
+    "personal.fiber": {
+      "label": {
+        "good": "Bona densitat de fibra",
+        "ok": "Una mica de fibra",
+        "bad": "Poca fibra per al teu objectiu"
+      }
+    },
+    "personal.salt": {
+      "label": {
+        "good": "Poca sal per al teu objectiu",
+        "ok": "Quantitat moderada de sal",
+        "bad": "Molta sal per al teu objectiu"
+      }
+    },
+    "personal.saturated_fat": {
+      "label": {
+        "good": "Pocs greixos saturats",
+        "ok": "Quantitat moderada de greixos saturats",
+        "bad": "Molts greixos saturats per al teu objectiu"
+      }
+    },
+    "personal.carbs": {
+      "label": {
+        "good": "Baixa densitat d’hidrats de carboni",
+        "ok": "Quantitat moderada d’hidrats de carboni",
+        "bad": "Molts hidrats de carboni per al teu patró alimentari"
+      }
+    },
+    "personal.energy": {
+      "label": {
+        "good": "Baixa densitat energètica",
+        "ok": "Densitat energètica moderada",
+        "bad": "Alta densitat energètica"
+      }
+    },
+    "personal.processing": {
+      "label": {
+        "good": "Mínimament processat, com has demanat",
+        "ok": "Moderadament processat",
+        "bad": "Molt processat per al teu objectiu"
+      },
+      "evidence": "El grup NOVA {group} es compara amb el teu objectiu «{goal}»."
+    },
+    "personal.no_data": {
+      "label": "No hi ha prou dades per als teus objectius",
+      "evidence": "No està disponible cap dels valors necessaris per als objectius seleccionats, de manera que la puntuació només reflecteix la qualitat general del producte."
+    }
+  },
+  "summary": {
+    "blocked": "Aquest producte queda descartat per una restricció estricta del teu perfil: {blocker}. La qualitat és secundària aquí; la restricció es manté independentment dels altres valors.",
+    "blockedFallback": "restricció del perfil",
+    "personalUp": "els teus objectius ({goals}) l’han augmentat en {delta}",
+    "personalDown": "els teus objectius ({goals}) l’han reduït en {delta}",
+    "personalFlat": "els teus objectius ({goals}) gairebé no l’han modificat",
+    "withSignals": "La qualitat de base del producte és {base} sobre 10, i {personal}. Les influències més fortes han estat {strongest}. Això mesura l’adequació al teu perfil, no una valoració universal de salut.",
+    "withoutSignals": "La qualitat de base del producte és {base} sobre 10, i {personal}. No hi ha prou dades per a un desglossament més detallat."
+  },
+  "dataNotice": {
+    "aiPhoto": "Font: identificació visual per AI. La informació nutricional és una estimació aproximada basada en l’aspecte; els ingredients, els al·lèrgens i els valors exactes continuen sent desconeguts. Confiança de la puntuació: {confidence}%.",
+    "estimatedText": "Font dels fets: {source}. Els valors que falten han estat estimats per AI a partir del nom i els ingredients, no llegits de l’envàs. Confiança de la puntuació: {confidence}%.",
+    "declared": "Font: {source}. Completesa de les dades: {completeness}%. Confiança de la puntuació: {confidence}%.",
+    "sourcePackage": "text visible de l’envàs"
+  },
+  "tip": {
+    "blocked": "Comprova sempre l’envàs abans de comprar: les receptes poden canviar sense que la base de dades s’actualitzi.",
+    "highRiskAdditive": "Per evitar {code}, busca el mateix tipus de producte amb una llista d’ingredients més curta.",
+    "ultraProcessed": "Aquest és un producte ultraprocessat. Un equivalent menys processat sol obtenir una puntuació de base notablement més alta.",
+    "default": "La puntuació està vinculada al teu perfil ({diet}). Canvia els teus objectius i el resultat es recalcularà."
+  }
+}

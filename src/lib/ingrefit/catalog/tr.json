@@ -1,0 +1,285 @@
+{
+  "_comment": "Translatable strings for product assessments. Copy en.json, translate values only, keep every {placeholder} intact.",
+  "decimalSeparator": ",",
+  "quotes": [
+    "“",
+    "”"
+  ],
+  "references": {
+    "100g": "100 g",
+    "100ml": "100 ml",
+    "serving": "bir porsiyon"
+  },
+  "nutrients": {
+    "sugars": {
+      "name": "şekerler",
+      "unit": "g"
+    },
+    "saturated_fat": {
+      "name": "doymuş yağ",
+      "unit": "g"
+    },
+    "salt": {
+      "name": "tuz eşdeğeri",
+      "unit": "g"
+    },
+    "fiber": {
+      "name": "lif",
+      "unit": "g"
+    },
+    "protein": {
+      "name": "protein",
+      "unit": "g"
+    },
+    "carbs": {
+      "name": "karbonhidrat",
+      "unit": "g"
+    },
+    "energy": {
+      "name": "enerji",
+      "unit": "kcal"
+    }
+  },
+  "goals": {
+    "balanced": "dengeli beslenme",
+    "weight_loss": "kilo yönetimi",
+    "muscle_gain": "kas kazanımı",
+    "high_protein": "daha fazla protein",
+    "low_sugar": "daha az şeker",
+    "low_sodium": "daha az tuz",
+    "high_fiber": "daha fazla lif",
+    "minimally_processed": "daha az işlenmiş gıda",
+    "heart_health": "kalbi gözeten seçimler",
+    "steady_energy": "dengeli enerji",
+    "digestive_wellness": "sindirim rahatlığı",
+    "low_saturated_fat": "daha az doymuş yağ"
+  },
+  "diets": {
+    "none": "özel bir diyet yok",
+    "vegetarian": "vejetaryen",
+    "vegan": "vegan",
+    "pescatarian": "pesketaryen",
+    "gluten_free": "glütensiz",
+    "dairy_free": "süt ürünsüz",
+    "low_carb": "düşük karbonhidratlı",
+    "mediterranean": "Akdeniz tipi"
+  },
+  "allergens": {
+    "milk": "süt",
+    "eggs": "yumurta",
+    "peanuts": "yer fıstığı",
+    "tree_nuts": "sert kabuklu yemişler",
+    "soy": "soya",
+    "wheat": "buğday",
+    "gluten": "glüten",
+    "fish": "balık",
+    "crustaceans": "kabuklular",
+    "sesame": "susam",
+    "celery": "kereviz",
+    "mustard": "hardal",
+    "sulphites": "sülfitler",
+    "lupin": "acı bakla",
+    "molluscs": "yumuşakçalar"
+  },
+  "labels": {
+    "en:organic": "organik",
+    "en:eu-organic": "EU organik",
+    "en:gluten-free": "glütensiz",
+    "en:no-gluten": "glütensiz",
+    "en:lactose-free": "laktozsuz",
+    "en:no-lactose": "laktozsuz",
+    "en:vegan": "vegan",
+    "en:vegetarian": "vejetaryen",
+    "en:sugar-free": "şekersiz",
+    "en:no-added-sugar": "ilave şekersiz",
+    "en:no-preservatives": "koruyucusuz",
+    "en:no-colorings": "renklendiricisiz",
+    "en:no-gmos": "GDO’suz",
+    "en:fair-trade": "adil ticaret",
+    "en:halal": "helal",
+    "en:kosher": "koşer",
+    "en:palm-oil-free": "palmiye yağı içermeyen",
+    "en:high-protein": "yüksek proteinli",
+    "en:whole-grain": "tam tahıllı"
+  },
+  "additiveBasis": {
+    "eu_not_authorised": "EU içinde artık gıda katkı maddesi olarak izin verilmiyor",
+    "eu_child_attention_warning": "EU mevzuatı çocuklarda aktivite ve dikkati etkileyebileceğine dair bir uyarı gerektirir",
+    "iarc_2a": "IARC tarafından nitrozasyona yol açan koşullarda alınan nitrat/nitrit için group 2A sınıflandırmasıyla ilişkilendirilmiştir",
+    "iarc_2b": "IARC tarafından group 2B içinde sınıflandırılmıştır",
+    "efsa_group_adi": "EFSA tarafından belirlenen kabul edilebilir günlük alım kapsamındadır",
+    "efsa_adi_lowered": "aşağı yönlü revize edilmiş bir EFSA alım sınırına tabidir",
+    "mandatory_allergen_labelling": "10 mg/kg üzerinde alerjen olarak beyan edilmelidir",
+    "use_restricted": "yalnızca kısıtlı kullanımlar için izin verilmiştir",
+    "authorised_routine": "izin verilmiş ve rutin olarak kullanılmaktadır"
+  },
+  "nova": {
+    "1": "İşlenmemiş veya az işlenmiş",
+    "2": "İşlenmiş mutfak bileşeni",
+    "3": "İşlenmiş gıda",
+    "4": "Ultra işlenmiş gıda",
+    "unknown": "İşlenme düzeyi"
+  },
+  "estimatePrefix": "Yaklaşık AI tahmini. {text}",
+  "signals": {
+    "fallback": {
+      "label": "Ek faktör",
+      "evidence": "Bu faktör puanı etkiledi."
+    },
+    "blocker.allergen_declared": {
+      "label": "Beyan edilen alerjen",
+      "evidence": "Ambalaj verileri, alerjen listenizde bulunan {allergen} maddesini açıkça beyan ediyor."
+    },
+    "blocker.allergen_ingredient": {
+      "label": "İçindekilerde alerjen bulundu",
+      "evidence": "“{match}” içindekiler listesinde yer alıyor ve {allergen} alerjeninizle eşleşiyor."
+    },
+    "blocker.avoid_ingredient": {
+      "label": "Kaçınma listenizdeki bileşen",
+      "evidence": "“{ingredient}” içindekiler listesinde yer alıyor."
+    },
+    "blocker.diet_conflict": {
+      "label": "Diyetinizle uyuşmuyor",
+      "evidence": "Bileşen analizi bu ürünü {diet} ile uyumsuz olarak işaretliyor ({evidence})."
+    },
+    "warning.allergen_traces": {
+      "label": "İz miktarda içerebilir",
+      "evidence": "Ambalaj, olası {allergen} izlerini beyan ediyor. Bu bir üretici uyarısıdır, bileşen değildir."
+    },
+    "warning.diet_uncertain": {
+      "label": "Diyet durumu belirsiz",
+      "evidence": "Bazı bileşenlerin {diet} ile uyumlu olduğu doğrulanamıyor. Satın almadan önce ambalajı kontrol edin."
+    },
+    "warning.allergen_data_missing": {
+      "label": "Alerjen verileri eksik",
+      "evidence": "Bu ürün için alerjen beyanı bulunmadığından alerjen listeniz kontrol edilemedi. Boş bir liste, ürünün alerjeni içermediğini asla kanıtlamaz."
+    },
+    "base.nutriscore": {
+      "label": "Nutri-Score {grade}",
+      "evidence": "Open Food Facts bu ürün için Nutri-Score {grade} yayımlıyor; bu, hedefleriniz uygulanmadan önceki temel beslenme kalitesini belirler."
+    },
+    "base.nutrition_profile": {
+      "label": "Beslenme profili",
+      "evidence": "Nutri-Score yayımlanmamış, bu nedenle temel değerlendirme beyan edilen değerlerden türetilir: {detail}."
+    },
+    "base.nutrition_unknown": {
+      "label": "Temel kalite bilinmiyor",
+      "evidence": "Temel kaliteyi değerlendirmek için yeterli beslenme verisi yok, bu nedenle puan nötr bir orta noktadan başlar."
+    },
+    "base.nova": {
+      "label": "{novaLabel}",
+      "evidence": "Open Food Facts bu ürünü NOVA group {group} içinde sınıflandırıyor."
+    },
+    "base.additive_high": {
+      "label": "Dikkat gerektiren katkı maddesi",
+      "evidence": "{names}: {basis}. IngreFit bunu yüksek dikkat gerektiren bir unsur olarak değerlendirir; bu nedenle ürün yüksek bir temel puana ulaşamaz."
+    },
+    "base.additive_moderate": {
+      "label": "Dikkate alınması gereken katkı maddeleri",
+      "evidence": "Tanımlı alım sınırı veya sınıflandırması olan {count} katkı maddesi: {names}."
+    },
+    "base.additives_clean": {
+      "label": "İşaretlenmiş katkı maddesi yok",
+      "evidence": "Beyan edilen katkı maddeleri listesinde IngreFit’in ek dikkat için işaretlediği hiçbir şey yok."
+    },
+    "base.fruit_veg": {
+      "label": "Meyve, sebze ve kuruyemiş içeriği",
+      "evidence": "Open Food Facts içindekiler listesine göre meyve, sebze, bakliyat ve kuruyemiş oranını %{percent} olarak tahmin ediyor."
+    },
+    "base.palm_oil": {
+      "label": "Palmiye yağı içerir",
+      "evidence": "Bileşen analizi palmiye yağı tespit ediyor; bu, doymuş yağ yükünü artırır ve tedarik kaynağıyla ilgili bilinen endişeleri beraberinde getirir."
+    },
+    "base.organic": {
+      "label": "Sertifikalı organik",
+      "evidence": "Ürün resmi bir organik etikete sahiptir. IngreFit bunu kaydeder ancak düşük ağırlık verir; çünkü organik statü tek başına beslenme kalitesini iyileştirmez."
+    },
+    "base.alcohol": {
+      "label": "Alkol içerir",
+      "evidence": "Ürün hacmen %{percent} alkol beyan ediyor."
+    },
+    "personal.nutrientEvidence": "{nutrient}: {reference} başına {value} {unit}; “{goal}” hedefinize göre değerlendirilmiştir.",
+    "personal.protein": {
+      "label": {
+        "good": "Yüksek protein yoğunluğu",
+        "ok": "Bir miktar protein",
+        "bad": "Hedefiniz için düşük protein"
+      }
+    },
+    "personal.sugars": {
+      "label": {
+        "good": "Hedefiniz için düşük şeker",
+        "ok": "Orta düzeyde şeker",
+        "bad": "Hedefiniz için yüksek şeker"
+      }
+    },
+    "personal.fiber": {
+      "label": {
+        "good": "İyi lif yoğunluğu",
+        "ok": "Bir miktar lif",
+        "bad": "Hedefiniz için düşük lif"
+      }
+    },
+    "personal.salt": {
+      "label": {
+        "good": "Hedefiniz için düşük tuz",
+        "ok": "Orta düzeyde tuz",
+        "bad": "Hedefiniz için yüksek tuz"
+      }
+    },
+    "personal.saturated_fat": {
+      "label": {
+        "good": "Düşük doymuş yağ",
+        "ok": "Orta düzeyde doymuş yağ",
+        "bad": "Hedefiniz için yüksek doymuş yağ"
+      }
+    },
+    "personal.carbs": {
+      "label": {
+        "good": "Düşük karbonhidrat yoğunluğu",
+        "ok": "Orta düzeyde karbonhidrat",
+        "bad": "Beslenme düzeniniz için yüksek karbonhidrat"
+      }
+    },
+    "personal.energy": {
+      "label": {
+        "good": "Düşük enerji yoğunluğu",
+        "ok": "Orta enerji yoğunluğu",
+        "bad": "Yüksek enerji yoğunluğu"
+      }
+    },
+    "personal.processing": {
+      "label": {
+        "good": "İstediğiniz gibi az işlenmiş",
+        "ok": "Orta düzeyde işlenmiş",
+        "bad": "Hedefiniz için yüksek düzeyde işlenmiş"
+      },
+      "evidence": "NOVA group {group}, “{goal}” hedefinize göre değerlendirilir."
+    },
+    "personal.no_data": {
+      "label": "Hedefleriniz için yeterli veri yok",
+      "evidence": "Seçtiğiniz hedefler için gereken değerlerin hiçbiri mevcut değil; bu nedenle puan yalnızca ürünün genel kalitesini yansıtır."
+    }
+  },
+  "summary": {
+    "blocked": "Bu ürün profilinizdeki kesin bir kısıtlama nedeniyle elenir: {blocker}. Kalite burada ikincildir; kısıtlama diğer değerlerden bağımsız olarak geçerlidir.",
+    "blockedFallback": "profil kısıtlaması",
+    "personalUp": "hedefleriniz ({goals}) puanı {delta} artırdı",
+    "personalDown": "hedefleriniz ({goals}) puanı {delta} düşürdü",
+    "personalFlat": "hedefleriniz ({goals}) puanı neredeyse hiç değiştirmedi",
+    "withSignals": "Ürünün temel kalite puanı 10 üzerinden {base} ve {personal}. En güçlü etkiler {strongest} oldu. Bu, evrensel sağlıklılığı değil profilinize uyumu ölçer.",
+    "withoutSignals": "Ürünün temel kalite puanı 10 üzerinden {base} ve {personal}. Daha ayrıntılı bir döküm için yeterli veri yok."
+  },
+  "dataNotice": {
+    "aiPhoto": "Kaynak: AI ile görsel tanımlama. Besin değerleri görünüme dayalı yaklaşık bir tahmindir; bileşenler, alerjenler ve kesin değerler bilinmiyor. Puan güveni: %{confidence}.",
+    "estimatedText": "Bilgi kaynağı: {source}. Eksik değerler ambalajdan okunmadı; ad ve bileşenlerden AI tarafından tahmin edildi. Puan güveni: %{confidence}.",
+    "declared": "Kaynak: {source}. Veri tamlığı: %{completeness}. Puan güveni: %{confidence}.",
+    "sourcePackage": "ambalajdaki görünür metin"
+  },
+  "tip": {
+    "blocked": "Satın almadan önce her zaman ambalajı kontrol edin: tarifler veri tabanı güncellenmeden değişebilir.",
+    "highRiskAdditive": "{code} maddesinden kaçınmak için aynı türde, daha kısa içindekiler listesine sahip bir ürün arayın.",
+    "ultraProcessed": "Bu ultra işlenmiş bir üründür. Daha az işlenmiş bir eşdeğer genellikle temel puanda belirgin şekilde daha yüksek sonuç alır.",
+    "default": "Puan profilinize ({diet}) bağlıdır. Hedeflerinizi değiştirin, sonuç yeniden hesaplanır."
+  }
+}

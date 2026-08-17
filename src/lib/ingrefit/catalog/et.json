@@ -1,0 +1,285 @@
+{
+  "_comment": "Translatable strings for product assessments. Copy en.json, translate values only, keep every {placeholder} intact.",
+  "decimalSeparator": ",",
+  "quotes": [
+    "„",
+    "“"
+  ],
+  "references": {
+    "100g": "100 g",
+    "100ml": "100 ml",
+    "serving": "portsjon"
+  },
+  "nutrients": {
+    "sugars": {
+      "name": "suhkrud",
+      "unit": "g"
+    },
+    "saturated_fat": {
+      "name": "küllastunud rasvad",
+      "unit": "g"
+    },
+    "salt": {
+      "name": "soola ekvivalent",
+      "unit": "g"
+    },
+    "fiber": {
+      "name": "kiudained",
+      "unit": "g"
+    },
+    "protein": {
+      "name": "valk",
+      "unit": "g"
+    },
+    "carbs": {
+      "name": "süsivesikud",
+      "unit": "g"
+    },
+    "energy": {
+      "name": "energia",
+      "unit": "kcal"
+    }
+  },
+  "goals": {
+    "balanced": "tasakaalustatud toitumine",
+    "weight_loss": "kehakaalu haldamine",
+    "muscle_gain": "lihasmassi kasvatamine",
+    "high_protein": "rohkem valku",
+    "low_sugar": "vähem suhkrut",
+    "low_sodium": "vähem soola",
+    "high_fiber": "rohkem kiudaineid",
+    "minimally_processed": "vähem töötlemist",
+    "heart_health": "südameteadlikud valikud",
+    "steady_energy": "ühtlane energia",
+    "digestive_wellness": "seedimise heaolu",
+    "low_saturated_fat": "vähem küllastunud rasvu"
+  },
+  "diets": {
+    "none": "ilma kindla dieedita",
+    "vegetarian": "taimetoit",
+    "vegan": "vegan",
+    "pescatarian": "pesketaarne",
+    "gluten_free": "gluteenivaba",
+    "dairy_free": "piimavaba",
+    "low_carb": "süsivesikuvaene",
+    "mediterranean": "Vahemere"
+  },
+  "allergens": {
+    "milk": "piim",
+    "eggs": "munad",
+    "peanuts": "maapähklid",
+    "tree_nuts": "pähklid",
+    "soy": "soja",
+    "wheat": "nisu",
+    "gluten": "gluteen",
+    "fish": "kala",
+    "crustaceans": "koorikloomad",
+    "sesame": "seesam",
+    "celery": "seller",
+    "mustard": "sinep",
+    "sulphites": "sulfitid",
+    "lupin": "lupiin",
+    "molluscs": "limused"
+  },
+  "labels": {
+    "en:organic": "mahe",
+    "en:eu-organic": "ELi mahe",
+    "en:gluten-free": "gluteenivaba",
+    "en:no-gluten": "gluteenivaba",
+    "en:lactose-free": "laktoosivaba",
+    "en:no-lactose": "laktoosivaba",
+    "en:vegan": "vegan",
+    "en:vegetarian": "taimetoit",
+    "en:sugar-free": "suhkruvaba",
+    "en:no-added-sugar": "lisatud suhkruta",
+    "en:no-preservatives": "säilitusaineteta",
+    "en:no-colorings": "värvaineteta",
+    "en:no-gmos": "GMO-vaba",
+    "en:fair-trade": "õiglane kaubandus",
+    "en:halal": "halal",
+    "en:kosher": "koššer",
+    "en:palm-oil-free": "palmiõlita",
+    "en:high-protein": "valgurikas",
+    "en:whole-grain": "täistera"
+  },
+  "additiveBasis": {
+    "eu_not_authorised": "ei ole enam EU toidulisandina lubatud",
+    "eu_child_attention_warning": "EU õigus nõuab hoiatust, et see võib mõjutada laste aktiivsust ja tähelepanu",
+    "iarc_2a": "IARC seostab selle group 2A klassifikatsiooniga sissevõetud nitraadi/nitriti puhul tingimustes, mis viivad nitrosatsioonini",
+    "iarc_2b": "IARC on klassifitseerinud selle group 2B",
+    "efsa_group_adi": "kuulub EFSA kehtestatud vastuvõetava päevase tarbimise alla",
+    "efsa_adi_lowered": "sellele kehtib EFSA tarbimispiir, mida on allapoole korrigeeritud",
+    "mandatory_allergen_labelling": "üle 10 mg/kg korral tuleb see deklareerida allergeenina",
+    "use_restricted": "lubatud ainult piiratud kasutuseks",
+    "authorised_routine": "lubatud ja tavapäraselt kasutatav"
+  },
+  "nova": {
+    "1": "Töötlemata või minimaalselt töödeldud",
+    "2": "Töödeldud kulinaarne koostisosa",
+    "3": "Töödeldud toit",
+    "4": "Ultratöödeldud toit",
+    "unknown": "Töötlemise tase"
+  },
+  "estimatePrefix": "Ligikaudne AI hinnang. {text}",
+  "signals": {
+    "fallback": {
+      "label": "Lisategur",
+      "evidence": "See tegur mõjutas hinnet."
+    },
+    "blocker.allergen_declared": {
+      "label": "Deklareeritud allergeen",
+      "evidence": "Pakendiandmed märgivad selgelt {allergen}, mis on sinu allergeenide loendis."
+    },
+    "blocker.allergen_ingredient": {
+      "label": "Koostisosadest leitud allergeen",
+      "evidence": "„{match}“ esineb koostisosade loendis ja vastab sinu allergeenile {allergen}."
+    },
+    "blocker.avoid_ingredient": {
+      "label": "Koostisosa sinu vältimisloendis",
+      "evidence": "„{ingredient}“ esineb koostisosade loendis."
+    },
+    "blocker.diet_conflict": {
+      "label": "Vastuolus sinu dieediga",
+      "evidence": "Koostisosade analüüs märgib selle toote dieediga {diet} kokkusobimatuks ({evidence})."
+    },
+    "warning.allergen_traces": {
+      "label": "Võib sisaldada jälgi",
+      "evidence": "Pakendil on märgitud võimalikud {allergen} jäljed. See on tootja hoiatus, mitte koostisosa."
+    },
+    "warning.diet_uncertain": {
+      "label": "Dieedisobivus ebaselge",
+      "evidence": "Mõne koostisosa sobivust dieediga {diet} ei saa kinnitada. Kontrolli pakendit enne ostmist."
+    },
+    "warning.allergen_data_missing": {
+      "label": "Allergeeniandmed on puudulikud",
+      "evidence": "Selle toote kohta puudub allergeenide deklaratsioon, seega ei saanud sinu allergeenide loendit kontrollida. Tühi loend ei tõesta kunagi, et toode on allergeenist vaba."
+    },
+    "base.nutriscore": {
+      "label": "Nutri-Score {grade}",
+      "evidence": "Open Food Facts avaldab selle toote kohta Nutri-Score {grade}; see määrab baas-toiteväärtuse kvaliteedi enne sinu eesmärkide rakendamist."
+    },
+    "base.nutrition_profile": {
+      "label": "Toitumisprofiil",
+      "evidence": "Nutri-Score’i pole avaldatud, seega tuletatakse baasnäit deklareeritud väärtustest: {detail}."
+    },
+    "base.nutrition_unknown": {
+      "label": "Baaskvaliteet teadmata",
+      "evidence": "Baaskvaliteedi hindamiseks pole piisavalt toitumisandmeid, seega algab hinne neutraalsest keskpunktist."
+    },
+    "base.nova": {
+      "label": "{novaLabel}",
+      "evidence": "Open Food Facts liigitab selle toote NOVA group {group}."
+    },
+    "base.additive_high": {
+      "label": "Tähelepanu vajav lisaaine",
+      "evidence": "{names}: {basis}. IngreFit hindab seda kõrget tähelepanu vajavaks, mistõttu toode ei saa saavutada kõrget baashinnet."
+    },
+    "base.additive_moderate": {
+      "label": "Lisaained, mida tasub teada",
+      "evidence": "{count} lisaainet, millel on määratud tarbimispiir või klassifikatsioon: {names}."
+    },
+    "base.additives_clean": {
+      "label": "Märgitud lisaaineid pole",
+      "evidence": "Deklareeritud lisaainete loend ei sisalda midagi, mida IngreFit märgib lisatähelepanu vajavaks."
+    },
+    "base.fruit_veg": {
+      "label": "Puuviljade, köögiviljade ja pähklite sisaldus",
+      "evidence": "Open Food Facts hindab koostisosade loendi põhjal puuviljade, köögiviljade, kaunviljade ja pähklite osakaaluks {percent}%."
+    },
+    "base.palm_oil": {
+      "label": "Sisaldab palmiõli",
+      "evidence": "Koostisosade analüüs tuvastab palmiõli, mis suurendab küllastunud rasvade hulka ja millega kaasnevad teadaolevad päritoluga seotud küsimused."
+    },
+    "base.organic": {
+      "label": "Sertifitseeritud mahe",
+      "evidence": "Tootel on ametlik mahemärgis. IngreFit arvestab seda, kuid annab sellele väikese kaalu, sest mahe staatus üksi ei paranda toiteväärtuse kvaliteeti."
+    },
+    "base.alcohol": {
+      "label": "Sisaldab alkoholi",
+      "evidence": "Tootel on deklareeritud {percent}% alkoholi mahuprotsendina."
+    },
+    "personal.nutrientEvidence": "{nutrient}: {value} {unit} {reference} kohta, võrrelduna sinu eesmärgiga „{goal}“.",
+    "personal.protein": {
+      "label": {
+        "good": "Kõrge valgutihedus",
+        "ok": "Mõningane valgusisaldus",
+        "bad": "Vähe valku sinu eesmärgi jaoks"
+      }
+    },
+    "personal.sugars": {
+      "label": {
+        "good": "Vähe suhkrut sinu eesmärgi jaoks",
+        "ok": "Mõõdukas suhkrusisaldus",
+        "bad": "Palju suhkrut sinu eesmärgi jaoks"
+      }
+    },
+    "personal.fiber": {
+      "label": {
+        "good": "Hea kiudainetihedus",
+        "ok": "Mõningane kiudainesisaldus",
+        "bad": "Vähe kiudaineid sinu eesmärgi jaoks"
+      }
+    },
+    "personal.salt": {
+      "label": {
+        "good": "Vähe soola sinu eesmärgi jaoks",
+        "ok": "Mõõdukas soolasisaldus",
+        "bad": "Palju soola sinu eesmärgi jaoks"
+      }
+    },
+    "personal.saturated_fat": {
+      "label": {
+        "good": "Vähe küllastunud rasvu",
+        "ok": "Mõõdukalt küllastunud rasvu",
+        "bad": "Palju küllastunud rasvu sinu eesmärgi jaoks"
+      }
+    },
+    "personal.carbs": {
+      "label": {
+        "good": "Madal süsivesikute tihedus",
+        "ok": "Mõõdukalt süsivesikuid",
+        "bad": "Palju süsivesikuid sinu toitumismustri jaoks"
+      }
+    },
+    "personal.energy": {
+      "label": {
+        "good": "Madal energiatihedus",
+        "ok": "Mõõdukas energiatihedus",
+        "bad": "Kõrge energiatihedus"
+      }
+    },
+    "personal.processing": {
+      "label": {
+        "good": "Minimaalselt töödeldud, nagu soovisid",
+        "ok": "Mõõdukalt töödeldud",
+        "bad": "Sinu eesmärgi jaoks tugevalt töödeldud"
+      },
+      "evidence": "NOVA group {group} hinnatakse sinu eesmärgi „{goal}“ suhtes."
+    },
+    "personal.no_data": {
+      "label": "Sinu eesmärkide jaoks pole piisavalt andmeid",
+      "evidence": "Ükski valitud eesmärkide jaoks vajalik väärtus pole saadaval, seega kajastab hinne ainult toote üldist kvaliteeti."
+    }
+  },
+  "summary": {
+    "blocked": "Selle toote välistab sinu profiili range piirang: {blocker}. Kvaliteet on siin teisejärguline; piirang kehtib sõltumata teistest väärtustest.",
+    "blockedFallback": "profiilipiirang",
+    "personalUp": "sinu eesmärgid ({goals}) tõstsid hinnet {delta} võrra",
+    "personalDown": "sinu eesmärgid ({goals}) langetasid hinnet {delta} võrra",
+    "personalFlat": "sinu eesmärgid ({goals}) peaaegu ei muutnud hinnet",
+    "withSignals": "Toote baaskvaliteet on {base}/10 ja {personal}. Kõige tugevamad mõjud olid {strongest}. See mõõdab sobivust sinu profiiliga, mitte universaalset tervislikkust.",
+    "withoutSignals": "Toote baaskvaliteet on {base}/10 ja {personal}. Täpsemaks jaotuseks pole piisavalt andmeid."
+  },
+  "dataNotice": {
+    "aiPhoto": "Allikas: visuaalne tuvastus AI abil. Toiteväärtused on välimuse põhjal ligikaudselt hinnatud; koostisosad, allergeenid ja täpsed väärtused jäävad teadmata. Hinde kindlus: {confidence}%.",
+    "estimatedText": "Faktiallikas: {source}. Puuduvad väärtused hindas AI nime ja koostisosade põhjal, neid ei loetud pakendilt. Hinde kindlus: {confidence}%.",
+    "declared": "Allikas: {source}. Andmete täielikkus: {completeness}%. Hinde kindlus: {confidence}%.",
+    "sourcePackage": "pakendil nähtav tekst"
+  },
+  "tip": {
+    "blocked": "Kontrolli enne ostmist alati pakendit: retsept võib muutuda ilma andmebaasi uuendamiseta.",
+    "highRiskAdditive": "Kui soovid vältida {code}, otsi sama tüüpi toodet lühema koostisosade loendiga.",
+    "ultraProcessed": "See on ultratöödeldud toode. Vähem töödeldud samalaadne toode saab tavaliselt märgatavalt kõrgema baashinde.",
+    "default": "Hinne on seotud sinu profiiliga ({diet}). Muuda eesmärke ja tulemus arvutatakse uuesti."
+  }
+}

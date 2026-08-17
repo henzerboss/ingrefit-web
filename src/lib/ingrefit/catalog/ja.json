@@ -1,0 +1,285 @@
+{
+  "_comment": "Translatable strings for product assessments. Copy en.json, translate values only, keep every {placeholder} intact.",
+  "decimalSeparator": ".",
+  "quotes": [
+    "「",
+    "」"
+  ],
+  "references": {
+    "100g": "100 g",
+    "100ml": "100 ml",
+    "serving": "1食分"
+  },
+  "nutrients": {
+    "sugars": {
+      "name": "糖類",
+      "unit": "g"
+    },
+    "saturated_fat": {
+      "name": "飽和脂肪",
+      "unit": "g"
+    },
+    "salt": {
+      "name": "食塩相当量",
+      "unit": "g"
+    },
+    "fiber": {
+      "name": "食物繊維",
+      "unit": "g"
+    },
+    "protein": {
+      "name": "たんぱく質",
+      "unit": "g"
+    },
+    "carbs": {
+      "name": "炭水化物",
+      "unit": "g"
+    },
+    "energy": {
+      "name": "エネルギー",
+      "unit": "kcal"
+    }
+  },
+  "goals": {
+    "balanced": "バランスのよい食事",
+    "weight_loss": "体重管理",
+    "muscle_gain": "筋肉量アップ",
+    "high_protein": "たんぱく質を増やす",
+    "low_sugar": "糖類を減らす",
+    "low_sodium": "塩分を減らす",
+    "high_fiber": "食物繊維を増やす",
+    "minimally_processed": "加工度を下げる",
+    "heart_health": "心臓を意識した選択",
+    "steady_energy": "安定したエネルギー",
+    "digestive_wellness": "消化の快適さ",
+    "low_saturated_fat": "飽和脂肪を減らす"
+  },
+  "diets": {
+    "none": "特定の食事法なし",
+    "vegetarian": "ベジタリアン",
+    "vegan": "ヴィーガン",
+    "pescatarian": "ペスカタリアン",
+    "gluten_free": "グルテンフリー",
+    "dairy_free": "乳製品不使用",
+    "low_carb": "低炭水化物",
+    "mediterranean": "地中海式"
+  },
+  "allergens": {
+    "milk": "乳",
+    "eggs": "卵",
+    "peanuts": "落花生",
+    "tree_nuts": "木の実",
+    "soy": "大豆",
+    "wheat": "小麦",
+    "gluten": "グルテン",
+    "fish": "魚",
+    "crustaceans": "甲殻類",
+    "sesame": "ごま",
+    "celery": "セロリ",
+    "mustard": "マスタード",
+    "sulphites": "亜硫酸塩",
+    "lupin": "ルピナス",
+    "molluscs": "軟体動物"
+  },
+  "labels": {
+    "en:organic": "オーガニック",
+    "en:eu-organic": "EUオーガニック",
+    "en:gluten-free": "グルテンフリー",
+    "en:no-gluten": "グルテンフリー",
+    "en:lactose-free": "ラクトースフリー",
+    "en:no-lactose": "ラクトースフリー",
+    "en:vegan": "ヴィーガン",
+    "en:vegetarian": "ベジタリアン",
+    "en:sugar-free": "シュガーフリー",
+    "en:no-added-sugar": "砂糖不使用",
+    "en:no-preservatives": "保存料不使用",
+    "en:no-colorings": "着色料不使用",
+    "en:no-gmos": "非GMO",
+    "en:fair-trade": "フェアトレード",
+    "en:halal": "ハラール",
+    "en:kosher": "コーシャ",
+    "en:palm-oil-free": "パーム油不使用",
+    "en:high-protein": "高たんぱく",
+    "en:whole-grain": "全粒穀物"
+  },
+  "additiveBasis": {
+    "eu_not_authorised": "EUでは食品添加物として現在認可されていない",
+    "eu_child_attention_warning": "EU法では、子どもの活動や注意力に影響する可能性がある旨の警告表示が必要",
+    "iarc_2a": "IARCにより、ニトロソ化につながる条件下で摂取された硝酸塩／亜硝酸塩についてgroup 2A分類と関連付けられている",
+    "iarc_2b": "IARCによりgroup 2Bに分類されている",
+    "efsa_group_adi": "EFSAが設定する許容一日摂取量の対象",
+    "efsa_adi_lowered": "下方修正されたEFSAの摂取上限の対象",
+    "mandatory_allergen_labelling": "10 mg/kgを超える場合はアレルゲンとして表示する必要がある",
+    "use_restricted": "使用が限定された用途のみ認可",
+    "authorised_routine": "認可され、通常使用されている"
+  },
+  "nova": {
+    "1": "未加工または最小限の加工",
+    "2": "加工済み調理用原料",
+    "3": "加工食品",
+    "4": "超加工食品",
+    "unknown": "加工度"
+  },
+  "estimatePrefix": "AIによる概算です。{text}",
+  "signals": {
+    "fallback": {
+      "label": "追加要因",
+      "evidence": "この要因がスコアに影響しました。"
+    },
+    "blocker.allergen_declared": {
+      "label": "表示済みアレルゲン",
+      "evidence": "パッケージ情報に、あなたのアレルゲン一覧にある{allergen}が明示されています。"
+    },
+    "blocker.allergen_ingredient": {
+      "label": "原材料でアレルゲンを確認",
+      "evidence": "原材料一覧に「{match}」があり、あなたの{allergen}アレルゲンと一致します。"
+    },
+    "blocker.avoid_ingredient": {
+      "label": "避ける原材料リストの項目",
+      "evidence": "原材料一覧に「{ingredient}」があります。"
+    },
+    "blocker.diet_conflict": {
+      "label": "食事法と不一致",
+      "evidence": "原材料分析では、この商品は{diet}と両立しないと判定されています（{evidence}）。"
+    },
+    "warning.allergen_traces": {
+      "label": "微量に含む可能性",
+      "evidence": "パッケージに{allergen}が微量に含まれる可能性が表示されています。これはメーカーの注意表示であり、原材料ではありません。"
+    },
+    "warning.diet_uncertain": {
+      "label": "食事法との適合が不明",
+      "evidence": "一部の原材料が{diet}に適合するか確認できません。購入前にパッケージを確認してください。"
+    },
+    "warning.allergen_data_missing": {
+      "label": "アレルゲン情報が不十分",
+      "evidence": "この商品にはアレルゲン表示データがないため、あなたのアレルゲン一覧を確認できませんでした。空の一覧は、そのアレルゲンを含まないことの証明にはなりません。"
+    },
+    "base.nutriscore": {
+      "label": "Nutri-Score {grade}",
+      "evidence": "Open Food Factsはこの商品にNutri-Score {grade}を掲載しています。これは、あなたの目標を反映する前の基本的な栄養品質を定めます。"
+    },
+    "base.nutrition_profile": {
+      "label": "栄養プロファイル",
+      "evidence": "Nutri-Scoreが公開されていないため、基本評価は表示されている数値から算出されます：{detail}。"
+    },
+    "base.nutrition_unknown": {
+      "label": "基本品質は不明",
+      "evidence": "基本品質を判断するための栄養データが不足しているため、スコアは中立的な中間値から始まります。"
+    },
+    "base.nova": {
+      "label": "{novaLabel}",
+      "evidence": "Open Food Factsはこの商品をNOVA group {group}に分類しています。"
+    },
+    "base.additive_high": {
+      "label": "注意が必要な添加物",
+      "evidence": "{names}：{basis}。IngreFitでは高い注意が必要と評価するため、この商品は高い基本スコアには到達できません。"
+    },
+    "base.additive_moderate": {
+      "label": "確認しておきたい添加物",
+      "evidence": "摂取上限または分類が定められている添加物が{count}件あります：{names}。"
+    },
+    "base.additives_clean": {
+      "label": "注意対象の添加物なし",
+      "evidence": "表示された添加物一覧には、IngreFitが追加の注意対象としているものはありません。"
+    },
+    "base.fruit_veg": {
+      "label": "果物・野菜・豆類・ナッツの割合",
+      "evidence": "Open Food Factsは原材料一覧から、果物・野菜・豆類・ナッツの割合を{percent}%と推定しています。"
+    },
+    "base.palm_oil": {
+      "label": "パーム油を含む",
+      "evidence": "原材料分析でパーム油が検出されています。これは飽和脂肪の量を増やし、調達元に関する既知の懸念もあります。"
+    },
+    "base.organic": {
+      "label": "オーガニック認証",
+      "evidence": "商品には公式のオーガニック表示があります。IngreFitでは記録しますが、オーガニックであること自体は栄養品質を改善しないため、重みは小さくしています。"
+    },
+    "base.alcohol": {
+      "label": "アルコールを含む",
+      "evidence": "商品にはアルコール度数{percent}%と表示されています。"
+    },
+    "personal.nutrientEvidence": "{reference}あたりの{nutrient}：{value} {unit}。「{goal}」という目標と比較して評価しています。",
+    "personal.protein": {
+      "label": {
+        "good": "たんぱく質密度が高い",
+        "ok": "たんぱく質をある程度含む",
+        "bad": "目標に対してたんぱく質が少ない"
+      }
+    },
+    "personal.sugars": {
+      "label": {
+        "good": "目標に対して糖類が少ない",
+        "ok": "糖類は中程度",
+        "bad": "目標に対して糖類が多い"
+      }
+    },
+    "personal.fiber": {
+      "label": {
+        "good": "食物繊維密度が良好",
+        "ok": "食物繊維をある程度含む",
+        "bad": "目標に対して食物繊維が少ない"
+      }
+    },
+    "personal.salt": {
+      "label": {
+        "good": "目標に対して塩分が少ない",
+        "ok": "塩分は中程度",
+        "bad": "目標に対して塩分が多い"
+      }
+    },
+    "personal.saturated_fat": {
+      "label": {
+        "good": "飽和脂肪が少ない",
+        "ok": "飽和脂肪は中程度",
+        "bad": "目標に対して飽和脂肪が多い"
+      }
+    },
+    "personal.carbs": {
+      "label": {
+        "good": "炭水化物密度が低い",
+        "ok": "炭水化物は中程度",
+        "bad": "あなたの食事パターンに対して炭水化物が多い"
+      }
+    },
+    "personal.energy": {
+      "label": {
+        "good": "エネルギー密度が低い",
+        "ok": "エネルギー密度は中程度",
+        "bad": "エネルギー密度が高い"
+      }
+    },
+    "personal.processing": {
+      "label": {
+        "good": "希望どおり最小限の加工",
+        "ok": "中程度の加工",
+        "bad": "目標に対して加工度が高い"
+      },
+      "evidence": "NOVA group {group}を「{goal}」という目標と比較して評価しています。"
+    },
+    "personal.no_data": {
+      "label": "目標に必要なデータが不足",
+      "evidence": "選択した目標に必要な値がどれも利用できないため、スコアには商品の一般的な品質のみが反映されています。"
+    }
+  },
+  "summary": {
+    "blocked": "この商品は、プロフィールの厳格な制限によって対象外です：{blocker}。ここでは品質は二次的で、他の数値に関係なく制限が優先されます。",
+    "blockedFallback": "プロフィールの制限",
+    "personalUp": "あなたの目標（{goals}）によりスコアが{delta}上がりました",
+    "personalDown": "あなたの目標（{goals}）によりスコアが{delta}下がりました",
+    "personalFlat": "あなたの目標（{goals}）によるスコア変化はわずかでした",
+    "withSignals": "商品の基本品質は10点中{base}で、{personal}。最も大きな影響は{strongest}でした。これはプロフィールへの適合度であり、普遍的な「健康度」ではありません。",
+    "withoutSignals": "商品の基本品質は10点中{base}で、{personal}。より詳しい内訳を出すにはデータが不足しています。"
+  },
+  "dataNotice": {
+    "aiPhoto": "情報源：AIによる画像識別。栄養値は見た目からの概算で、原材料、アレルゲン、正確な数値は不明です。スコア信頼度：{confidence}%。",
+    "estimatedText": "事実の情報源：{source}。不足値はパッケージから読み取ったものではなく、商品名と原材料からAIが推定しました。スコア信頼度：{confidence}%。",
+    "declared": "情報源：{source}。データ充足率：{completeness}%。スコア信頼度：{confidence}%。",
+    "sourcePackage": "パッケージに見える文字"
+  },
+  "tip": {
+    "blocked": "購入前には必ずパッケージを確認してください。データベースが更新されないままレシピが変わることがあります。",
+    "highRiskAdditive": "{code}を避けたい場合は、同じ種類で原材料一覧がより短い商品を探してください。",
+    "ultraProcessed": "これは超加工食品です。加工度の低い同等品は、通常、基本スコアが明確に高くなります。",
+    "default": "スコアはあなたのプロフィール（{diet}）に基づきます。目標を変更すると結果が再計算されます。"
+  }
+}

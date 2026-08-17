@@ -1,0 +1,285 @@
+{
+  "_comment": "Translatable strings for product assessments. Copy en.json, translate values only, keep every {placeholder} intact.",
+  "decimalSeparator": ".",
+  "quotes": [
+    "“",
+    "”"
+  ],
+  "references": {
+    "100g": "100 g",
+    "100ml": "100 ml",
+    "serving": "isang serving"
+  },
+  "nutrients": {
+    "sugars": {
+      "name": "asukal",
+      "unit": "g"
+    },
+    "saturated_fat": {
+      "name": "saturated fat",
+      "unit": "g"
+    },
+    "salt": {
+      "name": "katumbas na asin",
+      "unit": "g"
+    },
+    "fiber": {
+      "name": "fiber",
+      "unit": "g"
+    },
+    "protein": {
+      "name": "protein",
+      "unit": "g"
+    },
+    "carbs": {
+      "name": "carbohydrates",
+      "unit": "g"
+    },
+    "energy": {
+      "name": "enerhiya",
+      "unit": "kcal"
+    }
+  },
+  "goals": {
+    "balanced": "balanseng pagkain",
+    "weight_loss": "pamamahala ng timbang",
+    "muscle_gain": "pagdagdag ng muscle",
+    "high_protein": "mas maraming protein",
+    "low_sugar": "mas kaunting asukal",
+    "low_sodium": "mas kaunting asin",
+    "high_fiber": "mas maraming fiber",
+    "minimally_processed": "mas kaunting pagproseso",
+    "heart_health": "mga pagpiling isinasaalang-alang ang puso",
+    "steady_energy": "matatag na enerhiya",
+    "digestive_wellness": "maayos na pakiramdam sa pagtunaw",
+    "low_saturated_fat": "mas kaunting saturated fat"
+  },
+  "diets": {
+    "none": "walang partikular na diet",
+    "vegetarian": "vegetarian",
+    "vegan": "vegan",
+    "pescatarian": "pescatarian",
+    "gluten_free": "gluten-free",
+    "dairy_free": "dairy-free",
+    "low_carb": "low-carb",
+    "mediterranean": "Mediterranean"
+  },
+  "allergens": {
+    "milk": "gatas",
+    "eggs": "itlog",
+    "peanuts": "mani",
+    "tree_nuts": "tree nuts",
+    "soy": "soy",
+    "wheat": "trigo",
+    "gluten": "gluten",
+    "fish": "isda",
+    "crustaceans": "crustaceans",
+    "sesame": "sesame",
+    "celery": "celery",
+    "mustard": "mustard",
+    "sulphites": "sulphites",
+    "lupin": "lupin",
+    "molluscs": "molluscs"
+  },
+  "labels": {
+    "en:organic": "organic",
+    "en:eu-organic": "EU organic",
+    "en:gluten-free": "gluten-free",
+    "en:no-gluten": "gluten-free",
+    "en:lactose-free": "lactose-free",
+    "en:no-lactose": "lactose-free",
+    "en:vegan": "vegan",
+    "en:vegetarian": "vegetarian",
+    "en:sugar-free": "sugar-free",
+    "en:no-added-sugar": "walang idinagdag na asukal",
+    "en:no-preservatives": "walang preservatives",
+    "en:no-colorings": "walang pangkulay",
+    "en:no-gmos": "non-GMO",
+    "en:fair-trade": "fair trade",
+    "en:halal": "halal",
+    "en:kosher": "kosher",
+    "en:palm-oil-free": "walang palm oil",
+    "en:high-protein": "mataas sa protein",
+    "en:whole-grain": "whole grain"
+  },
+  "additiveBasis": {
+    "eu_not_authorised": "hindi na awtorisadong gamitin bilang food additive sa EU",
+    "eu_child_attention_warning": "iniaatas ng batas ng EU ang babala na maaari itong makaapekto sa aktibidad at atensyon ng mga bata",
+    "iarc_2a": "iniuugnay ng IARC sa klasipikasyong group 2A para sa nakakaing nitrate/nitrite sa mga kondisyong humahantong sa nitrosation",
+    "iarc_2b": "inuri ng IARC sa group 2B",
+    "efsa_group_adi": "saklaw ng katanggap-tanggap na araw-araw na intake ng EFSA",
+    "efsa_adi_lowered": "saklaw ng limitasyon sa intake ng EFSA na ibinaba",
+    "mandatory_allergen_labelling": "kailangang ideklara bilang allergen kapag lampas sa 10 mg/kg",
+    "use_restricted": "awtorisado lamang para sa limitadong paggamit",
+    "authorised_routine": "awtorisado at karaniwang ginagamit"
+  },
+  "nova": {
+    "1": "hindi naproseso o minimal na naproseso",
+    "2": "naprosesong sangkap sa pagluluto",
+    "3": "naprosesong pagkain",
+    "4": "ultra-processed na pagkain",
+    "unknown": "antas ng pagproseso"
+  },
+  "estimatePrefix": "Tinatayang AI estimate. {text}",
+  "signals": {
+    "fallback": {
+      "label": "Karagdagang salik",
+      "evidence": "Nakaapekto ang salik na ito sa score."
+    },
+    "blocker.allergen_declared": {
+      "label": "Idineklarang allergen",
+      "evidence": "Malinaw na idinedeklara ng data sa pakete ang {allergen}, na nasa listahan ng allergen mo."
+    },
+    "blocker.allergen_ingredient": {
+      "label": "Allergen na nakita sa mga sangkap",
+      "evidence": "Lumilitaw ang “{match}” sa listahan ng sangkap at tumutugma sa {allergen} allergen mo."
+    },
+    "blocker.avoid_ingredient": {
+      "label": "Sangkap sa listahan ng iniiwasan mo",
+      "evidence": "Lumilitaw ang “{ingredient}” sa listahan ng sangkap."
+    },
+    "blocker.diet_conflict": {
+      "label": "Hindi tugma sa diet mo",
+      "evidence": "Minamarkahan ng pagsusuri sa sangkap ang produktong ito bilang hindi tugma sa {diet} ({evidence})."
+    },
+    "warning.allergen_traces": {
+      "label": "Maaaring may bakas",
+      "evidence": "Ipinapahayag ng pakete na maaaring may bakas ng {allergen}. Babala ito ng manufacturer, hindi isang sangkap."
+    },
+    "warning.diet_uncertain": {
+      "label": "Hindi malinaw ang status sa diet",
+      "evidence": "Hindi makumpirma kung tugma sa {diet} ang ilang sangkap. Tingnan ang pakete bago bumili."
+    },
+    "warning.allergen_data_missing": {
+      "label": "Hindi kumpleto ang allergen data",
+      "evidence": "Walang available na allergen declaration para sa produktong ito, kaya hindi nasuri ang listahan ng allergen mo. Ang walang laman na listahan ay hindi kailanman nagpapatunay na wala sa produkto ang allergen na iyon."
+    },
+    "base.nutriscore": {
+      "label": "Nutri-Score {grade}",
+      "evidence": "Inilalathala ng Open Food Facts ang Nutri-Score {grade} para sa produktong ito; ito ang nagtatakda ng baseline nutritional quality bago ilapat ang mga goal mo."
+    },
+    "base.nutrition_profile": {
+      "label": "Profile ng nutrisyon",
+      "evidence": "Walang inilathalang Nutri-Score, kaya kinukuha ang baseline mula sa mga idineklarang value: {detail}."
+    },
+    "base.nutrition_unknown": {
+      "label": "Hindi alam ang baseline quality",
+      "evidence": "Kulang ang nutrition data para hatulan ang baseline quality, kaya nagsisimula ang score sa neutral na midpoint."
+    },
+    "base.nova": {
+      "label": "{novaLabel}",
+      "evidence": "Inuuri ng Open Food Facts ang produktong ito sa NOVA group {group}."
+    },
+    "base.additive_high": {
+      "label": "Additive na dapat pagtuunan ng pansin",
+      "evidence": "{names}: {basis}. Itinuturing ito ng IngreFit na nangangailangan ng mataas na atensyon, kaya hindi maaabot ng produkto ang mataas na baseline score."
+    },
+    "base.additive_moderate": {
+      "label": "Mga additive na dapat malaman",
+      "evidence": "May {count} additive na may itinakdang intake limit o classification: {names}."
+    },
+    "base.additives_clean": {
+      "label": "Walang naka-flag na additive",
+      "evidence": "Walang laman ang idineklarang listahan ng additive na fina-flag ng IngreFit para sa dagdag na atensyon."
+    },
+    "base.fruit_veg": {
+      "label": "Laman na prutas, gulay, legumes at nuts",
+      "evidence": "Tinataya ng Open Food Facts na {percent}% ang prutas, gulay, pulses at nuts batay sa listahan ng sangkap."
+    },
+    "base.palm_oil": {
+      "label": "May palm oil",
+      "evidence": "Nakikita sa pagsusuri ng sangkap ang palm oil, na nagpapataas sa saturated fat load at may mga kilalang concern sa sourcing."
+    },
+    "base.organic": {
+      "label": "Certified organic",
+      "evidence": "May opisyal na organic label ang produkto. Itinatala ito ng IngreFit pero maliit lang ang bigat nito, dahil hindi awtomatikong nagpapabuti sa nutritional quality ang pagiging organic."
+    },
+    "base.alcohol": {
+      "label": "May alcohol",
+      "evidence": "Idinedeklara ng produkto ang {percent}% alcohol by volume."
+    },
+    "personal.nutrientEvidence": "{nutrient}: {value} {unit} bawat {reference}, tinitimbang laban sa goal mong “{goal}”.",
+    "personal.protein": {
+      "label": {
+        "good": "Mataas ang protein density",
+        "ok": "May kaunting protein",
+        "bad": "Mababa ang protein para sa goal mo"
+      }
+    },
+    "personal.sugars": {
+      "label": {
+        "good": "Mababa ang asukal para sa goal mo",
+        "ok": "Katamtamang asukal",
+        "bad": "Mataas ang asukal para sa goal mo"
+      }
+    },
+    "personal.fiber": {
+      "label": {
+        "good": "Maganda ang fiber density",
+        "ok": "May kaunting fiber",
+        "bad": "Mababa ang fiber para sa goal mo"
+      }
+    },
+    "personal.salt": {
+      "label": {
+        "good": "Mababa ang asin para sa goal mo",
+        "ok": "Katamtamang asin",
+        "bad": "Mataas ang asin para sa goal mo"
+      }
+    },
+    "personal.saturated_fat": {
+      "label": {
+        "good": "Mababa ang saturated fat",
+        "ok": "Katamtamang saturated fat",
+        "bad": "Mataas ang saturated fat para sa goal mo"
+      }
+    },
+    "personal.carbs": {
+      "label": {
+        "good": "Mababa ang carbohydrate density",
+        "ok": "Katamtamang carbohydrates",
+        "bad": "Mataas ang carbohydrates para sa eating pattern mo"
+      }
+    },
+    "personal.energy": {
+      "label": {
+        "good": "Mababa ang energy density",
+        "ok": "Katamtamang energy density",
+        "bad": "Mataas ang energy density"
+      }
+    },
+    "personal.processing": {
+      "label": {
+        "good": "Minimal na naproseso, gaya ng hiniling mo",
+        "ok": "Katamtamang naproseso",
+        "bad": "Masyadong naproseso para sa goal mo"
+      },
+      "evidence": "Tinitimbang ang NOVA group {group} laban sa goal mong “{goal}”."
+    },
+    "personal.no_data": {
+      "label": "Kulang ang data para sa mga goal mo",
+      "evidence": "Wala sa mga value na kailangan para sa pinili mong goal ang available, kaya general product quality lang ang nakikita sa score."
+    }
+  },
+  "summary": {
+    "blocked": "Hindi pasok ang produktong ito dahil sa mahigpit na restriction sa profile mo: {blocker}. Pangalawa lang ang quality dito; nananatili ang restriction anuman ang ibang numero.",
+    "blockedFallback": "restriction sa profile",
+    "personalUp": "itinaas ito ng mga goal mo ({goals}) nang {delta}",
+    "personalDown": "ibinaba ito ng mga goal mo ({goals}) nang {delta}",
+    "personalFlat": "halos hindi binago ng mga goal mo ({goals}) ang score",
+    "withSignals": "Ang baseline product quality ay {base} sa 10, at {personal}. Ang pinakamalalakas na impluwensya ay {strongest}. Sinusukat nito ang fit sa profile mo, hindi ang universal na pagiging healthy.",
+    "withoutSignals": "Ang baseline product quality ay {base} sa 10, at {personal}. Kulang ang data para sa mas detalyadong breakdown."
+  },
+  "dataNotice": {
+    "aiPhoto": "Pinagmulan: visual identification ng AI. Ang nutrition ay tinatayang mula sa hitsura; hindi pa alam ang mga sangkap, allergen, at eksaktong value. Kumpiyansa sa score: {confidence}%.",
+    "estimatedText": "Pinagmulan ng impormasyon: {source}. Ang mga kulang na value ay tinaya ng AI mula sa pangalan at mga sangkap, hindi binasa sa pakete. Kumpiyansa sa score: {confidence}%.",
+    "declared": "Pinagmulan: {source}. Pagkakumpleto ng data: {completeness}%. Kumpiyansa sa score: {confidence}%.",
+    "sourcePackage": "tekstong nakikita sa pakete"
+  },
+  "tip": {
+    "blocked": "Laging tingnan ang pakete bago bumili: maaaring magbago ang recipe nang hindi pa naa-update ang database.",
+    "highRiskAdditive": "Para maiwasan ang {code}, maghanap ng parehong uri ng produkto na mas maikli ang listahan ng sangkap.",
+    "ultraProcessed": "Ultra-processed ang produktong ito. Karaniwang mas mataas nang kapansin-pansin ang baseline score ng katumbas na produktong mas kaunti ang pagproseso.",
+    "default": "Nakatali ang score sa profile mo ({diet}). Kapag binago mo ang mga goal, muling kakalkulahin ang resulta."
+  }
+}

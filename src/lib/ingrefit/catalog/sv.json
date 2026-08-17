@@ -1,0 +1,285 @@
+{
+  "_comment": "Translatable strings for product assessments. Copy en.json, translate values only, keep every {placeholder} intact.",
+  "decimalSeparator": ",",
+  "quotes": [
+    "”",
+    "”"
+  ],
+  "references": {
+    "100g": "100 g",
+    "100ml": "100 ml",
+    "serving": "en portion"
+  },
+  "nutrients": {
+    "sugars": {
+      "name": "sockerarter",
+      "unit": "g"
+    },
+    "saturated_fat": {
+      "name": "mättat fett",
+      "unit": "g"
+    },
+    "salt": {
+      "name": "saltekvivalent",
+      "unit": "g"
+    },
+    "fiber": {
+      "name": "fiber",
+      "unit": "g"
+    },
+    "protein": {
+      "name": "protein",
+      "unit": "g"
+    },
+    "carbs": {
+      "name": "kolhydrater",
+      "unit": "g"
+    },
+    "energy": {
+      "name": "energi",
+      "unit": "kcal"
+    }
+  },
+  "goals": {
+    "balanced": "balanserad kost",
+    "weight_loss": "viktkontroll",
+    "muscle_gain": "muskelökning",
+    "high_protein": "mer protein",
+    "low_sugar": "mindre socker",
+    "low_sodium": "mindre salt",
+    "high_fiber": "mer fiber",
+    "minimally_processed": "mindre bearbetning",
+    "heart_health": "hjärtmedvetna val",
+    "steady_energy": "jämn energi",
+    "digestive_wellness": "välmående för matsmältningen",
+    "low_saturated_fat": "mindre mättat fett"
+  },
+  "diets": {
+    "none": "ingen särskild kost",
+    "vegetarian": "vegetarisk",
+    "vegan": "vegansk",
+    "pescatarian": "pescetarisk",
+    "gluten_free": "glutenfri",
+    "dairy_free": "mjölkfri",
+    "low_carb": "kolhydratfattig",
+    "mediterranean": "medelhavskost"
+  },
+  "allergens": {
+    "milk": "mjölk",
+    "eggs": "ägg",
+    "peanuts": "jordnötter",
+    "tree_nuts": "nötter",
+    "soy": "soja",
+    "wheat": "vete",
+    "gluten": "gluten",
+    "fish": "fisk",
+    "crustaceans": "kräftdjur",
+    "sesame": "sesam",
+    "celery": "selleri",
+    "mustard": "senap",
+    "sulphites": "sulfiter",
+    "lupin": "lupin",
+    "molluscs": "blötdjur"
+  },
+  "labels": {
+    "en:organic": "ekologisk",
+    "en:eu-organic": "EU-ekologisk",
+    "en:gluten-free": "glutenfri",
+    "en:no-gluten": "glutenfri",
+    "en:lactose-free": "laktosfri",
+    "en:no-lactose": "laktosfri",
+    "en:vegan": "vegansk",
+    "en:vegetarian": "vegetarisk",
+    "en:sugar-free": "sockerfri",
+    "en:no-added-sugar": "utan tillsatt socker",
+    "en:no-preservatives": "utan konserveringsmedel",
+    "en:no-colorings": "utan färgämnen",
+    "en:no-gmos": "GMO-fri",
+    "en:fair-trade": "rättvis handel",
+    "en:halal": "halal",
+    "en:kosher": "kosher",
+    "en:palm-oil-free": "utan palmolja",
+    "en:high-protein": "proteinrik",
+    "en:whole-grain": "fullkorn"
+  },
+  "additiveBasis": {
+    "eu_not_authorised": "inte längre godkänt som livsmedelstillsats i EU",
+    "eu_child_attention_warning": "EU-lag kräver en varning om att det kan påverka barns aktivitet och uppmärksamhet",
+    "iarc_2a": "av IARC kopplat till en klassificering i group 2A för intaget nitrat/nitrit under förhållanden som leder till nitrosering",
+    "iarc_2b": "klassificerat av IARC i group 2B",
+    "efsa_group_adi": "omfattas av ett acceptabelt dagligt intag fastställt av EFSA",
+    "efsa_adi_lowered": "omfattas av en EFSA-gräns för intag som har reviderats nedåt",
+    "mandatory_allergen_labelling": "måste deklareras som allergen över 10 mg/kg",
+    "use_restricted": "godkänt endast för begränsad användning",
+    "authorised_routine": "godkänt och används rutinmässigt"
+  },
+  "nova": {
+    "1": "Obearbetat eller minimalt bearbetat",
+    "2": "Bearbetad kulinarisk ingrediens",
+    "3": "Bearbetat livsmedel",
+    "4": "Ultrabearbetat livsmedel",
+    "unknown": "Bearbetningsgrad"
+  },
+  "estimatePrefix": "Ungefärlig AI-uppskattning. {text}",
+  "signals": {
+    "fallback": {
+      "label": "Ytterligare faktor",
+      "evidence": "Den här faktorn påverkade poängen."
+    },
+    "blocker.allergen_declared": {
+      "label": "Deklarerat allergen",
+      "evidence": "Förpackningsuppgifterna anger uttryckligen {allergen}, som finns på din allergenlista."
+    },
+    "blocker.allergen_ingredient": {
+      "label": "Allergen hittat i ingredienserna",
+      "evidence": "”{match}” finns i ingredienslistan och motsvarar ditt allergen {allergen}."
+    },
+    "blocker.avoid_ingredient": {
+      "label": "Ingrediens på din undvik-lista",
+      "evidence": "”{ingredient}” finns i ingredienslistan."
+    },
+    "blocker.diet_conflict": {
+      "label": "Krockar med din kost",
+      "evidence": "Ingrediensanalysen markerar produkten som oförenlig med {diet} ({evidence})."
+    },
+    "warning.allergen_traces": {
+      "label": "Kan innehålla spår",
+      "evidence": "Förpackningen anger möjliga spår av {allergen}. Detta är en tillverkarvarning, inte en ingrediens."
+    },
+    "warning.diet_uncertain": {
+      "label": "Koststatus oklar",
+      "evidence": "Vissa ingredienser kan inte bekräftas som förenliga med {diet}. Kontrollera förpackningen före köp."
+    },
+    "warning.allergen_data_missing": {
+      "label": "Allergenuppgifterna är ofullständiga",
+      "evidence": "Det finns ingen allergendeklaration för produkten, så din allergenlista kunde inte kontrolleras. En tom lista bevisar aldrig att produkten är fri från allergenet."
+    },
+    "base.nutriscore": {
+      "label": "Nutri-Score {grade}",
+      "evidence": "Open Food Facts publicerar Nutri-Score {grade} för produkten; det anger den grundläggande näringskvaliteten innan dina mål tillämpas."
+    },
+    "base.nutrition_profile": {
+      "label": "Näringsprofil",
+      "evidence": "Ingen Nutri-Score har publicerats, så grundnivån härleds från de deklarerade värdena: {detail}."
+    },
+    "base.nutrition_unknown": {
+      "label": "Grundkvalitet okänd",
+      "evidence": "Det finns inte tillräckligt med näringsdata för att bedöma grundkvaliteten, så poängen börjar från en neutral mittpunkt."
+    },
+    "base.nova": {
+      "label": "{novaLabel}",
+      "evidence": "Open Food Facts klassificerar produkten i NOVA-grupp {group}."
+    },
+    "base.additive_high": {
+      "label": "Tillsats som kräver uppmärksamhet",
+      "evidence": "{names}: {basis}. IngreFit bedömer detta som något som kräver hög uppmärksamhet, så produkten kan inte nå en hög grundpoäng."
+    },
+    "base.additive_moderate": {
+      "label": "Tillsatser att känna till",
+      "evidence": "{count} tillsats(er) med en fastställd intagsgräns eller klassificering: {names}."
+    },
+    "base.additives_clean": {
+      "label": "Inga markerade tillsatser",
+      "evidence": "Den deklarerade tillsatslistan innehåller inget som IngreFit markerar för extra uppmärksamhet."
+    },
+    "base.fruit_veg": {
+      "label": "Innehåll av frukt, grönsaker och nötter",
+      "evidence": "Open Food Facts uppskattar {percent}% frukt, grönsaker, baljväxter och nötter utifrån ingredienslistan."
+    },
+    "base.palm_oil": {
+      "label": "Innehåller palmolja",
+      "evidence": "Ingrediensanalysen upptäcker palmolja, som ökar mängden mättat fett och medför kända frågor kring ursprung."
+    },
+    "base.organic": {
+      "label": "Certifierat ekologisk",
+      "evidence": "Produkten har en officiell ekologisk märkning. IngreFit registrerar den men ger den liten vikt, eftersom ekologisk status i sig inte förbättrar näringskvaliteten."
+    },
+    "base.alcohol": {
+      "label": "Innehåller alkohol",
+      "evidence": "Produkten deklarerar {percent}% alkohol per volym."
+    },
+    "personal.nutrientEvidence": "{nutrient}: {value} {unit} per {reference}, vägt mot ditt mål ”{goal}”.",
+    "personal.protein": {
+      "label": {
+        "good": "Hög proteintäthet",
+        "ok": "En del protein",
+        "bad": "Lite protein för ditt mål"
+      }
+    },
+    "personal.sugars": {
+      "label": {
+        "good": "Lite socker för ditt mål",
+        "ok": "Måttlig mängd socker",
+        "bad": "Mycket socker för ditt mål"
+      }
+    },
+    "personal.fiber": {
+      "label": {
+        "good": "Bra fibertäthet",
+        "ok": "En del fiber",
+        "bad": "Lite fiber för ditt mål"
+      }
+    },
+    "personal.salt": {
+      "label": {
+        "good": "Lite salt för ditt mål",
+        "ok": "Måttlig mängd salt",
+        "bad": "Mycket salt för ditt mål"
+      }
+    },
+    "personal.saturated_fat": {
+      "label": {
+        "good": "Lite mättat fett",
+        "ok": "Måttlig mängd mättat fett",
+        "bad": "Mycket mättat fett för ditt mål"
+      }
+    },
+    "personal.carbs": {
+      "label": {
+        "good": "Låg kolhydrattäthet",
+        "ok": "Måttlig mängd kolhydrater",
+        "bad": "Mycket kolhydrater för ditt kostmönster"
+      }
+    },
+    "personal.energy": {
+      "label": {
+        "good": "Låg energitäthet",
+        "ok": "Måttlig energitäthet",
+        "bad": "Hög energitäthet"
+      }
+    },
+    "personal.processing": {
+      "label": {
+        "good": "Minimalt bearbetat, som du bad om",
+        "ok": "Måttligt bearbetat",
+        "bad": "Mycket bearbetat för ditt mål"
+      },
+      "evidence": "NOVA-grupp {group} vägs mot ditt mål ”{goal}”."
+    },
+    "personal.no_data": {
+      "label": "Inte tillräckligt med data för dina mål",
+      "evidence": "Ingen av de värden som behövs för dina valda mål finns tillgängliga, så poängen speglar endast produktens allmänna kvalitet."
+    }
+  },
+  "summary": {
+    "blocked": "Produkten utesluts av en strikt begränsning i din profil: {blocker}. Kvaliteten är sekundär här; begränsningen gäller oavsett de andra värdena.",
+    "blockedFallback": "profilbegränsning",
+    "personalUp": "dina mål ({goals}) höjde poängen med {delta}",
+    "personalDown": "dina mål ({goals}) sänkte poängen med {delta}",
+    "personalFlat": "dina mål ({goals}) ändrade knappt poängen",
+    "withSignals": "Produktens grundkvalitet är {base} av 10, och {personal}. De starkaste påverkansfaktorerna var {strongest}. Detta mäter hur väl produkten passar din profil, inte universell hälsosamhet.",
+    "withoutSignals": "Produktens grundkvalitet är {base} av 10, och {personal}. Det finns inte tillräckligt med data för en mer detaljerad uppdelning."
+  },
+  "dataNotice": {
+    "aiPhoto": "Källa: visuell identifiering med AI. Näringsvärdena är en ungefärlig uppskattning utifrån utseendet; ingredienser, allergener och exakta värden är fortfarande okända. Poängens tillförlitlighet: {confidence}%.",
+    "estimatedText": "Faktakälla: {source}. Saknade värden uppskattades av AI utifrån namn och ingredienser och lästes inte från förpackningen. Poängens tillförlitlighet: {confidence}%.",
+    "declared": "Källa: {source}. Datakomplettering: {completeness}%. Poängens tillförlitlighet: {confidence}%.",
+    "sourcePackage": "synlig text på förpackningen"
+  },
+  "tip": {
+    "blocked": "Kontrollera alltid förpackningen före köp: recept kan ändras utan att databasen uppdateras.",
+    "highRiskAdditive": "För att undvika {code}, leta efter samma typ av produkt med en kortare ingredienslista.",
+    "ultraProcessed": "Detta är en ultrabearbetad produkt. Ett mindre bearbetat alternativ får vanligtvis en märkbart högre grundpoäng.",
+    "default": "Poängen är kopplad till din profil ({diet}). Ändra dina mål så räknas resultatet om."
+  }
+}

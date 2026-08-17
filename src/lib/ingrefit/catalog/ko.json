@@ -1,0 +1,285 @@
+{
+  "_comment": "Translatable strings for product assessments. Copy en.json, translate values only, keep every {placeholder} intact.",
+  "decimalSeparator": ".",
+  "quotes": [
+    "“",
+    "”"
+  ],
+  "references": {
+    "100g": "100 g",
+    "100ml": "100 ml",
+    "serving": "1회 제공량"
+  },
+  "nutrients": {
+    "sugars": {
+      "name": "당류",
+      "unit": "g"
+    },
+    "saturated_fat": {
+      "name": "포화지방",
+      "unit": "g"
+    },
+    "salt": {
+      "name": "소금 환산량",
+      "unit": "g"
+    },
+    "fiber": {
+      "name": "식이섬유",
+      "unit": "g"
+    },
+    "protein": {
+      "name": "단백질",
+      "unit": "g"
+    },
+    "carbs": {
+      "name": "탄수화물",
+      "unit": "g"
+    },
+    "energy": {
+      "name": "에너지",
+      "unit": "kcal"
+    }
+  },
+  "goals": {
+    "balanced": "균형 잡힌 식사",
+    "weight_loss": "체중 관리",
+    "muscle_gain": "근육 증가",
+    "high_protein": "단백질 늘리기",
+    "low_sugar": "당 줄이기",
+    "low_sodium": "소금 줄이기",
+    "high_fiber": "식이섬유 늘리기",
+    "minimally_processed": "가공 줄이기",
+    "heart_health": "심장을 고려한 선택",
+    "steady_energy": "안정적인 에너지",
+    "digestive_wellness": "소화 편안함",
+    "low_saturated_fat": "포화지방 줄이기"
+  },
+  "diets": {
+    "none": "특정 식단 없음",
+    "vegetarian": "채식",
+    "vegan": "비건",
+    "pescatarian": "페스코",
+    "gluten_free": "글루텐 프리",
+    "dairy_free": "유제품 제외",
+    "low_carb": "저탄수화물",
+    "mediterranean": "지중해식"
+  },
+  "allergens": {
+    "milk": "우유",
+    "eggs": "달걀",
+    "peanuts": "땅콩",
+    "tree_nuts": "견과류",
+    "soy": "대두",
+    "wheat": "밀",
+    "gluten": "글루텐",
+    "fish": "생선",
+    "crustaceans": "갑각류",
+    "sesame": "참깨",
+    "celery": "셀러리",
+    "mustard": "겨자",
+    "sulphites": "아황산염",
+    "lupin": "루핀",
+    "molluscs": "연체동물"
+  },
+  "labels": {
+    "en:organic": "유기농",
+    "en:eu-organic": "EU 유기농",
+    "en:gluten-free": "글루텐 프리",
+    "en:no-gluten": "글루텐 프리",
+    "en:lactose-free": "락토스 프리",
+    "en:no-lactose": "락토스 프리",
+    "en:vegan": "비건",
+    "en:vegetarian": "채식",
+    "en:sugar-free": "무설탕",
+    "en:no-added-sugar": "첨가당 없음",
+    "en:no-preservatives": "보존료 없음",
+    "en:no-colorings": "착색료 없음",
+    "en:no-gmos": "GMO 없음",
+    "en:fair-trade": "공정무역",
+    "en:halal": "할랄",
+    "en:kosher": "코셔",
+    "en:palm-oil-free": "팜유 없음",
+    "en:high-protein": "고단백",
+    "en:whole-grain": "통곡물"
+  },
+  "additiveBasis": {
+    "eu_not_authorised": "EU에서 더 이상 식품첨가물로 허가되지 않음",
+    "eu_child_attention_warning": "EU 법은 어린이의 활동과 주의력에 영향을 줄 수 있다는 경고를 요구함",
+    "iarc_2a": "IARC가 니트로소화로 이어지는 조건에서 섭취된 질산염/아질산염에 대해 group 2A 분류와 연관시킴",
+    "iarc_2b": "IARC가 group 2B로 분류함",
+    "efsa_group_adi": "EFSA가 정한 일일섭취허용량의 적용 대상",
+    "efsa_adi_lowered": "하향 조정된 EFSA 섭취 한도의 적용 대상",
+    "mandatory_allergen_labelling": "10 mg/kg를 초과하면 알레르겐으로 표시해야 함",
+    "use_restricted": "제한된 용도로만 허가됨",
+    "authorised_routine": "허가되어 통상적으로 사용됨"
+  },
+  "nova": {
+    "1": "가공하지 않았거나 최소 가공",
+    "2": "가공된 조리용 원료",
+    "3": "가공식품",
+    "4": "초가공식품",
+    "unknown": "가공 수준"
+  },
+  "estimatePrefix": "AI의 대략적인 추정치입니다. {text}",
+  "signals": {
+    "fallback": {
+      "label": "추가 요인",
+      "evidence": "이 요인이 점수에 영향을 주었습니다."
+    },
+    "blocker.allergen_declared": {
+      "label": "표시된 알레르겐",
+      "evidence": "포장 정보에 알레르겐 목록에 있는 {allergen}이 명시되어 있습니다."
+    },
+    "blocker.allergen_ingredient": {
+      "label": "원재료에서 알레르겐 발견",
+      "evidence": "원재료 목록에 “{match}”이(가) 있으며, {allergen} 알레르겐과 일치합니다."
+    },
+    "blocker.avoid_ingredient": {
+      "label": "피해야 할 원재료",
+      "evidence": "원재료 목록에 “{ingredient}”이(가) 있습니다."
+    },
+    "blocker.diet_conflict": {
+      "label": "식단과 맞지 않음",
+      "evidence": "원재료 분석에서 이 제품은 {diet}과(와) 맞지 않는 것으로 표시됩니다({evidence})."
+    },
+    "warning.allergen_traces": {
+      "label": "미량 함유 가능",
+      "evidence": "포장에 {allergen}의 미량 함유 가능성이 표시되어 있습니다. 이는 제조사의 주의 문구이며 원재료가 아닙니다."
+    },
+    "warning.diet_uncertain": {
+      "label": "식단 적합성 불분명",
+      "evidence": "일부 원재료가 {diet}에 적합한지 확인할 수 없습니다. 구매 전 포장을 확인하세요."
+    },
+    "warning.allergen_data_missing": {
+      "label": "알레르겐 데이터가 불완전함",
+      "evidence": "이 제품에는 알레르겐 표시 데이터가 없어 알레르겐 목록을 확인할 수 없었습니다. 빈 목록은 제품에 해당 알레르겐이 없다는 증거가 아닙니다."
+    },
+    "base.nutriscore": {
+      "label": "Nutri-Score {grade}",
+      "evidence": "Open Food Facts는 이 제품의 Nutri-Score {grade}를 게시합니다. 이는 목표를 적용하기 전 기본 영양 품질을 정합니다."
+    },
+    "base.nutrition_profile": {
+      "label": "영양 프로필",
+      "evidence": "공개된 Nutri-Score가 없어 표시된 값으로 기본 평가를 계산합니다: {detail}."
+    },
+    "base.nutrition_unknown": {
+      "label": "기본 품질 알 수 없음",
+      "evidence": "기본 품질을 판단할 영양 데이터가 충분하지 않아 점수는 중립적인 중간값에서 시작합니다."
+    },
+    "base.nova": {
+      "label": "{novaLabel}",
+      "evidence": "Open Food Facts는 이 제품을 NOVA group {group}로 분류합니다."
+    },
+    "base.additive_high": {
+      "label": "주의가 필요한 첨가물",
+      "evidence": "{names}: {basis}. IngreFit는 이를 높은 주의가 필요한 요인으로 평가하므로 제품은 높은 기본 점수에 도달할 수 없습니다."
+    },
+    "base.additive_moderate": {
+      "label": "알아둘 첨가물",
+      "evidence": "정해진 섭취 한도 또는 분류가 있는 첨가물이 {count}개 있습니다: {names}."
+    },
+    "base.additives_clean": {
+      "label": "표시된 첨가물 없음",
+      "evidence": "표시된 첨가물 목록에는 IngreFit가 추가 주의 대상으로 표시하는 항목이 없습니다."
+    },
+    "base.fruit_veg": {
+      "label": "과일·채소·콩류·견과류 함량",
+      "evidence": "Open Food Facts는 원재료 목록을 바탕으로 과일, 채소, 콩류, 견과류 함량을 {percent}%로 추정합니다."
+    },
+    "base.palm_oil": {
+      "label": "팜유 함유",
+      "evidence": "원재료 분석에서 팜유가 확인됩니다. 팜유는 포화지방 부담을 높이며 원료 조달과 관련된 알려진 우려가 있습니다."
+    },
+    "base.organic": {
+      "label": "유기농 인증",
+      "evidence": "제품에 공식 유기농 표시가 있습니다. IngreFit는 이를 기록하지만, 유기농 여부 자체가 영양 품질을 높이지는 않으므로 가중치는 작게 둡니다."
+    },
+    "base.alcohol": {
+      "label": "알코올 함유",
+      "evidence": "제품에 부피 기준 알코올 {percent}%가 표시되어 있습니다."
+    },
+    "personal.nutrientEvidence": "{reference}당 {nutrient}: {value} {unit}. “{goal}” 목표와 비교해 평가했습니다.",
+    "personal.protein": {
+      "label": {
+        "good": "단백질 밀도 높음",
+        "ok": "단백질이 어느 정도 있음",
+        "bad": "목표에 비해 단백질이 적음"
+      }
+    },
+    "personal.sugars": {
+      "label": {
+        "good": "목표에 비해 당류가 적음",
+        "ok": "당류 보통",
+        "bad": "목표에 비해 당류가 많음"
+      }
+    },
+    "personal.fiber": {
+      "label": {
+        "good": "식이섬유 밀도 좋음",
+        "ok": "식이섬유가 어느 정도 있음",
+        "bad": "목표에 비해 식이섬유가 적음"
+      }
+    },
+    "personal.salt": {
+      "label": {
+        "good": "목표에 비해 소금이 적음",
+        "ok": "소금 보통",
+        "bad": "목표에 비해 소금이 많음"
+      }
+    },
+    "personal.saturated_fat": {
+      "label": {
+        "good": "포화지방이 적음",
+        "ok": "포화지방 보통",
+        "bad": "목표에 비해 포화지방이 많음"
+      }
+    },
+    "personal.carbs": {
+      "label": {
+        "good": "탄수화물 밀도 낮음",
+        "ok": "탄수화물 보통",
+        "bad": "식사 패턴에 비해 탄수화물이 많음"
+      }
+    },
+    "personal.energy": {
+      "label": {
+        "good": "에너지 밀도 낮음",
+        "ok": "에너지 밀도 보통",
+        "bad": "에너지 밀도 높음"
+      }
+    },
+    "personal.processing": {
+      "label": {
+        "good": "요청한 대로 최소 가공",
+        "ok": "중간 정도 가공",
+        "bad": "목표에 비해 가공도가 높음"
+      },
+      "evidence": "NOVA group {group}를 “{goal}” 목표와 비교해 평가합니다."
+    },
+    "personal.no_data": {
+      "label": "목표 평가에 필요한 데이터 부족",
+      "evidence": "선택한 목표에 필요한 값이 하나도 없어 점수에는 제품의 전반적인 품질만 반영됩니다."
+    }
+  },
+  "summary": {
+    "blocked": "이 제품은 프로필의 엄격한 제한 때문에 제외됩니다: {blocker}. 여기서는 품질이 부차적이며, 다른 수치와 관계없이 제한이 적용됩니다.",
+    "blockedFallback": "프로필 제한",
+    "personalUp": "목표({goals})가 점수를 {delta} 올렸습니다",
+    "personalDown": "목표({goals})가 점수를 {delta} 낮췄습니다",
+    "personalFlat": "목표({goals})가 점수를 거의 바꾸지 않았습니다",
+    "withSignals": "제품의 기본 품질은 10점 만점에 {base}이며, {personal}. 가장 큰 영향은 {strongest}였습니다. 이는 보편적인 건강성을 뜻하는 것이 아니라 프로필과의 적합도를 나타냅니다.",
+    "withoutSignals": "제품의 기본 품질은 10점 만점에 {base}이며, {personal}. 더 자세한 분석을 하기에는 데이터가 부족합니다."
+  },
+  "dataNotice": {
+    "aiPhoto": "출처: AI 시각 식별. 영양 정보는 외관을 바탕으로 한 대략적인 추정치이며, 원재료·알레르겐·정확한 값은 알 수 없습니다. 점수 신뢰도: {confidence}%.",
+    "estimatedText": "사실 출처: {source}. 누락된 값은 포장에서 읽은 것이 아니라 이름과 원재료를 바탕으로 AI가 추정했습니다. 점수 신뢰도: {confidence}%.",
+    "declared": "출처: {source}. 데이터 완전성: {completeness}%. 점수 신뢰도: {confidence}%.",
+    "sourcePackage": "포장에 보이는 텍스트"
+  },
+  "tip": {
+    "blocked": "구매 전에는 항상 포장을 확인하세요. 데이터베이스가 업데이트되지 않은 상태에서 제조법이 바뀔 수 있습니다.",
+    "highRiskAdditive": "{code}을(를) 피하려면 같은 종류이면서 원재료 목록이 더 짧은 제품을 찾아보세요.",
+    "ultraProcessed": "이 제품은 초가공식품입니다. 덜 가공된 동등 제품은 보통 기본 점수가 눈에 띄게 더 높습니다.",
+    "default": "점수는 프로필({diet})과 연결되어 있습니다. 목표를 변경하면 결과가 다시 계산됩니다."
+  }
+}

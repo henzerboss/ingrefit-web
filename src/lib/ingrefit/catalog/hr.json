@@ -1,0 +1,285 @@
+{
+  "_comment": "Translatable strings for product assessments. Copy en.json, translate values only, keep every {placeholder} intact.",
+  "decimalSeparator": ",",
+  "quotes": [
+    "„",
+    "“"
+  ],
+  "references": {
+    "100g": "100 g",
+    "100ml": "100 ml",
+    "serving": "jednu porciju"
+  },
+  "nutrients": {
+    "sugars": {
+      "name": "šećeri",
+      "unit": "g"
+    },
+    "saturated_fat": {
+      "name": "zasićene masti",
+      "unit": "g"
+    },
+    "salt": {
+      "name": "ekvivalent soli",
+      "unit": "g"
+    },
+    "fiber": {
+      "name": "vlakna",
+      "unit": "g"
+    },
+    "protein": {
+      "name": "proteini",
+      "unit": "g"
+    },
+    "carbs": {
+      "name": "ugljikohidrati",
+      "unit": "g"
+    },
+    "energy": {
+      "name": "energija",
+      "unit": "kcal"
+    }
+  },
+  "goals": {
+    "balanced": "uravnotežena prehrana",
+    "weight_loss": "upravljanje tjelesnom težinom",
+    "muscle_gain": "dobivanje mišićne mase",
+    "high_protein": "više proteina",
+    "low_sugar": "manje šećera",
+    "low_sodium": "manje soli",
+    "high_fiber": "više vlakana",
+    "minimally_processed": "manje obrade",
+    "heart_health": "izbori uz brigu o srcu",
+    "steady_energy": "stabilna energija",
+    "digestive_wellness": "dobrobit probave",
+    "low_saturated_fat": "manje zasićenih masti"
+  },
+  "diets": {
+    "none": "bez posebne prehrane",
+    "vegetarian": "vegetarijanska",
+    "vegan": "veganska",
+    "pescatarian": "pesketarijanska",
+    "gluten_free": "bez glutena",
+    "dairy_free": "bez mliječnih proizvoda",
+    "low_carb": "s malo ugljikohidrata",
+    "mediterranean": "mediteranska"
+  },
+  "allergens": {
+    "milk": "mlijeko",
+    "eggs": "jaja",
+    "peanuts": "kikiriki",
+    "tree_nuts": "orašasti plodovi",
+    "soy": "soja",
+    "wheat": "pšenica",
+    "gluten": "gluten",
+    "fish": "riba",
+    "crustaceans": "rakovi",
+    "sesame": "sezam",
+    "celery": "celer",
+    "mustard": "gorušica",
+    "sulphites": "sulfiti",
+    "lupin": "lupina",
+    "molluscs": "mekušci"
+  },
+  "labels": {
+    "en:organic": "organsko",
+    "en:eu-organic": "EU organsko",
+    "en:gluten-free": "bez glutena",
+    "en:no-gluten": "bez glutena",
+    "en:lactose-free": "bez laktoze",
+    "en:no-lactose": "bez laktoze",
+    "en:vegan": "vegansko",
+    "en:vegetarian": "vegetarijansko",
+    "en:sugar-free": "bez šećera",
+    "en:no-added-sugar": "bez dodanog šećera",
+    "en:no-preservatives": "bez konzervansa",
+    "en:no-colorings": "bez bojila",
+    "en:no-gmos": "bez GMO-a",
+    "en:fair-trade": "pravedna trgovina",
+    "en:halal": "halal",
+    "en:kosher": "košer",
+    "en:palm-oil-free": "bez palminog ulja",
+    "en:high-protein": "visok udio proteina",
+    "en:whole-grain": "cjelovito zrno"
+  },
+  "additiveBasis": {
+    "eu_not_authorised": "više nije odobren kao prehrambeni aditiv u EU",
+    "eu_child_attention_warning": "zakonodavstvo EU zahtijeva upozorenje da može utjecati na aktivnost i pažnju djece",
+    "iarc_2a": "IARC ga povezuje s klasifikacijom u group 2A za uneseni nitrat/nitrit u uvjetima koji dovode do nitrozacije",
+    "iarc_2b": "IARC ga klasificira u group 2B",
+    "efsa_group_adi": "obuhvaćen prihvatljivim dnevnim unosom koji je utvrdila EFSA",
+    "efsa_adi_lowered": "podliježe ograničenju unosa EFSA koje je revidirano naniže",
+    "mandatory_allergen_labelling": "mora biti deklariran kao alergen iznad 10 mg/kg",
+    "use_restricted": "odobren samo za ograničene uporabe",
+    "authorised_routine": "odobren i rutinski se koristi"
+  },
+  "nova": {
+    "1": "Neprerađeno ili minimalno prerađeno",
+    "2": "Prerađeni kulinarski sastojak",
+    "3": "Prerađena hrana",
+    "4": "Ultraprerađena hrana",
+    "unknown": "Razina obrade"
+  },
+  "estimatePrefix": "Približna AI procjena. {text}",
+  "signals": {
+    "fallback": {
+      "label": "Dodatni čimbenik",
+      "evidence": "Ovaj je čimbenik utjecao na rezultat."
+    },
+    "blocker.allergen_declared": {
+      "label": "Deklarirani alergen",
+      "evidence": "Podaci na pakiranju izričito navode {allergen}, koji se nalazi na vašem popisu alergena."
+    },
+    "blocker.allergen_ingredient": {
+      "label": "Alergen pronađen u sastojcima",
+      "evidence": "„{match}“ se nalazi na popisu sastojaka i odgovara vašem alergenu {allergen}."
+    },
+    "blocker.avoid_ingredient": {
+      "label": "Sastojak s vašeg popisa za izbjegavanje",
+      "evidence": "„{ingredient}“ se nalazi na popisu sastojaka."
+    },
+    "blocker.diet_conflict": {
+      "label": "U sukobu s vašom prehranom",
+      "evidence": "Analiza sastojaka označava ovaj proizvod kao nekompatibilan s {diet} ({evidence})."
+    },
+    "warning.allergen_traces": {
+      "label": "Može sadržavati tragove",
+      "evidence": "Na pakiranju su navedeni mogući tragovi {allergen}. To je upozorenje proizvođača, a ne sastojak."
+    },
+    "warning.diet_uncertain": {
+      "label": "Usklađenost s prehranom nije jasna",
+      "evidence": "Za neke sastojke nije moguće potvrditi da su kompatibilni s {diet}. Provjerite pakiranje prije kupnje."
+    },
+    "warning.allergen_data_missing": {
+      "label": "Podaci o alergenima su nepotpuni",
+      "evidence": "Za ovaj proizvod nije dostupna deklaracija alergena, pa vaš popis alergena nije bilo moguće provjeriti. Prazan popis nikada ne dokazuje da proizvod ne sadrži alergen."
+    },
+    "base.nutriscore": {
+      "label": "Nutri-Score {grade}",
+      "evidence": "Open Food Facts objavljuje Nutri-Score {grade} za ovaj proizvod; on određuje osnovnu nutritivnu kvalitetu prije primjene vaših ciljeva."
+    },
+    "base.nutrition_profile": {
+      "label": "Nutritivni profil",
+      "evidence": "Nutri-Score nije objavljen, pa se osnova izvodi iz deklariranih vrijednosti: {detail}."
+    },
+    "base.nutrition_unknown": {
+      "label": "Osnovna kvaliteta nije poznata",
+      "evidence": "Nema dovoljno nutritivnih podataka za procjenu osnovne kvalitete, pa rezultat počinje od neutralne sredine."
+    },
+    "base.nova": {
+      "label": "{novaLabel}",
+      "evidence": "Open Food Facts svrstava ovaj proizvod u NOVA group {group}."
+    },
+    "base.additive_high": {
+      "label": "Aditiv koji zahtijeva pozornost",
+      "evidence": "{names}: {basis}. IngreFit to ocjenjuje kao čimbenik koji zahtijeva visoku pozornost, pa proizvod ne može postići visok osnovni rezultat."
+    },
+    "base.additive_moderate": {
+      "label": "Aditivi koje treba imati na umu",
+      "evidence": "{count} aditiv(a) s definiranim ograničenjem unosa ili klasifikacijom: {names}."
+    },
+    "base.additives_clean": {
+      "label": "Nema označenih aditiva",
+      "evidence": "Deklarirani popis aditiva ne sadrži ništa što IngreFit označava za dodatnu pozornost."
+    },
+    "base.fruit_veg": {
+      "label": "Sadržaj voća, povrća i orašastih plodova",
+      "evidence": "Open Food Facts procjenjuje {percent}% voća, povrća, mahunarki i orašastih plodova na temelju popisa sastojaka."
+    },
+    "base.palm_oil": {
+      "label": "Sadrži palmino ulje",
+      "evidence": "Analiza sastojaka otkriva palmino ulje, koje povećava količinu zasićenih masti i nosi poznata pitanja vezana uz podrijetlo."
+    },
+    "base.organic": {
+      "label": "Certificirano organsko",
+      "evidence": "Proizvod ima službenu organsku oznaku. IngreFit je bilježi, ali joj daje malu težinu jer organski status sam po sebi ne poboljšava nutritivnu kvalitetu."
+    },
+    "base.alcohol": {
+      "label": "Sadrži alkohol",
+      "evidence": "Proizvod deklarira {percent}% alkohola po volumenu."
+    },
+    "personal.nutrientEvidence": "{nutrient}: {value} {unit} na {reference}, uspoređeno s vašim ciljem „{goal}“.",
+    "personal.protein": {
+      "label": {
+        "good": "Visoka gustoća proteina",
+        "ok": "Nešto proteina",
+        "bad": "Malo proteina za vaš cilj"
+      }
+    },
+    "personal.sugars": {
+      "label": {
+        "good": "Malo šećera za vaš cilj",
+        "ok": "Umjerena količina šećera",
+        "bad": "Mnogo šećera za vaš cilj"
+      }
+    },
+    "personal.fiber": {
+      "label": {
+        "good": "Dobra gustoća vlakana",
+        "ok": "Nešto vlakana",
+        "bad": "Malo vlakana za vaš cilj"
+      }
+    },
+    "personal.salt": {
+      "label": {
+        "good": "Malo soli za vaš cilj",
+        "ok": "Umjerena količina soli",
+        "bad": "Mnogo soli za vaš cilj"
+      }
+    },
+    "personal.saturated_fat": {
+      "label": {
+        "good": "Malo zasićenih masti",
+        "ok": "Umjerena količina zasićenih masti",
+        "bad": "Mnogo zasićenih masti za vaš cilj"
+      }
+    },
+    "personal.carbs": {
+      "label": {
+        "good": "Niska gustoća ugljikohidrata",
+        "ok": "Umjerena količina ugljikohidrata",
+        "bad": "Mnogo ugljikohidrata za vaš obrazac prehrane"
+      }
+    },
+    "personal.energy": {
+      "label": {
+        "good": "Niska energetska gustoća",
+        "ok": "Umjerena energetska gustoća",
+        "bad": "Visoka energetska gustoća"
+      }
+    },
+    "personal.processing": {
+      "label": {
+        "good": "Minimalno prerađeno, kako ste tražili",
+        "ok": "Umjereno prerađeno",
+        "bad": "Visoko prerađeno za vaš cilj"
+      },
+      "evidence": "NOVA group {group} uspoređuje se s vašim ciljem „{goal}“."
+    },
+    "personal.no_data": {
+      "label": "Nema dovoljno podataka za vaše ciljeve",
+      "evidence": "Nijedna vrijednost potrebna za odabrane ciljeve nije dostupna, pa rezultat odražava samo opću kvalitetu proizvoda."
+    }
+  },
+  "summary": {
+    "blocked": "Ovaj proizvod isključuje strogo ograničenje u vašem profilu: {blocker}. Kvaliteta je ovdje sporedna; ograničenje vrijedi bez obzira na ostale vrijednosti.",
+    "blockedFallback": "ograničenje profila",
+    "personalUp": "vaši ciljevi ({goals}) povećali su rezultat za {delta}",
+    "personalDown": "vaši ciljevi ({goals}) smanjili su rezultat za {delta}",
+    "personalFlat": "vaši ciljevi ({goals}) jedva su promijenili rezultat",
+    "withSignals": "Osnovna kvaliteta proizvoda je {base} od 10, a {personal}. Najjači utjecaji bili su {strongest}. To mjeri usklađenost s vašim profilom, a ne univerzalnu zdravstvenu vrijednost.",
+    "withoutSignals": "Osnovna kvaliteta proizvoda je {base} od 10, a {personal}. Nema dovoljno podataka za detaljniju raščlambu."
+  },
+  "dataNotice": {
+    "aiPhoto": "Izvor: vizualna identifikacija pomoću AI. Nutritivne vrijednosti su približna procjena prema izgledu; sastojci, alergeni i točne vrijednosti ostaju nepoznati. Pouzdanost rezultata: {confidence}%.",
+    "estimatedText": "Izvor činjenica: {source}. Nedostajuće vrijednosti procijenio je AI prema nazivu i sastojcima, a nisu pročitane s pakiranja. Pouzdanost rezultata: {confidence}%.",
+    "declared": "Izvor: {source}. Potpunost podataka: {completeness}%. Pouzdanost rezultata: {confidence}%.",
+    "sourcePackage": "vidljivi tekst na pakiranju"
+  },
+  "tip": {
+    "blocked": "Uvijek provjerite pakiranje prije kupnje: recepture se mogu promijeniti bez ažuriranja baze podataka.",
+    "highRiskAdditive": "Da biste izbjegli {code}, potražite isti tip proizvoda s kraćim popisom sastojaka.",
+    "ultraProcessed": "Ovo je ultraprerađeni proizvod. Manje prerađena alternativa obično dobiva osjetno viši osnovni rezultat.",
+    "default": "Rezultat je vezan uz vaš profil ({diet}). Promijenite ciljeve i rezultat će se ponovno izračunati."
+  }
+}

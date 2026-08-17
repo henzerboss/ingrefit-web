@@ -1,0 +1,285 @@
+{
+  "_comment": "Translatable strings for product assessments. Copy en.json, translate values only, keep every {placeholder} intact.",
+  "decimalSeparator": ",",
+  "quotes": [
+    "„",
+    "”"
+  ],
+  "references": {
+    "100g": "100 g",
+    "100ml": "100 ml",
+    "serving": "o porție"
+  },
+  "nutrients": {
+    "sugars": {
+      "name": "zaharuri",
+      "unit": "g"
+    },
+    "saturated_fat": {
+      "name": "grăsimi saturate",
+      "unit": "g"
+    },
+    "salt": {
+      "name": "echivalent de sare",
+      "unit": "g"
+    },
+    "fiber": {
+      "name": "fibre",
+      "unit": "g"
+    },
+    "protein": {
+      "name": "proteine",
+      "unit": "g"
+    },
+    "carbs": {
+      "name": "carbohidrați",
+      "unit": "g"
+    },
+    "energy": {
+      "name": "energie",
+      "unit": "kcal"
+    }
+  },
+  "goals": {
+    "balanced": "alimentație echilibrată",
+    "weight_loss": "gestionarea greutății",
+    "muscle_gain": "creștere musculară",
+    "high_protein": "mai multe proteine",
+    "low_sugar": "mai puțin zahăr",
+    "low_sodium": "mai puțină sare",
+    "high_fiber": "mai multe fibre",
+    "minimally_processed": "mai puțină procesare",
+    "heart_health": "alegeri atente pentru inimă",
+    "steady_energy": "energie constantă",
+    "digestive_wellness": "stare bună digestivă",
+    "low_saturated_fat": "mai puține grăsimi saturate"
+  },
+  "diets": {
+    "none": "fără dietă specifică",
+    "vegetarian": "vegetariană",
+    "vegan": "vegană",
+    "pescatarian": "pescetariană",
+    "gluten_free": "fără gluten",
+    "dairy_free": "fără lactate",
+    "low_carb": "săracă în carbohidrați",
+    "mediterranean": "mediteraneană"
+  },
+  "allergens": {
+    "milk": "lapte",
+    "eggs": "ouă",
+    "peanuts": "arahide",
+    "tree_nuts": "fructe cu coajă lemnoasă",
+    "soy": "soia",
+    "wheat": "grâu",
+    "gluten": "gluten",
+    "fish": "pește",
+    "crustaceans": "crustacee",
+    "sesame": "susan",
+    "celery": "țelină",
+    "mustard": "muștar",
+    "sulphites": "sulfiți",
+    "lupin": "lupin",
+    "molluscs": "moluște"
+  },
+  "labels": {
+    "en:organic": "ecologic",
+    "en:eu-organic": "ecologic UE",
+    "en:gluten-free": "fără gluten",
+    "en:no-gluten": "fără gluten",
+    "en:lactose-free": "fără lactoză",
+    "en:no-lactose": "fără lactoză",
+    "en:vegan": "vegan",
+    "en:vegetarian": "vegetarian",
+    "en:sugar-free": "fără zahăr",
+    "en:no-added-sugar": "fără zahăr adăugat",
+    "en:no-preservatives": "fără conservanți",
+    "en:no-colorings": "fără coloranți",
+    "en:no-gmos": "fără OMG",
+    "en:fair-trade": "comerț echitabil",
+    "en:halal": "halal",
+    "en:kosher": "kosher",
+    "en:palm-oil-free": "fără ulei de palmier",
+    "en:high-protein": "bogat în proteine",
+    "en:whole-grain": "integral"
+  },
+  "additiveBasis": {
+    "eu_not_authorised": "nu mai este autorizat ca aditiv alimentar în EU",
+    "eu_child_attention_warning": "legislația EU impune un avertisment că poate afecta activitatea și atenția copiilor",
+    "iarc_2a": "asociat de IARC cu o clasificare în group 2A pentru nitrat/nitrit ingerat în condiții care duc la nitrozare",
+    "iarc_2b": "clasificat de IARC în group 2B",
+    "efsa_group_adi": "acoperit de un aport zilnic acceptabil stabilit de EFSA",
+    "efsa_adi_lowered": "supus unei limite de aport EFSA care a fost revizuită în jos",
+    "mandatory_allergen_labelling": "trebuie declarat ca alergen peste 10 mg/kg",
+    "use_restricted": "autorizat numai pentru utilizări restricționate",
+    "authorised_routine": "autorizat și utilizat în mod obișnuit"
+  },
+  "nova": {
+    "1": "Neprocesat sau minim procesat",
+    "2": "Ingredient culinar procesat",
+    "3": "Aliment procesat",
+    "4": "Aliment ultraprocesat",
+    "unknown": "Nivel de procesare"
+  },
+  "estimatePrefix": "Estimare AI aproximativă. {text}",
+  "signals": {
+    "fallback": {
+      "label": "Factor suplimentar",
+      "evidence": "Acest factor a influențat scorul."
+    },
+    "blocker.allergen_declared": {
+      "label": "Alergen declarat",
+      "evidence": "Datele de pe ambalaj declară explicit {allergen}, care se află pe lista ta de alergeni."
+    },
+    "blocker.allergen_ingredient": {
+      "label": "Alergen găsit în ingrediente",
+      "evidence": "„{match}” apare în lista de ingrediente și corespunde alergenului tău {allergen}."
+    },
+    "blocker.avoid_ingredient": {
+      "label": "Ingredient din lista ta de evitat",
+      "evidence": "„{ingredient}” apare în lista de ingrediente."
+    },
+    "blocker.diet_conflict": {
+      "label": "Intră în conflict cu dieta ta",
+      "evidence": "Analiza ingredientelor marchează acest produs ca incompatibil cu {diet} ({evidence})."
+    },
+    "warning.allergen_traces": {
+      "label": "Poate conține urme",
+      "evidence": "Ambalajul declară posibile urme de {allergen}. Acesta este un avertisment al producătorului, nu un ingredient."
+    },
+    "warning.diet_uncertain": {
+      "label": "Statusul dietei este neclar",
+      "evidence": "Nu se poate confirma că unele ingrediente sunt compatibile cu {diet}. Verifică ambalajul înainte de cumpărare."
+    },
+    "warning.allergen_data_missing": {
+      "label": "Datele despre alergeni sunt incomplete",
+      "evidence": "Nu este disponibilă nicio declarație de alergeni pentru acest produs, astfel încât lista ta de alergeni nu a putut fi verificată. O listă goală nu dovedește niciodată că produsul nu conține alergenul."
+    },
+    "base.nutriscore": {
+      "label": "Nutri-Score {grade}",
+      "evidence": "Open Food Facts publică Nutri-Score {grade} pentru acest produs; acesta stabilește calitatea nutrițională de bază înainte de aplicarea obiectivelor tale."
+    },
+    "base.nutrition_profile": {
+      "label": "Profil nutrițional",
+      "evidence": "Nu este publicat niciun Nutri-Score, astfel că baza este derivată din valorile declarate: {detail}."
+    },
+    "base.nutrition_unknown": {
+      "label": "Calitate de bază necunoscută",
+      "evidence": "Nu sunt disponibile suficiente date nutriționale pentru a evalua calitatea de bază, astfel că scorul pornește de la un punct median neutru."
+    },
+    "base.nova": {
+      "label": "{novaLabel}",
+      "evidence": "Open Food Facts clasifică acest produs în grupa NOVA {group}."
+    },
+    "base.additive_high": {
+      "label": "Aditiv care necesită atenție",
+      "evidence": "{names}: {basis}. IngreFit îl evaluează ca necesitând atenție ridicată, astfel că produsul nu poate atinge un scor de bază mare."
+    },
+    "base.additive_moderate": {
+      "label": "Aditivi de care să ții cont",
+      "evidence": "{count} aditiv(i) cu o limită de aport sau o clasificare definită: {names}."
+    },
+    "base.additives_clean": {
+      "label": "Fără aditivi semnalați",
+      "evidence": "Lista de aditivi declarați nu conține nimic pe care IngreFit să îl semnaleze pentru atenție suplimentară."
+    },
+    "base.fruit_veg": {
+      "label": "Conținut de fructe, legume și nuci",
+      "evidence": "Open Food Facts estimează {percent}% conținut de fructe, legume, leguminoase și nuci pe baza listei de ingrediente."
+    },
+    "base.palm_oil": {
+      "label": "Conține ulei de palmier",
+      "evidence": "Analiza ingredientelor detectează ulei de palmier, care crește aportul de grăsimi saturate și implică preocupări cunoscute privind proveniența."
+    },
+    "base.organic": {
+      "label": "Ecologic certificat",
+      "evidence": "Produsul poartă o etichetă ecologică oficială. IngreFit o înregistrează, dar îi acordă o pondere mică, deoarece statutul ecologic nu îmbunătățește de unul singur calitatea nutrițională."
+    },
+    "base.alcohol": {
+      "label": "Conține alcool",
+      "evidence": "Produsul declară {percent}% alcool în volum."
+    },
+    "personal.nutrientEvidence": "{nutrient}: {value} {unit} per {reference}, comparat cu obiectivul tău „{goal}”.",
+    "personal.protein": {
+      "label": {
+        "good": "Densitate mare de proteine",
+        "ok": "O anumită cantitate de proteine",
+        "bad": "Puține proteine pentru obiectivul tău"
+      }
+    },
+    "personal.sugars": {
+      "label": {
+        "good": "Puțin zahăr pentru obiectivul tău",
+        "ok": "Cantitate moderată de zahăr",
+        "bad": "Mult zahăr pentru obiectivul tău"
+      }
+    },
+    "personal.fiber": {
+      "label": {
+        "good": "Densitate bună de fibre",
+        "ok": "O anumită cantitate de fibre",
+        "bad": "Puține fibre pentru obiectivul tău"
+      }
+    },
+    "personal.salt": {
+      "label": {
+        "good": "Puțină sare pentru obiectivul tău",
+        "ok": "Cantitate moderată de sare",
+        "bad": "Multă sare pentru obiectivul tău"
+      }
+    },
+    "personal.saturated_fat": {
+      "label": {
+        "good": "Puține grăsimi saturate",
+        "ok": "Cantitate moderată de grăsimi saturate",
+        "bad": "Multe grăsimi saturate pentru obiectivul tău"
+      }
+    },
+    "personal.carbs": {
+      "label": {
+        "good": "Densitate mică de carbohidrați",
+        "ok": "Cantitate moderată de carbohidrați",
+        "bad": "Mulți carbohidrați pentru tiparul tău alimentar"
+      }
+    },
+    "personal.energy": {
+      "label": {
+        "good": "Densitate energetică mică",
+        "ok": "Densitate energetică moderată",
+        "bad": "Densitate energetică mare"
+      }
+    },
+    "personal.processing": {
+      "label": {
+        "good": "Minim procesat, așa cum ai cerut",
+        "ok": "Moderat procesat",
+        "bad": "Foarte procesat pentru obiectivul tău"
+      },
+      "evidence": "Grupa NOVA {group} este comparată cu obiectivul tău „{goal}”."
+    },
+    "personal.no_data": {
+      "label": "Nu sunt suficiente date pentru obiectivele tale",
+      "evidence": "Niciuna dintre valorile necesare pentru obiectivele selectate nu este disponibilă, astfel că scorul reflectă numai calitatea generală a produsului."
+    }
+  },
+  "summary": {
+    "blocked": "Acest produs este exclus de o restricție strictă din profilul tău: {blocker}. Calitatea este secundară aici; restricția rămâne valabilă indiferent de celelalte valori.",
+    "blockedFallback": "restricție de profil",
+    "personalUp": "obiectivele tale ({goals}) au crescut scorul cu {delta}",
+    "personalDown": "obiectivele tale ({goals}) au redus scorul cu {delta}",
+    "personalFlat": "obiectivele tale ({goals}) abia au modificat scorul",
+    "withSignals": "Calitatea de bază a produsului este {base} din 10, iar {personal}. Cele mai puternice influențe au fost {strongest}. Aceasta măsoară potrivirea cu profilul tău, nu o evaluare universală a sănătății.",
+    "withoutSignals": "Calitatea de bază a produsului este {base} din 10, iar {personal}. Nu sunt suficiente date pentru o defalcare mai fină."
+  },
+  "dataNotice": {
+    "aiPhoto": "Sursă: identificare vizuală prin AI. Valorile nutriționale sunt o estimare aproximativă pe baza aspectului; ingredientele, alergenii și valorile exacte rămân necunoscute. Încredere în scor: {confidence}%.",
+    "estimatedText": "Sursa faptelor: {source}. Valorile lipsă au fost estimate de AI pe baza numelui și ingredientelor, nu citite de pe ambalaj. Încredere în scor: {confidence}%.",
+    "declared": "Sursă: {source}. Completitudinea datelor: {completeness}%. Încredere în scor: {confidence}%.",
+    "sourcePackage": "text vizibil pe ambalaj"
+  },
+  "tip": {
+    "blocked": "Verifică întotdeauna ambalajul înainte de cumpărare: rețetele se pot schimba fără ca baza de date să fie actualizată.",
+    "highRiskAdditive": "Pentru a evita {code}, caută același tip de produs cu o listă de ingrediente mai scurtă.",
+    "ultraProcessed": "Acesta este un produs ultraprocesat. Un echivalent mai puțin procesat obține de obicei un scor de bază vizibil mai mare.",
+    "default": "Scorul este legat de profilul tău ({diet}). Schimbă obiectivele, iar rezultatul va fi recalculat."
+  }
+}

@@ -1,0 +1,285 @@
+{
+  "_comment": "Translatable strings for product assessments. Copy en.json, translate values only, keep every {placeholder} intact.",
+  "decimalSeparator": ",",
+  "quotes": [
+    "“",
+    "”"
+  ],
+  "references": {
+    "100g": "100 g",
+    "100ml": "100 ml",
+    "serving": "một khẩu phần"
+  },
+  "nutrients": {
+    "sugars": {
+      "name": "đường",
+      "unit": "g"
+    },
+    "saturated_fat": {
+      "name": "chất béo bão hòa",
+      "unit": "g"
+    },
+    "salt": {
+      "name": "lượng muối tương đương",
+      "unit": "g"
+    },
+    "fiber": {
+      "name": "chất xơ",
+      "unit": "g"
+    },
+    "protein": {
+      "name": "protein",
+      "unit": "g"
+    },
+    "carbs": {
+      "name": "carbohydrate",
+      "unit": "g"
+    },
+    "energy": {
+      "name": "năng lượng",
+      "unit": "kcal"
+    }
+  },
+  "goals": {
+    "balanced": "ăn uống cân bằng",
+    "weight_loss": "quản lý cân nặng",
+    "muscle_gain": "tăng cơ",
+    "high_protein": "nhiều protein hơn",
+    "low_sugar": "ít đường hơn",
+    "low_sodium": "ít muối hơn",
+    "high_fiber": "nhiều chất xơ hơn",
+    "minimally_processed": "ít chế biến hơn",
+    "heart_health": "lựa chọn có cân nhắc đến tim",
+    "steady_energy": "năng lượng ổn định",
+    "digestive_wellness": "tiêu hóa thoải mái",
+    "low_saturated_fat": "ít chất béo bão hòa hơn"
+  },
+  "diets": {
+    "none": "không theo chế độ ăn cụ thể",
+    "vegetarian": "ăn chay",
+    "vegan": "thuần chay",
+    "pescatarian": "ăn chay có cá",
+    "gluten_free": "không gluten",
+    "dairy_free": "không sữa",
+    "low_carb": "ít carbohydrate",
+    "mediterranean": "Địa Trung Hải"
+  },
+  "allergens": {
+    "milk": "sữa",
+    "eggs": "trứng",
+    "peanuts": "đậu phộng",
+    "tree_nuts": "hạt cây",
+    "soy": "đậu nành",
+    "wheat": "lúa mì",
+    "gluten": "gluten",
+    "fish": "cá",
+    "crustaceans": "giáp xác",
+    "sesame": "mè",
+    "celery": "cần tây",
+    "mustard": "mù tạt",
+    "sulphites": "sulfit",
+    "lupin": "đậu lupin",
+    "molluscs": "nhuyễn thể"
+  },
+  "labels": {
+    "en:organic": "hữu cơ",
+    "en:eu-organic": "hữu cơ EU",
+    "en:gluten-free": "không gluten",
+    "en:no-gluten": "không gluten",
+    "en:lactose-free": "không lactose",
+    "en:no-lactose": "không lactose",
+    "en:vegan": "thuần chay",
+    "en:vegetarian": "ăn chay",
+    "en:sugar-free": "không đường",
+    "en:no-added-sugar": "không thêm đường",
+    "en:no-preservatives": "không chất bảo quản",
+    "en:no-colorings": "không phẩm màu",
+    "en:no-gmos": "không GMO",
+    "en:fair-trade": "thương mại công bằng",
+    "en:halal": "halal",
+    "en:kosher": "kosher",
+    "en:palm-oil-free": "không dầu cọ",
+    "en:high-protein": "giàu protein",
+    "en:whole-grain": "ngũ cốc nguyên hạt"
+  },
+  "additiveBasis": {
+    "eu_not_authorised": "không còn được phép dùng làm phụ gia thực phẩm tại EU",
+    "eu_child_attention_warning": "luật EU yêu cầu cảnh báo rằng chất này có thể ảnh hưởng đến hoạt động và sự chú ý ở trẻ em",
+    "iarc_2a": "được IARC liên kết với phân loại group 2A đối với nitrat/nitrit được ăn vào trong các điều kiện dẫn đến nitros hóa",
+    "iarc_2b": "được IARC phân loại trong group 2B",
+    "efsa_group_adi": "nằm trong mức lượng dùng hằng ngày chấp nhận được của EFSA",
+    "efsa_adi_lowered": "chịu giới hạn lượng dùng của EFSA đã được điều chỉnh giảm",
+    "mandatory_allergen_labelling": "phải được khai báo là chất gây dị ứng khi vượt quá 10 mg/kg",
+    "use_restricted": "chỉ được phép cho các mục đích sử dụng hạn chế",
+    "authorised_routine": "được phép và sử dụng thường quy"
+  },
+  "nova": {
+    "1": "không chế biến hoặc chế biến tối thiểu",
+    "2": "nguyên liệu nấu ăn đã qua chế biến",
+    "3": "thực phẩm chế biến",
+    "4": "thực phẩm siêu chế biến",
+    "unknown": "mức độ chế biến"
+  },
+  "estimatePrefix": "Ước tính gần đúng bằng AI. {text}",
+  "signals": {
+    "fallback": {
+      "label": "Yếu tố bổ sung",
+      "evidence": "Yếu tố này đã ảnh hưởng đến điểm số."
+    },
+    "blocker.allergen_declared": {
+      "label": "Chất gây dị ứng đã khai báo",
+      "evidence": "Dữ liệu trên bao bì nêu rõ {allergen}, chất này có trong danh sách dị ứng của bạn."
+    },
+    "blocker.allergen_ingredient": {
+      "label": "Phát hiện chất gây dị ứng trong thành phần",
+      "evidence": "“{match}” xuất hiện trong danh sách thành phần và khớp với chất gây dị ứng {allergen} của bạn."
+    },
+    "blocker.avoid_ingredient": {
+      "label": "Thành phần trong danh sách tránh của bạn",
+      "evidence": "“{ingredient}” xuất hiện trong danh sách thành phần."
+    },
+    "blocker.diet_conflict": {
+      "label": "Xung đột với chế độ ăn của bạn",
+      "evidence": "Phân tích thành phần đánh dấu sản phẩm này không phù hợp với {diet} ({evidence})."
+    },
+    "warning.allergen_traces": {
+      "label": "Có thể chứa vết",
+      "evidence": "Bao bì cảnh báo có thể có vết {allergen}. Đây là cảnh báo của nhà sản xuất, không phải một thành phần."
+    },
+    "warning.diet_uncertain": {
+      "label": "Tình trạng chế độ ăn chưa rõ",
+      "evidence": "Không thể xác nhận một số thành phần có phù hợp với {diet} hay không. Hãy kiểm tra bao bì trước khi mua."
+    },
+    "warning.allergen_data_missing": {
+      "label": "Dữ liệu chất gây dị ứng chưa đầy đủ",
+      "evidence": "Không có thông tin khai báo chất gây dị ứng cho sản phẩm này, nên không thể đối chiếu danh sách dị ứng của bạn. Danh sách trống không bao giờ chứng minh rằng sản phẩm không có chất gây dị ứng đó."
+    },
+    "base.nutriscore": {
+      "label": "Nutri-Score {grade}",
+      "evidence": "Open Food Facts công bố Nutri-Score {grade} cho sản phẩm này; đây là mức chất lượng dinh dưỡng cơ sở trước khi áp dụng các mục tiêu của bạn."
+    },
+    "base.nutrition_profile": {
+      "label": "Hồ sơ dinh dưỡng",
+      "evidence": "Không có Nutri-Score được công bố, vì vậy điểm cơ sở được suy ra từ các giá trị đã khai báo: {detail}."
+    },
+    "base.nutrition_unknown": {
+      "label": "Chưa rõ chất lượng cơ sở",
+      "evidence": "Không có đủ dữ liệu dinh dưỡng để đánh giá chất lượng cơ sở, nên điểm bắt đầu từ mức trung tính ở giữa."
+    },
+    "base.nova": {
+      "label": "{novaLabel}",
+      "evidence": "Open Food Facts xếp sản phẩm này vào NOVA group {group}."
+    },
+    "base.additive_high": {
+      "label": "Phụ gia cần chú ý",
+      "evidence": "{names}: {basis}. IngreFit đánh giá đây là yếu tố cần chú ý cao, vì vậy sản phẩm không thể đạt điểm cơ sở cao."
+    },
+    "base.additive_moderate": {
+      "label": "Phụ gia nên lưu ý",
+      "evidence": "Có {count} phụ gia với giới hạn lượng dùng hoặc phân loại xác định: {names}."
+    },
+    "base.additives_clean": {
+      "label": "Không có phụ gia bị đánh dấu",
+      "evidence": "Danh sách phụ gia đã khai báo không có mục nào mà IngreFit đánh dấu cần chú ý thêm."
+    },
+    "base.fruit_veg": {
+      "label": "Hàm lượng trái cây, rau, đậu và hạt",
+      "evidence": "Open Food Facts ước tính {percent}% hàm lượng trái cây, rau, đậu và hạt từ danh sách thành phần."
+    },
+    "base.palm_oil": {
+      "label": "Có dầu cọ",
+      "evidence": "Phân tích thành phần phát hiện dầu cọ, làm tăng lượng chất béo bão hòa và đi kèm những quan ngại đã biết về nguồn cung ứng."
+    },
+    "base.organic": {
+      "label": "Hữu cơ được chứng nhận",
+      "evidence": "Sản phẩm có nhãn hữu cơ chính thức. IngreFit ghi nhận nhưng chỉ cho trọng số nhỏ, vì trạng thái hữu cơ tự nó không làm tăng chất lượng dinh dưỡng."
+    },
+    "base.alcohol": {
+      "label": "Có cồn",
+      "evidence": "Sản phẩm khai báo {percent}% cồn theo thể tích."
+    },
+    "personal.nutrientEvidence": "{nutrient}: {value} {unit} trên {reference}, được cân nhắc theo mục tiêu “{goal}” của bạn.",
+    "personal.protein": {
+      "label": {
+        "good": "Mật độ protein cao",
+        "ok": "Có một ít protein",
+        "bad": "Ít protein so với mục tiêu của bạn"
+      }
+    },
+    "personal.sugars": {
+      "label": {
+        "good": "Ít đường so với mục tiêu của bạn",
+        "ok": "Lượng đường vừa phải",
+        "bad": "Nhiều đường so với mục tiêu của bạn"
+      }
+    },
+    "personal.fiber": {
+      "label": {
+        "good": "Mật độ chất xơ tốt",
+        "ok": "Có một ít chất xơ",
+        "bad": "Ít chất xơ so với mục tiêu của bạn"
+      }
+    },
+    "personal.salt": {
+      "label": {
+        "good": "Ít muối so với mục tiêu của bạn",
+        "ok": "Lượng muối vừa phải",
+        "bad": "Nhiều muối so với mục tiêu của bạn"
+      }
+    },
+    "personal.saturated_fat": {
+      "label": {
+        "good": "Ít chất béo bão hòa",
+        "ok": "Chất béo bão hòa vừa phải",
+        "bad": "Nhiều chất béo bão hòa so với mục tiêu của bạn"
+      }
+    },
+    "personal.carbs": {
+      "label": {
+        "good": "Mật độ carbohydrate thấp",
+        "ok": "Carbohydrate vừa phải",
+        "bad": "Nhiều carbohydrate so với kiểu ăn của bạn"
+      }
+    },
+    "personal.energy": {
+      "label": {
+        "good": "Mật độ năng lượng thấp",
+        "ok": "Mật độ năng lượng vừa phải",
+        "bad": "Mật độ năng lượng cao"
+      }
+    },
+    "personal.processing": {
+      "label": {
+        "good": "Chế biến tối thiểu như bạn yêu cầu",
+        "ok": "Chế biến vừa phải",
+        "bad": "Chế biến nhiều so với mục tiêu của bạn"
+      },
+      "evidence": "NOVA group {group} được cân nhắc theo mục tiêu “{goal}” của bạn."
+    },
+    "personal.no_data": {
+      "label": "Không đủ dữ liệu cho mục tiêu của bạn",
+      "evidence": "Không có giá trị nào cần cho các mục tiêu bạn chọn, nên điểm số chỉ phản ánh chất lượng chung của sản phẩm."
+    }
+  },
+  "summary": {
+    "blocked": "Sản phẩm này bị loại do một hạn chế bắt buộc trong hồ sơ của bạn: {blocker}. Chất lượng là yếu tố thứ yếu ở đây; hạn chế vẫn áp dụng bất kể các con số khác.",
+    "blockedFallback": "hạn chế trong hồ sơ",
+    "personalUp": "các mục tiêu của bạn ({goals}) đã tăng điểm thêm {delta}",
+    "personalDown": "các mục tiêu của bạn ({goals}) đã giảm điểm đi {delta}",
+    "personalFlat": "các mục tiêu của bạn ({goals}) hầu như không làm thay đổi điểm",
+    "withSignals": "Chất lượng cơ sở của sản phẩm là {base} trên 10, và {personal}. Những ảnh hưởng mạnh nhất là {strongest}. Đây là mức độ phù hợp với hồ sơ của bạn, không phải thước đo sức khỏe áp dụng cho mọi người.",
+    "withoutSignals": "Chất lượng cơ sở của sản phẩm là {base} trên 10, và {personal}. Không có đủ dữ liệu để phân tích chi tiết hơn."
+  },
+  "dataNotice": {
+    "aiPhoto": "Nguồn: nhận dạng hình ảnh bằng AI. Dinh dưỡng là ước tính gần đúng từ hình thức; thành phần, chất gây dị ứng và các giá trị chính xác vẫn chưa rõ. Độ tin cậy của điểm: {confidence}%.",
+    "estimatedText": "Nguồn dữ kiện: {source}. Các giá trị còn thiếu được AI ước tính từ tên và thành phần, không được đọc từ bao bì. Độ tin cậy của điểm: {confidence}%.",
+    "declared": "Nguồn: {source}. Mức độ đầy đủ của dữ liệu: {completeness}%. Độ tin cậy của điểm: {confidence}%.",
+    "sourcePackage": "văn bản nhìn thấy trên bao bì"
+  },
+  "tip": {
+    "blocked": "Luôn kiểm tra bao bì trước khi mua: công thức có thể thay đổi mà cơ sở dữ liệu chưa được cập nhật.",
+    "highRiskAdditive": "Để tránh {code}, hãy tìm sản phẩm cùng loại có danh sách thành phần ngắn hơn.",
+    "ultraProcessed": "Đây là sản phẩm siêu chế biến. Một sản phẩm tương đương ít chế biến hơn thường có điểm cơ sở cao hơn rõ rệt.",
+    "default": "Điểm số gắn với hồ sơ của bạn ({diet}). Khi bạn thay đổi mục tiêu, kết quả sẽ được tính lại."
+  }
+}

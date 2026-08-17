@@ -1,0 +1,285 @@
+{
+  "_comment": "Translatable strings for product assessments. Copy en.json, translate values only, keep every {placeholder} intact.",
+  "decimalSeparator": ".",
+  "quotes": [
+    "“",
+    "”"
+  ],
+  "references": {
+    "100g": "100克",
+    "100ml": "100毫升",
+    "serving": "一份"
+  },
+  "nutrients": {
+    "sugars": {
+      "name": "糖",
+      "unit": "克"
+    },
+    "saturated_fat": {
+      "name": "饱和脂肪",
+      "unit": "克"
+    },
+    "salt": {
+      "name": "盐当量",
+      "unit": "克"
+    },
+    "fiber": {
+      "name": "膳食纤维",
+      "unit": "克"
+    },
+    "protein": {
+      "name": "蛋白质",
+      "unit": "克"
+    },
+    "carbs": {
+      "name": "碳水化合物",
+      "unit": "克"
+    },
+    "energy": {
+      "name": "能量",
+      "unit": "千卡"
+    }
+  },
+  "goals": {
+    "balanced": "均衡饮食",
+    "weight_loss": "体重管理",
+    "muscle_gain": "增肌",
+    "high_protein": "更多蛋白质",
+    "low_sugar": "更少糖",
+    "low_sodium": "更少盐",
+    "high_fiber": "更多膳食纤维",
+    "minimally_processed": "更少加工",
+    "heart_health": "关注心脏的选择",
+    "steady_energy": "稳定能量",
+    "digestive_wellness": "消化舒适",
+    "low_saturated_fat": "更少饱和脂肪"
+  },
+  "diets": {
+    "none": "无特定饮食",
+    "vegetarian": "素食",
+    "vegan": "纯素",
+    "pescatarian": "鱼素",
+    "gluten_free": "无麸质",
+    "dairy_free": "不含乳制品",
+    "low_carb": "低碳水",
+    "mediterranean": "地中海式"
+  },
+  "allergens": {
+    "milk": "牛奶",
+    "eggs": "鸡蛋",
+    "peanuts": "花生",
+    "tree_nuts": "坚果",
+    "soy": "大豆",
+    "wheat": "小麦",
+    "gluten": "麸质",
+    "fish": "鱼",
+    "crustaceans": "甲壳类",
+    "sesame": "芝麻",
+    "celery": "芹菜",
+    "mustard": "芥末",
+    "sulphites": "亚硫酸盐",
+    "lupin": "羽扇豆",
+    "molluscs": "软体动物"
+  },
+  "labels": {
+    "en:organic": "有机",
+    "en:eu-organic": "EU有机",
+    "en:gluten-free": "无麸质",
+    "en:no-gluten": "无麸质",
+    "en:lactose-free": "无乳糖",
+    "en:no-lactose": "无乳糖",
+    "en:vegan": "纯素",
+    "en:vegetarian": "素食",
+    "en:sugar-free": "无糖",
+    "en:no-added-sugar": "无添加糖",
+    "en:no-preservatives": "无防腐剂",
+    "en:no-colorings": "无色素",
+    "en:no-gmos": "非转基因",
+    "en:fair-trade": "公平贸易",
+    "en:halal": "清真",
+    "en:kosher": "犹太洁食",
+    "en:palm-oil-free": "不含棕榈油",
+    "en:high-protein": "高蛋白",
+    "en:whole-grain": "全谷物"
+  },
+  "additiveBasis": {
+    "eu_not_authorised": "在EU已不再获准作为食品添加剂使用",
+    "eu_child_attention_warning": "EU法律要求标注警告，说明其可能影响儿童的活动和注意力",
+    "iarc_2a": "IARC将其与在导致亚硝化的条件下摄入硝酸盐/亚硝酸盐的group 2A分类相关联",
+    "iarc_2b": "IARC将其归为group 2B",
+    "efsa_group_adi": "适用EFSA规定的可接受每日摄入量",
+    "efsa_adi_lowered": "适用经下调修订的EFSA摄入上限",
+    "mandatory_allergen_labelling": "超过10 mg/kg时必须作为过敏原声明",
+    "use_restricted": "仅获准用于受限用途",
+    "authorised_routine": "已获准并常规使用"
+  },
+  "nova": {
+    "1": "未加工或最低限度加工",
+    "2": "加工烹饪原料",
+    "3": "加工食品",
+    "4": "超加工食品",
+    "unknown": "加工程度"
+  },
+  "estimatePrefix": "AI近似估算。{text}",
+  "signals": {
+    "fallback": {
+      "label": "其他因素",
+      "evidence": "该因素影响了评分。"
+    },
+    "blocker.allergen_declared": {
+      "label": "已声明过敏原",
+      "evidence": "包装数据明确声明含有{allergen}，它在你的过敏原列表中。"
+    },
+    "blocker.allergen_ingredient": {
+      "label": "配料中发现过敏原",
+      "evidence": "配料表中出现“{match}”，与您的{allergen}过敏原相匹配。"
+    },
+    "blocker.avoid_ingredient": {
+      "label": "您的避免清单中的配料",
+      "evidence": "配料表中出现“{ingredient}”。"
+    },
+    "blocker.diet_conflict": {
+      "label": "与您的饮食方式冲突",
+      "evidence": "配料分析将该产品标记为与{diet}不兼容（{evidence}）。"
+    },
+    "warning.allergen_traces": {
+      "label": "可能含有微量成分",
+      "evidence": "包装声明可能含有微量{allergen}。这是生产商警告，并非配料。"
+    },
+    "warning.diet_uncertain": {
+      "label": "饮食适配情况不明确",
+      "evidence": "部分配料无法确认是否符合{diet}。购买前请检查包装。"
+    },
+    "warning.allergen_data_missing": {
+      "label": "过敏原数据不完整",
+      "evidence": "该产品没有可用的过敏原声明，因此无法核对您的过敏原列表。空列表绝不能证明产品不含该过敏原。"
+    },
+    "base.nutriscore": {
+      "label": "Nutri-Score {grade}",
+      "evidence": "Open Food Facts发布该产品的Nutri-Score {grade}；它用于确定应用您的目标之前的基础营养质量。"
+    },
+    "base.nutrition_profile": {
+      "label": "营养概况",
+      "evidence": "未发布Nutri-Score，因此基础评分根据已声明数值推导：{detail}。"
+    },
+    "base.nutrition_unknown": {
+      "label": "基础质量未知",
+      "evidence": "营养数据不足，无法判断基础质量，因此评分从中性的中间值开始。"
+    },
+    "base.nova": {
+      "label": "{novaLabel}",
+      "evidence": "Open Food Facts将该产品归入NOVA group {group}。"
+    },
+    "base.additive_high": {
+      "label": "需要关注的添加剂",
+      "evidence": "{names}：{basis}。IngreFit将其评为需要高度关注，因此该产品无法获得较高的基础评分。"
+    },
+    "base.additive_moderate": {
+      "label": "需要留意的添加剂",
+      "evidence": "有{count}种添加剂具有规定的摄入上限或分类：{names}。"
+    },
+    "base.additives_clean": {
+      "label": "没有标记的添加剂",
+      "evidence": "已声明的添加剂列表中没有IngreFit标记为需要额外关注的项目。"
+    },
+    "base.fruit_veg": {
+      "label": "水果、蔬菜、豆类和坚果含量",
+      "evidence": "Open Food Facts根据配料表估算水果、蔬菜、豆类和坚果占{percent}%。"
+    },
+    "base.palm_oil": {
+      "label": "含棕榈油",
+      "evidence": "配料分析检测到棕榈油，它会增加饱和脂肪负荷，并伴有已知的原料来源方面的顾虑。"
+    },
+    "base.organic": {
+      "label": "有机认证",
+      "evidence": "产品带有官方有机标签。IngreFit会记录这一点，但权重很小，因为有机身份本身并不会提高营养质量。"
+    },
+    "base.alcohol": {
+      "label": "含酒精",
+      "evidence": "产品声明酒精体积分数为{percent}%。"
+    },
+    "personal.nutrientEvidence": "每{reference}{nutrient}：{value} {unit}，并与您的“{goal}”目标进行比较。",
+    "personal.protein": {
+      "label": {
+        "good": "蛋白质密度高",
+        "ok": "含一些蛋白质",
+        "bad": "对您的目标而言蛋白质较少"
+      }
+    },
+    "personal.sugars": {
+      "label": {
+        "good": "对您的目标而言糖较少",
+        "ok": "糖含量适中",
+        "bad": "对您的目标而言糖较多"
+      }
+    },
+    "personal.fiber": {
+      "label": {
+        "good": "膳食纤维密度良好",
+        "ok": "含一些膳食纤维",
+        "bad": "对您的目标而言膳食纤维较少"
+      }
+    },
+    "personal.salt": {
+      "label": {
+        "good": "对您的目标而言盐较少",
+        "ok": "盐含量适中",
+        "bad": "对您的目标而言盐较多"
+      }
+    },
+    "personal.saturated_fat": {
+      "label": {
+        "good": "饱和脂肪较少",
+        "ok": "饱和脂肪适中",
+        "bad": "对您的目标而言饱和脂肪较多"
+      }
+    },
+    "personal.carbs": {
+      "label": {
+        "good": "碳水化合物密度低",
+        "ok": "碳水化合物适中",
+        "bad": "对您的饮食模式而言碳水化合物较多"
+      }
+    },
+    "personal.energy": {
+      "label": {
+        "good": "能量密度低",
+        "ok": "能量密度适中",
+        "bad": "能量密度高"
+      }
+    },
+    "personal.processing": {
+      "label": {
+        "good": "按您的要求，最低限度加工",
+        "ok": "中度加工",
+        "bad": "对您的目标而言加工程度较高"
+      },
+      "evidence": "将NOVA group {group}与您的“{goal}”目标进行比较。"
+    },
+    "personal.no_data": {
+      "label": "没有足够数据评估您的目标",
+      "evidence": "您所选目标需要的数值均不可用，因此评分仅反映产品的一般质量。"
+    }
+  },
+  "summary": {
+    "blocked": "该产品因您个人资料中的严格限制而被排除：{blocker}。此处质量是次要因素，无论其他数值如何，该限制都适用。",
+    "blockedFallback": "个人资料限制",
+    "personalUp": "您的目标（{goals}）使评分提高了{delta}",
+    "personalDown": "您的目标（{goals}）使评分降低了{delta}",
+    "personalFlat": "您的目标（{goals}）几乎没有改变评分",
+    "withSignals": "产品基础质量为10分中的{base}分，且{personal}。影响最大的因素是{strongest}。这衡量的是与您个人资料的匹配度，而不是普遍意义上的健康程度。",
+    "withoutSignals": "产品基础质量为10分中的{base}分，且{personal}。数据不足，无法进行更细的拆分。"
+  },
+  "dataNotice": {
+    "aiPhoto": "来源：AI视觉识别。营养信息是根据外观得出的近似估算；配料、过敏原和准确数值仍未知。评分置信度：{confidence}%。",
+    "estimatedText": "事实来源：{source}。缺失数值由AI根据名称和配料估算，并非从包装读取。评分置信度：{confidence}%。",
+    "declared": "来源：{source}。数据完整度：{completeness}%。评分置信度：{confidence}%。",
+    "sourcePackage": "包装上可见的文字"
+  },
+  "tip": {
+    "blocked": "购买前请始终检查包装：配方可能会变化，而数据库尚未更新。",
+    "highRiskAdditive": "如果想避开{code}，请寻找同类但配料表更短的产品。",
+    "ultraProcessed": "这是超加工食品。加工程度较低的同类产品通常会获得明显更高的基础评分。",
+    "default": "评分与您的个人资料（{diet}）相关。更改目标后，结果会重新计算。"
+  }
+}

@@ -1,0 +1,285 @@
+{
+  "_comment": "Translatable strings for product assessments. Copy en.json, translate values only, keep every {placeholder} intact.",
+  "decimalSeparator": ",",
+  "quotes": [
+    "“",
+    "”"
+  ],
+  "references": {
+    "100g": "100 g",
+    "100ml": "100 ml",
+    "serving": "een portie"
+  },
+  "nutrients": {
+    "sugars": {
+      "name": "suikers",
+      "unit": "g"
+    },
+    "saturated_fat": {
+      "name": "verzadigd vet",
+      "unit": "g"
+    },
+    "salt": {
+      "name": "zoutequivalent",
+      "unit": "g"
+    },
+    "fiber": {
+      "name": "vezels",
+      "unit": "g"
+    },
+    "protein": {
+      "name": "eiwit",
+      "unit": "g"
+    },
+    "carbs": {
+      "name": "koolhydraten",
+      "unit": "g"
+    },
+    "energy": {
+      "name": "energie",
+      "unit": "kcal"
+    }
+  },
+  "goals": {
+    "balanced": "evenwichtige voeding",
+    "weight_loss": "gewichtsbeheersing",
+    "muscle_gain": "spieropbouw",
+    "high_protein": "meer eiwit",
+    "low_sugar": "minder suiker",
+    "low_sodium": "minder zout",
+    "high_fiber": "meer vezels",
+    "minimally_processed": "minder verwerking",
+    "heart_health": "hartbewuste keuzes",
+    "steady_energy": "stabiele energie",
+    "digestive_wellness": "spijsverteringswelzijn",
+    "low_saturated_fat": "minder verzadigd vet"
+  },
+  "diets": {
+    "none": "geen specifiek dieet",
+    "vegetarian": "vegetarisch",
+    "vegan": "veganistisch",
+    "pescatarian": "pescotarisch",
+    "gluten_free": "glutenvrij",
+    "dairy_free": "zuivelvrij",
+    "low_carb": "koolhydraatarm",
+    "mediterranean": "mediterraan"
+  },
+  "allergens": {
+    "milk": "melk",
+    "eggs": "eieren",
+    "peanuts": "pinda’s",
+    "tree_nuts": "noten",
+    "soy": "soja",
+    "wheat": "tarwe",
+    "gluten": "gluten",
+    "fish": "vis",
+    "crustaceans": "schaaldieren",
+    "sesame": "sesam",
+    "celery": "selderij",
+    "mustard": "mosterd",
+    "sulphites": "sulfieten",
+    "lupin": "lupine",
+    "molluscs": "weekdieren"
+  },
+  "labels": {
+    "en:organic": "biologisch",
+    "en:eu-organic": "EU-biologisch",
+    "en:gluten-free": "glutenvrij",
+    "en:no-gluten": "glutenvrij",
+    "en:lactose-free": "lactosevrij",
+    "en:no-lactose": "lactosevrij",
+    "en:vegan": "veganistisch",
+    "en:vegetarian": "vegetarisch",
+    "en:sugar-free": "suikervrij",
+    "en:no-added-sugar": "zonder toegevoegde suikers",
+    "en:no-preservatives": "zonder conserveermiddelen",
+    "en:no-colorings": "zonder kleurstoffen",
+    "en:no-gmos": "GMO-vrij",
+    "en:fair-trade": "fairtrade",
+    "en:halal": "halal",
+    "en:kosher": "koosjer",
+    "en:palm-oil-free": "palmolievrij",
+    "en:high-protein": "eiwitrijk",
+    "en:whole-grain": "volkoren"
+  },
+  "additiveBasis": {
+    "eu_not_authorised": "niet langer toegestaan als levensmiddelenadditief in de EU",
+    "eu_child_attention_warning": "volgens EU-wetgeving is een waarschuwing verplicht dat het de activiteit en aandacht van kinderen kan beïnvloeden",
+    "iarc_2a": "door IARC gekoppeld aan een classificatie in group 2A voor ingenomen nitraat/nitriet onder omstandigheden die tot nitrosering leiden",
+    "iarc_2b": "door IARC ingedeeld in group 2B",
+    "efsa_group_adi": "valt onder een door EFSA vastgestelde aanvaardbare dagelijkse inname",
+    "efsa_adi_lowered": "valt onder een EFSA-innamegrens die naar beneden is bijgesteld",
+    "mandatory_allergen_labelling": "moet boven 10 mg/kg als allergeen worden vermeld",
+    "use_restricted": "alleen toegestaan voor beperkt gebruik",
+    "authorised_routine": "toegestaan en routinematig gebruikt"
+  },
+  "nova": {
+    "1": "Onbewerkt of minimaal bewerkt",
+    "2": "Bewerkt culinair ingrediënt",
+    "3": "Bewerkt voedingsmiddel",
+    "4": "Ultrabewerkt voedingsmiddel",
+    "unknown": "Mate van bewerking"
+  },
+  "estimatePrefix": "Geschatte AI-schatting. {text}",
+  "signals": {
+    "fallback": {
+      "label": "Aanvullende factor",
+      "evidence": "Deze factor heeft de score beïnvloed."
+    },
+    "blocker.allergen_declared": {
+      "label": "Vermeld allergeen",
+      "evidence": "De verpakkingsgegevens vermelden expliciet {allergen}, dat op je allergenenlijst staat."
+    },
+    "blocker.allergen_ingredient": {
+      "label": "Allergeen gevonden in ingrediënten",
+      "evidence": "“{match}” staat in de ingrediëntenlijst en komt overeen met je allergeen {allergen}."
+    },
+    "blocker.avoid_ingredient": {
+      "label": "Ingrediënt op je vermijdlijst",
+      "evidence": "“{ingredient}” staat in de ingrediëntenlijst."
+    },
+    "blocker.diet_conflict": {
+      "label": "Past niet bij je dieet",
+      "evidence": "De ingrediëntenanalyse markeert dit product als onverenigbaar met {diet} ({evidence})."
+    },
+    "warning.allergen_traces": {
+      "label": "Kan sporen bevatten",
+      "evidence": "De verpakking vermeldt mogelijke sporen van {allergen}. Dit is een waarschuwing van de fabrikant, geen ingrediënt."
+    },
+    "warning.diet_uncertain": {
+      "label": "Dieetstatus onduidelijk",
+      "evidence": "Van sommige ingrediënten kan niet worden bevestigd dat ze bij {diet} passen. Controleer de verpakking voordat je koopt."
+    },
+    "warning.allergen_data_missing": {
+      "label": "Allergeengegevens zijn onvolledig",
+      "evidence": "Voor dit product is geen allergenenverklaring beschikbaar, waardoor je allergenenlijst niet kon worden gecontroleerd. Een lege lijst bewijst nooit dat het product ervan vrij is."
+    },
+    "base.nutriscore": {
+      "label": "Nutri-Score {grade}",
+      "evidence": "Open Food Facts publiceert Nutri-Score {grade} voor dit product; die bepaalt de basale voedingskwaliteit voordat je doelen worden toegepast."
+    },
+    "base.nutrition_profile": {
+      "label": "Voedingsprofiel",
+      "evidence": "Er is geen Nutri-Score gepubliceerd, dus de basis wordt afgeleid van de vermelde waarden: {detail}."
+    },
+    "base.nutrition_unknown": {
+      "label": "Basiskwaliteit onbekend",
+      "evidence": "Er zijn onvoldoende voedingsgegevens om de basiskwaliteit te beoordelen, daarom start de score vanuit een neutraal middenpunt."
+    },
+    "base.nova": {
+      "label": "{novaLabel}",
+      "evidence": "Open Food Facts deelt dit product in bij NOVA-groep {group}."
+    },
+    "base.additive_high": {
+      "label": "Additief dat extra aandacht vraagt",
+      "evidence": "{names}: {basis}. IngreFit beoordeelt dit als iets dat veel aandacht vraagt, waardoor het product geen hoge basisscore kan behalen."
+    },
+    "base.additive_moderate": {
+      "label": "Additieven om rekening mee te houden",
+      "evidence": "{count} additief/additieven met een vastgestelde innamelimiet of classificatie: {names}."
+    },
+    "base.additives_clean": {
+      "label": "Geen gemarkeerde additieven",
+      "evidence": "De vermelde additievenlijst bevat niets dat IngreFit markeert voor extra aandacht."
+    },
+    "base.fruit_veg": {
+      "label": "Gehalte aan fruit, groente en noten",
+      "evidence": "Open Food Facts schat op basis van de ingrediëntenlijst {percent}% fruit, groente, peulvruchten en noten."
+    },
+    "base.palm_oil": {
+      "label": "Bevat palmolie",
+      "evidence": "De ingrediëntenanalyse detecteert palmolie, die de hoeveelheid verzadigd vet verhoogt en bekende zorgen over herkomst met zich meebrengt."
+    },
+    "base.organic": {
+      "label": "Biologisch gecertificeerd",
+      "evidence": "Het product heeft een officieel biologisch keurmerk. IngreFit registreert dit maar geeft het slechts een klein gewicht, omdat biologische status op zichzelf de voedingskwaliteit niet verbetert."
+    },
+    "base.alcohol": {
+      "label": "Bevat alcohol",
+      "evidence": "Het product vermeldt {percent}% alcohol per volume."
+    },
+    "personal.nutrientEvidence": "{nutrient}: {value} {unit} per {reference}, afgewogen tegen je doel “{goal}”.",
+    "personal.protein": {
+      "label": {
+        "good": "Hoge eiwitdichtheid",
+        "ok": "Enig eiwit",
+        "bad": "Weinig eiwit voor je doel"
+      }
+    },
+    "personal.sugars": {
+      "label": {
+        "good": "Weinig suiker voor je doel",
+        "ok": "Matige hoeveelheid suiker",
+        "bad": "Veel suiker voor je doel"
+      }
+    },
+    "personal.fiber": {
+      "label": {
+        "good": "Goede vezeldichtheid",
+        "ok": "Enige vezels",
+        "bad": "Weinig vezels voor je doel"
+      }
+    },
+    "personal.salt": {
+      "label": {
+        "good": "Weinig zout voor je doel",
+        "ok": "Matige hoeveelheid zout",
+        "bad": "Veel zout voor je doel"
+      }
+    },
+    "personal.saturated_fat": {
+      "label": {
+        "good": "Weinig verzadigd vet",
+        "ok": "Matige hoeveelheid verzadigd vet",
+        "bad": "Veel verzadigd vet voor je doel"
+      }
+    },
+    "personal.carbs": {
+      "label": {
+        "good": "Lage koolhydraatdichtheid",
+        "ok": "Matige hoeveelheid koolhydraten",
+        "bad": "Veel koolhydraten voor je voedingspatroon"
+      }
+    },
+    "personal.energy": {
+      "label": {
+        "good": "Lage energiedichtheid",
+        "ok": "Matige energiedichtheid",
+        "bad": "Hoge energiedichtheid"
+      }
+    },
+    "personal.processing": {
+      "label": {
+        "good": "Minimaal bewerkt, zoals je vroeg",
+        "ok": "Matig bewerkt",
+        "bad": "Sterk bewerkt voor je doel"
+      },
+      "evidence": "NOVA-groep {group} wordt afgewogen tegen je doel “{goal}”."
+    },
+    "personal.no_data": {
+      "label": "Niet genoeg gegevens voor je doelen",
+      "evidence": "Geen van de waarden die nodig zijn voor je geselecteerde doelen is beschikbaar, dus de score weerspiegelt alleen de algemene productkwaliteit."
+    }
+  },
+  "summary": {
+    "blocked": "Dit product valt af door een harde beperking in je profiel: {blocker}. Kwaliteit is hier ondergeschikt; de beperking blijft gelden ongeacht de andere waarden.",
+    "blockedFallback": "profielbeperking",
+    "personalUp": "je doelen ({goals}) verhoogden de score met {delta}",
+    "personalDown": "je doelen ({goals}) verlaagden de score met {delta}",
+    "personalFlat": "je doelen ({goals}) veranderden de score nauwelijks",
+    "withSignals": "De basiskwaliteit van het product is {base} van 10, en {personal}. De sterkste invloeden waren {strongest}. Dit meet hoe goed het bij je profiel past, niet een universele gezondheidswaarde.",
+    "withoutSignals": "De basiskwaliteit van het product is {base} van 10, en {personal}. Er zijn onvoldoende gegevens voor een fijnere uitsplitsing."
+  },
+  "dataNotice": {
+    "aiPhoto": "Bron: visuele identificatie door AI. De voedingswaarden zijn een globale schatting op basis van het uiterlijk; ingrediënten, allergenen en exacte waarden blijven onbekend. Betrouwbaarheid van de score: {confidence}%.",
+    "estimatedText": "Feitenbron: {source}. Ontbrekende waarden zijn door AI geschat op basis van naam en ingrediënten en niet van de verpakking gelezen. Betrouwbaarheid van de score: {confidence}%.",
+    "declared": "Bron: {source}. Gegevensvolledigheid: {completeness}%. Betrouwbaarheid van de score: {confidence}%.",
+    "sourcePackage": "zichtbare tekst op de verpakking"
+  },
+  "tip": {
+    "blocked": "Controleer altijd de verpakking voordat je koopt: recepten kunnen veranderen zonder dat de database wordt bijgewerkt.",
+    "highRiskAdditive": "Om {code} te vermijden, zoek je hetzelfde soort product met een kortere ingrediëntenlijst.",
+    "ultraProcessed": "Dit is een ultrabewerkt product. Een minder bewerkt equivalent scoort doorgaans merkbaar hoger op de basisbeoordeling.",
+    "default": "De score is gekoppeld aan je profiel ({diet}). Wijzig je doelen en het resultaat wordt opnieuw berekend."
+  }
+}

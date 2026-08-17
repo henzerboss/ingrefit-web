@@ -1,0 +1,285 @@
+{
+  "_comment": "Translatable strings for product assessments. Copy en.json, translate values only, keep every {placeholder} intact.",
+  "decimalSeparator": ",",
+  "quotes": [
+    "„",
+    "”"
+  ],
+  "references": {
+    "100g": "100 g",
+    "100ml": "100 ml",
+    "serving": "egy adag"
+  },
+  "nutrients": {
+    "sugars": {
+      "name": "cukrok",
+      "unit": "g"
+    },
+    "saturated_fat": {
+      "name": "telített zsír",
+      "unit": "g"
+    },
+    "salt": {
+      "name": "sóegyenérték",
+      "unit": "g"
+    },
+    "fiber": {
+      "name": "rost",
+      "unit": "g"
+    },
+    "protein": {
+      "name": "fehérje",
+      "unit": "g"
+    },
+    "carbs": {
+      "name": "szénhidrát",
+      "unit": "g"
+    },
+    "energy": {
+      "name": "energia",
+      "unit": "kcal"
+    }
+  },
+  "goals": {
+    "balanced": "kiegyensúlyozott étkezés",
+    "weight_loss": "testsúlykezelés",
+    "muscle_gain": "izomtömeg-növelés",
+    "high_protein": "több fehérje",
+    "low_sugar": "kevesebb cukor",
+    "low_sodium": "kevesebb só",
+    "high_fiber": "több rost",
+    "minimally_processed": "kevesebb feldolgozás",
+    "heart_health": "szívtudatos választások",
+    "steady_energy": "egyenletes energia",
+    "digestive_wellness": "emésztési jóllét",
+    "low_saturated_fat": "kevesebb telített zsír"
+  },
+  "diets": {
+    "none": "nincs meghatározott étrend",
+    "vegetarian": "vegetáriánus",
+    "vegan": "vegán",
+    "pescatarian": "peszkatáriánus",
+    "gluten_free": "gluténmentes",
+    "dairy_free": "tejmentes",
+    "low_carb": "alacsony szénhidráttartalmú",
+    "mediterranean": "mediterrán"
+  },
+  "allergens": {
+    "milk": "tej",
+    "eggs": "tojás",
+    "peanuts": "földimogyoró",
+    "tree_nuts": "diófélék",
+    "soy": "szója",
+    "wheat": "búza",
+    "gluten": "glutén",
+    "fish": "hal",
+    "crustaceans": "rákfélék",
+    "sesame": "szezám",
+    "celery": "zeller",
+    "mustard": "mustár",
+    "sulphites": "szulfitok",
+    "lupin": "csillagfürt",
+    "molluscs": "puhatestűek"
+  },
+  "labels": {
+    "en:organic": "bio",
+    "en:eu-organic": "EU-bio",
+    "en:gluten-free": "gluténmentes",
+    "en:no-gluten": "gluténmentes",
+    "en:lactose-free": "laktózmentes",
+    "en:no-lactose": "laktózmentes",
+    "en:vegan": "vegán",
+    "en:vegetarian": "vegetáriánus",
+    "en:sugar-free": "cukormentes",
+    "en:no-added-sugar": "hozzáadott cukor nélkül",
+    "en:no-preservatives": "tartósítószer nélkül",
+    "en:no-colorings": "színezék nélkül",
+    "en:no-gmos": "GMO-mentes",
+    "en:fair-trade": "méltányos kereskedelem",
+    "en:halal": "halal",
+    "en:kosher": "kóser",
+    "en:palm-oil-free": "pálmaolajmentes",
+    "en:high-protein": "magas fehérjetartalmú",
+    "en:whole-grain": "teljes kiőrlésű"
+  },
+  "additiveBasis": {
+    "eu_not_authorised": "az EU-ban már nem engedélyezett élelmiszer-adalékanyagként",
+    "eu_child_attention_warning": "az EU-jog figyelmeztetést ír elő arról, hogy befolyásolhatja a gyermekek aktivitását és figyelmét",
+    "iarc_2a": "az IARC a group 2A besoroláshoz kapcsolja a bevitt nitrátot/nitritet nitrozációhoz vezető körülmények között",
+    "iarc_2b": "az IARC group 2B kategóriába sorolja",
+    "efsa_group_adi": "az EFSA által meghatározott elfogadható napi bevitel vonatkozik rá",
+    "efsa_adi_lowered": "az EFSA olyan beviteli határértéke vonatkozik rá, amelyet lefelé módosítottak",
+    "mandatory_allergen_labelling": "10 mg/kg felett allergénként kell feltüntetni",
+    "use_restricted": "csak korlátozott felhasználásra engedélyezett",
+    "authorised_routine": "engedélyezett és rutinszerűen használt"
+  },
+  "nova": {
+    "1": "Feldolgozatlan vagy minimálisan feldolgozott",
+    "2": "Feldolgozott konyhai alapanyag",
+    "3": "Feldolgozott élelmiszer",
+    "4": "Ultrafeldolgozott élelmiszer",
+    "unknown": "Feldolgozottsági szint"
+  },
+  "estimatePrefix": "Hozzávetőleges AI-becslés. {text}",
+  "signals": {
+    "fallback": {
+      "label": "További tényező",
+      "evidence": "Ez a tényező befolyásolta a pontszámot."
+    },
+    "blocker.allergen_declared": {
+      "label": "Feltüntetett allergén",
+      "evidence": "A csomagolási adatok kifejezetten feltüntetik a(z) {allergen} allergént, amely szerepel az allergénlistáján."
+    },
+    "blocker.allergen_ingredient": {
+      "label": "Allergén az összetevők között",
+      "evidence": "A(z) „{match}” szerepel az összetevők listáján, és megfelel a(z) {allergen} allergénjének."
+    },
+    "blocker.avoid_ingredient": {
+      "label": "Kerülendő összetevő",
+      "evidence": "A(z) „{ingredient}” szerepel az összetevők listáján."
+    },
+    "blocker.diet_conflict": {
+      "label": "Nem illik az étrendjéhez",
+      "evidence": "Az összetevőelemzés ezt a terméket a(z) {diet} étrenddel összeegyeztethetetlennek jelöli ({evidence})."
+    },
+    "warning.allergen_traces": {
+      "label": "Nyomokban tartalmazhat",
+      "evidence": "A csomagolás lehetséges {allergen} nyomokat jelez. Ez gyártói figyelmeztetés, nem összetevő."
+    },
+    "warning.diet_uncertain": {
+      "label": "Az étrendi megfelelés nem egyértelmű",
+      "evidence": "Egyes összetevőkről nem igazolható, hogy megfelelnek a(z) {diet} étrendnek. Vásárlás előtt ellenőrizze a csomagolást."
+    },
+    "warning.allergen_data_missing": {
+      "label": "Az allergénadatok hiányosak",
+      "evidence": "Ehhez a termékhez nem érhető el allergénnyilatkozat, ezért az allergénlistáját nem lehetett ellenőrizni. Az üres lista soha nem bizonyítja, hogy a termék mentes az allergéntől."
+    },
+    "base.nutriscore": {
+      "label": "Nutri-Score {grade}",
+      "evidence": "Az Open Food Facts Nutri-Score {grade} besorolást közöl ehhez a termékhez; ez határozza meg az alapvető táplálkozási minőséget a céljai alkalmazása előtt."
+    },
+    "base.nutrition_profile": {
+      "label": "Táplálkozási profil",
+      "evidence": "Nincs közzétett Nutri-Score, ezért az alapértékelés a feltüntetett értékekből származik: {detail}."
+    },
+    "base.nutrition_unknown": {
+      "label": "Az alapminőség ismeretlen",
+      "evidence": "Nincs elegendő tápértékadat az alapminőség megítéléséhez, ezért a pontszám semleges középértékről indul."
+    },
+    "base.nova": {
+      "label": "{novaLabel}",
+      "evidence": "Az Open Food Facts ezt a terméket a NOVA group {group} csoportba sorolja."
+    },
+    "base.additive_high": {
+      "label": "Figyelmet igénylő adalékanyag",
+      "evidence": "{names}: {basis}. Az IngreFit ezt fokozott figyelmet igénylő tényezőnek értékeli, ezért a termék nem érhet el magas alappontszámot."
+    },
+    "base.additive_moderate": {
+      "label": "Adalékanyagok, amelyeket érdemes figyelembe venni",
+      "evidence": "{count} adalékanyag meghatározott beviteli határértékkel vagy besorolással: {names}."
+    },
+    "base.additives_clean": {
+      "label": "Nincs megjelölt adalékanyag",
+      "evidence": "A feltüntetett adalékanyag-lista nem tartalmaz olyat, amelyet az IngreFit külön figyelemre jelölne."
+    },
+    "base.fruit_veg": {
+      "label": "Gyümölcs-, zöldség- és diótartalom",
+      "evidence": "Az Open Food Facts az összetevők listája alapján {percent}% gyümölcs-, zöldség-, hüvelyes- és diótartalmat becsül."
+    },
+    "base.palm_oil": {
+      "label": "Pálmaolajat tartalmaz",
+      "evidence": "Az összetevőelemzés pálmaolajat észlel, amely növeli a telítettzsír-terhelést, és ismert beszerzési aggályok kapcsolódnak hozzá."
+    },
+    "base.organic": {
+      "label": "Tanúsított bio",
+      "evidence": "A termék hivatalos bio címkével rendelkezik. Az IngreFit ezt rögzíti, de csak kis súllyal veszi figyelembe, mert a bio státusz önmagában nem javítja a táplálkozási minőséget."
+    },
+    "base.alcohol": {
+      "label": "Alkoholt tartalmaz",
+      "evidence": "A termék {percent}% alkoholtartalmat tüntet fel térfogatszázalékban."
+    },
+    "personal.nutrientEvidence": "{nutrient}: {value} {unit} / {reference}, a(z) „{goal}” céljához viszonyítva.",
+    "personal.protein": {
+      "label": {
+        "good": "Magas fehérjesűrűség",
+        "ok": "Némi fehérje",
+        "bad": "Kevés fehérje a céljához"
+      }
+    },
+    "personal.sugars": {
+      "label": {
+        "good": "Kevés cukor a céljához",
+        "ok": "Mérsékelt cukormennyiség",
+        "bad": "Sok cukor a céljához"
+      }
+    },
+    "personal.fiber": {
+      "label": {
+        "good": "Jó rostsűrűség",
+        "ok": "Némi rost",
+        "bad": "Kevés rost a céljához"
+      }
+    },
+    "personal.salt": {
+      "label": {
+        "good": "Kevés só a céljához",
+        "ok": "Mérsékelt sómennyiség",
+        "bad": "Sok só a céljához"
+      }
+    },
+    "personal.saturated_fat": {
+      "label": {
+        "good": "Kevés telített zsír",
+        "ok": "Mérsékelt telítettzsír-mennyiség",
+        "bad": "Sok telített zsír a céljához"
+      }
+    },
+    "personal.carbs": {
+      "label": {
+        "good": "Alacsony szénhidrátsűrűség",
+        "ok": "Mérsékelt szénhidrátmennyiség",
+        "bad": "Sok szénhidrát az étkezési mintájához"
+      }
+    },
+    "personal.energy": {
+      "label": {
+        "good": "Alacsony energiasűrűség",
+        "ok": "Mérsékelt energiasűrűség",
+        "bad": "Magas energiasűrűség"
+      }
+    },
+    "personal.processing": {
+      "label": {
+        "good": "Minimálisan feldolgozott, ahogy kérte",
+        "ok": "Mérsékelten feldolgozott",
+        "bad": "Erősen feldolgozott a céljához"
+      },
+      "evidence": "A NOVA group {group} a(z) „{goal}” céljához van viszonyítva."
+    },
+    "personal.no_data": {
+      "label": "Nincs elég adat a céljaihoz",
+      "evidence": "A kiválasztott céljaihoz szükséges értékek egyike sem érhető el, ezért a pontszám csak a termék általános minőségét tükrözi."
+    }
+  },
+  "summary": {
+    "blocked": "Ezt a terméket a profiljában szereplő szigorú korlátozás kizárja: {blocker}. A minőség itt másodlagos; a korlátozás a többi értéktől függetlenül érvényes.",
+    "blockedFallback": "profilkorlátozás",
+    "personalUp": "a céljai ({goals}) {delta} értékkel növelték a pontszámot",
+    "personalDown": "a céljai ({goals}) {delta} értékkel csökkentették a pontszámot",
+    "personalFlat": "a céljai ({goals}) alig változtatták a pontszámot",
+    "withSignals": "A termék alapminősége {base}/10, és {personal}. A legerősebb hatások: {strongest}. Ez a profiljához való illeszkedést méri, nem egyetemes egészségességet.",
+    "withoutSignals": "A termék alapminősége {base}/10, és {personal}. Finomabb bontáshoz nincs elegendő adat."
+  },
+  "dataNotice": {
+    "aiPhoto": "Forrás: vizuális azonosítás AI segítségével. A tápérték a megjelenés alapján készült hozzávetőleges becslés; az összetevők, allergének és pontos értékek továbbra is ismeretlenek. A pontszám megbízhatósága: {confidence}%.",
+    "estimatedText": "Tényforrás: {source}. A hiányzó értékeket az AI a név és az összetevők alapján becsülte, nem a csomagolásról olvasta le. A pontszám megbízhatósága: {confidence}%.",
+    "declared": "Forrás: {source}. Adatteljeskörűség: {completeness}%. A pontszám megbízhatósága: {confidence}%.",
+    "sourcePackage": "a csomagoláson látható szöveg"
+  },
+  "tip": {
+    "blocked": "Vásárlás előtt mindig ellenőrizze a csomagolást: a receptúra az adatbázis frissítése nélkül is változhat.",
+    "highRiskAdditive": "A(z) {code} elkerüléséhez keressen ugyanilyen típusú terméket rövidebb összetevőlistával.",
+    "ultraProcessed": "Ez ultrafeldolgozott termék. Egy kevésbé feldolgozott megfelelő általában észrevehetően magasabb alappontszámot kap.",
+    "default": "A pontszám a profiljához ({diet}) kötődik. Módosítsa a céljait, és az eredmény újraszámításra kerül."
+  }
+}

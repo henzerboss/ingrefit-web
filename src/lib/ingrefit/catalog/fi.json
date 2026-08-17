@@ -1,0 +1,285 @@
+{
+  "_comment": "Translatable strings for product assessments. Copy en.json, translate values only, keep every {placeholder} intact.",
+  "decimalSeparator": ",",
+  "quotes": [
+    "”",
+    "”"
+  ],
+  "references": {
+    "100g": "100 g",
+    "100ml": "100 ml",
+    "serving": "annos"
+  },
+  "nutrients": {
+    "sugars": {
+      "name": "sokerit",
+      "unit": "g"
+    },
+    "saturated_fat": {
+      "name": "tyydyttynyt rasva",
+      "unit": "g"
+    },
+    "salt": {
+      "name": "suolavastaavuus",
+      "unit": "g"
+    },
+    "fiber": {
+      "name": "kuitu",
+      "unit": "g"
+    },
+    "protein": {
+      "name": "proteiini",
+      "unit": "g"
+    },
+    "carbs": {
+      "name": "hiilihydraatit",
+      "unit": "g"
+    },
+    "energy": {
+      "name": "energia",
+      "unit": "kcal"
+    }
+  },
+  "goals": {
+    "balanced": "tasapainoinen syöminen",
+    "weight_loss": "painonhallinta",
+    "muscle_gain": "lihaskasvu",
+    "high_protein": "enemmän proteiinia",
+    "low_sugar": "vähemmän sokeria",
+    "low_sodium": "vähemmän suolaa",
+    "high_fiber": "enemmän kuitua",
+    "minimally_processed": "vähemmän prosessointia",
+    "heart_health": "sydäntietoiset valinnat",
+    "steady_energy": "tasainen energia",
+    "digestive_wellness": "ruoansulatuksen hyvinvointi",
+    "low_saturated_fat": "vähemmän tyydyttynyttä rasvaa"
+  },
+  "diets": {
+    "none": "ei erityistä ruokavaliota",
+    "vegetarian": "kasvisruokavalio",
+    "vegan": "vegaaninen",
+    "pescatarian": "pescovegetaarinen",
+    "gluten_free": "gluteeniton",
+    "dairy_free": "maidoton",
+    "low_carb": "vähähiilihydraattinen",
+    "mediterranean": "välimerellinen"
+  },
+  "allergens": {
+    "milk": "maito",
+    "eggs": "munat",
+    "peanuts": "maapähkinät",
+    "tree_nuts": "pähkinät",
+    "soy": "soija",
+    "wheat": "vehnä",
+    "gluten": "gluteeni",
+    "fish": "kala",
+    "crustaceans": "äyriäiset",
+    "sesame": "seesami",
+    "celery": "selleri",
+    "mustard": "sinappi",
+    "sulphites": "sulfiitit",
+    "lupin": "lupiini",
+    "molluscs": "nilviäiset"
+  },
+  "labels": {
+    "en:organic": "luomu",
+    "en:eu-organic": "EU-luomu",
+    "en:gluten-free": "gluteeniton",
+    "en:no-gluten": "gluteeniton",
+    "en:lactose-free": "laktoositon",
+    "en:no-lactose": "laktoositon",
+    "en:vegan": "vegaaninen",
+    "en:vegetarian": "kasvis",
+    "en:sugar-free": "sokeriton",
+    "en:no-added-sugar": "ei lisättyä sokeria",
+    "en:no-preservatives": "ei säilöntäaineita",
+    "en:no-colorings": "ei väriaineita",
+    "en:no-gmos": "GMO-vapaa",
+    "en:fair-trade": "reilu kauppa",
+    "en:halal": "halal",
+    "en:kosher": "kosher",
+    "en:palm-oil-free": "ei palmuöljyä",
+    "en:high-protein": "runsasproteiininen",
+    "en:whole-grain": "täysjyvä"
+  },
+  "additiveBasis": {
+    "eu_not_authorised": "ei enää hyväksytty elintarvikelisäaineeksi EU:ssa",
+    "eu_child_attention_warning": "EU-lainsäädäntö edellyttää varoitusta siitä, että se voi vaikuttaa lasten aktiivisuuteen ja tarkkaavaisuuteen",
+    "iarc_2a": "IARC on yhdistänyt sen group 2A luokitukseen nautitun nitraatin/nitriitin osalta olosuhteissa, jotka johtavat nitrosaatioon",
+    "iarc_2b": "IARC on luokitellut group 2B",
+    "efsa_group_adi": "kuuluu EFSA:n hyväksyttävän päivittäisen saannin piiriin",
+    "efsa_adi_lowered": "siihen sovelletaan EFSA:n saantirajaa, jota on tarkistettu alaspäin",
+    "mandatory_allergen_labelling": "on ilmoitettava allergeenina yli 10 mg/kg pitoisuuksissa",
+    "use_restricted": "hyväksytty vain rajoitettuihin käyttötarkoituksiin",
+    "authorised_routine": "hyväksytty ja rutiininomaisesti käytetty"
+  },
+  "nova": {
+    "1": "Käsittelemätön tai vähän käsitelty",
+    "2": "Käsitelty ruoanvalmistuksen ainesosa",
+    "3": "Käsitelty elintarvike",
+    "4": "Ultraprosessoitu elintarvike",
+    "unknown": "Käsittelyaste"
+  },
+  "estimatePrefix": "Likimääräinen AI-arvio. {text}",
+  "signals": {
+    "fallback": {
+      "label": "Lisätekijä",
+      "evidence": "Tämä tekijä vaikutti pisteisiin."
+    },
+    "blocker.allergen_declared": {
+      "label": "Ilmoitettu allergeeni",
+      "evidence": "Pakkaustiedoissa ilmoitetaan nimenomaisesti {allergen}, joka on allergeenilistallasi."
+    },
+    "blocker.allergen_ingredient": {
+      "label": "Ainesosista löytynyt allergeeni",
+      "evidence": "”{match}” esiintyy ainesosaluettelossa ja vastaa allergeeniasi {allergen}."
+    },
+    "blocker.avoid_ingredient": {
+      "label": "Vältettävien listasi ainesosa",
+      "evidence": "”{ingredient}” esiintyy ainesosaluettelossa."
+    },
+    "blocker.diet_conflict": {
+      "label": "Ristiriidassa ruokavaliosi kanssa",
+      "evidence": "Ainesosa-analyysi merkitsee tämän tuotteen yhteensopimattomaksi ruokavalion {diet} kanssa ({evidence})."
+    },
+    "warning.allergen_traces": {
+      "label": "Saattaa sisältää jäämiä",
+      "evidence": "Pakkauksessa ilmoitetaan mahdollisista {allergen}-jäämistä. Tämä on valmistajan varoitus, ei ainesosa."
+    },
+    "warning.diet_uncertain": {
+      "label": "Ruokavaliosopivuus epäselvä",
+      "evidence": "Joidenkin ainesosien sopivuutta ruokavalioon {diet} ei voida vahvistaa. Tarkista pakkaus ennen ostamista."
+    },
+    "warning.allergen_data_missing": {
+      "label": "Allergeenitiedot ovat puutteelliset",
+      "evidence": "Tälle tuotteelle ei ole saatavilla allergeenimerkintää, joten allergeenilistaasi ei voitu tarkistaa. Tyhjä lista ei koskaan todista, että tuote olisi vapaa allergeenista."
+    },
+    "base.nutriscore": {
+      "label": "Nutri-Score {grade}",
+      "evidence": "Open Food Facts julkaisee tälle tuotteelle Nutri-Score-arvosanan {grade}; se määrittää ravitsemuksellisen peruslaadun ennen tavoitteidesi huomioimista."
+    },
+    "base.nutrition_profile": {
+      "label": "Ravintoprofiili",
+      "evidence": "Nutri-Scorea ei ole julkaistu, joten perusarvio johdetaan ilmoitetuista arvoista: {detail}."
+    },
+    "base.nutrition_unknown": {
+      "label": "Peruslaatu tuntematon",
+      "evidence": "Ravintotietoja ei ole riittävästi peruslaadun arvioimiseen, joten pisteytys alkaa neutraalista keskikohdasta."
+    },
+    "base.nova": {
+      "label": "{novaLabel}",
+      "evidence": "Open Food Facts luokittelee tämän tuotteen NOVA-ryhmään {group}."
+    },
+    "base.additive_high": {
+      "label": "Huomiota vaativa lisäaine",
+      "evidence": "{names}: {basis}. IngreFit arvioi tämän korkeaa huomiota vaativaksi, joten tuote ei voi saavuttaa korkeaa peruspistemäärää."
+    },
+    "base.additive_moderate": {
+      "label": "Huomioitavat lisäaineet",
+      "evidence": "{count} lisäainetta, joilla on määritelty saantiraja tai luokitus: {names}."
+    },
+    "base.additives_clean": {
+      "label": "Ei merkittyjä lisäaineita",
+      "evidence": "Ilmoitettu lisäaineluettelo ei sisällä mitään, minkä IngreFit merkitsisi lisähuomiota vaativaksi."
+    },
+    "base.fruit_veg": {
+      "label": "Hedelmien, vihannesten ja pähkinöiden osuus",
+      "evidence": "Open Food Facts arvioi ainesosaluettelon perusteella hedelmien, vihannesten, palkokasvien ja pähkinöiden osuudeksi {percent}%."
+    },
+    "base.palm_oil": {
+      "label": "Sisältää palmuöljyä",
+      "evidence": "Ainesosa-analyysi havaitsee palmuöljyä, joka lisää tyydyttyneen rasvan määrää ja johon liittyy tunnettuja alkuperään liittyviä huolia."
+    },
+    "base.organic": {
+      "label": "Sertifioitu luomu",
+      "evidence": "Tuotteella on virallinen luomumerkintä. IngreFit kirjaa sen, mutta antaa sille vain pienen painon, koska luomustatus ei yksin paranna ravitsemuksellista laatua."
+    },
+    "base.alcohol": {
+      "label": "Sisältää alkoholia",
+      "evidence": "Tuote ilmoittaa alkoholipitoisuudeksi {percent}% tilavuudesta."
+    },
+    "personal.nutrientEvidence": "{nutrient}: {value} {unit} per {reference}, verrattuna tavoitteeseesi ”{goal}”.",
+    "personal.protein": {
+      "label": {
+        "good": "Korkea proteiinitiheys",
+        "ok": "Jonkin verran proteiinia",
+        "bad": "Vähän proteiinia tavoitteeseesi nähden"
+      }
+    },
+    "personal.sugars": {
+      "label": {
+        "good": "Vähän sokeria tavoitteeseesi nähden",
+        "ok": "Kohtalaisesti sokeria",
+        "bad": "Paljon sokeria tavoitteeseesi nähden"
+      }
+    },
+    "personal.fiber": {
+      "label": {
+        "good": "Hyvä kuitutiheys",
+        "ok": "Jonkin verran kuitua",
+        "bad": "Vähän kuitua tavoitteeseesi nähden"
+      }
+    },
+    "personal.salt": {
+      "label": {
+        "good": "Vähän suolaa tavoitteeseesi nähden",
+        "ok": "Kohtalaisesti suolaa",
+        "bad": "Paljon suolaa tavoitteeseesi nähden"
+      }
+    },
+    "personal.saturated_fat": {
+      "label": {
+        "good": "Vähän tyydyttynyttä rasvaa",
+        "ok": "Kohtalaisesti tyydyttynyttä rasvaa",
+        "bad": "Paljon tyydyttynyttä rasvaa tavoitteeseesi nähden"
+      }
+    },
+    "personal.carbs": {
+      "label": {
+        "good": "Matala hiilihydraattitiheys",
+        "ok": "Kohtalaisesti hiilihydraatteja",
+        "bad": "Paljon hiilihydraatteja ruokailumalliisi nähden"
+      }
+    },
+    "personal.energy": {
+      "label": {
+        "good": "Matala energiatiheys",
+        "ok": "Kohtalainen energiatiheys",
+        "bad": "Korkea energiatiheys"
+      }
+    },
+    "personal.processing": {
+      "label": {
+        "good": "Vähän käsitelty, kuten pyysit",
+        "ok": "Kohtalaisesti käsitelty",
+        "bad": "Voimakkaasti käsitelty tavoitteeseesi nähden"
+      },
+      "evidence": "NOVA-ryhmää {group} verrataan tavoitteeseesi ”{goal}”."
+    },
+    "personal.no_data": {
+      "label": "Ei riittävästi tietoja tavoitteisiisi",
+      "evidence": "Yhtäkään valitsemiesi tavoitteiden edellyttämistä arvoista ei ole saatavilla, joten pisteet kuvaavat vain tuotteen yleistä laatua."
+    }
+  },
+  "summary": {
+    "blocked": "Tämä tuote suljetaan pois profiilisi tiukan rajoituksen vuoksi: {blocker}. Laatu on tässä toissijaista; rajoitus pätee muista arvoista riippumatta.",
+    "blockedFallback": "profiilin rajoitus",
+    "personalUp": "tavoitteesi ({goals}) nostivat pisteitä {delta}",
+    "personalDown": "tavoitteesi ({goals}) laskivat pisteitä {delta}",
+    "personalFlat": "tavoitteesi ({goals}) muuttivat pisteitä vain vähän",
+    "withSignals": "Tuotteen peruslaatu on {base}/10, ja {personal}. Voimakkaimmat vaikutukset olivat {strongest}. Tämä mittaa sopivuutta profiiliisi, ei yleispätevää terveellisyyttä.",
+    "withoutSignals": "Tuotteen peruslaatu on {base}/10, ja {personal}. Tarkempaan erittelyyn ei ole riittävästi tietoja."
+  },
+  "dataNotice": {
+    "aiPhoto": "Lähde: AI:n visuaalinen tunnistus. Ravintoarvot ovat likimääräinen arvio ulkonäön perusteella; ainesosat, allergeenit ja tarkat arvot ovat edelleen tuntemattomia. Pisteiden luottamus: {confidence}%.",
+    "estimatedText": "Tietolähde: {source}. Puuttuvat arvot arvioitiin AI:lla nimen ja ainesosien perusteella, eikä niitä luettu pakkauksesta. Pisteiden luottamus: {confidence}%.",
+    "declared": "Lähde: {source}. Tietojen kattavuus: {completeness}%. Pisteiden luottamus: {confidence}%.",
+    "sourcePackage": "pakkauksen näkyvä teksti"
+  },
+  "tip": {
+    "blocked": "Tarkista pakkaus aina ennen ostamista: reseptit voivat muuttua ilman, että tietokanta päivittyy.",
+    "highRiskAdditive": "Jos haluat välttää {code}, etsi samanlainen tuote, jonka ainesosaluettelo on lyhyempi.",
+    "ultraProcessed": "Tämä on ultraprosessoitu tuote. Vähemmän käsitelty vastaava tuote saa yleensä selvästi korkeamman peruspistemäärän.",
+    "default": "Pisteet on sidottu profiiliisi ({diet}). Muuta tavoitteitasi, niin tulos lasketaan uudelleen."
+  }
+}

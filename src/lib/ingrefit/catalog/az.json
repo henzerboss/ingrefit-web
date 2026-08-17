@@ -1,0 +1,285 @@
+{
+  "_comment": "Translatable strings for product assessments. Copy en.json, translate values only, keep every {placeholder} intact.",
+  "decimalSeparator": ",",
+  "quotes": [
+    "«",
+    "»"
+  ],
+  "references": {
+    "100g": "100 q",
+    "100ml": "100 ml",
+    "serving": "bir porsiya"
+  },
+  "nutrients": {
+    "sugars": {
+      "name": "şəkərlər",
+      "unit": "q"
+    },
+    "saturated_fat": {
+      "name": "doymuş yağ",
+      "unit": "q"
+    },
+    "salt": {
+      "name": "duz ekvivalenti",
+      "unit": "q"
+    },
+    "fiber": {
+      "name": "lif",
+      "unit": "q"
+    },
+    "protein": {
+      "name": "zülal",
+      "unit": "q"
+    },
+    "carbs": {
+      "name": "karbohidratlar",
+      "unit": "q"
+    },
+    "energy": {
+      "name": "enerji",
+      "unit": "kkal"
+    }
+  },
+  "goals": {
+    "balanced": "balanslı qidalanma",
+    "weight_loss": "çəkinin idarə edilməsi",
+    "muscle_gain": "əzələ artımı",
+    "high_protein": "daha çox zülal",
+    "low_sugar": "daha az şəkər",
+    "low_sodium": "daha az duz",
+    "high_fiber": "daha çox lif",
+    "minimally_processed": "daha az emal",
+    "heart_health": "ürəyi nəzərə alan seçimlər",
+    "steady_energy": "sabit enerji",
+    "digestive_wellness": "həzm rahatlığı",
+    "low_saturated_fat": "daha az doymuş yağ"
+  },
+  "diets": {
+    "none": "xüsusi pəhriz yoxdur",
+    "vegetarian": "vegetarian",
+    "vegan": "veqan",
+    "pescatarian": "pesketarian",
+    "gluten_free": "qlütensiz",
+    "dairy_free": "süd məhsulsuz",
+    "low_carb": "az karbohidratlı",
+    "mediterranean": "Aralıq dənizi"
+  },
+  "allergens": {
+    "milk": "süd",
+    "eggs": "yumurta",
+    "peanuts": "yerfındığı",
+    "tree_nuts": "çərəzlər",
+    "soy": "soya",
+    "wheat": "buğda",
+    "gluten": "qlüten",
+    "fish": "balıq",
+    "crustaceans": "xərçəngkimilər",
+    "sesame": "küncüt",
+    "celery": "kərəviz",
+    "mustard": "xardal",
+    "sulphites": "sulfitlər",
+    "lupin": "lüpin",
+    "molluscs": "molyusklar"
+  },
+  "labels": {
+    "en:organic": "orqanik",
+    "en:eu-organic": "EU orqanik",
+    "en:gluten-free": "qlütensiz",
+    "en:no-gluten": "qlütensiz",
+    "en:lactose-free": "laktozasız",
+    "en:no-lactose": "laktozasız",
+    "en:vegan": "veqan",
+    "en:vegetarian": "vegetarian",
+    "en:sugar-free": "şəkərsiz",
+    "en:no-added-sugar": "əlavə şəkərsiz",
+    "en:no-preservatives": "konservantsız",
+    "en:no-colorings": "rəngləndiricisiz",
+    "en:no-gmos": "GMO-suz",
+    "en:fair-trade": "ədalətli ticarət",
+    "en:halal": "halal",
+    "en:kosher": "koşer",
+    "en:palm-oil-free": "palma yağsız",
+    "en:high-protein": "yüksək zülallı",
+    "en:whole-grain": "tam taxıllı"
+  },
+  "additiveBasis": {
+    "eu_not_authorised": "EU-da artıq qida əlavəsi kimi icazəli deyil",
+    "eu_child_attention_warning": "EU qanunvericiliyi bunun uşaqlarda aktivliyə və diqqətə təsir edə biləcəyi barədə xəbərdarlıq tələb edir",
+    "iarc_2a": "IARC tərəfindən nitrozlaşmaya gətirən şəraitdə qəbul edilmiş nitrat/nitrit üçün group 2A təsnifatı ilə əlaqələndirilir",
+    "iarc_2b": "IARC tərəfindən group 2B-də təsnif edilir",
+    "efsa_group_adi": "EFSA tərəfindən müəyyən edilmiş məqbul gündəlik qəbul həddi ilə əhatə olunur",
+    "efsa_adi_lowered": "aşağıya doğru yenidən nəzərdən keçirilmiş EFSA qəbul həddinə tabedir",
+    "mandatory_allergen_labelling": "10 mg/kg-dan yuxarı allergen kimi bəyan edilməlidir",
+    "use_restricted": "yalnız məhdud istifadələr üçün icazəlidir",
+    "authorised_routine": "icazəlidir və rutin istifadə olunur"
+  },
+  "nova": {
+    "1": "Emal olunmamış və ya minimal emal olunmuş",
+    "2": "Emal olunmuş kulinariya inqrediyenti",
+    "3": "Emal olunmuş qida",
+    "4": "Ultraemal olunmuş qida",
+    "unknown": "Emal səviyyəsi"
+  },
+  "estimatePrefix": "Təxmini AI qiymətləndirməsi. {text}",
+  "signals": {
+    "fallback": {
+      "label": "Əlavə amil",
+      "evidence": "Bu amil bala təsir etdi."
+    },
+    "blocker.allergen_declared": {
+      "label": "Bəyan edilmiş allergen",
+      "evidence": "Qablaşdırma məlumatları allergen siyahınızda olan {allergen} maddəsini açıq şəkildə bəyan edir."
+    },
+    "blocker.allergen_ingredient": {
+      "label": "Tərkibdə allergen tapıldı",
+      "evidence": "«{match}» inqrediyent siyahısında var və {allergen} allergeninizə uyğun gəlir."
+    },
+    "blocker.avoid_ingredient": {
+      "label": "Qaçınma siyahınızdakı inqrediyent",
+      "evidence": "«{ingredient}» inqrediyent siyahısında var."
+    },
+    "blocker.diet_conflict": {
+      "label": "Pəhrizinizlə uyğun deyil",
+      "evidence": "İnqrediyent analizi bu məhsulu {diet} ilə uyğun olmayan kimi qeyd edir ({evidence})."
+    },
+    "warning.allergen_traces": {
+      "label": "İzlər ola bilər",
+      "evidence": "Qablaşdırmada mümkün {allergen} izləri bəyan edilir. Bu istehsalçı xəbərdarlığıdır, inqrediyent deyil."
+    },
+    "warning.diet_uncertain": {
+      "label": "Pəhrizə uyğunluq aydın deyil",
+      "evidence": "Bəzi inqrediyentlərin {diet} ilə uyğunluğu təsdiqlənə bilmir. Almazdan əvvəl qablaşdırmanı yoxlayın."
+    },
+    "warning.allergen_data_missing": {
+      "label": "Allergen məlumatları natamamdır",
+      "evidence": "Bu məhsul üçün allergen bəyanatı yoxdur, buna görə allergen siyahınız yoxlanıla bilmədi. Boş siyahı məhsulun allergendən azad olduğunu heç vaxt sübut etmir."
+    },
+    "base.nutriscore": {
+      "label": "Nutri-Score {grade}",
+      "evidence": "Open Food Facts bu məhsul üçün Nutri-Score {grade} dərc edir; bu, hədəfləriniz tətbiq olunmazdan əvvəl əsas qidalanma keyfiyyətini müəyyən edir."
+    },
+    "base.nutrition_profile": {
+      "label": "Qidalanma profili",
+      "evidence": "Nutri-Score dərc edilməyib, buna görə əsas qiymətləndirmə bəyan edilmiş dəyərlərdən çıxarılır: {detail}."
+    },
+    "base.nutrition_unknown": {
+      "label": "Əsas keyfiyyət məlum deyil",
+      "evidence": "Əsas keyfiyyəti qiymətləndirmək üçün kifayət qədər qidalanma məlumatı yoxdur, buna görə bal neytral orta nöqtədən başlayır."
+    },
+    "base.nova": {
+      "label": "{novaLabel}",
+      "evidence": "Open Food Facts bu məhsulu NOVA group {group} kimi təsnif edir."
+    },
+    "base.additive_high": {
+      "label": "Diqqət tələb edən əlavə",
+      "evidence": "{names}: {basis}. IngreFit bunu yüksək diqqət tələb edən amil kimi qiymətləndirir, buna görə məhsul yüksək əsas bala çata bilməz."
+    },
+    "base.additive_moderate": {
+      "label": "Nəzərə alınmalı əlavələr",
+      "evidence": "Müəyyən qəbul həddi və ya təsnifatı olan {count} əlavə: {names}."
+    },
+    "base.additives_clean": {
+      "label": "İşarələnmiş əlavə yoxdur",
+      "evidence": "Bəyan edilmiş əlavələr siyahısında IngreFit-in əlavə diqqət üçün işarələdiyi heç nə yoxdur."
+    },
+    "base.fruit_veg": {
+      "label": "Meyvə, tərəvəz və çərəz tərkibi",
+      "evidence": "Open Food Facts inqrediyent siyahısına əsasən {percent}% meyvə, tərəvəz, paxlalı və çərəz tərkibi hesablayır."
+    },
+    "base.palm_oil": {
+      "label": "Palma yağı ehtiva edir",
+      "evidence": "İnqrediyent analizi palma yağı aşkar edir; bu, doymuş yağ yükünü artırır və mənşə ilə bağlı məlum narahatlıqlar daşıyır."
+    },
+    "base.organic": {
+      "label": "Sertifikatlı orqanik",
+      "evidence": "Məhsulun rəsmi orqanik etiketi var. IngreFit bunu qeyd edir, lakin az çəki verir, çünki orqanik status təkbaşına qidalanma keyfiyyətini yaxşılaşdırmır."
+    },
+    "base.alcohol": {
+      "label": "Alkoqol ehtiva edir",
+      "evidence": "Məhsul həcm üzrə {percent}% alkoqol bəyan edir."
+    },
+    "personal.nutrientEvidence": "{nutrient}: {reference} üçün {value} {unit}, «{goal}» hədəfinizlə müqayisə edilir.",
+    "personal.protein": {
+      "label": {
+        "good": "Yüksək zülal sıxlığı",
+        "ok": "Bir qədər zülal",
+        "bad": "Hədəfiniz üçün az zülal"
+      }
+    },
+    "personal.sugars": {
+      "label": {
+        "good": "Hədəfiniz üçün az şəkər",
+        "ok": "Orta şəkər miqdarı",
+        "bad": "Hədəfiniz üçün çox şəkər"
+      }
+    },
+    "personal.fiber": {
+      "label": {
+        "good": "Yaxşı lif sıxlığı",
+        "ok": "Bir qədər lif",
+        "bad": "Hədəfiniz üçün az lif"
+      }
+    },
+    "personal.salt": {
+      "label": {
+        "good": "Hədəfiniz üçün az duz",
+        "ok": "Orta duz miqdarı",
+        "bad": "Hədəfiniz üçün çox duz"
+      }
+    },
+    "personal.saturated_fat": {
+      "label": {
+        "good": "Az doymuş yağ",
+        "ok": "Orta doymuş yağ miqdarı",
+        "bad": "Hədəfiniz üçün çox doymuş yağ"
+      }
+    },
+    "personal.carbs": {
+      "label": {
+        "good": "Aşağı karbohidrat sıxlığı",
+        "ok": "Orta karbohidrat miqdarı",
+        "bad": "Qidalanma modeliniz üçün çox karbohidrat"
+      }
+    },
+    "personal.energy": {
+      "label": {
+        "good": "Aşağı enerji sıxlığı",
+        "ok": "Orta enerji sıxlığı",
+        "bad": "Yüksək enerji sıxlığı"
+      }
+    },
+    "personal.processing": {
+      "label": {
+        "good": "İstədiyiniz kimi minimal emal olunmuş",
+        "ok": "Orta dərəcədə emal olunmuş",
+        "bad": "Hədəfiniz üçün yüksək dərəcədə emal olunmuş"
+      },
+      "evidence": "NOVA group {group} «{goal}» hədəfinizlə müqayisə olunur."
+    },
+    "personal.no_data": {
+      "label": "Hədəfləriniz üçün kifayət qədər məlumat yoxdur",
+      "evidence": "Seçdiyiniz hədəflər üçün lazım olan dəyərlərin heç biri mövcud deyil, buna görə bal yalnız məhsulun ümumi keyfiyyətini əks etdirir."
+    }
+  },
+  "summary": {
+    "blocked": "Bu məhsul profilinizdəki sərt məhdudiyyətə görə istisna edilir: {blocker}. Keyfiyyət burada ikinci dərəcəlidir; məhdudiyyət digər rəqəmlərdən asılı olmayaraq qüvvədədir.",
+    "blockedFallback": "profil məhdudiyyəti",
+    "personalUp": "hədəfləriniz ({goals}) balı {delta} artırdı",
+    "personalDown": "hədəfləriniz ({goals}) balı {delta} azaltdı",
+    "personalFlat": "hədəfləriniz ({goals}) balı demək olar dəyişmədi",
+    "withSignals": "Məhsulun əsas keyfiyyəti 10 üzərindən {base}-dir və {personal}. Ən güclü təsirlər {strongest} oldu. Bu, universal sağlamlıq deyil, profilinizə uyğunluğu ölçür.",
+    "withoutSignals": "Məhsulun əsas keyfiyyəti 10 üzərindən {base}-dir və {personal}. Daha incə təhlil üçün kifayət qədər məlumat yoxdur."
+  },
+  "dataNotice": {
+    "aiPhoto": "Mənbə: AI ilə vizual tanıma. Qidalanma dəyərləri görünüşə əsaslanan təxmini qiymətləndirmədir; inqrediyentlər, allergenlər və dəqiq dəyərlər naməlum qalır. Bal etibarlılığı: {confidence}%.",
+    "estimatedText": "Fakt mənbəyi: {source}. Çatışmayan dəyərlər qablaşdırmadan oxunmayıb; ad və inqrediyentlərə əsasən AI tərəfindən qiymətləndirilib. Bal etibarlılığı: {confidence}%.",
+    "declared": "Mənbə: {source}. Məlumat tamlığı: {completeness}%. Bal etibarlılığı: {confidence}%.",
+    "sourcePackage": "qablaşdırmada görünən mətn"
+  },
+  "tip": {
+    "blocked": "Almazdan əvvəl həmişə qablaşdırmanı yoxlayın: reseptlər verilənlər bazası yenilənmədən dəyişə bilər.",
+    "highRiskAdditive": "{code} maddəsindən qaçınmaq üçün eyni növ, daha qısa inqrediyent siyahısı olan məhsul axtarın.",
+    "ultraProcessed": "Bu ultraemal olunmuş məhsuldur. Daha az emal olunmuş ekvivalent adətən əsas qiymətləndirmədə nəzərəçarpacaq dərəcədə yüksək bal alır.",
+    "default": "Bal profilinizə ({diet}) bağlıdır. Hədəflərinizi dəyişin və nəticə yenidən hesablanacaq."
+  }
+}

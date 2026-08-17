@@ -1,0 +1,285 @@
+{
+  "_comment": "Translatable strings for product assessments. Copy en.json, translate values only, keep every {placeholder} intact.",
+  "decimalSeparator": "٫",
+  "quotes": [
+    "«",
+    "»"
+  ],
+  "references": {
+    "100g": "100 غ",
+    "100ml": "100 مل",
+    "serving": "حصة واحدة"
+  },
+  "nutrients": {
+    "sugars": {
+      "name": "السكريات",
+      "unit": "غ"
+    },
+    "saturated_fat": {
+      "name": "الدهون المشبعة",
+      "unit": "غ"
+    },
+    "salt": {
+      "name": "مكافئ الملح",
+      "unit": "غ"
+    },
+    "fiber": {
+      "name": "الألياف",
+      "unit": "غ"
+    },
+    "protein": {
+      "name": "البروتين",
+      "unit": "غ"
+    },
+    "carbs": {
+      "name": "الكربوهيدرات",
+      "unit": "غ"
+    },
+    "energy": {
+      "name": "الطاقة",
+      "unit": "كيلوكالوري"
+    }
+  },
+  "goals": {
+    "balanced": "تناول متوازن",
+    "weight_loss": "إدارة الوزن",
+    "muscle_gain": "زيادة الكتلة العضلية",
+    "high_protein": "المزيد من البروتين",
+    "low_sugar": "سكر أقل",
+    "low_sodium": "ملح أقل",
+    "high_fiber": "المزيد من الألياف",
+    "minimally_processed": "معالجة أقل",
+    "heart_health": "خيارات تراعي القلب",
+    "steady_energy": "طاقة مستقرة",
+    "digestive_wellness": "راحة الهضم",
+    "low_saturated_fat": "دهون مشبعة أقل"
+  },
+  "diets": {
+    "none": "لا نظام غذائي محدد",
+    "vegetarian": "نباتي",
+    "vegan": "نباتي صرف",
+    "pescatarian": "نباتي مع الأسماك",
+    "gluten_free": "خالٍ من الغلوتين",
+    "dairy_free": "خالٍ من منتجات الألبان",
+    "low_carb": "منخفض الكربوهيدرات",
+    "mediterranean": "متوسطي"
+  },
+  "allergens": {
+    "milk": "الحليب",
+    "eggs": "البيض",
+    "peanuts": "الفول السوداني",
+    "tree_nuts": "المكسرات الشجرية",
+    "soy": "الصويا",
+    "wheat": "القمح",
+    "gluten": "الغلوتين",
+    "fish": "السمك",
+    "crustaceans": "القشريات",
+    "sesame": "السمسم",
+    "celery": "الكرفس",
+    "mustard": "الخردل",
+    "sulphites": "الكبريتيت",
+    "lupin": "الترمس",
+    "molluscs": "الرخويات"
+  },
+  "labels": {
+    "en:organic": "عضوي",
+    "en:eu-organic": "عضوي EU",
+    "en:gluten-free": "خالٍ من الغلوتين",
+    "en:no-gluten": "خالٍ من الغلوتين",
+    "en:lactose-free": "خالٍ من اللاكتوز",
+    "en:no-lactose": "خالٍ من اللاكتوز",
+    "en:vegan": "نباتي صرف",
+    "en:vegetarian": "نباتي",
+    "en:sugar-free": "خالٍ من السكر",
+    "en:no-added-sugar": "من دون سكر مضاف",
+    "en:no-preservatives": "من دون مواد حافظة",
+    "en:no-colorings": "من دون ملونات",
+    "en:no-gmos": "غير معدل وراثيًا",
+    "en:fair-trade": "تجارة عادلة",
+    "en:halal": "حلال",
+    "en:kosher": "كوشير",
+    "en:palm-oil-free": "خالٍ من زيت النخيل",
+    "en:high-protein": "عالي البروتين",
+    "en:whole-grain": "حبوب كاملة"
+  },
+  "additiveBasis": {
+    "eu_not_authorised": "لم يعد مسموحًا به كمضاف غذائي في EU",
+    "eu_child_attention_warning": "يفرض قانون EU تحذيرًا بأنه قد يؤثر في نشاط الأطفال وانتباههم",
+    "iarc_2a": "ربطته IARC بتصنيف group 2A للنترات/النتريت المتناولة في ظروف تؤدي إلى تكوّن مركبات النيتروز",
+    "iarc_2b": "صنفته IARC ضمن group 2B",
+    "efsa_group_adi": "مشمول بحد تناول يومي مقبول تحدده EFSA",
+    "efsa_adi_lowered": "خاضع لحد تناول من EFSA جرى تخفيضه",
+    "mandatory_allergen_labelling": "يجب التصريح عنه كمسبب للحساسية فوق 10 mg/kg",
+    "use_restricted": "مسموح به فقط لاستخدامات مقيدة",
+    "authorised_routine": "مسموح به ويُستخدم بصورة روتينية"
+  },
+  "nova": {
+    "1": "غير معالج أو معالج بالحد الأدنى",
+    "2": "مكوّن طهي معالج",
+    "3": "غذاء معالج",
+    "4": "غذاء فائق المعالجة",
+    "unknown": "مستوى المعالجة"
+  },
+  "estimatePrefix": "تقدير تقريبي بالذكاء الاصطناعي. {text}",
+  "signals": {
+    "fallback": {
+      "label": "عامل إضافي",
+      "evidence": "أثر هذا العامل في الدرجة."
+    },
+    "blocker.allergen_declared": {
+      "label": "مسبب حساسية مُعلن",
+      "evidence": "تصرّح بيانات العبوة بوضوح بوجود {allergen}، وهو موجود في قائمة مسببات الحساسية لديك."
+    },
+    "blocker.allergen_ingredient": {
+      "label": "مسبب حساسية موجود في المكونات",
+      "evidence": "يظهر «{match}» في قائمة المكونات ويتطابق مع مسبب الحساسية {allergen} لديك."
+    },
+    "blocker.avoid_ingredient": {
+      "label": "مكوّن في قائمة التجنب لديك",
+      "evidence": "يظهر «{ingredient}» في قائمة المكونات."
+    },
+    "blocker.diet_conflict": {
+      "label": "يتعارض مع نظامك الغذائي",
+      "evidence": "يشير تحليل المكونات إلى أن هذا المنتج غير متوافق مع {diet} ({evidence})."
+    },
+    "warning.allergen_traces": {
+      "label": "قد يحتوي على آثار",
+      "evidence": "تذكر العبوة احتمال وجود آثار من {allergen}. هذا تحذير من الشركة المصنعة وليس مكوّنًا."
+    },
+    "warning.diet_uncertain": {
+      "label": "حالة النظام الغذائي غير واضحة",
+      "evidence": "لا يمكن التأكد من توافق بعض المكونات مع {diet}. تحقّق من العبوة قبل الشراء."
+    },
+    "warning.allergen_data_missing": {
+      "label": "بيانات مسببات الحساسية غير مكتملة",
+      "evidence": "لا يتوفر تصريح بمسببات الحساسية لهذا المنتج، لذلك تعذر التحقق من قائمة مسببات الحساسية لديك. القائمة الفارغة لا تثبت أبدًا أن المنتج خالٍ منها."
+    },
+    "base.nutriscore": {
+      "label": "Nutri-Score {grade}",
+      "evidence": "ينشر Open Food Facts درجة Nutri-Score {grade} لهذا المنتج؛ وهي تحدد الجودة الغذائية الأساسية قبل تطبيق أهدافك."
+    },
+    "base.nutrition_profile": {
+      "label": "الملف الغذائي",
+      "evidence": "لا توجد درجة Nutri-Score منشورة، لذلك تُشتق الدرجة الأساسية من القيم المعلنة: {detail}."
+    },
+    "base.nutrition_unknown": {
+      "label": "الجودة الأساسية غير معروفة",
+      "evidence": "لا تتوفر بيانات غذائية كافية للحكم على الجودة الأساسية، لذلك تبدأ الدرجة من نقطة وسط محايدة."
+    },
+    "base.nova": {
+      "label": "{novaLabel}",
+      "evidence": "يصنف Open Food Facts هذا المنتج ضمن NOVA group {group}."
+    },
+    "base.additive_high": {
+      "label": "مضاف يستحق الانتباه",
+      "evidence": "{names}: {basis}. يصنف IngreFit هذا على أنه يستدعي انتباهًا مرتفعًا، لذلك لا يمكن للمنتج الوصول إلى درجة أساسية مرتفعة."
+    },
+    "base.additive_moderate": {
+      "label": "مضافات يجدر الانتباه إليها",
+      "evidence": "يوجد {count} من المضافات ذات حد تناول أو تصنيف محدد: {names}."
+    },
+    "base.additives_clean": {
+      "label": "لا مضافات معلَّمة",
+      "evidence": "لا تحتوي قائمة المضافات المعلنة على شيء يعلّمه IngreFit بأنه يستدعي انتباهًا إضافيًا."
+    },
+    "base.fruit_veg": {
+      "label": "محتوى الفاكهة والخضروات والبقول والمكسرات",
+      "evidence": "يقدّر Open Food Facts أن الفاكهة والخضروات والبقول والمكسرات تمثل {percent}% من قائمة المكونات."
+    },
+    "base.palm_oil": {
+      "label": "يحتوي على زيت النخيل",
+      "evidence": "يكشف تحليل المكونات عن زيت النخيل، مما يزيد كمية الدهون المشبعة ويرتبط بمخاوف معروفة تتعلق بمصدره."
+    },
+    "base.organic": {
+      "label": "عضوي معتمد",
+      "evidence": "يحمل المنتج ملصقًا عضويًا رسميًا. يسجل IngreFit ذلك لكنه يمنحه وزنًا صغيرًا فقط، لأن الصفة العضوية وحدها لا تحسن الجودة الغذائية."
+    },
+    "base.alcohol": {
+      "label": "يحتوي على الكحول",
+      "evidence": "يصرح المنتج بنسبة كحول {percent}% بالحجم."
+    },
+    "personal.nutrientEvidence": "{nutrient}: {value} {unit} لكل {reference}، مقارنة بهدفك «{goal}».",
+    "personal.protein": {
+      "label": {
+        "good": "كثافة بروتين مرتفعة",
+        "ok": "بعض البروتين",
+        "bad": "بروتين منخفض بالنسبة لهدفك"
+      }
+    },
+    "personal.sugars": {
+      "label": {
+        "good": "سكر منخفض بالنسبة لهدفك",
+        "ok": "سكر متوسط",
+        "bad": "سكر مرتفع بالنسبة لهدفك"
+      }
+    },
+    "personal.fiber": {
+      "label": {
+        "good": "كثافة ألياف جيدة",
+        "ok": "بعض الألياف",
+        "bad": "ألياف منخفضة بالنسبة لهدفك"
+      }
+    },
+    "personal.salt": {
+      "label": {
+        "good": "ملح منخفض بالنسبة لهدفك",
+        "ok": "ملح متوسط",
+        "bad": "ملح مرتفع بالنسبة لهدفك"
+      }
+    },
+    "personal.saturated_fat": {
+      "label": {
+        "good": "دهون مشبعة منخفضة",
+        "ok": "دهون مشبعة متوسطة",
+        "bad": "دهون مشبعة مرتفعة بالنسبة لهدفك"
+      }
+    },
+    "personal.carbs": {
+      "label": {
+        "good": "كثافة كربوهيدرات منخفضة",
+        "ok": "كربوهيدرات متوسطة",
+        "bad": "كربوهيدرات مرتفعة بالنسبة لنمطك"
+      }
+    },
+    "personal.energy": {
+      "label": {
+        "good": "كثافة طاقة منخفضة",
+        "ok": "كثافة طاقة متوسطة",
+        "bad": "كثافة طاقة مرتفعة"
+      }
+    },
+    "personal.processing": {
+      "label": {
+        "good": "معالج بالحد الأدنى كما طلبت",
+        "ok": "معالجة متوسطة",
+        "bad": "معالجة عالية بالنسبة لهدفك"
+      },
+      "evidence": "تتم موازنة NOVA group {group} مقابل هدفك «{goal}»."
+    },
+    "personal.no_data": {
+      "label": "لا توجد بيانات كافية لأهدافك",
+      "evidence": "لا تتوفر أي من القيم اللازمة لأهدافك المحددة، لذلك تعكس الدرجة الجودة العامة للمنتج فقط."
+    }
+  },
+  "summary": {
+    "blocked": "هذا المنتج مستبعد بسبب قيد صارم في ملفك: {blocker}. الجودة أمر ثانوي هنا؛ يظل القيد قائمًا بغض النظر عن الأرقام الأخرى.",
+    "blockedFallback": "قيد في الملف",
+    "personalUp": "رفعت أهدافك ({goals}) الدرجة بمقدار {delta}",
+    "personalDown": "خفضت أهدافك ({goals}) الدرجة بمقدار {delta}",
+    "personalFlat": "لم تغيّر أهدافك ({goals}) الدرجة إلا قليلًا",
+    "withSignals": "الجودة الأساسية للمنتج هي {base} من 10، و{personal}. وكانت أقوى التأثيرات {strongest}. هذا يقيس مدى ملاءمته لملفك، وليس جودة صحية عامة.",
+    "withoutSignals": "الجودة الأساسية للمنتج هي {base} من 10، و{personal}. لا تتوفر بيانات كافية لتفصيل أدق."
+  },
+  "dataNotice": {
+    "aiPhoto": "المصدر: تعرف بصري بالذكاء الاصطناعي. القيم الغذائية تقدير تقريبي من المظهر؛ أما المكونات ومسببات الحساسية والقيم الدقيقة فما زالت غير معروفة. موثوقية الدرجة: {confidence}%.",
+    "estimatedText": "مصدر الحقائق: {source}. قدّر الذكاء الاصطناعي القيم المفقودة من الاسم والمكونات، ولم تُقرأ من العبوة. موثوقية الدرجة: {confidence}%.",
+    "declared": "المصدر: {source}. اكتمال البيانات: {completeness}%. موثوقية الدرجة: {confidence}%.",
+    "sourcePackage": "النص الظاهر على العبوة"
+  },
+  "tip": {
+    "blocked": "تحقّق دائمًا من العبوة قبل الشراء، فقد تتغير الوصفة من دون تحديث قاعدة البيانات.",
+    "highRiskAdditive": "لتجنب {code}، ابحث عن منتج من النوع نفسه بقائمة مكونات أقصر.",
+    "ultraProcessed": "هذا منتج فائق المعالجة. البديل الأقل معالجة من النوع نفسه يحصل عادة على درجة أساسية أعلى بوضوح.",
+    "default": "الدرجة مرتبطة بملفك ({diet}). غيّر أهدافك وسيُعاد حساب النتيجة."
+  }
+}

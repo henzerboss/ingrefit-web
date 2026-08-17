@@ -1,0 +1,285 @@
+{
+  "_comment": "Translatable strings for product assessments. Copy en.json, translate values only, keep every {placeholder} intact.",
+  "decimalSeparator": ",",
+  "quotes": [
+    "„",
+    "“"
+  ],
+  "references": {
+    "100g": "100 g",
+    "100ml": "100 ml",
+    "serving": "jednu porciu"
+  },
+  "nutrients": {
+    "sugars": {
+      "name": "cukry",
+      "unit": "g"
+    },
+    "saturated_fat": {
+      "name": "nasýtené tuky",
+      "unit": "g"
+    },
+    "salt": {
+      "name": "ekvivalent soli",
+      "unit": "g"
+    },
+    "fiber": {
+      "name": "vláknina",
+      "unit": "g"
+    },
+    "protein": {
+      "name": "bielkoviny",
+      "unit": "g"
+    },
+    "carbs": {
+      "name": "sacharidy",
+      "unit": "g"
+    },
+    "energy": {
+      "name": "energia",
+      "unit": "kcal"
+    }
+  },
+  "goals": {
+    "balanced": "vyvážené stravovanie",
+    "weight_loss": "kontrola hmotnosti",
+    "muscle_gain": "rast svalov",
+    "high_protein": "viac bielkovín",
+    "low_sugar": "menej cukru",
+    "low_sodium": "menej soli",
+    "high_fiber": "viac vlákniny",
+    "minimally_processed": "menej spracovania",
+    "heart_health": "voľby s ohľadom na srdce",
+    "steady_energy": "stála energia",
+    "digestive_wellness": "dobré trávenie",
+    "low_saturated_fat": "menej nasýtených tukov"
+  },
+  "diets": {
+    "none": "žiadna konkrétna diéta",
+    "vegetarian": "vegetariánska",
+    "vegan": "vegánska",
+    "pescatarian": "pescetariánska",
+    "gluten_free": "bezlepková",
+    "dairy_free": "bez mliečnych výrobkov",
+    "low_carb": "nízkosacharidová",
+    "mediterranean": "stredomorská"
+  },
+  "allergens": {
+    "milk": "mlieko",
+    "eggs": "vajcia",
+    "peanuts": "arašidy",
+    "tree_nuts": "škrupinové plody",
+    "soy": "sója",
+    "wheat": "pšenica",
+    "gluten": "lepok",
+    "fish": "ryby",
+    "crustaceans": "kôrovce",
+    "sesame": "sezam",
+    "celery": "zeler",
+    "mustard": "horčica",
+    "sulphites": "siričitany",
+    "lupin": "lupina",
+    "molluscs": "mäkkýše"
+  },
+  "labels": {
+    "en:organic": "bio",
+    "en:eu-organic": "EU bio",
+    "en:gluten-free": "bez lepku",
+    "en:no-gluten": "bez lepku",
+    "en:lactose-free": "bez laktózy",
+    "en:no-lactose": "bez laktózy",
+    "en:vegan": "vegánske",
+    "en:vegetarian": "vegetariánske",
+    "en:sugar-free": "bez cukru",
+    "en:no-added-sugar": "bez pridaného cukru",
+    "en:no-preservatives": "bez konzervačných látok",
+    "en:no-colorings": "bez farbív",
+    "en:no-gmos": "bez GMO",
+    "en:fair-trade": "fair trade",
+    "en:halal": "halal",
+    "en:kosher": "kóšer",
+    "en:palm-oil-free": "bez palmového oleja",
+    "en:high-protein": "s vysokým obsahom bielkovín",
+    "en:whole-grain": "celozrnné"
+  },
+  "additiveBasis": {
+    "eu_not_authorised": "už nie je v EU povolené ako potravinárska prídavná látka",
+    "eu_child_attention_warning": "právo EU vyžaduje upozornenie, že môže ovplyvniť aktivitu a pozornosť detí",
+    "iarc_2a": "IARC ho spája s klasifikáciou v group 2A pre požité dusičnany/dusitany za podmienok vedúcich k nitrozácii",
+    "iarc_2b": "IARC ho klasifikuje v group 2B",
+    "efsa_group_adi": "spadá pod prijateľný denný príjem stanovený EFSA",
+    "efsa_adi_lowered": "podlieha limitu príjmu EFSA, ktorý bol znížený",
+    "mandatory_allergen_labelling": "pri množstve nad 10 mg/kg musí byť deklarované ako alergén",
+    "use_restricted": "povolené len na obmedzené použitia",
+    "authorised_routine": "povolené a bežne používané"
+  },
+  "nova": {
+    "1": "Nespracované alebo minimálne spracované",
+    "2": "Spracovaná kulinárska zložka",
+    "3": "Spracovaná potravina",
+    "4": "Ultraspracovaná potravina",
+    "unknown": "Úroveň spracovania"
+  },
+  "estimatePrefix": "Približný odhad AI. {text}",
+  "signals": {
+    "fallback": {
+      "label": "Ďalší faktor",
+      "evidence": "Tento faktor ovplyvnil skóre."
+    },
+    "blocker.allergen_declared": {
+      "label": "Deklarovaný alergén",
+      "evidence": "Údaje na obale výslovne uvádzajú {allergen}, ktorý je na vašom zozname alergénov."
+    },
+    "blocker.allergen_ingredient": {
+      "label": "Alergén nájdený v zložení",
+      "evidence": "„{match}“ sa nachádza v zozname zložiek a zodpovedá vášmu alergénu {allergen}."
+    },
+    "blocker.avoid_ingredient": {
+      "label": "Zložka na vašom zozname na vynechanie",
+      "evidence": "„{ingredient}“ sa nachádza v zozname zložiek."
+    },
+    "blocker.diet_conflict": {
+      "label": "V rozpore s vašou diétou",
+      "evidence": "Analýza zloženia označuje tento výrobok ako nezlučiteľný s {diet} ({evidence})."
+    },
+    "warning.allergen_traces": {
+      "label": "Môže obsahovať stopy",
+      "evidence": "Obal uvádza možné stopy {allergen}. Ide o upozornenie výrobcu, nie o zložku."
+    },
+    "warning.diet_uncertain": {
+      "label": "Zlučiteľnosť s diétou nie je jasná",
+      "evidence": "Pri niektorých zložkách nemožno potvrdiť zlučiteľnosť s {diet}. Pred nákupom skontrolujte obal."
+    },
+    "warning.allergen_data_missing": {
+      "label": "Údaje o alergénoch sú neúplné",
+      "evidence": "Pre tento výrobok nie je dostupné vyhlásenie o alergénoch, preto sa váš zoznam alergénov nedal skontrolovať. Prázdny zoznam nikdy nedokazuje, že výrobok alergén neobsahuje."
+    },
+    "base.nutriscore": {
+      "label": "Nutri-Score {grade}",
+      "evidence": "Open Food Facts zverejňuje pre tento výrobok Nutri-Score {grade}; ten určuje základnú výživovú kvalitu pred zohľadnením vašich cieľov."
+    },
+    "base.nutrition_profile": {
+      "label": "Výživový profil",
+      "evidence": "Nutri-Score nie je zverejnený, preto sa základ odvodzuje z deklarovaných hodnôt: {detail}."
+    },
+    "base.nutrition_unknown": {
+      "label": "Základná kvalita neznáma",
+      "evidence": "Nie je dostupných dosť výživových údajov na posúdenie základnej kvality, preto skóre začína na neutrálnom strede."
+    },
+    "base.nova": {
+      "label": "{novaLabel}",
+      "evidence": "Open Food Facts zaraďuje tento výrobok do skupiny NOVA {group}."
+    },
+    "base.additive_high": {
+      "label": "Prídavná látka vyžadujúca pozornosť",
+      "evidence": "{names}: {basis}. IngreFit to hodnotí ako faktor vyžadujúci zvýšenú pozornosť, preto výrobok nemôže dosiahnuť vysoké základné skóre."
+    },
+    "base.additive_moderate": {
+      "label": "Prídavné látky, o ktorých je dobré vedieť",
+      "evidence": "{count} prídavná látka/látky s definovaným limitom príjmu alebo klasifikáciou: {names}."
+    },
+    "base.additives_clean": {
+      "label": "Žiadne označené prídavné látky",
+      "evidence": "Deklarovaný zoznam prídavných látok neobsahuje nič, čo IngreFit označuje na ďalšiu pozornosť."
+    },
+    "base.fruit_veg": {
+      "label": "Obsah ovocia, zeleniny a orechov",
+      "evidence": "Open Food Facts odhaduje podľa zoznamu zložiek {percent}% ovocia, zeleniny, strukovín a orechov."
+    },
+    "base.palm_oil": {
+      "label": "Obsahuje palmový olej",
+      "evidence": "Analýza zloženia zistila palmový olej, ktorý zvyšuje množstvo nasýtených tukov a prináša známe otázky týkajúce sa pôvodu."
+    },
+    "base.organic": {
+      "label": "Certifikované bio",
+      "evidence": "Výrobok má oficiálne bio označenie. IngreFit ho zaznamenáva, ale dáva mu len malú váhu, pretože bio status sám osebe nezlepšuje výživovú kvalitu."
+    },
+    "base.alcohol": {
+      "label": "Obsahuje alkohol",
+      "evidence": "Výrobok deklaruje {percent}% alkoholu objemovo."
+    },
+    "personal.nutrientEvidence": "{nutrient}: {value} {unit} na {reference}, posúdené voči vášmu cieľu „{goal}“.",
+    "personal.protein": {
+      "label": {
+        "good": "Vysoká hustota bielkovín",
+        "ok": "Určité množstvo bielkovín",
+        "bad": "Málo bielkovín pre váš cieľ"
+      }
+    },
+    "personal.sugars": {
+      "label": {
+        "good": "Málo cukru pre váš cieľ",
+        "ok": "Stredné množstvo cukru",
+        "bad": "Veľa cukru pre váš cieľ"
+      }
+    },
+    "personal.fiber": {
+      "label": {
+        "good": "Dobrá hustota vlákniny",
+        "ok": "Určité množstvo vlákniny",
+        "bad": "Málo vlákniny pre váš cieľ"
+      }
+    },
+    "personal.salt": {
+      "label": {
+        "good": "Málo soli pre váš cieľ",
+        "ok": "Stredné množstvo soli",
+        "bad": "Veľa soli pre váš cieľ"
+      }
+    },
+    "personal.saturated_fat": {
+      "label": {
+        "good": "Málo nasýtených tukov",
+        "ok": "Stredné množstvo nasýtených tukov",
+        "bad": "Veľa nasýtených tukov pre váš cieľ"
+      }
+    },
+    "personal.carbs": {
+      "label": {
+        "good": "Nízka hustota sacharidov",
+        "ok": "Stredné množstvo sacharidov",
+        "bad": "Veľa sacharidov pre váš stravovací vzorec"
+      }
+    },
+    "personal.energy": {
+      "label": {
+        "good": "Nízka energetická hustota",
+        "ok": "Stredná energetická hustota",
+        "bad": "Vysoká energetická hustota"
+      }
+    },
+    "personal.processing": {
+      "label": {
+        "good": "Minimálne spracované, ako ste chceli",
+        "ok": "Stredne spracované",
+        "bad": "Vysoko spracované pre váš cieľ"
+      },
+      "evidence": "Skupina NOVA {group} sa posudzuje voči vášmu cieľu „{goal}“."
+    },
+    "personal.no_data": {
+      "label": "Nedostatok údajov pre vaše ciele",
+      "evidence": "Nie je dostupná žiadna z hodnôt potrebných pre vaše vybrané ciele, preto skóre odráža iba všeobecnú kvalitu výrobku."
+    }
+  },
+  "summary": {
+    "blocked": "Tento výrobok je vylúčený pre pevné obmedzenie vo vašom profile: {blocker}. Kvalita je tu druhoradá; obmedzenie platí bez ohľadu na ostatné hodnoty.",
+    "blockedFallback": "obmedzenie profilu",
+    "personalUp": "vaše ciele ({goals}) zvýšili skóre o {delta}",
+    "personalDown": "vaše ciele ({goals}) znížili skóre o {delta}",
+    "personalFlat": "vaše ciele ({goals}) skóre takmer nezmenili",
+    "withSignals": "Základná kvalita výrobku je {base} z 10 a {personal}. Najsilnejšie vplyvy boli {strongest}. Toto meria zhodu s vaším profilom, nie univerzálne hodnotenie zdravosti.",
+    "withoutSignals": "Základná kvalita výrobku je {base} z 10 a {personal}. Na podrobnejšie členenie nie je dostatok údajov."
+  },
+  "dataNotice": {
+    "aiPhoto": "Zdroj: vizuálna identifikácia pomocou AI. Výživové hodnoty sú približným odhadom podľa vzhľadu; zloženie, alergény a presné hodnoty zostávajú neznáme. Spoľahlivosť skóre: {confidence}%.",
+    "estimatedText": "Zdroj faktov: {source}. Chýbajúce hodnoty odhadla AI podľa názvu a zloženia, neboli prečítané z obalu. Spoľahlivosť skóre: {confidence}%.",
+    "declared": "Zdroj: {source}. Úplnosť dát: {completeness}%. Spoľahlivosť skóre: {confidence}%.",
+    "sourcePackage": "viditeľný text na obale"
+  },
+  "tip": {
+    "blocked": "Pred nákupom vždy skontrolujte obal: receptúra sa môže zmeniť bez aktualizácie databázy.",
+    "highRiskAdditive": "Ak sa chcete vyhnúť {code}, hľadajte rovnaký typ výrobku s kratším zoznamom zložiek.",
+    "ultraProcessed": "Ide o ultraspracovaný výrobok. Menej spracovaná alternatíva zvyčajne získa citeľne vyššie základné skóre.",
+    "default": "Skóre je naviazané na váš profil ({diet}). Zmeňte ciele a výsledok sa prepočíta."
+  }
+}
