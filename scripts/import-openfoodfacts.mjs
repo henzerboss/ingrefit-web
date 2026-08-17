@@ -67,6 +67,27 @@ const KEPT_NUTRIMENTS = [
   'fruits-vegetables-nuts-estimate-from-ingredients_100g', 'fruits-vegetables-nuts_100g',
 ];
 
+/**
+ * PostgreSQL rejects U+0000 inside jsonb ("\\u0000 cannot be converted to
+ * text"), and the export does contain records with stray NUL bytes in text
+ * fields. Strip them recursively, from keys as well as values, before the row
+ * ever reaches the driver.
+ */
+function stripNul(value) {
+  if (typeof value === 'string') {
+    return value.includes('\u0000') ? value.replaceAll('\u0000', '') : value;
+  }
+  if (Array.isArray(value)) return value.map(stripNul);
+  if (value && typeof value === 'object') {
+    const output = {};
+    for (const [key, nested] of Object.entries(value)) {
+      output[stripNul(key)] = stripNul(nested);
+    }
+    return output;
+  }
+  return value;
+}
+
 function slim(record) {
   const output = {};
   for (const field of KEPT_FIELDS) {
@@ -84,7 +105,7 @@ function slim(record) {
     }
     output.nutriments = nutriments;
   }
-  return output;
+  return stripNul(output);
 }
 
 function readState() {
@@ -110,20 +131,39 @@ async function download(url, destination) {
   return destination;
 }
 
+function upsertRow(row) {
+  return prisma.offProduct.upsert({
+    where: { barcode: row.barcode },
+    create: row,
+    update: { data: row.data, lastModified: row.lastModified },
+  });
+}
+
+let rejected = 0;
+
 async function flush(batch) {
   if (!batch.length) return;
   // upsert-per-row inside one transaction: slower than COPY, but it is
   // restartable, keeps existing rows on conflict, and never locks the table
   // that live traffic is reading from.
-  await prisma.$transaction(
-    batch.map((row) =>
-      prisma.offProduct.upsert({
-        where: { barcode: row.barcode },
-        create: row,
-        update: { data: row.data, lastModified: row.lastModified },
-      }),
-    ),
-  );
+  try {
+    await prisma.$transaction(batch.map(upsertRow));
+    return;
+  } catch (error) {
+    // One malformed record out of three million must not discard hours of work.
+    // Retry the batch row by row, skip whatever the database refuses, and keep
+    // going. Anything skipped is reported at the end.
+    console.warn(`[off] batch failed, retrying ${batch.length} rows individually: ${error?.message ?? error}`);
+  }
+
+  for (const row of batch) {
+    try {
+      await upsertRow(row);
+    } catch (rowError) {
+      rejected += 1;
+      console.warn(`[off] rejected barcode ${row.barcode}: ${rowError?.message ?? rowError}`);
+    }
+  }
 }
 
 async function importJsonl(filePath, { resumeFrom = 0, onProgress } = {}) {
@@ -201,7 +241,9 @@ async function runFull() {
   state.lastFullImport = new Date().toISOString();
   state.processedLines = 0;
   writeState(state);
-  console.log(`[off] full import finished: ${result.imported} products, ${result.skipped} skipped`);
+  console.log(
+    `[off] full import finished: ${result.imported} products, ${result.skipped} skipped, ${rejected} rejected by the database`,
+  );
 }
 
 async function runDelta() {
@@ -227,6 +269,7 @@ async function runDelta() {
     const destination = path.join(WORK_DIR, 'delta', file);
     await download(`${DELTA_BASE_URL}${file}`, destination);
     const result = await importJsonl(destination);
+    if (rejected) console.warn(`[off] ${rejected} row(s) rejected so far`);
     applied.add(file);
     // Keep the applied list bounded; older entries can never be pending again.
     state.appliedDeltas = [...applied].sort().slice(-400);
