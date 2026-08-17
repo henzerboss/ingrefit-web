@@ -30,7 +30,7 @@
  */
 
 import { createGunzip } from 'node:zlib';
-import { createReadStream, createWriteStream, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { createReadStream, createWriteStream, existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { pipeline } from 'node:stream/promises';
 import { createInterface } from 'node:readline';
 import path from 'node:path';
@@ -400,6 +400,56 @@ async function runInspect(targetBarcode) {
   if (targetBarcode) console.log(`[off] barcode ${targetBarcode} not found in the archive`);
 }
 
+/**
+ * Sample the archive and report how much of it carries usable nutrition.
+ *
+ * A published export can contain records whose `nutriments` object is empty even
+ * though the API serves full values for the same barcode. This tells you whether
+ * the archive on disk is worth importing before spending hours on it.
+ */
+async function runStats(sampleSize) {
+  const archive = path.join(WORK_DIR, 'openfoodfacts-products.jsonl.gz');
+  if (!existsSync(archive)) {
+    console.error(`[off] archive not found at ${archive}`);
+    process.exit(1);
+  }
+  const stats = statSync(archive);
+  console.log(`[off] archive: ${(stats.size / 1024 ** 3).toFixed(2)} GB, modified ${stats.mtime.toISOString()}`);
+
+  const lines = createInterface({ input: createReadStream(archive).pipe(createGunzip()), crlfDelay: Infinity });
+  let total = 0;
+  let emptyRaw = 0;
+  let usable = 0;
+  let named = 0;
+
+  for await (const line of lines) {
+    if (!line.trim()) continue;
+    let record;
+    try {
+      record = JSON.parse(line);
+    } catch {
+      continue;
+    }
+    total += 1;
+    if (record.product_name) named += 1;
+    const raw = record.nutriments;
+    if (!raw || (typeof raw === 'object' && !Array.isArray(raw) && Object.keys(raw).length === 0)) emptyRaw += 1;
+    else if (Object.keys(normalizeNutriments(raw, record.nutrition_data_per)).length >= 4) usable += 1;
+    if (total >= sampleSize) break;
+  }
+  lines.close();
+
+  const percent = (value) => `${((value / total) * 100).toFixed(1)}%`;
+  console.log(`[off] sampled ${total} records`);
+  console.log(`[off]   with a product name          : ${named} (${percent(named)})`);
+  console.log(`[off]   nutriments empty in the dump  : ${emptyRaw} (${percent(emptyRaw)})`);
+  console.log(`[off]   4+ usable nutrients           : ${usable} (${percent(usable)})`);
+  if (emptyRaw / total > 0.5) {
+    console.warn('[off] WARNING: most sampled records have no nutriments at all in the archive.');
+    console.warn('[off] Re-download with OFF_FORCE_DOWNLOAD=true and re-run this check before importing.');
+  }
+}
+
 async function main() {
   const mode = process.argv.includes('--full')
     ? 'full'
@@ -407,10 +457,19 @@ async function main() {
       ? 'delta'
       : process.argv.includes('--inspect')
         ? 'inspect'
-        : null;
+        : process.argv.includes('--stats')
+          ? 'stats'
+          : null;
   if (!mode) {
-    console.error('Usage: node scripts/import-openfoodfacts.mjs --full | --delta | --inspect [barcode]');
+    console.error('Usage: node scripts/import-openfoodfacts.mjs --full | --delta | --inspect [barcode] | --stats [sample]');
     process.exit(1);
+  }
+  if (mode === 'stats') {
+    const index = process.argv.indexOf('--stats');
+    const size = Number(process.argv[index + 1]);
+    await runStats(Number.isFinite(size) && size > 0 ? size : 50_000);
+    await prisma.$disconnect();
+    return;
   }
   if (mode === 'inspect') {
     const index = process.argv.indexOf('--inspect');

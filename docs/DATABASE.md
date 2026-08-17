@@ -161,8 +161,24 @@ given by `nutrition_data_per`, plus `*_value` in the unit named by `*_unit`.
 per-nutrient subset alongside the normalized values, so re-deriving them later is
 a SQL update rather than another multi-hour pass over the archive.
 
-Run `node scripts/import-openfoodfacts.mjs --inspect [barcode]` before trusting
-an import: it prints the raw shape and the normalized result without a full pass.
+Two checks to run before trusting an import, both cheap:
+
+```bash
+node scripts/import-openfoodfacts.mjs --stats 50000        # is this archive worth importing?
+node scripts/import-openfoodfacts.mjs --inspect 3017620422003   # what does one product look like?
+```
+
+`--stats` samples the head of the archive and reports how many records have an
+empty `nutriments` object versus four or more usable values. A published archive
+can contain records whose `nutriments` is empty even though the API serves full
+values for the same barcode, so a bad download is worth catching before spending
+hours on it.
+
+Because of that, **a thin mirror row counts as a miss**: if the local record
+cannot support a score, the lookup falls through to the API (unless
+`OPEN_FOOD_FACTS_LOCAL_ONLY=true`), and the thin row is only used if the network
+then fails. The mirror can therefore never make results worse than the API alone,
+which is why `LOCAL_ONLY` should stay `false` unless the mirror is known good.
 
 Two further consequences of using the exports:
 

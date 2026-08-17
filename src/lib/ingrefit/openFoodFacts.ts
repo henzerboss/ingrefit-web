@@ -296,13 +296,24 @@ export async function findProductByBarcode(barcode: string, locale = 'en'): Prom
   const cached = await readCachedRaw(barcode);
   if (cached) return toFacts(cached, barcode, locale);
 
+  const localOnly = process.env.OPEN_FOOD_FACTS_LOCAL_ONLY === 'true';
   const local = await readLocalDataset(barcode);
-  if (local) return toFacts(local, barcode, locale);
+  let localFacts: ProductFacts | null = null;
+  if (local) {
+    localFacts = toFacts(local, barcode, locale);
+    // A mirror row can be present but thin: the published exports contain
+    // records whose nutriments object is empty even though the API serves full
+    // values for the same barcode. Treating such a row as authoritative turned
+    // every scan into "insufficient data", so an unusable local record counts as
+    // a miss and the request falls through to the API. The thin record is still
+    // kept as a last resort if the network then fails.
+    if (hasEnoughFacts(localFacts) || localOnly) return localFacts;
+  }
 
   // With a complete local mirror, a miss is a genuine "product not in the
   // dataset" answer. Falling through to the network would only reintroduce the
   // rate limit for barcodes we already know are absent.
-  if (process.env.OPEN_FOOD_FACTS_LOCAL === 'true' && process.env.OPEN_FOOD_FACTS_LOCAL_ONLY === 'true') {
+  if (process.env.OPEN_FOOD_FACTS_LOCAL === 'true' && localOnly) {
     return null;
   }
 
@@ -312,17 +323,27 @@ export async function findProductByBarcode(barcode: string, locale = 'en'): Prom
   }
   const base = (process.env.OPEN_FOOD_FACTS_BASE_URL ?? 'https://world.openfoodfacts.org').replace(/\/$/, '');
 
-  const response = await fetch(`${base}/api/v3/product/${barcode}?fields=${encodeURIComponent(FIELDS)}`, {
-    headers: { 'User-Agent': userAgent ?? 'IngreFit-Development/1.0 (https://ingrefit.com)' },
-    next: { revalidate: 86_400 },
-    signal: AbortSignal.timeout(8_000),
-  });
-  if (response.status === 404) return null;
-  if (response.status === 429) throw new Error('Open Food Facts rate limit reached');
-  if (!response.ok) throw new Error(`Open Food Facts returned HTTP ${response.status}`);
+  let response: Response;
+  try {
+    response = await fetch(`${base}/api/v3/product/${barcode}?fields=${encodeURIComponent(FIELDS)}`, {
+      headers: { 'User-Agent': userAgent ?? 'IngreFit-Development/1.0 (https://ingrefit.com)' },
+      next: { revalidate: 86_400 },
+      signal: AbortSignal.timeout(8_000),
+    });
+  } catch (error) {
+    if (localFacts) return localFacts;
+    throw error;
+  }
+
+  if (response.status === 404) return localFacts;
+  if (!response.ok) {
+    if (localFacts) return localFacts;
+    if (response.status === 429) throw new Error('Open Food Facts rate limit reached');
+    throw new Error(`Open Food Facts returned HTTP ${response.status}`);
+  }
 
   const payload = (await response.json()) as OpenFoodFactsResponse;
-  if (!payload.product || payload.status === 0 || payload.status === 'failure') return null;
+  if (!payload.product || payload.status === 0 || payload.status === 'failure') return localFacts;
 
   await writeCachedRaw(barcode, payload.product);
   return toFacts(payload.product, barcode, locale);
