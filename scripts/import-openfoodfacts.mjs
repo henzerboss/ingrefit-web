@@ -440,6 +440,22 @@ async function runInspect(targetBarcode) {
     console.log(`    normalized: ${JSON.stringify(normalizeNutriments(raw, record.nutrition_data_per))}`);
     if (targetBarcode) {
       console.log(`    FULL nutriments: ${JSON.stringify(raw)}`);
+
+      // When `nutriments` is empty the values may live in another top-level
+      // field that the importer neither keeps nor previously inspected. Dump
+      // every key, then the full value of anything nutrition-shaped, so a
+      // recoverable source can be identified instead of guessed at.
+      const keys = Object.keys(record).sort();
+      console.log(`\n    ALL TOP-LEVEL KEYS (${keys.length}):`);
+      console.log(`      ${keys.join(', ')}`);
+
+      const interesting = keys.filter((key) => /nutr|energ|kcal|kj|serving|quantity/i.test(key));
+      console.log(`\n    NUTRITION-SHAPED FIELDS (${interesting.length}):`);
+      for (const key of interesting) {
+        const value = JSON.stringify(record[key]);
+        console.log(`      ${key} = ${value && value.length > 700 ? `${value.slice(0, 700)}...(truncated)` : value}`);
+      }
+
       lines.close();
       return;
     }
