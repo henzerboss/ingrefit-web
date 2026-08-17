@@ -141,3 +141,44 @@ tables from the imported dataset, which the current schema already does.
   the fingerprint is too specific and the cache is not paying for itself.
 - Back up `ProductLocalization` and `ExplanationCache` — losing them is not a
   correctness problem, but re-earning them costs real Gemini spend.
+
+## Field shapes in the JSONL export
+
+The JSONL export is the MongoDB document, not the API response. The field
+reference is published at
+`https://world.openfoodfacts.org/data/data-fields.txt`, and two of its rules
+matter for the importer:
+
+- `*_100g` is the amount per 100 g or 100 ml, **and energy in that family is in
+  kJ**. Only `energy-kcal_100g` is in kcal, so `energy_100g` and `energy-kj_100g`
+  must be divided by 4.184.
+- `*_serving` is per serving, so those values cannot be reinterpreted as per
+  100 g without a serving weight.
+
+In practice `nutriments` also carries bare names (`fat`, `sugars`) whose basis is
+given by `nutrition_data_per`, plus `*_value` in the unit named by `*_unit`.
+`scripts/import-openfoodfacts.mjs` handles all of these and stores the raw
+per-nutrient subset alongside the normalized values, so re-deriving them later is
+a SQL update rather than another multi-hour pass over the archive.
+
+Run `node scripts/import-openfoodfacts.mjs --inspect [barcode]` before trusting
+an import: it prints the raw shape and the normalized result without a full pass.
+
+Two further consequences of using the exports:
+
+- **Delta files cannot express deletions.** Only a full re-import removes
+  products that were deleted upstream, which is why `--full` should still run
+  every few months.
+- **Product images are licensed CC BY-SA**, separately from the ODbL database.
+  Attribution applies to images too if they are displayed.
+
+## Translating assessment output
+
+Product assessment wording lives in `src/lib/ingrefit/catalog/<language>.json`,
+not in TypeScript. To add a language: copy `en.json`, translate the values while
+keeping every `{placeholder}` intact, then import it in
+`src/lib/ingrefit/catalog/index.ts` and add it to `CATALOGS`. Missing keys fall
+back to English individually, so partial files are safe to ship.
+
+`npm run i18n:status` reports completeness for both the website UI and the
+assessment catalog; add `--missing` to list the outstanding keys.

@@ -1,6 +1,6 @@
 {
   "name": "ingrefit-web",
-  "version": "1.7.6",
+  "version": "1.8.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -13,7 +13,8 @@
     "postinstall": "prisma generate",
     "test:scoring": "tsx scripts/scoring-cases.ts",
     "off:full": "./scripts/off-cron.sh full",
-    "off:delta": "./scripts/off-cron.sh delta"
+    "off:delta": "./scripts/off-cron.sh delta",
+    "i18n:status": "node scripts/i18n-status.mjs"
   },
   "dependencies": {
     "@prisma/client": "^6.12.0",

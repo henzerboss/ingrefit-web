@@ -119,7 +119,12 @@ case "$MODE" in
     log "$MODE import started"
     "$NODE" scripts/import-openfoodfacts.mjs "--$MODE" >> "$LOG_FILE" 2>&1
     log "$MODE import finished"
-    [ "$MODE" = "delta" ] && prune_counters
+    # Written as an if, not `[ ... ] && ...`: as the final statement of the
+    # script the latter returns 1 in full mode under `set -e`, which made a
+    # successful import report itself as a failed job.
+    if [ "$MODE" = "delta" ]; then
+      prune_counters
+    fi
     ;;
   *)
     echo "Usage: $0 [delta|full|prune]" >&2

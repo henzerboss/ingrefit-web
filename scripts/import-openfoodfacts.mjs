@@ -58,6 +58,7 @@ const KEPT_FIELDS = [
   'nutriscore_grade', 'nutrition_grades', 'nova_group', 'ecoscore_grade', 'environmental_score_grade',
   'alcohol_by_volume', 'alcohol_value', 'alcohol_unit',
   'nutriments', 'serving_size', 'nutrition_data_per', 'last_modified_t',
+  'nutrition_data_per', 'no_nutriments',
 ];
 
 /** Nutriment keys the app uses; the raw object routinely holds 200+. */
@@ -86,7 +87,7 @@ function numeric(value) {
  * product fail the "at least four nutrient values" threshold, so all three are
  * handled here and the outcome is counted rather than trusted.
  */
-function normalizeNutriments(raw) {
+function normalizeNutriments(raw, dataPer) {
   const output = {};
   if (!raw) return output;
 
@@ -104,67 +105,66 @@ function normalizeNutriments(raw) {
 
   if (typeof raw !== 'object') return output;
 
-  // Shape 1: already suffixed.
-  for (const key of KEPT_NUTRIMENTS) {
-    const value = numeric(raw[key]);
-    if (value !== undefined) output[key] = value;
-  }
+  // Values declared per serving cannot be reinterpreted as per 100 g without a
+  // serving weight, so in that case only explicit *_100g keys are trustworthy.
+  const perServing = String(dataPer ?? '').toLowerCase() === 'serving';
 
-  // Shape 2: bare names, or nested per-quantity objects.
-  for (const base of KEPT_NUTRIMENT_BASES) {
-    if (output[`${base}_100g`] !== undefined) continue;
-    const candidate = raw[base];
-    if (candidate && typeof candidate === 'object' && !Array.isArray(candidate)) {
-      const nested = numeric(candidate['100g'] ?? candidate.per_100g ?? candidate.value);
-      if (nested !== undefined) output[`${base}_100g`] = nested;
-      continue;
+  // Convert an "as entered" value using its declared unit. Open Food Facts
+  // stores *_100g in grams, but *_value in whatever the label used.
+  const convert = (value, unit) => {
+    if (value === undefined) return undefined;
+    switch (String(unit ?? '').toLowerCase()) {
+      case 'mg': return value / 1000;
+      case 'µg':
+      case 'ug':
+      case 'mcg': return value / 1_000_000;
+      case 'kg': return value * 1000;
+      default: return value;
     }
-    const flat = numeric(candidate);
-    if (flat !== undefined) output[`${base}_100g`] = flat;
+  };
+
+  for (const base of KEPT_NUTRIMENT_BASES) {
+    const key = `${base}_100g`;
+
+    // 1. Explicit per-100g value, always authoritative.
+    let value = numeric(raw[key]);
+
+    // 2. Bare name, or a nested per-quantity object.
+    if (value === undefined && !perServing) {
+      const candidate = raw[base];
+      if (candidate && typeof candidate === 'object' && !Array.isArray(candidate)) {
+        value = numeric(candidate['100g'] ?? candidate.per_100g ?? candidate.value);
+      } else {
+        value = numeric(candidate);
+      }
+    }
+
+    // 3. The "as entered" value, converted from its declared unit.
+    if (value === undefined && !perServing) {
+      value = convert(numeric(raw[`${base}_value`]), raw[`${base}_unit`]);
+    }
+
+    if (value !== undefined) output[key] = value;
   }
 
   // Energy in kJ is common when kcal is absent; 1 kcal = 4.184 kJ.
   if (output['energy-kcal_100g'] === undefined) {
-    const kj = numeric(raw['energy-kj_100g'] ?? raw['energy_100g'] ?? raw['energy-kj'] ?? raw.energy);
+    const kj = numeric(
+      raw['energy-kj_100g'] ??
+      (perServing ? undefined : raw['energy-kj'] ?? raw['energy-kj_value'] ?? raw.energy_100g ?? (perServing ? undefined : raw.energy)),
+    );
     if (kj !== undefined) output['energy-kcal_100g'] = Math.round((kj / 4.184) * 10) / 10;
   }
 
+  // Salt and sodium are interchangeable: salt = sodium x 2.5.
+  if (output.salt_100g === undefined && output.sodium_100g !== undefined) {
+    output.salt_100g = Math.round(output.sodium_100g * 2.5 * 1000) / 1000;
+  }
+  if (output.sodium_100g === undefined && output.salt_100g !== undefined) {
+    output.sodium_100g = Math.round((output.salt_100g / 2.5) * 1000) / 1000;
+  }
+
   return output;
-}
-
-/**
- * PostgreSQL rejects U+0000 inside jsonb ("\\u0000 cannot be converted to
- * text"), and the export does contain records with stray NUL bytes in text
- * fields. Strip them recursively, from keys as well as values, before the row
- * ever reaches the driver.
- */
-function stripNul(value) {
-  if (typeof value === 'string') {
-    return value.includes('\u0000') ? value.replaceAll('\u0000', '') : value;
-  }
-  if (Array.isArray(value)) return value.map(stripNul);
-  if (value && typeof value === 'object') {
-    const output = {};
-    for (const [key, nested] of Object.entries(value)) {
-      output[stripNul(key)] = stripNul(nested);
-    }
-    return output;
-  }
-  return value;
-}
-
-function slim(record) {
-  const output = {};
-  for (const field of KEPT_FIELDS) {
-    if (record[field] === undefined || record[field] === null) continue;
-    output[field] = record[field];
-  }
-  if (Array.isArray(record.ingredients)) {
-    // Keep only the display text; the nested parse tree is large and unused.
-    output.ingredients = record.ingredients.slice(0, 120).map((item) => ({ text: item?.text, id: item?.id }));
-  }
-  output.nutriments = normalizeNutriments(record.nutriments);
-  return stripNul(output);
 }
 
 function readState() {
@@ -345,8 +345,12 @@ async function runDelta() {
   }
 }
 
-/** Print the raw shape of the first few records. Reads only the file head. */
-async function runInspect() {
+/**
+ * Print the raw shape of records. With no argument it reads the file head; with
+ * a barcode it scans until that product is found, which is the fast way to see
+ * why one specific scan came back without nutrition.
+ */
+async function runInspect(targetBarcode) {
   const archive = path.join(WORK_DIR, 'openfoodfacts-products.jsonl.gz');
   if (!existsSync(archive)) {
     console.error(`[off] archive not found at ${archive}`);
@@ -354,14 +358,26 @@ async function runInspect() {
   }
   const lines = createInterface({ input: createReadStream(archive).pipe(createGunzip()), crlfDelay: Infinity });
   let seen = 0;
+  let scanned = 0;
+  if (targetBarcode) console.log(`[off] scanning for barcode ${targetBarcode}, this reads the archive sequentially...`);
+
   for await (const line of lines) {
     if (!line.trim()) continue;
+
+    if (targetBarcode) {
+      scanned += 1;
+      if (scanned % 500_000 === 0) console.log(`[off]   ...${scanned} lines scanned`);
+      // Cheap pre-filter: avoid parsing every one of millions of lines.
+      if (!line.includes(`"${targetBarcode}"`)) continue;
+    }
+
     let record;
     try {
       record = JSON.parse(line);
     } catch {
       continue;
     }
+    if (targetBarcode && String(record.code ?? '').trim() !== targetBarcode) continue;
     const raw = record.nutriments;
     console.log(`--- ${record.code} ${record.product_name ?? ''}`);
     console.log(`    nutriments type: ${Array.isArray(raw) ? 'array' : typeof raw}`);
@@ -370,11 +386,18 @@ async function runInspect() {
       console.log(`    sample keys: ${JSON.stringify(keys)}`);
       console.log(`    raw sample: ${JSON.stringify(raw).slice(0, 400)}`);
     }
-    console.log(`    normalized: ${JSON.stringify(normalizeNutriments(raw))}`);
+    console.log(`    nutrition_data_per: ${record.nutrition_data_per ?? '(unset)'}`);
+    console.log(`    normalized: ${JSON.stringify(normalizeNutriments(raw, record.nutrition_data_per))}`);
+    if (targetBarcode) {
+      console.log(`    FULL nutriments: ${JSON.stringify(raw)}`);
+      lines.close();
+      return;
+    }
     seen += 1;
     if (seen >= 3) break;
   }
   lines.close();
+  if (targetBarcode) console.log(`[off] barcode ${targetBarcode} not found in the archive`);
 }
 
 async function main() {
@@ -386,11 +409,13 @@ async function main() {
         ? 'inspect'
         : null;
   if (!mode) {
-    console.error('Usage: node scripts/import-openfoodfacts.mjs --full | --delta | --inspect');
+    console.error('Usage: node scripts/import-openfoodfacts.mjs --full | --delta | --inspect [barcode]');
     process.exit(1);
   }
   if (mode === 'inspect') {
-    await runInspect();
+    const index = process.argv.indexOf('--inspect');
+    const candidate = process.argv[index + 1];
+    await runInspect(candidate && /^\d{6,18}$/.test(candidate) ? candidate : undefined);
     await prisma.$disconnect();
     return;
   }

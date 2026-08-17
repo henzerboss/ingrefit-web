@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { fill, formatNumber, phrase } from './catalog';
 import { catalogLanguage, dietName, goalName, renderSignal, type CatalogLanguage } from './signalCatalog';
 import { callGemini } from './gemini';
 import { safeDb } from './db';
@@ -45,10 +46,6 @@ function renderSignals(scored: ScoredProduct, language: CatalogLanguage): Render
   });
 }
 
-function goalList(profile: AnalysisProfile, language: CatalogLanguage): string {
-  return profile.goals.slice(0, 3).map((goal) => goalName(goal as GoalId, language)).join(', ');
-}
-
 function buildSummary(
   facts: ProductFacts,
   profile: AnalysisProfile,
@@ -56,87 +53,58 @@ function buildSummary(
   signals: RenderedSignal[],
   language: CatalogLanguage,
 ): string {
-  const russian = language === 'ru';
-
   if (scored.blocked) {
     const blocker = signals.find((signal) => signal.severity === 'critical');
-    return russian
-      ? `Этот продукт не подходит вам по жёсткому ограничению: ${blocker?.label.toLocaleLowerCase('ru') ?? 'ограничение профиля'}. Оценка качества здесь вторична — покупать его не стоит независимо от остальных показателей.`
-      : `This product is ruled out by a hard restriction in your profile: ${blocker?.label.toLowerCase() ?? 'profile restriction'}. Quality is secondary here — the restriction stands regardless of the other numbers.`;
+    return fill(phrase(language, 'summary.blocked'), {
+      blocker: blocker ? blocker.label.toLocaleLowerCase(language) : phrase(language, 'summary.blockedFallback'),
+    });
   }
 
   const strongest = signals
     .filter((signal) => signal.impact !== 0)
     .sort((left, right) => Math.abs(right.impact) - Math.abs(left.impact))
     .slice(0, 2)
-    .map((signal) => (russian ? signal.label.toLocaleLowerCase('ru') : signal.label.toLowerCase()));
+    .map((signal) => signal.label.toLocaleLowerCase(language));
 
-  const goals = goalList(profile, language);
-  const personal = scored.personalDelta;
-  const personalPhrase = russian
-    ? personal > 0.2
-      ? `ваши цели (${goals}) подняли оценку на ${personal.toFixed(1)}`
-      : personal < -0.2
-        ? `ваши цели (${goals}) снизили оценку на ${Math.abs(personal).toFixed(1)}`
-        : `ваши цели (${goals}) почти не изменили оценку`
-    : personal > 0.2
-      ? `your goals (${goals}) raised it by ${personal.toFixed(1)}`
-      : personal < -0.2
-        ? `your goals (${goals}) lowered it by ${Math.abs(personal).toFixed(1)}`
-        : `your goals (${goals}) barely moved it`;
+  const delta = scored.personalDelta;
+  const personalKey = delta > 0.2 ? 'summary.personalUp' : delta < -0.2 ? 'summary.personalDown' : 'summary.personalFlat';
+  const personal = fill(phrase(language, personalKey), {
+    goals: profile.goals.slice(0, 3).map((goal) => goalName(goal as GoalId, language)).join(', '),
+    delta: formatNumber(language, Math.abs(delta)),
+  });
 
-  if (!strongest.length) {
-    return russian
-      ? `Базовое качество продукта — ${scored.baseScore.toFixed(1)} из 10, и ${personalPhrase}. Данных для более точного разбора пока мало.`
-      : `Baseline product quality is ${scored.baseScore.toFixed(1)} out of 10, and ${personalPhrase}. There is not enough data for a finer breakdown.`;
-  }
-
-  return russian
-    ? `Базовое качество продукта — ${scored.baseScore.toFixed(1)} из 10, и ${personalPhrase}. Сильнее всего повлияли: ${strongest.join('; ')}. Это оценка соответствия именно вашему профилю, а не универсальная «полезность».`
-    : `Baseline product quality is ${scored.baseScore.toFixed(1)} out of 10, and ${personalPhrase}. The strongest influences were ${strongest.join('; ')}. This measures fit with your profile, not universal healthiness.`;
+  return fill(phrase(language, strongest.length ? 'summary.withSignals' : 'summary.withoutSignals'), {
+    base: formatNumber(language, scored.baseScore),
+    personal,
+    strongest: strongest.join('; '),
+  });
 }
 
 function buildDataNotice(facts: ProductFacts, scored: ScoredProduct, language: CatalogLanguage): string {
-  const russian = language === 'ru';
   const confidence = Math.round(scored.confidence * 100);
-
   if (facts.source === 'ai_photo') {
-    return russian
-      ? `Источник: визуальное распознавание AI. Пищевая ценность — ориентировочная оценка по внешнему виду; состав, аллергены и точные значения неизвестны. Достоверность оценки: ${confidence}%.`
-      : `Source: AI visual identification. Nutrition is an approximate estimate from appearance; ingredients, allergens and exact values remain unknown. Score confidence: ${confidence}%.`;
+    return fill(phrase(language, 'dataNotice.aiPhoto'), { confidence });
   }
+  const source = facts.source === 'openfoodfacts' ? 'Open Food Facts (ODbL)' : phrase(language, 'dataNotice.sourcePackage');
   if (facts.nutritionBasis === 'estimated_text') {
-    return russian
-      ? `Источник фактов: ${facts.source === 'openfoodfacts' ? 'Open Food Facts' : 'текст упаковки'}. Недостающие значения оценены AI по названию и составу, а не взяты с упаковки. Достоверность оценки: ${confidence}%.`
-      : `Fact source: ${facts.source === 'openfoodfacts' ? 'Open Food Facts' : 'package text'}. Missing values were estimated by AI from the name and ingredients, not read from the package. Score confidence: ${confidence}%.`;
+    return fill(phrase(language, 'dataNotice.estimatedText'), { source, confidence });
   }
-  const source = facts.source === 'openfoodfacts' ? 'Open Food Facts (ODbL)' : russian ? 'видимый текст упаковки' : 'visible package text';
-  return russian
-    ? `Источник: ${source}. Полнота данных: ${facts.completeness}%. Достоверность оценки: ${confidence}%.`
-    : `Source: ${source}. Data completeness: ${facts.completeness}%. Score confidence: ${confidence}%.`;
+  return fill(phrase(language, 'dataNotice.declared'), {
+    source,
+    completeness: facts.completeness,
+    confidence,
+  });
 }
 
 function buildTip(facts: ProductFacts, profile: AnalysisProfile, scored: ScoredProduct, language: CatalogLanguage): string {
-  const russian = language === 'ru';
-  if (scored.blocked) {
-    return russian
-      ? 'Перед покупкой всегда проверяйте упаковку: состав может измениться без обновления базы.'
-      : 'Always check the package before buying: recipes change without the database being updated.';
-  }
+  if (scored.blocked) return phrase(language, 'tip.blocked');
+
   const highRisk = facts.additives.find((additive) => additive.risk === 'high');
-  if (highRisk) {
-    return russian
-      ? `Если хотите избежать ${highRisk.code.toUpperCase()}, ищите вариант того же типа с более коротким составом.`
-      : `To avoid ${highRisk.code.toUpperCase()}, look for the same kind of product with a shorter ingredient list.`;
-  }
-  if (facts.novaGroup === 4) {
-    return russian
-      ? 'Это ультраобработанный продукт. Менее обработанный аналог обычно даёт заметно более высокую базовую оценку.'
-      : 'This is an ultra-processed product. A less processed equivalent usually scores noticeably higher at baseline.';
-  }
-  return russian
-    ? `Оценка привязана к вашему профилю (${dietName(profile.diet, language)}). Измените цели в профиле — и результат пересчитается.`
-    : `The score is tied to your profile (${dietName(profile.diet, language)}). Change your goals and the result is recalculated.`;
+  if (highRisk) return fill(phrase(language, 'tip.highRiskAdditive'), { code: highRisk.code.toUpperCase() });
+
+  if (facts.novaGroup === 4) return phrase(language, 'tip.ultraProcessed');
+
+  return fill(phrase(language, 'tip.default'), { diet: dietName(profile.diet, language) });
 }
 
 /** Deterministic assessment. Always complete, always in the user's language. */
@@ -265,8 +233,11 @@ export async function explainScore(
       validate: (value) => aiSchema.parse(value),
     });
 
-    const looksLocalized = language !== 'ru' || /[А-Яа-яЁё]/.test(result.summary);
-    if (!looksLocalized) return deterministic;
+    // Cheap sanity check: for a Cyrillic-script language, a reply with no
+    // Cyrillic means the model ignored the requested language. Keep the
+    // deterministic text rather than showing English to a Russian user.
+    const cyrillicExpected = ['ru', 'uk', 'sr', 'bg', 'kk'].includes(language);
+    if (cyrillicExpected && !/[\u0400-\u04FF]/.test(result.summary)) return deterministic;
 
     await writeExplanationCache(scored.fingerprint, language, result);
     return { ...deterministic, summary: result.summary, tip: result.tip };
