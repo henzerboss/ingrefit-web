@@ -1,5 +1,53 @@
 import en from './en.json';
 import ru from './ru.json';
+import af from './af.json';
+import ar from './ar.json';
+import az from './az.json';
+import bg from './bg.json';
+import bn from './bn.json';
+import ca from './ca.json';
+import cs from './cs.json';
+import da from './da.json';
+import de from './de.json';
+import el from './el.json';
+import es from './es.json';
+import et from './et.json';
+import fi from './fi.json';
+import fil from './fil.json';
+import fr from './fr.json';
+import gu from './gu.json';
+import he from './he.json';
+import hi from './hi.json';
+import hr from './hr.json';
+import hu from './hu.json';
+import id from './id.json';
+import it from './it.json';
+import ja from './ja.json';
+import kk from './kk.json';
+import kn from './kn.json';
+import ko from './ko.json';
+import lt from './lt.json';
+import lv from './lv.json';
+import ml from './ml.json';
+import mr from './mr.json';
+import ms from './ms.json';
+import nl from './nl.json';
+import no from './no.json';
+import pa from './pa.json';
+import pl from './pl.json';
+import pt from './pt.json';
+import ro from './ro.json';
+import sk from './sk.json';
+import sl from './sl.json';
+import sr from './sr.json';
+import sv from './sv.json';
+import ta from './ta.json';
+import te from './te.json';
+import th from './th.json';
+import tr from './tr.json';
+import uk from './uk.json';
+import vi from './vi.json';
+import zh from './zh.json';
 
 /**
  * Translation catalog for everything the assessment engine says to the user.
@@ -17,7 +65,58 @@ import ru from './ru.json';
 export type Catalog = typeof en;
 
 /** Languages with a catalog file. Everything else is served in English. */
-const CATALOGS: Record<string, unknown> = { en, ru };
+const CATALOGS: Record<string, unknown> = {
+  en,
+  ru,
+  af,
+  ar,
+  az,
+  bg,
+  bn,
+  ca,
+  cs,
+  da,
+  de,
+  el,
+  es,
+  et,
+  fi,
+  fil,
+  fr,
+  gu,
+  he,
+  hi,
+  hr,
+  hu,
+  id,
+  it,
+  ja,
+  kk,
+  kn,
+  ko,
+  lt,
+  lv,
+  ml,
+  mr,
+  ms,
+  nl,
+  no,
+  pa,
+  pl,
+  pt,
+  ro,
+  sk,
+  sl,
+  sr,
+  sv,
+  ta,
+  te,
+  th,
+  tr,
+  uk,
+  vi,
+  zh,
+};
 
 export const CATALOG_LANGUAGES = Object.keys(CATALOGS);
 
