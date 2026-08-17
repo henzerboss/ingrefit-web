@@ -155,8 +155,26 @@ matter for the importer:
 - `*_serving` is per serving, so those values cannot be reinterpreted as per
   100 g without a serving weight.
 
-In practice `nutriments` also carries bare names (`fat`, `sugars`) whose basis is
-given by `nutrition_data_per`, plus `*_value` in the unit named by `*_unit`.
+Nutrition is not stored in one place. Open Food Facts is migrating onto a newer
+`nutrition.input_sets` structure, and **for products already migrated the legacy
+`nutriments` object is left empty** — roughly one record in six, including
+well-known products such as Nutella. The importer therefore reads three sources
+in order of trustworthiness and merges them:
+
+1. `nutriments` — the legacy object. Carries `*_100g` keys, bare names (`fat`,
+   `sugars`) whose basis is given by `nutrition_data_per`, and `*_value` in the
+   unit named by `*_unit`.
+2. `nutrition.input_sets[]` — the new structure. Each set has `per`,
+   `per_quantity`, `per_unit` and `nutrients: { name: { value, unit,
+   value_computed } }`. Only per-100 sets are used, preferring
+   `source: "manufacturer"`, because a per-serving set cannot be converted
+   without a serving weight.
+3. `nutriscore.2021.data` and `nutriscore_data.components` — the declared values
+   Open Food Facts fed into Nutri-Score. Smaller set, and the units differ:
+   energy in kJ, sodium in mg in the 2021 block.
+
+Salt is then derived from sodium (and back) at a ratio of 2.5, and the
+fruit/vegetable estimate falls back to its top-level field.
 `scripts/import-openfoodfacts.mjs` handles all of these and stores the raw
 per-nutrient subset alongside the normalized values, so re-deriving them later is
 a SQL update rather than another multi-hour pass over the archive.

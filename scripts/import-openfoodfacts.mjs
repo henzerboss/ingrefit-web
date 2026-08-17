@@ -200,7 +200,7 @@ function slim(record) {
     output.ingredients = record.ingredients.slice(0, 120).map((item) => ({ text: item?.text, id: item?.id }));
   }
 
-  output.nutriments = normalizeNutriments(record.nutriments, record.nutrition_data_per);
+  output.nutriments = extractNutriments(record);
 
   // Also keep the raw per-nutrient subset. Re-deriving values later then costs a
   // SQL update instead of another multi-hour pass over a 50 GB archive, which is
@@ -215,6 +215,123 @@ function slim(record) {
   }
 
   return stripNul(output);
+}
+
+/**
+ * Open Food Facts is migrating nutrition onto a new `nutrition.input_sets`
+ * structure, and for products already migrated the legacy `nutriments` object is
+ * left empty. That is why roughly one record in six looked like it had no
+ * nutrition at all: the values had simply moved.
+ *
+ * Set shape: { source, per, per_quantity, per_unit,
+ *              nutrients: { "saturated-fat": { value, unit, value_computed } } }
+ */
+function fromNutritionSets(nutrition) {
+  const output = {};
+  const sets = nutrition && typeof nutrition === 'object' ? nutrition.input_sets : undefined;
+  if (!Array.isArray(sets)) return output;
+
+  // Only per-100 sets are usable without a serving weight. A manufacturer set
+  // is preferred over an estimate when both are present.
+  const usable = sets.filter((set) => {
+    const per = String(set?.per ?? '').toLowerCase();
+    return per === '100g' || per === '100ml' || Number(set?.per_quantity) === 100;
+  });
+  const chosen = usable.find((set) => set?.source === 'manufacturer') ?? usable[0];
+  const nutrients = chosen?.nutrients;
+  if (!nutrients || typeof nutrients !== 'object') return output;
+
+  for (const [name, entry] of Object.entries(nutrients)) {
+    if (!entry || typeof entry !== 'object') continue;
+    const value = numeric(entry.value ?? entry.value_computed);
+    if (value === undefined) continue;
+    if (name === 'energy-kj') {
+      if (output['energy-kcal_100g'] === undefined) output['energy-kcal_100g'] = Math.round((value / 4.184) * 10) / 10;
+      continue;
+    }
+    if (KEPT_NUTRIMENT_BASES.includes(name)) output[`${name}_100g`] = value;
+  }
+  return output;
+}
+
+/**
+ * Last-resort source: the values Open Food Facts fed into Nutri-Score. They are
+ * the declared per-100 values, so they are trustworthy, but the set is smaller
+ * and the units differ (energy in kJ, sodium in mg in the 2021 block).
+ */
+function fromNutriscore(record) {
+  const output = {};
+
+  const legacy = record?.nutriscore?.['2021']?.data;
+  if (legacy && typeof legacy === 'object') {
+    const map = { sugars: 'sugars', saturated_fat: 'saturated-fat', proteins: 'proteins', fiber: 'fiber' };
+    for (const [key, base] of Object.entries(map)) {
+      const value = numeric(legacy[key]);
+      if (value !== undefined) output[`${base}_100g`] = Math.round(value * 100) / 100;
+    }
+    const energyKj = numeric(legacy.energy);
+    if (energyKj !== undefined) output['energy-kcal_100g'] = Math.round((energyKj / 4.184) * 10) / 10;
+    // The 2021 block reports sodium in mg per 100 g.
+    const sodiumMg = numeric(legacy.sodium);
+    if (sodiumMg !== undefined) output.sodium_100g = Math.round((sodiumMg / 1000) * 1000) / 1000;
+  }
+
+  const components = record?.nutriscore_data?.components;
+  if (components && typeof components === 'object') {
+    const ids = { energy: 'energy', sugars: 'sugars', saturated_fat: 'saturated-fat', salt: 'salt', fiber: 'fiber', proteins: 'proteins' };
+    for (const group of ['negative', 'positive']) {
+      for (const item of Array.isArray(components[group]) ? components[group] : []) {
+        const base = ids[item?.id];
+        const value = numeric(item?.value);
+        if (!base || value === undefined) continue;
+        if (base === 'energy') {
+          if (output['energy-kcal_100g'] === undefined) {
+            const kcal = String(item.unit ?? '').toLowerCase() === 'kcal' ? value : value / 4.184;
+            output['energy-kcal_100g'] = Math.round(kcal * 10) / 10;
+          }
+          continue;
+        }
+        if (output[`${base}_100g`] === undefined) output[`${base}_100g`] = value;
+      }
+    }
+  }
+
+  return output;
+}
+
+/**
+ * Collect nutrition from every place Open Food Facts may store it, in order of
+ * trustworthiness, and fill in what can be derived. Earlier sources win.
+ */
+function extractNutriments(record) {
+  const output = { ...normalizeNutriments(record.nutriments, record.nutrition_data_per) };
+
+  const merge = (source) => {
+    for (const [key, value] of Object.entries(source)) {
+      if (output[key] === undefined) output[key] = value;
+    }
+  };
+
+  if (Object.keys(output).length < 4) merge(fromNutritionSets(record.nutrition));
+  if (Object.keys(output).length < 4) merge(fromNutriscore(record));
+
+  // The fruit/vegetable estimate also exists as a top-level field.
+  if (output['fruits-vegetables-nuts-estimate-from-ingredients_100g'] === undefined) {
+    const estimate =
+      numeric(record['fruits-vegetables-nuts_100g_estimate']) ??
+      numeric(record.nutrition_score_warning_fruits_vegetables_nuts_estimate_from_ingredients_value);
+    if (estimate !== undefined) output['fruits-vegetables-nuts-estimate-from-ingredients_100g'] = estimate;
+  }
+
+  // Salt and sodium are interchangeable: salt = sodium x 2.5.
+  if (output.salt_100g === undefined && output.sodium_100g !== undefined) {
+    output.salt_100g = Math.round(output.sodium_100g * 2.5 * 1000) / 1000;
+  }
+  if (output.sodium_100g === undefined && output.salt_100g !== undefined) {
+    output.sodium_100g = Math.round((output.salt_100g / 2.5) * 1000) / 1000;
+  }
+
+  return output;
 }
 
 function readState() {
@@ -437,7 +554,7 @@ async function runInspect(targetBarcode) {
       console.log(`    raw sample: ${JSON.stringify(raw).slice(0, 400)}`);
     }
     console.log(`    nutrition_data_per: ${record.nutrition_data_per ?? '(unset)'}`);
-    console.log(`    normalized: ${JSON.stringify(normalizeNutriments(raw, record.nutrition_data_per))}`);
+    console.log(`    normalized: ${JSON.stringify(extractNutriments(record))}`);
     if (targetBarcode) {
       console.log(`    FULL nutriments: ${JSON.stringify(raw)}`);
 
@@ -500,19 +617,22 @@ async function runStats(sampleSize) {
     if (record.product_name) named += 1;
     const raw = record.nutriments;
     if (!raw || (typeof raw === 'object' && !Array.isArray(raw) && Object.keys(raw).length === 0)) emptyRaw += 1;
-    else if (Object.keys(normalizeNutriments(raw, record.nutrition_data_per)).length >= 4) usable += 1;
+    if (Object.keys(extractNutriments(record)).length >= 4) usable += 1;
     if (total >= sampleSize) break;
   }
   lines.close();
 
   const percent = (value) => `${((value / total) * 100).toFixed(1)}%`;
   console.log(`[off] sampled ${total} records`);
-  console.log(`[off]   with a product name          : ${named} (${percent(named)})`);
-  console.log(`[off]   nutriments empty in the dump  : ${emptyRaw} (${percent(emptyRaw)})`);
-  console.log(`[off]   4+ usable nutrients           : ${usable} (${percent(usable)})`);
-  if (emptyRaw / total > 0.5) {
-    console.warn('[off] WARNING: most sampled records have no nutriments at all in the archive.');
-    console.warn('[off] Re-download with OFF_FORCE_DOWNLOAD=true and re-run this check before importing.');
+  console.log(`[off]   with a product name              : ${named} (${percent(named)})`);
+  console.log(`[off]   legacy nutriments empty          : ${emptyRaw} (${percent(emptyRaw)})`);
+  console.log(`[off]   4+ usable nutrients after merge  : ${usable} (${percent(usable)})`);
+  // An empty legacy `nutriments` is normal for products migrated to the newer
+  // `nutrition.input_sets` structure, so only the post-merge figure indicates a
+  // problem worth acting on.
+  if (usable / total < 0.5) {
+    console.warn('[off] WARNING: fewer than half the sampled records yield usable nutrition.');
+    console.warn('[off] Run --inspect <barcode> on a well-known product before importing.');
   }
 }
 
