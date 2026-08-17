@@ -39,21 +39,43 @@ table plus its index, not hundreds.
 
 ### First import
 
+Run it through the wrapper, which loads `.env` and resolves node the same way
+the cron job will:
+
 ```bash
-node scripts/import-openfoodfacts.mjs --full
+mkdir -p "$OFF_IMPORT_DIR" "$OFF_LOG_DIR"
+nohup ./scripts/off-cron.sh full > /dev/null 2>&1 &
 ```
 
 It downloads the export to `OFF_IMPORT_DIR`, streams it, and upserts in batches
-of 2,000 inside transactions. Expect hours, not minutes. The run is restartable:
-progress is written to a state file, so an interrupted import resumes at the
-line it stopped on rather than starting over.
+of 2,000 inside transactions. Expect hours, not minutes, so start it detached —
+an SSH disconnect must not kill it. The run is restartable: progress is written
+to a state file, so an interrupted import resumes at the line it stopped on
+rather than starting over.
+
+Budget disk space before starting: the compressed download plus the resulting
+table need roughly 60–70 GB combined. Check with `df -h`.
 
 ### Keeping it current, safely
 
+Point the server's cron at `scripts/off-cron.sh`. Do not call
+`import-openfoodfacts.mjs` from cron directly: cron provides a minimal `PATH`
+(so an nvm-installed node is not found) and does not load `.env` (so
+`DATABASE_URL` would be missing). The wrapper handles both, takes an flock so a
+slow night cannot start a second overlapping import, and prunes expired
+rate-limit rows afterwards.
+
 ```cron
 # Nightly deltas at 04:15
-15 4 * * * cd /srv/ingrefit-web && node scripts/import-openfoodfacts.mjs --delta >> /var/log/ingrefit/off-delta.log 2>&1
+15 4 * * * /home/ingrefit/htdocs/ingrefit.com/scripts/off-cron.sh
 ```
+
+In a panel with separate schedule fields: minute `15`, hour `4`, day `*`,
+month `*`, weekday `*`, command `/home/ingrefit/htdocs/ingrefit.com/scripts/off-cron.sh`.
+
+Logs land in `$OFF_LOG_DIR` (`off-delta.log`, `off-full.log`). If the log stays
+empty after the first night, node was not found — set `NODE_BIN` in `.env` to
+the output of `command -v node`.
 
 Open Food Facts publishes daily delta files; a normal night is a few megabytes.
 Re-run `--full` every few months to pick up deletions and any records the deltas
@@ -112,9 +134,9 @@ tables from the imported dataset, which the current schema already does.
 
 ## Operational notes
 
-- `RateLimitWindow` accumulates rows. Call `pruneRateLimitWindows()` from a
-  cron, or add `DELETE FROM "RateLimitWindow" WHERE "expiresAt" < now();` to the
-  nightly job.
+- `RateLimitWindow` accumulates rows. The nightly `scripts/off-cron.sh` run
+  prunes them; `./scripts/off-cron.sh prune` does it on demand. Schedule that
+  cron even if the local dataset mirror is never enabled.
 - `ExplanationCache` tracks `hits`; watch it after launch. A low hit rate means
   the fingerprint is too specific and the cache is not paying for itself.
 - Back up `ProductLocalization` and `ExplanationCache` — losing them is not a
