@@ -37,9 +37,15 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    return NextResponse.json(await analyzeProduct(parsed.data, installationId, plan), {
+    const result = await analyzeProduct(parsed.data, installationId, plan);
+    // Surfaced as a header so the fact source can be verified with curl alone,
+    // without reading the body or inferring it from cache side effects.
+    const origin = 'factsOrigin' in result && result.factsOrigin ? String(result.factsOrigin) : 'none';
+
+    return NextResponse.json(result, {
       headers: {
         'Cache-Control': 'no-store',
+        'X-IngreFit-Fact-Source': origin,
         'X-RateLimit-Limit': String(limit.limit),
         'X-RateLimit-Remaining': String(limit.remaining),
         'X-RateLimit-Reset': String(Math.floor(limit.resetAt / 1000)),

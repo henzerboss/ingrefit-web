@@ -182,12 +182,20 @@ a SQL update rather than another multi-hour pass over the archive.
 Two checks to run before trusting an import, both cheap:
 
 ```bash
-node scripts/import-openfoodfacts.mjs --stats 50000        # is this archive worth importing?
+node scripts/import-openfoodfacts.mjs --stats                   # exact, full pass, several minutes
+node scripts/import-openfoodfacts.mjs --stats 50000             # quick smoke test, biased
 node scripts/import-openfoodfacts.mjs --inspect 3017620422003   # what does one product look like?
 ```
 
-`--stats` samples the head of the archive and reports how many records have an
-empty `nutriments` object versus four or more usable values. A published archive
+`--stats` with no argument reads the whole archive and reports exact figures.
+**Do not trust a head sample as a statistic:** the archive is not randomly
+ordered, and a 50,000-line sample once read 96% usable where the complete
+dataset was 72%. Passing a line count is a smoke test for "is this download
+readable at all", nothing more.
+
+Expect roughly a quarter of the dataset to carry no usable nutrition at all.
+Many products in Open Food Facts have never had a nutrition table entered, which
+is a property of crowdsourced data, not a defect in the import. A published archive
 can contain records whose `nutriments` is empty even though the API serves full
 values for the same barcode, so a bad download is worth catching before spending
 hours on it.

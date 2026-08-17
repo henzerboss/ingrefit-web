@@ -152,7 +152,7 @@
     },
     "warning.allergen_data_missing": {
       "label": "Duomenys apie alergenus neišsamūs",
-      "evidence": "Šiam produktui nėra alergenų deklaracijos, todėl jūsų alergenų sąrašo nepavyko patikrinti. Tuščias sąrašas niekada neįrodo, kad produkto alergene nėra."
+      "evidence": "Šiam produktui nėra alergenų deklaracijos, todėl jūsų alergenų sąrašo nepavyko patikrinti. Tuščias sąrašas niekada neįrodo, kad produkte nėra alergeno."
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
@@ -168,7 +168,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts priskiria šį produktą NOVA group {group}."
+      "evidence": "Open Food Facts priskiria šį produktą NOVA {group} grupei."
     },
     "base.additive_high": {
       "label": "Dėmesio reikalaujantis priedas",
@@ -254,7 +254,7 @@
         "ok": "Vidutiniškai perdirbtas",
         "bad": "Labai perdirbtas jūsų tikslui"
       },
-      "evidence": "NOVA group {group} palyginama su jūsų tikslu „{goal}“."
+      "evidence": "NOVA {group} grupė lyginama su jūsų tikslu „{goal}“."
     },
     "personal.no_data": {
       "label": "Nepakanka duomenų jūsų tikslams",

@@ -168,7 +168,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts klassifiseer hierdie produk in NOVA group {group}."
+      "evidence": "Open Food Facts klassifiseer hierdie produk in NOVA-groep {group}."
     },
     "base.additive_high": {
       "label": "Bymiddel wat aandag verg",
@@ -254,7 +254,7 @@
         "ok": "Matig verwerk",
         "bad": "Sterk verwerk vir jou doelwit"
       },
-      "evidence": "NOVA group {group} word teen jou “{goal}”-doelwit opgeweeg."
+      "evidence": "NOVA-groep {group} word teen jou “{goal}”-doelwit opgeweeg."
     },
     "personal.no_data": {
       "label": "Nie genoeg data vir jou doelwitte nie",

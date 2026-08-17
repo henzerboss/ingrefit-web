@@ -168,7 +168,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts या उत्पादनाला NOVA group {group}मध्ये वर्गीकृत करते."
+      "evidence": "Open Food Facts या उत्पादनाला NOVA गट {group}मध्ये वर्गीकृत करते."
     },
     "base.additive_high": {
       "label": "लक्ष देण्याजोगा अॅडिटिव्ह",
@@ -254,7 +254,7 @@
         "ok": "मध्यम प्रक्रिया केलेले",
         "bad": "तुमच्या उद्दिष्टासाठी खूप प्रक्रिया केलेले"
       },
-      "evidence": "NOVA group {group}ला तुमच्या “{goal}” उद्दिष्टाच्या तुलनेत विचारात घेतले जाते."
+      "evidence": "NOVA गट {group}ला तुमच्या “{goal}” उद्दिष्टाच्या तुलनेत विचारात घेतले जाते."
     },
     "personal.no_data": {
       "label": "तुमच्या उद्दिष्टांसाठी पुरेसा डेटा नाही",

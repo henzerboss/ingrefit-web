@@ -168,7 +168,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Το Open Food Facts κατατάσσει αυτό το προϊόν στην NOVA group {group}."
+      "evidence": "Το Open Food Facts κατατάσσει αυτό το προϊόν στην ομάδα NOVA {group}."
     },
     "base.additive_high": {
       "label": "Πρόσθετο που χρειάζεται προσοχή",
@@ -254,7 +254,7 @@
         "ok": "Μέτρια επεξεργασμένο",
         "bad": "Πολύ επεξεργασμένο για τον στόχο σου"
       },
-      "evidence": "Η NOVA group {group} σταθμίζεται σε σχέση με τον στόχο σου «{goal}»."
+      "evidence": "Η ομάδα NOVA {group} σταθμίζεται σε σχέση με τον στόχο σου «{goal}»."
     },
     "personal.no_data": {
       "label": "Δεν υπάρχουν αρκετά δεδομένα για τους στόχους σου",

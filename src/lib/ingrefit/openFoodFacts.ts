@@ -292,9 +292,26 @@ async function writeCachedRaw(barcode: string, raw: OpenFoodFactsProduct): Promi
  * from this backend shares one IP. The cache is therefore not only a cost
  * optimization, it is what keeps the server from being throttled or banned.
  */
-export async function findProductByBarcode(barcode: string, locale = 'en'): Promise<ProductFacts | null> {
+/**
+ * Where a product's facts came from. Reported so the mirror can be verified in
+ * production without guessing from timing or side effects.
+ *
+ *   cache       our ProductCache row, written by an earlier network response
+ *   mirror      the imported Open Food Facts dataset, usable as-is
+ *   mirror_thin the mirror row was too sparse to score and was used only
+ *               because LOCAL_ONLY is set or the network failed
+ *   network     a live call to the Open Food Facts API
+ */
+export type FactsOrigin = 'cache' | 'mirror' | 'mirror_thin' | 'network';
+
+export interface FactsLookup {
+  facts: ProductFacts | null;
+  origin: FactsOrigin | null;
+}
+
+export async function findProductByBarcode(barcode: string, locale = 'en'): Promise<FactsLookup> {
   const cached = await readCachedRaw(barcode);
-  if (cached) return toFacts(cached, barcode, locale);
+  if (cached) return { facts: toFacts(cached, barcode, locale), origin: 'cache' };
 
   const localOnly = process.env.OPEN_FOOD_FACTS_LOCAL_ONLY === 'true';
   const local = await readLocalDataset(barcode);
@@ -307,14 +324,15 @@ export async function findProductByBarcode(barcode: string, locale = 'en'): Prom
     // every scan into "insufficient data", so an unusable local record counts as
     // a miss and the request falls through to the API. The thin record is still
     // kept as a last resort if the network then fails.
-    if (hasEnoughFacts(localFacts) || localOnly) return localFacts;
+    if (hasEnoughFacts(localFacts)) return { facts: localFacts, origin: 'mirror' };
+    if (localOnly) return { facts: localFacts, origin: 'mirror_thin' };
   }
 
   // With a complete local mirror, a miss is a genuine "product not in the
   // dataset" answer. Falling through to the network would only reintroduce the
   // rate limit for barcodes we already know are absent.
   if (process.env.OPEN_FOOD_FACTS_LOCAL === 'true' && localOnly) {
-    return null;
+    return { facts: null, origin: null };
   }
 
   const userAgent = process.env.OPEN_FOOD_FACTS_USER_AGENT;
@@ -331,20 +349,22 @@ export async function findProductByBarcode(barcode: string, locale = 'en'): Prom
       signal: AbortSignal.timeout(8_000),
     });
   } catch (error) {
-    if (localFacts) return localFacts;
+    if (localFacts) return { facts: localFacts, origin: 'mirror_thin' };
     throw error;
   }
 
-  if (response.status === 404) return localFacts;
+  if (response.status === 404) return { facts: localFacts, origin: localFacts ? 'mirror_thin' : null };
   if (!response.ok) {
-    if (localFacts) return localFacts;
+    if (localFacts) return { facts: localFacts, origin: 'mirror_thin' };
     if (response.status === 429) throw new Error('Open Food Facts rate limit reached');
     throw new Error(`Open Food Facts returned HTTP ${response.status}`);
   }
 
   const payload = (await response.json()) as OpenFoodFactsResponse;
-  if (!payload.product || payload.status === 0 || payload.status === 'failure') return localFacts;
+  if (!payload.product || payload.status === 0 || payload.status === 'failure') {
+    return { facts: localFacts, origin: localFacts ? 'mirror_thin' : null };
+  }
 
   await writeCachedRaw(barcode, payload.product);
-  return toFacts(payload.product, barcode, locale);
+  return { facts: toFacts(payload.product, barcode, locale), origin: 'network' };
 }

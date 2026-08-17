@@ -168,7 +168,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts liigitab selle toote NOVA group {group}."
+      "evidence": "Open Food Facts liigitab selle toote NOVA rühma {group}."
     },
     "base.additive_high": {
       "label": "Tähelepanu vajav lisaaine",
@@ -254,7 +254,7 @@
         "ok": "Mõõdukalt töödeldud",
         "bad": "Sinu eesmärgi jaoks tugevalt töödeldud"
       },
-      "evidence": "NOVA group {group} hinnatakse sinu eesmärgi „{goal}“ suhtes."
+      "evidence": "NOVA rühma {group} hinnatakse sinu eesmärgi „{goal}“ suhtes."
     },
     "personal.no_data": {
       "label": "Sinu eesmärkide jaoks pole piisavalt andmeid",

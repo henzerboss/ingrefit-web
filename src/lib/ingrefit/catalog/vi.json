@@ -168,7 +168,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts xếp sản phẩm này vào NOVA group {group}."
+      "evidence": "Open Food Facts xếp sản phẩm này vào nhóm NOVA {group}."
     },
     "base.additive_high": {
       "label": "Phụ gia cần chú ý",
@@ -254,7 +254,7 @@
         "ok": "Chế biến vừa phải",
         "bad": "Chế biến nhiều so với mục tiêu của bạn"
       },
-      "evidence": "NOVA group {group} được cân nhắc theo mục tiêu “{goal}” của bạn."
+      "evidence": "Nhóm NOVA {group} được cân nhắc theo mục tiêu “{goal}” của bạn."
     },
     "personal.no_data": {
       "label": "Không đủ dữ liệu cho mục tiêu của bạn",

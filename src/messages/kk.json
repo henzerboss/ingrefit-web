@@ -112,9 +112,7 @@
     "privacy": "Privacy",
     "terms": "Terms",
     "disclaimer": "IngreFit provides general information, not medical advice. Always verify the package for allergies and medical conditions.",
-    "off": "Product data may come from Open Food Facts, a crowdsourced database whose data is not guaranteed to be complete or accurate.",
-    "attribution": "Nutri-Score — Santé publique France компаниясының тіркелген сауда белгісі. IngreFit жарияланған бағаларды дерек ретінде көрсетеді және Nutri-Score, NOVA немесе Open Food Facts бағдарламаларымен байланысты емес, олар мақұлдамаған және сертификаттамаған.",
-    "aiNotice": "Premium қорытындыларын детерминирленген бал негізінде AI моделі жасайды. Балдың өзін ешқашан AI моделі өндірмейді."
+    "off": "Product data may come from Open Food Facts, a crowdsourced database whose data is not guaranteed to be complete or accurate."
   },
   "legal": {
     "privacyTitle": "Privacy Policy",

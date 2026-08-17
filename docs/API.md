@@ -71,6 +71,8 @@ Signal labels and evidence are rendered server-side in the user's language for e
 - `402 PREMIUM_REQUIRED` — photo/AI/translation was requested without a verified entitlement.
 - `422 INSUFFICIENT_LABEL_DATA` — the two label photos remain illegible or incomplete.
 - `422 INSUFFICIENT_PHOTO_DATA` — the unpackaged-food photo does not support a useful identification and nutrition estimate.
+Successful responses carry `X-IngreFit-Fact-Source`, a diagnostic header naming what answered the lookup: `cache` (our ProductCache row), `mirror` (the imported dataset), `mirror_thin` (a mirror row too sparse to score, used because `OPEN_FOOD_FACTS_LOCAL_ONLY` is set or the network failed), `network` (a live API call), `ai_label`, `ai_photo`, or `none`. The same value appears as `factsOrigin` in the body. Clients may ignore both.
+
 - `413 PAYLOAD_TOO_LARGE` — the request body exceeds 16 MB.
 - `429 RATE_LIMITED` — per-installation or per-IP limit reached. `Retry-After` and `retryAfterSeconds` say when to retry; `X-RateLimit-*` headers are on successful responses.
 - `502 AI_UNAVAILABLE` — configured Gemini models failed during a required Premium operation.

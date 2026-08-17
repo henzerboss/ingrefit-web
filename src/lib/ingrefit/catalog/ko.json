@@ -168,7 +168,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts는 이 제품을 NOVA group {group}로 분류합니다."
+      "evidence": "Open Food Facts는 이 제품을 NOVA 그룹 {group}로 분류합니다."
     },
     "base.additive_high": {
       "label": "주의가 필요한 첨가물",
@@ -254,7 +254,7 @@
         "ok": "중간 정도 가공",
         "bad": "목표에 비해 가공도가 높음"
       },
-      "evidence": "NOVA group {group}를 “{goal}” 목표와 비교해 평가합니다."
+      "evidence": "NOVA 그룹 {group}를 “{goal}” 목표와 비교해 평가합니다."
     },
     "personal.no_data": {
       "label": "목표 평가에 필요한 데이터 부족",

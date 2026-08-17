@@ -168,7 +168,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts бұл өнімді NOVA group {group} санатына жатқызады."
+      "evidence": "Open Food Facts бұл өнімді NOVA {group} тобына жатқызады."
     },
     "base.additive_high": {
       "label": "Назар аударуды қажет ететін қоспа",
@@ -254,7 +254,7 @@
         "ok": "Орташа өңделген",
         "bad": "Мақсатыңыз үшін қатты өңделген"
       },
-      "evidence": "NOVA group {group} «{goal}» мақсатыңызбен салыстырылады."
+      "evidence": "NOVA {group} тобы «{goal}» мақсатыңызбен салыстырылады."
     },
     "personal.no_data": {
       "label": "Мақсаттарыңыз үшін дерек жеткіліксіз",

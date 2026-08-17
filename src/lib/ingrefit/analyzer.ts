@@ -1,7 +1,7 @@
 import { HttpError } from './http';
 import { explainScore } from './explanation';
 import { localizeProductFacts } from './localization';
-import { findProductByBarcode, hasContaminatedIngredients, hasEnoughFacts } from './openFoodFacts';
+import { findProductByBarcode, hasContaminatedIngredients, hasEnoughFacts, type FactsOrigin } from './openFoodFacts';
 import { enrichProductFromText, recognizeFoodPhoto, recognizeLabel } from './recognition';
 import { enforceLimit } from './rateLimit';
 import { scoreProduct } from './scoring';
@@ -26,15 +26,18 @@ export async function analyzeProduct(request: AnalyzeRequest, installationId: st
 
   let product: ProductFacts;
   let alreadyLocalized = false;
+  let factsOrigin: FactsOrigin | 'ai_label' | 'ai_photo' | null = null;
 
   if (request.mode === 'unpackaged') {
     product = await recognizeFoodPhoto(request.photos![0]!, request.locale);
     alreadyLocalized = true;
+    factsOrigin = 'ai_photo';
     if (!hasEnoughFacts(product)) {
       throw new HttpError(422, 'INSUFFICIENT_PHOTO_DATA', 'The supplied photo does not support a useful food and nutrition estimate.');
     }
   } else if (request.mode === 'label') {
     product = await recognizeLabel(request.barcode ?? null, request.photos!, request.locale);
+    factsOrigin = 'ai_label';
     if (!hasEnoughFacts(product) && (product.ingredientsText || product.ingredients.length)) {
       try {
         product = await enrichProductFromText(product, request.locale);
@@ -51,7 +54,9 @@ export async function analyzeProduct(request: AnalyzeRequest, installationId: st
   } else {
     let found: ProductFacts | null = null;
     try {
-      found = await findProductByBarcode(request.barcode!, request.locale);
+      const lookup = await findProductByBarcode(request.barcode!, request.locale);
+      found = lookup.facts;
+      factsOrigin = lookup.origin;
     } catch (error) {
       console.error('[ingrefit] Open Food Facts lookup failed', error);
       throw new HttpError(502, 'OPEN_FOOD_FACTS_UNAVAILABLE', 'The product database is temporarily unavailable.');
@@ -62,6 +67,7 @@ export async function analyzeProduct(request: AnalyzeRequest, installationId: st
         await enforceLimit('ai:installation', installationId, plan === 'premium');
         found = await enrichProductFromText(found, request.locale);
         alreadyLocalized = true;
+        factsOrigin = factsOrigin ? `${factsOrigin}+ai` as FactsOrigin : 'network';
       } catch (error) {
         console.error('[ingrefit] Text-based product enrichment failed; requesting label photos', error);
       }
@@ -92,5 +98,7 @@ export async function analyzeProduct(request: AnalyzeRequest, installationId: st
     product,
     assessment: { ...assessment, aiEnhanced: request.premiumFeatures, translated },
     usage: unlimitedUsage(plan),
+    /** Diagnostic only: which source answered. Clients may ignore this. */
+    factsOrigin,
   };
 }

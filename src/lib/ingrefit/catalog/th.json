@@ -168,7 +168,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts จัดผลิตภัณฑ์นี้อยู่ใน NOVA group {group}"
+      "evidence": "Open Food Facts จัดผลิตภัณฑ์นี้อยู่ในกลุ่ม NOVA {group}"
     },
     "base.additive_high": {
       "label": "วัตถุเจือปนที่ควรใส่ใจ",
@@ -254,7 +254,7 @@
         "ok": "แปรรูปปานกลาง",
         "bad": "แปรรูปมากสำหรับเป้าหมายของคุณ"
       },
-      "evidence": "เปรียบเทียบ NOVA group {group} กับเป้าหมาย “{goal}” ของคุณ"
+      "evidence": "เปรียบเทียบกลุ่ม NOVA {group} กับเป้าหมาย “{goal}” ของคุณ"
     },
     "personal.no_data": {
       "label": "ข้อมูลไม่เพียงพอสำหรับเป้าหมายของคุณ",

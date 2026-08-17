@@ -168,7 +168,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Az Open Food Facts ezt a terméket a NOVA group {group} csoportba sorolja."
+      "evidence": "Az Open Food Facts ezt a terméket a NOVA {group} csoportba sorolja."
     },
     "base.additive_high": {
       "label": "Figyelmet igénylő adalékanyag",
@@ -254,7 +254,7 @@
         "ok": "Mérsékelten feldolgozott",
         "bad": "Erősen feldolgozott a céljához"
       },
-      "evidence": "A NOVA group {group} a(z) „{goal}” céljához van viszonyítva."
+      "evidence": "A NOVA {group} csoportot a(z) „{goal}” céljához viszonyítjuk."
     },
     "personal.no_data": {
       "label": "Nincs elég adat a céljaihoz",

@@ -168,7 +168,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts bu məhsulu NOVA group {group} kimi təsnif edir."
+      "evidence": "Open Food Facts bu məhsulu NOVA {group} qrupuna aid edir."
     },
     "base.additive_high": {
       "label": "Diqqət tələb edən əlavə",
@@ -254,7 +254,7 @@
         "ok": "Orta dərəcədə emal olunmuş",
         "bad": "Hədəfiniz üçün yüksək dərəcədə emal olunmuş"
       },
-      "evidence": "NOVA group {group} «{goal}» hədəfinizlə müqayisə olunur."
+      "evidence": "NOVA {group} qrupu «{goal}» hədəfinizlə müqayisə olunur."
     },
     "personal.no_data": {
       "label": "Hədəfləriniz üçün kifayət qədər məlumat yoxdur",

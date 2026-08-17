@@ -168,7 +168,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts ఈ ఉత్పత్తిని NOVA group {group}లో వర్గీకరిస్తుంది."
+      "evidence": "Open Food Facts ఈ ఉత్పత్తిని NOVA గ్రూప్ {group}లో వర్గీకరిస్తుంది."
     },
     "base.additive_high": {
       "label": "శ్రద్ధ అవసరమైన యాడిటివ్",
@@ -254,7 +254,7 @@
         "ok": "మధ్యస్థంగా ప్రాసెస్ చేసినది",
         "bad": "మీ లక్ష్యానికి ఎక్కువగా ప్రాసెస్ చేసినది"
       },
-      "evidence": "NOVA group {group}ను మీ “{goal}” లక్ష్యంతో పోల్చి పరిగణిస్తారు."
+      "evidence": "NOVA గ్రూప్ {group}ను మీ “{goal}” లక్ష్యంతో పోల్చి పరిగణిస్తారు."
     },
     "personal.no_data": {
       "label": "మీ లక్ష్యాలకు సరిపడా డేటా లేదు",

@@ -168,7 +168,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts将该产品归入NOVA group {group}。"
+      "evidence": "Open Food Facts将该产品归入NOVA第{group}组。"
     },
     "base.additive_high": {
       "label": "需要关注的添加剂",
@@ -254,7 +254,7 @@
         "ok": "中度加工",
         "bad": "对您的目标而言加工程度较高"
       },
-      "evidence": "将NOVA group {group}与您的“{goal}”目标进行比较。"
+      "evidence": "将NOVA第{group}组与您的“{goal}”目标进行比较。"
     },
     "personal.no_data": {
       "label": "没有足够数据评估您的目标",

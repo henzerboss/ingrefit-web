@@ -168,7 +168,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts bu ürünü NOVA group {group} içinde sınıflandırıyor."
+      "evidence": "Open Food Facts bu ürünü NOVA {group}. grupta sınıflandırıyor."
     },
     "base.additive_high": {
       "label": "Dikkat gerektiren katkı maddesi",
@@ -254,7 +254,7 @@
         "ok": "Orta düzeyde işlenmiş",
         "bad": "Hedefiniz için yüksek düzeyde işlenmiş"
       },
-      "evidence": "NOVA group {group}, “{goal}” hedefinize göre değerlendirilir."
+      "evidence": "NOVA {group}. grup, “{goal}” hedefinize göre değerlendirilir."
     },
     "personal.no_data": {
       "label": "Hedefleriniz için yeterli veri yok",

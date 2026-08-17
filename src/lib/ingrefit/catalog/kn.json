@@ -168,7 +168,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts ಈ ಉತ್ಪನ್ನವನ್ನು NOVA group {group}ನಲ್ಲಿ ವರ್ಗೀಕರಿಸುತ್ತದೆ."
+      "evidence": "Open Food Facts ಈ ಉತ್ಪನ್ನವನ್ನು NOVA ಗುಂಪು {group}ರಲ್ಲಿ ವರ್ಗೀಕರಿಸುತ್ತದೆ."
     },
     "base.additive_high": {
       "label": "ಗಮನ ಕೊಡಬೇಕಾದ ಸಂಯೋಜಕ",
@@ -254,7 +254,7 @@
         "ok": "ಮಧ್ಯಮವಾಗಿ ಸಂಸ್ಕರಿಸಿದ",
         "bad": "ನಿಮ್ಮ ಗುರಿಗೆ ಹೆಚ್ಚು ಸಂಸ್ಕರಿಸಿದ"
       },
-      "evidence": "NOVA group {group} ಅನ್ನು ನಿಮ್ಮ “{goal}” ಗುರಿಯ ವಿರುದ್ಧ ಪರಿಗಣಿಸಲಾಗಿದೆ."
+      "evidence": "NOVA ಗುಂಪು {group} ಅನ್ನು ನಿಮ್ಮ “{goal}” ಗುರಿಯ ವಿರುದ್ಧ ಪರಿಗಣಿಸಲಾಗಿದೆ."
     },
     "personal.no_data": {
       "label": "ನಿಮ್ಮ ಗುರಿಗಳಿಗೆ ಸಾಕಷ್ಟು ಮಾಹಿತಿ ಇಲ್ಲ",

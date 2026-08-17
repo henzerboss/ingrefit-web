@@ -1,9 +1,9 @@
 {
   "_comment": "Translatable strings for product assessments. Copy en.json, translate values only, keep every {placeholder} intact.",
-  "decimalSeparator": "٫",
+  "decimalSeparator": ".",
   "quotes": [
-    "«",
-    "»"
+    "”",
+    "“"
   ],
   "references": {
     "100g": "100 غ",
@@ -132,11 +132,11 @@
     },
     "blocker.allergen_ingredient": {
       "label": "مسبب حساسية موجود في المكونات",
-      "evidence": "يظهر «{match}» في قائمة المكونات ويتطابق مع مسبب الحساسية {allergen} لديك."
+      "evidence": "يظهر ”{match}“ في قائمة المكونات ويتطابق مع مسبب الحساسية {allergen} لديك."
     },
     "blocker.avoid_ingredient": {
       "label": "مكوّن في قائمة التجنب لديك",
-      "evidence": "يظهر «{ingredient}» في قائمة المكونات."
+      "evidence": "يظهر ”{ingredient}“ في قائمة المكونات."
     },
     "blocker.diet_conflict": {
       "label": "يتعارض مع نظامك الغذائي",
@@ -168,7 +168,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "يصنف Open Food Facts هذا المنتج ضمن NOVA group {group}."
+      "evidence": "يصنف Open Food Facts هذا المنتج ضمن مجموعة NOVA {group}."
     },
     "base.additive_high": {
       "label": "مضاف يستحق الانتباه",
@@ -198,7 +198,7 @@
       "label": "يحتوي على الكحول",
       "evidence": "يصرح المنتج بنسبة كحول {percent}% بالحجم."
     },
-    "personal.nutrientEvidence": "{nutrient}: {value} {unit} لكل {reference}، مقارنة بهدفك «{goal}».",
+    "personal.nutrientEvidence": "{nutrient}: {value} {unit} لكل {reference}، مقارنة بهدفك ”{goal}“.",
     "personal.protein": {
       "label": {
         "good": "كثافة بروتين مرتفعة",
@@ -254,7 +254,7 @@
         "ok": "معالجة متوسطة",
         "bad": "معالجة عالية بالنسبة لهدفك"
       },
-      "evidence": "تتم موازنة NOVA group {group} مقابل هدفك «{goal}»."
+      "evidence": "تتم موازنة مجموعة NOVA {group} مقابل هدفك ”{goal}“."
     },
     "personal.no_data": {
       "label": "لا توجد بيانات كافية لأهدافك",

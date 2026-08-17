@@ -168,7 +168,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts класифицира този продукт в NOVA group {group}."
+      "evidence": "Open Food Facts класифицира този продукт в група NOVA {group}."
     },
     "base.additive_high": {
       "label": "Добавка, изискваща внимание",
@@ -254,7 +254,7 @@
         "ok": "Умерено преработен",
         "bad": "Силно преработен за вашата цел"
       },
-      "evidence": "NOVA group {group} се оценява спрямо целта ви „{goal}“."
+      "evidence": "Група NOVA {group} се оценява спрямо целта ви „{goal}“."
     },
     "personal.no_data": {
       "label": "Недостатъчно данни за вашите цели",

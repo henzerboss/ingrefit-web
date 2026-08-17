@@ -168,7 +168,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts mengklasifikasikan produk ini dalam NOVA group {group}."
+      "evidence": "Open Food Facts mengklasifikasikan produk ini dalam kumpulan NOVA {group}."
     },
     "base.additive_high": {
       "label": "Bahan tambahan yang perlu diberi perhatian",
@@ -254,7 +254,7 @@
         "ok": "Diproses sederhana",
         "bad": "Sangat diproses untuk matlamat anda"
       },
-      "evidence": "NOVA group {group} dinilai berbanding matlamat “{goal}” anda."
+      "evidence": "Kumpulan NOVA {group} dinilai berbanding matlamat “{goal}” anda."
     },
     "personal.no_data": {
       "label": "Data tidak mencukupi untuk matlamat anda",

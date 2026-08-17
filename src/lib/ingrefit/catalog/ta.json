@@ -168,7 +168,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts இந்த தயாரிப்பை NOVA group {group}ல் வகைப்படுத்துகிறது."
+      "evidence": "Open Food Facts இந்த தயாரிப்பை NOVA குழு {group}ல் வகைப்படுத்துகிறது."
     },
     "base.additive_high": {
       "label": "கவனம் தேவைப்படும் சேர்க்கை",
@@ -254,7 +254,7 @@
         "ok": "மிதமாக செயலாக்கப்பட்டது",
         "bad": "உங்கள் இலக்கிற்கு அதிகமாக செயலாக்கப்பட்டது"
       },
-      "evidence": "NOVA group {group} உங்கள் “{goal}” இலக்குடன் ஒப்பிட்டு மதிப்பிடப்படுகிறது."
+      "evidence": "NOVA குழு {group} உங்கள் “{goal}” இலக்குடன் ஒப்பிட்டு மதிப்பிடப்படுகிறது."
     },
     "personal.no_data": {
       "label": "உங்கள் இலக்குகளுக்கு போதுமான தரவு இல்லை",

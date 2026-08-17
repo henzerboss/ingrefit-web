@@ -2,7 +2,7 @@
   "_comment": "Translatable strings for product assessments. Copy en.json, translate values only, keep every {placeholder} intact.",
   "decimalSeparator": ".",
   "quotes": [
-    "„",
+    "”",
     "”"
   ],
   "references": {
@@ -132,11 +132,11 @@
     },
     "blocker.allergen_ingredient": {
       "label": "אלרגן נמצא ברכיבים",
-      "evidence": "„{match}” מופיע ברשימת הרכיבים ותואם לאלרגן {allergen} שלך."
+      "evidence": "”{match}” מופיע ברשימת הרכיבים ותואם לאלרגן {allergen} שלך."
     },
     "blocker.avoid_ingredient": {
       "label": "רכיב ברשימת ההימנעות שלך",
-      "evidence": "„{ingredient}” מופיע ברשימת הרכיבים."
+      "evidence": "”{ingredient}” מופיע ברשימת הרכיבים."
     },
     "blocker.diet_conflict": {
       "label": "מתנגש עם התזונה שלך",
@@ -168,7 +168,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts מסווג את המוצר הזה ב-NOVA group {group}."
+      "evidence": "Open Food Facts מסווג את המוצר הזה בקבוצת NOVA {group}."
     },
     "base.additive_high": {
       "label": "תוסף שדורש תשומת לב",
@@ -198,7 +198,7 @@
       "label": "מכיל אלכוהול",
       "evidence": "המוצר מצהיר על {percent}% אלכוהול בנפח."
     },
-    "personal.nutrientEvidence": "{nutrient}: {value} {unit} לכל {reference}, בהשוואה ליעד „{goal}” שלך.",
+    "personal.nutrientEvidence": "{nutrient}: {value} {unit} לכל {reference}, בהשוואה ליעד ”{goal}” שלך.",
     "personal.protein": {
       "label": {
         "good": "צפיפות חלבון גבוהה",
@@ -254,7 +254,7 @@
         "ok": "עיבוד בינוני",
         "bad": "מעובד מאוד ביחס ליעד שלך"
       },
-      "evidence": "NOVA group {group} נשקל מול היעד „{goal}” שלך."
+      "evidence": "קבוצת NOVA {group} נשקלת מול היעד ”{goal}” שלך."
     },
     "personal.no_data": {
       "label": "אין מספיק נתונים ליעדים שלך",

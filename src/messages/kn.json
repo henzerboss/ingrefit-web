@@ -112,9 +112,7 @@
     "privacy": "Privacy",
     "terms": "Terms",
     "disclaimer": "IngreFit provides general information, not medical advice. Always verify the package for allergies and medical conditions.",
-    "off": "Product data may come from Open Food Facts, a crowdsourced database whose data is not guaranteed to be complete or accurate.",
-    "attribution": "Nutri-Score ಎಂಬುದು Santé publique Franceನ ನೋಂದಾಯಿತ ಟ್ರೇಡ್‌ಮಾರ್ಕ್. IngreFit ಪ್ರಕಟಿತ ಗ್ರೇಡ್‌ಗಳನ್ನು ಡೇಟಾವಾಗಿ ತೋರಿಸುತ್ತದೆ ಮತ್ತು Nutri-Score, NOVA ಅಥವಾ Open Food Facts ಕಾರ್ಯಕ್ರಮಗಳೊಂದಿಗೆ ಸಂಬಂಧಿತ, ಬೆಂಬಲಿತ ಅಥವಾ ಪ್ರಮಾಣೀಕೃತವಾಗಿಲ್ಲ.",
-    "aiNotice": "Premium ಸಾರಾಂಶಗಳನ್ನು ನಿಯಮಾಧಾರಿತವಾಗಿ ಲೆಕ್ಕಿಸಿದ ಸ್ಕೋರ್‌ನಿಂದ AI ಮಾದರಿ ರಚಿಸುತ್ತದೆ. ಸ್ಕೋರ್ ಅನ್ನು AI ಮಾದರಿ ಎಂದಿಗೂ ರಚಿಸುವುದಿಲ್ಲ."
+    "off": "Product data may come from Open Food Facts, a crowdsourced database whose data is not guaranteed to be complete or accurate."
   },
   "legal": {
     "privacyTitle": "Privacy Policy",

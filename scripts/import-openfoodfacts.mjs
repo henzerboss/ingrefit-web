@@ -584,11 +584,12 @@ async function runInspect(targetBarcode) {
 }
 
 /**
- * Sample the archive and report how much of it carries usable nutrition.
+ * Report how much of the archive carries usable nutrition.
  *
- * A published export can contain records whose `nutriments` object is empty even
- * though the API serves full values for the same barcode. This tells you whether
- * the archive on disk is worth importing before spending hours on it.
+ * By default this reads the WHOLE archive, because the head of the file is not
+ * representative: an early-lines sample once read 96% usable where the complete
+ * dataset was 72%. Pass a line count to sample the head instead, but treat that
+ * number as a smoke test only, never as a statistic.
  */
 async function runStats(sampleSize) {
   const archive = path.join(WORK_DIR, 'openfoodfacts-products.jsonl.gz');
@@ -599,11 +600,19 @@ async function runStats(sampleSize) {
   const stats = statSync(archive);
   console.log(`[off] archive: ${(stats.size / 1024 ** 3).toFixed(2)} GB, modified ${stats.mtime.toISOString()}`);
 
+  if (sampleSize) {
+    console.log(`[off] HEAD SAMPLE of ${sampleSize} lines. The head of the archive is not`);
+    console.log('[off] representative of the whole dataset; omit the count for exact figures.');
+  } else {
+    console.log('[off] full pass over the archive, this takes several minutes');
+  }
+
   const lines = createInterface({ input: createReadStream(archive).pipe(createGunzip()), crlfDelay: Infinity });
   let total = 0;
   let emptyRaw = 0;
   let usable = 0;
   let named = 0;
+  let recoverable = 0;
 
   for await (const line of lines) {
     if (!line.trim()) continue;
@@ -616,9 +625,15 @@ async function runStats(sampleSize) {
     total += 1;
     if (record.product_name) named += 1;
     const raw = record.nutriments;
-    if (!raw || (typeof raw === 'object' && !Array.isArray(raw) && Object.keys(raw).length === 0)) emptyRaw += 1;
-    if (Object.keys(extractNutriments(record)).length >= 4) usable += 1;
-    if (total >= sampleSize) break;
+    const legacyEmpty = !raw || (typeof raw === 'object' && !Array.isArray(raw) && Object.keys(raw).length === 0);
+    if (legacyEmpty) emptyRaw += 1;
+    const extracted = extractNutriments(record);
+    if (Object.keys(extracted).length >= 4) {
+      usable += 1;
+      if (legacyEmpty) recoverable += 1;
+    }
+    if (sampleSize && total >= sampleSize) break;
+    if (!sampleSize && total % 500_000 === 0) console.log(`[off]   ...${total} records scanned`);
   }
   lines.close();
 
@@ -627,6 +642,8 @@ async function runStats(sampleSize) {
   console.log(`[off]   with a product name              : ${named} (${percent(named)})`);
   console.log(`[off]   legacy nutriments empty          : ${emptyRaw} (${percent(emptyRaw)})`);
   console.log(`[off]   4+ usable nutrients after merge  : ${usable} (${percent(usable)})`);
+  console.log(`[off]   recovered from the new structure : ${recoverable} (${percent(recoverable)})`);
+  console.log(`[off]   genuinely without nutrition      : ${total - usable} (${percent(total - usable)})`);
   // An empty legacy `nutriments` is normal for products migrated to the newer
   // `nutrition.input_sets` structure, so only the post-merge figure indicates a
   // problem worth acting on.
@@ -647,13 +664,15 @@ async function main() {
           ? 'stats'
           : null;
   if (!mode) {
-    console.error('Usage: node scripts/import-openfoodfacts.mjs --full | --delta | --inspect [barcode] | --stats [sample]');
+    console.error('Usage: node scripts/import-openfoodfacts.mjs --full | --delta | --inspect [barcode] | --stats [head-sample]');
     process.exit(1);
   }
   if (mode === 'stats') {
     const index = process.argv.indexOf('--stats');
     const size = Number(process.argv[index + 1]);
-    await runStats(Number.isFinite(size) && size > 0 ? size : 50_000);
+    // No count means a full, exact pass. A count means an explicitly biased
+    // head sample, which is fine for a smoke test and misleading as a metric.
+    await runStats(Number.isFinite(size) && size > 0 ? size : 0);
     await prisma.$disconnect();
     return;
   }
