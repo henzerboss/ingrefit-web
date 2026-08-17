@@ -67,6 +67,71 @@ const KEPT_NUTRIMENTS = [
   'fruits-vegetables-nuts-estimate-from-ingredients_100g', 'fruits-vegetables-nuts_100g',
 ];
 
+/** Base nutrient names, without the per-quantity suffix. */
+const KEPT_NUTRIMENT_BASES = KEPT_NUTRIMENTS.map((key) => key.replace(/_100g$/, ''));
+
+function numeric(value) {
+  if (typeof value === 'number' && Number.isFinite(value)) return value;
+  if (typeof value === 'string' && value.trim() && Number.isFinite(Number(value))) return Number(value);
+  return undefined;
+}
+
+/**
+ * Normalize `nutriments` into the `<name>_100g` dictionary the backend reads.
+ *
+ * The JSONL export does not always match the API response shape: depending on
+ * the export generation it can be a flat dictionary with `_100g` suffixes, a
+ * dictionary keyed by bare nutrient name, or a list of per-nutrient objects.
+ * Assuming one shape silently produced an empty object and made every imported
+ * product fail the "at least four nutrient values" threshold, so all three are
+ * handled here and the outcome is counted rather than trusted.
+ */
+function normalizeNutriments(raw) {
+  const output = {};
+  if (!raw) return output;
+
+  // Shape 3: list of { name | id, 100g | value, ... }
+  if (Array.isArray(raw)) {
+    for (const item of raw) {
+      if (!item || typeof item !== 'object') continue;
+      const name = String(item.name ?? item.id ?? '').replace(/^[a-z]{2}:/, '');
+      if (!name || !KEPT_NUTRIMENT_BASES.includes(name)) continue;
+      const value = numeric(item['100g'] ?? item.per_100g ?? item.value_100g ?? item.value);
+      if (value !== undefined) output[`${name}_100g`] = value;
+    }
+    return output;
+  }
+
+  if (typeof raw !== 'object') return output;
+
+  // Shape 1: already suffixed.
+  for (const key of KEPT_NUTRIMENTS) {
+    const value = numeric(raw[key]);
+    if (value !== undefined) output[key] = value;
+  }
+
+  // Shape 2: bare names, or nested per-quantity objects.
+  for (const base of KEPT_NUTRIMENT_BASES) {
+    if (output[`${base}_100g`] !== undefined) continue;
+    const candidate = raw[base];
+    if (candidate && typeof candidate === 'object' && !Array.isArray(candidate)) {
+      const nested = numeric(candidate['100g'] ?? candidate.per_100g ?? candidate.value);
+      if (nested !== undefined) output[`${base}_100g`] = nested;
+      continue;
+    }
+    const flat = numeric(candidate);
+    if (flat !== undefined) output[`${base}_100g`] = flat;
+  }
+
+  // Energy in kJ is common when kcal is absent; 1 kcal = 4.184 kJ.
+  if (output['energy-kcal_100g'] === undefined) {
+    const kj = numeric(raw['energy-kj_100g'] ?? raw['energy_100g'] ?? raw['energy-kj'] ?? raw.energy);
+    if (kj !== undefined) output['energy-kcal_100g'] = Math.round((kj / 4.184) * 10) / 10;
+  }
+
+  return output;
+}
+
 /**
  * PostgreSQL rejects U+0000 inside jsonb ("\\u0000 cannot be converted to
  * text"), and the export does contain records with stray NUL bytes in text
@@ -98,13 +163,7 @@ function slim(record) {
     // Keep only the display text; the nested parse tree is large and unused.
     output.ingredients = record.ingredients.slice(0, 120).map((item) => ({ text: item?.text, id: item?.id }));
   }
-  if (record.nutriments && typeof record.nutriments === 'object') {
-    const nutriments = {};
-    for (const key of KEPT_NUTRIMENTS) {
-      if (record.nutriments[key] !== undefined) nutriments[key] = record.nutriments[key];
-    }
-    output.nutriments = nutriments;
-  }
+  output.nutriments = normalizeNutriments(record.nutriments);
   return stripNul(output);
 }
 
@@ -140,6 +199,7 @@ function upsertRow(row) {
 }
 
 let rejected = 0;
+let withoutNutrients = 0;
 
 async function flush(batch) {
   if (!batch.length) return;
@@ -194,10 +254,13 @@ async function importJsonl(filePath, { resumeFrom = 0, onProgress } = {}) {
       continue;
     }
 
+    const slimmed = slim(record);
+    if (Object.keys(slimmed.nutriments ?? {}).length < 4) withoutNutrients += 1;
+
     const lastModifiedSeconds = Number(record.last_modified_t);
     batch.push({
       barcode,
-      data: slim(record),
+      data: slimmed,
       lastModified: Number.isFinite(lastModifiedSeconds) ? new Date(lastModifiedSeconds * 1000) : new Date(0),
     });
 
@@ -242,8 +305,12 @@ async function runFull() {
   state.processedLines = 0;
   writeState(state);
   console.log(
-    `[off] full import finished: ${result.imported} products, ${result.skipped} skipped, ${rejected} rejected by the database`,
+    `[off] full import finished: ${result.imported} products, ${result.skipped} skipped, ` +
+    `${rejected} rejected by the database, ${withoutNutrients} with fewer than four nutrient values`,
   );
+  if (withoutNutrients > result.imported * 0.5) {
+    console.warn('[off] WARNING: most products carry no usable nutrition. Run --inspect and check the nutriments shape.');
+  }
 }
 
 async function runDelta() {
@@ -278,11 +345,54 @@ async function runDelta() {
   }
 }
 
-async function main() {
-  const mode = process.argv.includes('--full') ? 'full' : process.argv.includes('--delta') ? 'delta' : null;
-  if (!mode) {
-    console.error('Usage: node scripts/import-openfoodfacts.mjs --full | --delta');
+/** Print the raw shape of the first few records. Reads only the file head. */
+async function runInspect() {
+  const archive = path.join(WORK_DIR, 'openfoodfacts-products.jsonl.gz');
+  if (!existsSync(archive)) {
+    console.error(`[off] archive not found at ${archive}`);
     process.exit(1);
+  }
+  const lines = createInterface({ input: createReadStream(archive).pipe(createGunzip()), crlfDelay: Infinity });
+  let seen = 0;
+  for await (const line of lines) {
+    if (!line.trim()) continue;
+    let record;
+    try {
+      record = JSON.parse(line);
+    } catch {
+      continue;
+    }
+    const raw = record.nutriments;
+    console.log(`--- ${record.code} ${record.product_name ?? ''}`);
+    console.log(`    nutriments type: ${Array.isArray(raw) ? 'array' : typeof raw}`);
+    if (raw && typeof raw === 'object') {
+      const keys = Array.isArray(raw) ? raw.slice(0, 6).map((item) => item?.name ?? item?.id) : Object.keys(raw).slice(0, 12);
+      console.log(`    sample keys: ${JSON.stringify(keys)}`);
+      console.log(`    raw sample: ${JSON.stringify(raw).slice(0, 400)}`);
+    }
+    console.log(`    normalized: ${JSON.stringify(normalizeNutriments(raw))}`);
+    seen += 1;
+    if (seen >= 3) break;
+  }
+  lines.close();
+}
+
+async function main() {
+  const mode = process.argv.includes('--full')
+    ? 'full'
+    : process.argv.includes('--delta')
+      ? 'delta'
+      : process.argv.includes('--inspect')
+        ? 'inspect'
+        : null;
+  if (!mode) {
+    console.error('Usage: node scripts/import-openfoodfacts.mjs --full | --delta | --inspect');
+    process.exit(1);
+  }
+  if (mode === 'inspect') {
+    await runInspect();
+    await prisma.$disconnect();
+    return;
   }
   if (!process.env.DATABASE_URL) {
     console.error('DATABASE_URL is required.');
