@@ -201,6 +201,7 @@ function slim(record) {
   }
 
   output.nutriments = extractNutriments(record);
+  Object.assign(output, deriveImageUrls(record));
 
   // Also keep the raw per-nutrient subset. Re-deriving values later then costs a
   // SQL update instead of another multi-hour pass over a 50 GB archive, which is
@@ -332,6 +333,48 @@ function extractNutriments(record) {
   }
 
   return output;
+}
+
+const IMAGE_BASE_URL = (process.env.OFF_IMAGE_BASE_URL ?? 'https://images.openfoodfacts.org').replace(/\/$/, '');
+
+/**
+ * Build the product image URLs.
+ *
+ * `image_front_url` and `image_front_small_url` are computed fields the API adds
+ * on the fly; the raw export only carries the `images` object. Importing without
+ * deriving them left every mirrored product with no picture at all, so they are
+ * reconstructed here from the image revision.
+ *
+ * Path rule: codes of nine digits or more are split 3/3/3/rest after padding to
+ * 13, shorter codes are used as-is. 3017620422003 -> 301/762/042/2003
+ */
+function imagePath(code) {
+  if (code.length < 9) return code;
+  const padded = code.padStart(13, '0');
+  return `${padded.slice(0, 3)}/${padded.slice(3, 6)}/${padded.slice(6, 9)}/${padded.slice(9)}`;
+}
+
+function deriveImageUrls(record) {
+  const images = record?.images;
+  const code = typeof record?.code === 'string' ? record.code.trim() : '';
+  if (!images || typeof images !== 'object' || !code) return {};
+
+  // Prefer the product's own language, then English, then any front image.
+  const language = String(record.lc ?? record.lang ?? '').toLowerCase();
+  const keys = Object.keys(images);
+  // A ternary, not `language && ...`: an empty string is falsy but not nullish,
+  // so `??` would accept it as the chosen key and skip both fallbacks.
+  const key =
+    (language ? keys.find((name) => name === `front_${language}`) : undefined) ??
+    keys.find((name) => name === 'front_en') ??
+    keys.find((name) => name.startsWith('front_'));
+  if (!key) return {};
+
+  const revision = images[key]?.rev;
+  if (revision === undefined || revision === null) return {};
+
+  const base = `${IMAGE_BASE_URL}/images/products/${imagePath(code)}/${key}.${revision}`;
+  return { image_front_url: `${base}.400.jpg`, image_front_small_url: `${base}.200.jpg` };
 }
 
 function readState() {

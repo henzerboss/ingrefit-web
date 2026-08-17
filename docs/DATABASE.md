@@ -214,6 +214,25 @@ Two further consequences of using the exports:
 - **Product images are licensed CC BY-SA**, separately from the ODbL database.
   Attribution applies to images too if they are displayed.
 
+## Product images
+
+`image_front_url` and `image_front_small_url` are computed fields the API adds on
+the fly; the raw export carries only the `images` object. The importer therefore
+reconstructs the URLs from the image revision:
+
+```
+https://images.openfoodfacts.org/images/products/301/762/042/2003/front_en.879.400.jpg
+                                                 ^ code split 3/3/3/rest        ^ rev
+```
+
+Codes of nine digits or more are padded to 13 and split 3/3/3/rest; shorter codes
+are used as-is. The front image is chosen in the product's own language first,
+then English, then any available front image. A mirror imported before this was
+added has no images at all — that requires a re-import, not a code change.
+
+Images are licensed CC BY-SA, separately from the ODbL database, so attribution
+applies to them too.
+
 ## Translating assessment output
 
 Product assessment wording lives in `src/lib/ingrefit/catalog/<language>.json`,
