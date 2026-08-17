@@ -167,6 +167,56 @@ function normalizeNutriments(raw, dataPer) {
   return output;
 }
 
+/**
+ * PostgreSQL rejects U+0000 inside jsonb ("\\u0000 cannot be converted to
+ * text"), and the export does contain records with stray NUL bytes in text
+ * fields. Strip them recursively, from keys as well as values, before the row
+ * ever reaches the driver.
+ */
+function stripNul(value) {
+  if (typeof value === 'string') {
+    return value.includes('\u0000') ? value.replaceAll('\u0000', '') : value;
+  }
+  if (Array.isArray(value)) return value.map(stripNul);
+  if (value && typeof value === 'object') {
+    const output = {};
+    for (const [key, nested] of Object.entries(value)) {
+      output[stripNul(key)] = stripNul(nested);
+    }
+    return output;
+  }
+  return value;
+}
+
+/** Reduce a raw export record to the fields the backend actually reads. */
+function slim(record) {
+  const output = {};
+  for (const field of KEPT_FIELDS) {
+    if (record[field] === undefined || record[field] === null) continue;
+    output[field] = record[field];
+  }
+  if (Array.isArray(record.ingredients)) {
+    // Keep only the display text; the nested parse tree is large and unused.
+    output.ingredients = record.ingredients.slice(0, 120).map((item) => ({ text: item?.text, id: item?.id }));
+  }
+
+  output.nutriments = normalizeNutriments(record.nutriments, record.nutrition_data_per);
+
+  // Also keep the raw per-nutrient subset. Re-deriving values later then costs a
+  // SQL update instead of another multi-hour pass over a 50 GB archive, which is
+  // exactly the price paid for the first wrong guess about this field's shape.
+  if (record.nutriments && typeof record.nutriments === 'object' && !Array.isArray(record.nutriments)) {
+    const source = {};
+    for (const [key, value] of Object.entries(record.nutriments)) {
+      const base = key.replace(/_(100g|serving|value|unit|prepared)$/, '');
+      if (KEPT_NUTRIMENT_BASES.includes(base)) source[key] = value;
+    }
+    if (Object.keys(source).length) output.nutriments_source = source;
+  }
+
+  return stripNul(output);
+}
+
 function readState() {
   if (!existsSync(STATE_FILE)) return { lastFullImport: null, appliedDeltas: [], processedLines: 0 };
   try {
