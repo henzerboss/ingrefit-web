@@ -14,6 +14,9 @@
 #     so DATABASE_URL would be missing and the import would fail immediately.
 #   - Nothing prevents two slow imports from overlapping.
 #
+# Run it as the site user, never as root: files it creates must stay writable by
+# the user that PM2 and the cron job run as.
+#
 # Everything below is resolved relative to this file, so the script works from
 # any deployment path and from any working directory.
 
@@ -23,13 +26,30 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 APP_DIR="$(dirname "$SCRIPT_DIR")"
 cd "$APP_DIR"
 
-# Load .env without executing it as a script.
-if [ -f .env ]; then
-  set -a
-  # shellcheck disable=SC1091
-  . ./.env
-  set +a
-fi
+# Parse .env instead of sourcing it. Sourcing would execute the file, and real
+# values break that immediately: OPEN_FOOD_FACTS_USER_AGENT contains unquoted
+# parentheses, which bash reads as a subshell and rejects as a syntax error.
+load_env() {
+  local file="$1" line key value
+  [ -f "$file" ] || return 0
+  while IFS= read -r line || [ -n "$line" ]; do
+    line="${line%$'\r'}"                       # tolerate CRLF
+    case "$line" in ''|'#'*) continue ;; esac
+    line="${line#export }"
+    case "$line" in *=*) ;; *) continue ;; esac
+    key="${line%%=*}"
+    value="${line#*=}"
+    key="$(printf '%s' "$key" | tr -d '[:space:]')"
+    [ -z "$key" ] && continue
+    case "$value" in
+      \"*\") value="${value#\"}"; value="${value%\"}" ;;
+      \'*\') value="${value#\'}"; value="${value%\'}" ;;
+    esac
+    export "$key=$value"
+  done < "$file"
+}
+
+load_env "$APP_DIR/.env"
 
 LOG_DIR="${OFF_LOG_DIR:-$HOME/logs}"
 LOCK_FILE="${OFF_LOCK_FILE:-$HOME/.ingrefit-off-import.lock}"
