@@ -1,5 +1,5 @@
 import { classifyAdditives } from './additives';
-import { additiveBasisText, catalogLanguage } from './signalCatalog';
+import { additiveBasisText, allergenTagName, catalogLanguage, labelTagName } from './signalCatalog';
 import { safeDb } from './db';
 import type { IngredientAnalysis, NutrientLevel, NutrientLevels, NutritionFacts, ProductFacts } from './types';
 
@@ -214,12 +214,15 @@ function toFacts(raw: OpenFoodFactsProduct, barcode: string, locale: string): Pr
     imageUrl: text(raw.image_front_url) ?? text(raw.image_front_small_url),
     ingredientsText: cleanIngredientsText,
     ingredients: ingredientItems,
-    allergens: displayTags(allergenTags),
-    traces: displayTags(traceTags),
+    // Display names come from the catalog, not from stripping the tag prefix:
+    // `en:eggs` must read "яйца" for a Russian user even when no translation
+    // call happens (which is the normal case for a Russian-language product).
+    allergens: allergenTags.map((tag) => allergenTagName(tag, catalogLanguage(locale))),
+    traces: traceTags.map((tag) => allergenTagName(tag, catalogLanguage(locale))),
     allergenTags,
     traceTags,
     additives,
-    labels: displayTags(labelTags),
+    labels: labelTags.map((tag) => labelTagName(tag, catalogLanguage(locale))),
     labelTags,
     categories: displayTags(canonicalTags(raw.categories_tags)),
     ingredientAnalysis: {

@@ -1,3 +1,5 @@
+import { createHmac } from 'node:crypto';
+
 import { getDb } from './db';
 import { HttpError } from './http';
 
@@ -129,8 +131,25 @@ export async function pruneRateLimitWindows(): Promise<void> {
   }
 }
 
+/**
+ * Returns a keyed hash of the caller's IP, never the address itself.
+ *
+ * An IP address is personal data under the GDPR, and a rate-limit counter has no
+ * need for the original value: it only has to recognise the same caller within
+ * one window. Hashing keeps the counter working while making the stored row
+ * useless to anyone reading the database, and it keeps the retention story
+ * simple, since rows expire with the window.
+ *
+ * INGREFIT_IP_HASH_SECRET should be set in production; without it the process
+ * boot value is used, which still avoids storing raw addresses but resets the
+ * counters on restart.
+ */
+const IP_HASH_SECRET =
+  process.env.INGREFIT_IP_HASH_SECRET ?? `ephemeral-${process.pid}-${Date.now()}`;
+
 export function clientIp(headers: Headers): string {
   const forwarded = headers.get('x-forwarded-for');
   const candidate = forwarded?.split(',')[0]?.trim() || headers.get('x-real-ip')?.trim() || '';
-  return candidate || 'unknown-ip';
+  if (!candidate) return 'unknown-ip';
+  return createHmac('sha256', IP_HASH_SECRET).update(candidate).digest('base64url').slice(0, 22);
 }

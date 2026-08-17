@@ -76,6 +76,110 @@ export function allergenName(allergen: string, language: CatalogLanguage): strin
   return ALLERGEN_NAMES[key]?.[language === 'ru' ? 1 : 0] ?? allergen;
 }
 
+/**
+ * Open Food Facts tag -> localized display name.
+ *
+ * Tags arrive canonicalized as `en:eggs`, `en:sesame-seeds`, `en:organic`, and
+ * for products whose ingredients did not match the taxonomy, in the source
+ * language instead (`ru:глютен`). Stripping the prefix alone therefore shows an
+ * English word to a Russian user whenever the tag did match. That is what these
+ * maps fix, deterministically and without a model call.
+ */
+const TAG_TO_ALLERGEN: Record<string, string> = {
+  'en:milk': 'milk',
+  'en:eggs': 'eggs',
+  'en:peanuts': 'peanuts',
+  'en:nuts': 'tree_nuts',
+  'en:tree-nuts': 'tree_nuts',
+  'en:almonds': 'tree_nuts',
+  'en:hazelnuts': 'tree_nuts',
+  'en:walnuts': 'tree_nuts',
+  'en:cashew-nuts': 'tree_nuts',
+  'en:pistachio-nuts': 'tree_nuts',
+  'en:soybeans': 'soy',
+  'en:gluten': 'gluten',
+  'en:wheat': 'wheat',
+  'en:fish': 'fish',
+  'en:crustaceans': 'crustaceans',
+  'en:sesame-seeds': 'sesame',
+  'en:celery': 'celery',
+  'en:mustard': 'mustard',
+  'en:sulphur-dioxide-and-sulphites': 'sulphites',
+  'en:lupin': 'lupin',
+  'en:molluscs': 'molluscs',
+};
+
+const LABEL_NAMES: Record<string, [string, string]> = {
+  'en:organic': ['organic', 'органический'],
+  'en:eu-organic': ['EU organic', 'органический (ЕС)'],
+  'en:gluten-free': ['gluten-free', 'без глютена'],
+  'en:lactose-free': ['lactose-free', 'без лактозы'],
+  'en:no-lactose': ['lactose-free', 'без лактозы'],
+  'en:vegan': ['vegan', 'веганский'],
+  'en:vegetarian': ['vegetarian', 'вегетарианский'],
+  'en:no-gluten': ['gluten-free', 'без глютена'],
+  'en:sugar-free': ['sugar-free', 'без сахара'],
+  'en:no-added-sugar': ['no added sugar', 'без добавленного сахара'],
+  'en:no-preservatives': ['no preservatives', 'без консервантов'],
+  'en:no-colorings': ['no colourings', 'без красителей'],
+  'en:no-gmos': ['non-GMO', 'без ГМО'],
+  'en:fair-trade': ['fair trade', 'справедливая торговля'],
+  'en:halal': ['halal', 'халяль'],
+  'en:kosher': ['kosher', 'кошерный'],
+  'en:palm-oil-free': ['palm-oil free', 'без пальмового масла'],
+  'en:high-protein': ['high protein', 'высокобелковый'],
+  'en:whole-grain': ['whole grain', 'цельнозерновой'],
+};
+
+function prettifySlug(tag: string): string {
+  return tag.replace(/^[a-z]{2}:/i, '').replaceAll('-', ' ').trim();
+}
+
+/** Localized name for an allergen or traces tag. */
+export function allergenTagName(tag: string, language: CatalogLanguage): string {
+  const key = TAG_TO_ALLERGEN[tag];
+  if (key) return allergenName(key, language);
+  return prettifySlug(tag);
+}
+
+/** Localized name for a label tag. */
+export function labelTagName(tag: string, language: CatalogLanguage): string {
+  const entry = LABEL_NAMES[tag];
+  if (entry) return entry[language === 'ru' ? 1 : 0];
+  return prettifySlug(tag);
+}
+
+/** Nutrient names used by the derived-baseline explanation. */
+const NUTRIENT_LABELS: Record<string, [string, string, string, string]> = {
+  // key: [name en, name ru, unit en, unit ru]
+  sugars: ['sugars', 'сахара', 'g', 'г'],
+  saturated_fat: ['saturated fat', 'насыщенные жиры', 'g', 'г'],
+  salt: ['salt', 'соль', 'g', 'г'],
+  fiber: ['fiber', 'клетчатка', 'g', 'г'],
+  protein: ['protein', 'белок', 'g', 'г'],
+  energy: ['energy', 'энергия', 'kcal', 'ккал'],
+};
+
+/**
+ * Renders the compact `key=value;key=value` detail string the scorer produces.
+ * The scorer stays language-neutral; the words are chosen here.
+ */
+function renderNutrientDetail(detail: string, language: CatalogLanguage): string {
+  const russian = language === 'ru';
+  return detail
+    .split(';')
+    .map((part) => {
+      const [key, rawValue] = part.split('=');
+      if (!key || rawValue === undefined) return null;
+      const entry = NUTRIENT_LABELS[key];
+      const value = russian ? rawValue.replace('.', ',') : rawValue;
+      if (!entry) return `${key} ${value}`;
+      return `${entry[russian ? 1 : 0]} ${value} ${entry[russian ? 3 : 2]}`;
+    })
+    .filter(Boolean)
+    .join(', ');
+}
+
 const ADDITIVE_BASIS: Record<AdditiveBasis, [string, string]> = {
   eu_not_authorised: [
     'no longer authorised as a food additive in the EU',
@@ -232,14 +336,17 @@ const TEMPLATES: Record<string, Template> = {
       ),
     };
   },
-  'base.nutrition_profile': (params, language) => ({
-    label: pick(language, 'Nutritional profile', 'Профиль питательности'),
-    evidence: pick(
-      language,
-      `No Nutri-Score is published, so the baseline is derived from the declared values: ${params.detail}.`,
-      `Nutri-Score не опубликован, поэтому базовая оценка выведена из заявленных значений: ${params.detail}.`,
-    ),
-  }),
+  'base.nutrition_profile': (params, language) => {
+    const detail = renderNutrientDetail(String(params.detail ?? ''), language);
+    return {
+      label: pick(language, 'Nutritional profile', 'Профиль питательности'),
+      evidence: pick(
+        language,
+        `No Nutri-Score is published, so the baseline is derived from the declared values: ${detail}.`,
+        `Nutri-Score не опубликован, поэтому базовая оценка выведена из заявленных значений: ${detail}.`,
+      ),
+    };
+  },
   'base.nutrition_unknown': (_params, language) => ({
     label: pick(language, 'Baseline quality unknown', 'Базовое качество неизвестно'),
     evidence: pick(
@@ -265,14 +372,18 @@ const TEMPLATES: Record<string, Template> = {
       ),
     };
   },
-  'base.additive_high': (params, language) => ({
-    label: pick(language, 'Additive of concern', 'Добавка повышенного внимания'),
-    evidence: pick(
-      language,
-      `${params.names}: ${params.basis}. IngreFit rates this as high-attention; the product cannot reach a high baseline score.`,
-      `${params.names}: ${params.basis}. IngreFit относит это к повышенному вниманию, поэтому базовая оценка ограничена.`,
-    ),
-  }),
+  'base.additive_high': (params, language) => {
+    // params.basis is a machine code; never print it raw.
+    const basis = additiveBasisText(String(params.basis) as AdditiveBasis, language);
+    return {
+      label: pick(language, 'Additive of concern', 'Добавка повышенного внимания'),
+      evidence: pick(
+        language,
+        `${params.names}: ${basis}. IngreFit rates this as high-attention, so the product cannot reach a high baseline score.`,
+        `${params.names}: ${basis}. IngreFit относит это к повышенному вниманию, поэтому базовая оценка ограничена.`,
+      ),
+    };
+  },
   'base.additive_moderate': (params, language) => ({
     label: pick(language, 'Additives to be aware of', 'Добавки, о которых стоит знать'),
     evidence: pick(

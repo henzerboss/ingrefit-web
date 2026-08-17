@@ -433,6 +433,8 @@ function computeBase(facts: ProductFacts): BaseResult {
 function nutritionProxy(facts: ProductFacts): { impact: number; detail: string } | null {
   const nutrition = facts.nutrition;
   const beverage = isBeverage(facts);
+  // Detail is emitted as `key=value` pairs, never as prose: this module must
+  // stay language-neutral so the same signal can render in any language.
   const parts: string[] = [];
   let impact = 0;
   let known = 0;
@@ -447,27 +449,27 @@ function nutritionProxy(facts: ProductFacts): { impact: number; detail: string }
 
   if (typeof nutrition.sugars100g === 'number') {
     const scaled = beverage ? nutrition.sugars100g * 2 : nutrition.sugars100g;
-    push(scaled, band(scaled, [[5, 0.5], [10, 0.1], [22.5, -0.7]], -1.3), `sugars ${round(nutrition.sugars100g)} g`);
+    push(scaled, band(scaled, [[5, 0.5], [10, 0.1], [22.5, -0.7]], -1.3), `sugars=${round(nutrition.sugars100g)}`);
   }
   if (typeof nutrition.saturatedFat100g === 'number') {
-    push(nutrition.saturatedFat100g, band(nutrition.saturatedFat100g, [[1.5, 0.4], [5, -0.2], [10, -0.7]], -1.1), `saturated fat ${round(nutrition.saturatedFat100g)} g`);
+    push(nutrition.saturatedFat100g, band(nutrition.saturatedFat100g, [[1.5, 0.4], [5, -0.2], [10, -0.7]], -1.1), `saturated_fat=${round(nutrition.saturatedFat100g)}`);
   }
   if (salt !== null) {
-    push(salt, band(salt, [[0.3, 0.4], [1, 0], [1.5, -0.5]], -0.9), `salt ${round(salt, 2)} g`);
+    push(salt, band(salt, [[0.3, 0.4], [1, 0], [1.5, -0.5]], -0.9), `salt=${round(salt, 2)}`);
   }
   if (typeof nutrition.fiber100g === 'number') {
-    push(nutrition.fiber100g, band(nutrition.fiber100g, [[1.5, -0.3], [3, 0.2], [6, 0.5]], 0.8), `fiber ${round(nutrition.fiber100g)} g`);
+    push(nutrition.fiber100g, band(nutrition.fiber100g, [[1.5, -0.3], [3, 0.2], [6, 0.5]], 0.8), `fiber=${round(nutrition.fiber100g)}`);
   }
   if (typeof nutrition.protein100g === 'number') {
-    push(nutrition.protein100g, band(nutrition.protein100g, [[3, -0.2], [8, 0.1], [15, 0.4]], 0.6), `protein ${round(nutrition.protein100g)} g`);
+    push(nutrition.protein100g, band(nutrition.protein100g, [[3, -0.2], [8, 0.1], [15, 0.4]], 0.6), `protein=${round(nutrition.protein100g)}`);
   }
   if (typeof nutrition.energyKcal100g === 'number') {
     const scaled = beverage ? nutrition.energyKcal100g * 2.5 : nutrition.energyKcal100g;
-    push(scaled, band(scaled, [[150, 0.3], [300, 0], [450, -0.4]], -0.7), `energy ${Math.round(nutrition.energyKcal100g)} kcal`);
+    push(scaled, band(scaled, [[150, 0.3], [300, 0], [450, -0.4]], -0.7), `energy=${Math.round(nutrition.energyKcal100g)}`);
   }
 
   if (known < 3) return null;
-  return { impact: Math.max(-2.5, Math.min(2, impact)), detail: parts.join(', ') };
+  return { impact: Math.max(-2.5, Math.min(2, impact)), detail: parts.join(';') };
 }
 
 // ---------------------------------------------------------------------------
