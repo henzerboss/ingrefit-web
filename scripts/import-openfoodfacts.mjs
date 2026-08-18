@@ -359,22 +359,46 @@ function deriveImageUrls(record) {
   const code = typeof record?.code === 'string' ? record.code.trim() : '';
   if (!images || typeof images !== 'object' || !code) return {};
 
-  // Prefer the product's own language, then English, then any front image.
   const language = String(record.lc ?? record.lang ?? '').toLowerCase();
-  const keys = Object.keys(images);
-  // A ternary, not `language && ...`: an empty string is falsy but not nullish,
-  // so `??` would accept it as the chosen key and skip both fallbacks.
-  const key =
-    (language ? keys.find((name) => name === `front_${language}`) : undefined) ??
-    keys.find((name) => name === 'front_en') ??
-    keys.find((name) => name.startsWith('front_'));
-  if (!key) return {};
 
-  const revision = images[key]?.rev;
-  if (revision === undefined || revision === null) return {};
+  // Two shapes exist, because Open Food Facts is migrating this field too:
+  //
+  //   legacy: images["front_fr"] = { rev, sizes }
+  //   new:    images.selected.front.fr = { rev, imgid, sizes }
+  //
+  // Supporting only the legacy one produced an image for fewer than a fifth of
+  // the dataset, which is what made mirrored products look picture-less.
+  const candidates = [];
 
-  const base = `${IMAGE_BASE_URL}/images/products/${imagePath(code)}/${key}.${revision}`;
-  return { image_front_url: `${base}.400.jpg`, image_front_small_url: `${base}.200.jpg` };
+  const selected = images.selected?.front;
+  if (selected && typeof selected === 'object') {
+    const languages = Object.keys(selected);
+    const order = [language, 'en', ...languages].filter(Boolean);
+    for (const code2 of order) {
+      const entry = selected[code2];
+      if (entry && typeof entry === 'object') candidates.push({ key: `front_${code2}`, entry });
+    }
+  }
+
+  const legacyKeys = Object.keys(images).filter((name) => name.startsWith('front_'));
+  const legacyOrder = [
+    ...(language ? legacyKeys.filter((name) => name === `front_${language}`) : []),
+    ...legacyKeys.filter((name) => name === 'front_en'),
+    ...legacyKeys,
+  ];
+  for (const key of legacyOrder) {
+    const entry = images[key];
+    if (entry && typeof entry === 'object') candidates.push({ key, entry });
+  }
+
+  for (const { key, entry } of candidates) {
+    const revision = entry.rev ?? entry.revision;
+    if (revision === undefined || revision === null || revision === '') continue;
+    const base = `${IMAGE_BASE_URL}/images/products/${imagePath(code)}/${key}.${revision}`;
+    return { image_front_url: `${base}.400.jpg`, image_front_small_url: `${base}.200.jpg` };
+  }
+
+  return {};
 }
 
 function readState() {
@@ -609,6 +633,9 @@ async function runInspect(targetBarcode) {
       console.log(`\n    ALL TOP-LEVEL KEYS (${keys.length}):`);
       console.log(`      ${keys.join(', ')}`);
 
+      console.log(`\n    IMAGES: ${JSON.stringify(record.images).slice(0, 600)}`);
+      console.log(`    derived: ${JSON.stringify(deriveImageUrls(record))}`);
+
       const interesting = keys.filter((key) => /nutr|energ|kcal|kj|serving|quantity/i.test(key));
       console.log(`\n    NUTRITION-SHAPED FIELDS (${interesting.length}):`);
       for (const key of interesting) {
@@ -696,6 +723,131 @@ async function runStats(sampleSize) {
   }
 }
 
+/**
+ * Find where nutrition and images actually live, instead of guessing.
+ *
+ * Scans the archive, and for every record the importer FAILS to extract from,
+ * records which nutrition-shaped fields are non-empty and what shape the
+ * `images` object has. The report tells you exactly which structures are still
+ * unsupported and how much of the dataset each one is worth, so one pass
+ * replaces a series of speculative re-imports.
+ *
+ *   node scripts/import-openfoodfacts.mjs --discover           # whole archive
+ *   node scripts/import-openfoodfacts.mjs --discover 200000    # quick look
+ */
+async function runDiscover(sampleSize) {
+  const archive = path.join(WORK_DIR, 'openfoodfacts-products.jsonl.gz');
+  if (!existsSync(archive)) {
+    console.error(`[off] archive not found at ${archive}`);
+    process.exit(1);
+  }
+
+  const lines = createInterface({ input: createReadStream(archive).pipe(createGunzip()), crlfDelay: Infinity });
+
+  let total = 0;
+  let nutritionOk = 0;
+  let imageOk = 0;
+  const nutritionFields = new Map();   // field name -> { count, sample }
+  const imageShapes = new Map();       // shape signature -> { count, sample }
+  const nutritionShapes = new Map();
+
+  const bump = (map, key, sample) => {
+    const entry = map.get(key) ?? { count: 0, sample: undefined };
+    entry.count += 1;
+    if (entry.sample === undefined && sample !== undefined) entry.sample = String(sample).slice(0, 160);
+    map.set(key, entry);
+  };
+
+  const nonEmpty = (value) => {
+    if (value === null || value === undefined || value === '') return false;
+    if (Array.isArray(value)) return value.length > 0;
+    if (typeof value === 'object') return Object.keys(value).length > 0;
+    return true;
+  };
+
+  /** Compact description of an object's shape, not its values. */
+  const shapeOf = (value) => {
+    if (value === null || value === undefined) return 'missing';
+    if (Array.isArray(value)) return value.length ? `array[${typeof value[0]}]` : 'array(empty)';
+    if (typeof value !== 'object') return typeof value;
+    const keys = Object.keys(value);
+    if (!keys.length) return 'object(empty)';
+    const kinds = new Set(
+      keys.map((key) => {
+        if (/^\d+$/.test(key)) return '<number>';
+        if (/^front_[a-z]{2}/.test(key)) return 'front_<lang>';
+        if (/^(ingredients|nutrition|packaging|other)_[a-z]{2}/.test(key)) return '<type>_<lang>';
+        return key;
+      }),
+    );
+    return [...kinds].sort().join('+');
+  };
+
+  for await (const line of lines) {
+    if (!line.trim()) continue;
+    let record;
+    try {
+      record = JSON.parse(line);
+    } catch {
+      continue;
+    }
+    total += 1;
+
+    const nutrients = extractNutriments(record);
+    if (Object.keys(nutrients).length >= 4) {
+      nutritionOk += 1;
+    } else {
+      // Which nutrition-shaped fields carry something we are not reading?
+      for (const [key, value] of Object.entries(record)) {
+        if (!/nutr|energ|kcal|kj/i.test(key)) continue;
+        if (!nonEmpty(value)) continue;
+        bump(nutritionFields, key, typeof value === 'object' ? JSON.stringify(value) : value);
+      }
+      bump(nutritionShapes, `nutrition=${shapeOf(record.nutrition)} | nutriments=${shapeOf(record.nutriments)}`,
+        JSON.stringify(record.nutrition ?? record.nutriments));
+    }
+
+    const images = deriveImageUrls(record);
+    if (images.image_front_url) {
+      imageOk += 1;
+    } else {
+      bump(imageShapes, shapeOf(record.images), JSON.stringify(record.images));
+    }
+
+    if (sampleSize && total >= sampleSize) break;
+    if (total % 500_000 === 0) console.log(`[off]   ...${total} records scanned`);
+  }
+  lines.close();
+
+  const percent = (value) => `${((value / total) * 100).toFixed(1)}%`;
+  const top = (map, limit) => [...map.entries()].sort((a, b) => b[1].count - a[1].count).slice(0, limit);
+
+  console.log(`\n[off] scanned ${total} records`);
+  console.log(`[off] nutrition extracted : ${nutritionOk} (${percent(nutritionOk)})`);
+  console.log(`[off] image URL derived   : ${imageOk} (${percent(imageOk)})`);
+
+  console.log(`\n=== records WITHOUT usable nutrition: which fields still hold something ===`);
+  for (const [field, entry] of top(nutritionFields, 20)) {
+    console.log(`  ${String(entry.count).padStart(8)} (${percent(entry.count)})  ${field}`);
+    console.log(`           e.g. ${entry.sample}`);
+  }
+
+  console.log(`\n=== records WITHOUT usable nutrition: shape of nutrition/nutriments ===`);
+  for (const [shape, entry] of top(nutritionShapes, 10)) {
+    console.log(`  ${String(entry.count).padStart(8)} (${percent(entry.count)})  ${shape}`);
+  }
+
+  console.log(`\n=== records WITHOUT an image: shape of the images field ===`);
+  for (const [shape, entry] of top(imageShapes, 12)) {
+    console.log(`  ${String(entry.count).padStart(8)} (${percent(entry.count)})  ${shape}`);
+    if (shape !== 'missing' && shape !== 'object(empty)') console.log(`           e.g. ${entry.sample}`);
+  }
+
+  console.log('\nA shape listed above with a large count is an unsupported structure worth adding.');
+  console.log('"missing" and "object(empty)" mean the data is genuinely absent.');
+}
+
+
 async function main() {
   const mode = process.argv.includes('--full')
     ? 'full'
@@ -705,10 +857,19 @@ async function main() {
         ? 'inspect'
         : process.argv.includes('--stats')
           ? 'stats'
-          : null;
+          : process.argv.includes('--discover')
+            ? 'discover'
+            : null;
   if (!mode) {
-    console.error('Usage: node scripts/import-openfoodfacts.mjs --full | --delta | --inspect [barcode] | --stats [head-sample]');
+    console.error('Usage: node scripts/import-openfoodfacts.mjs --full | --delta | --inspect [barcode] | --stats [head-sample] | --discover [sample]');
     process.exit(1);
+  }
+  if (mode === 'discover') {
+    const index = process.argv.indexOf('--discover');
+    const size = Number(process.argv[index + 1]);
+    await runDiscover(Number.isFinite(size) && size > 0 ? size : 0);
+    await prisma.$disconnect();
+    return;
   }
   if (mode === 'stats') {
     const index = process.argv.indexOf('--stats');

@@ -179,7 +179,26 @@ fruit/vegetable estimate falls back to its top-level field.
 per-nutrient subset alongside the normalized values, so re-deriving them later is
 a SQL update rather than another multi-hour pass over the archive.
 
-Two checks to run before trusting an import, both cheap:
+### Before importing, find out where the data actually is
+
+```bash
+node scripts/import-openfoodfacts.mjs --discover 200000   # quick look
+node scripts/import-openfoodfacts.mjs --discover          # whole archive
+```
+
+`--discover` scans records the importer FAILS to extract from and reports which
+fields still hold something and what shape they have, ranked by how much of the
+dataset each accounts for. Open Food Facts is actively migrating its schema —
+nutrition moved to `nutrition.input_sets`, images to `images.selected.front` —
+and each unnoticed move silently emptied a large slice of the mirror. Run this
+after every full re-download instead of discovering the next migration through a
+user-visible regression.
+
+Read the output like this: a shape with a large count is an unsupported
+structure worth adding to the importer; `missing` and `object(empty)` mean the
+data is genuinely absent upstream and no code change will recover it.
+
+Two further checks, both cheap:
 
 ```bash
 node scripts/import-openfoodfacts.mjs --stats                   # exact, full pass, several minutes
@@ -227,7 +246,18 @@ https://images.openfoodfacts.org/images/products/301/762/042/2003/front_en.879.4
 
 Codes of nine digits or more are padded to 13 and split 3/3/3/rest; shorter codes
 are used as-is. The front image is chosen in the product's own language first,
-then English, then any available front image. A mirror imported before this was
+then English, then any available front image.
+
+Like nutrition, this field exists in two shapes, and only supporting the legacy
+one yielded an image for fewer than a fifth of the dataset:
+
+```
+legacy: images["front_fr"]        = { rev, sizes }
+new:    images.selected.front.fr  = { rev, imgid, sizes }
+```
+
+`--inspect <barcode>` prints the raw `images` object and the derived URLs, which
+is the fastest way to check a product that shows no picture. A mirror imported before this was
 added has no images at all — that requires a re-import, not a code change.
 
 Images are licensed CC BY-SA, separately from the ODbL database, so attribution
