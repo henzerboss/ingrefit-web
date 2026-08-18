@@ -87,7 +87,15 @@ function numeric(value) {
  * product fail the "at least four nutrient values" threshold, so all three are
  * handled here and the outcome is counted rather than trusted.
  */
-function normalizeNutriments(raw, dataPer) {
+/** Serving weight in grams/millilitres, when it is usable for conversion. */
+function servingQuantity(record) {
+  const unit = String(record?.serving_quantity_unit ?? 'g').toLowerCase();
+  if (unit && unit !== 'g' && unit !== 'ml') return undefined;
+  const quantity = numeric(record?.serving_quantity);
+  return quantity && quantity > 0 && quantity < 2000 ? quantity : undefined;
+}
+
+function normalizeNutriments(raw, dataPer, servingGrams) {
   const output = {};
   if (!raw) return output;
 
@@ -105,9 +113,12 @@ function normalizeNutriments(raw, dataPer) {
 
   if (typeof raw !== 'object') return output;
 
-  // Values declared per serving cannot be reinterpreted as per 100 g without a
-  // serving weight, so in that case only explicit *_100g keys are trustworthy.
+  // Values declared per serving are only usable if the serving weight is known;
+  // with it they convert exactly, without it they must be ignored rather than
+  // silently treated as per-100 values.
   const perServing = String(dataPer ?? '').toLowerCase() === 'serving';
+  const servingFactor = servingGrams ? 100 / servingGrams : undefined;
+  const fromServing = (value) => (value === undefined || !servingFactor ? undefined : value * servingFactor);
 
   // Convert an "as entered" value using its declared unit. Open Food Facts
   // stores *_100g in grams, but *_value in whatever the label used.
@@ -129,7 +140,13 @@ function normalizeNutriments(raw, dataPer) {
     // 1. Explicit per-100g value, always authoritative.
     let value = numeric(raw[key]);
 
-    // 2. Bare name, or a nested per-quantity object.
+    // 2. Explicit per-serving value, converted with the known serving weight.
+    if (value === undefined) {
+      const converted = fromServing(numeric(raw[`${base}_serving`]));
+      if (converted !== undefined) value = Math.round(converted * 1000) / 1000;
+    }
+
+    // 3. Bare name, or a nested per-quantity object.
     if (value === undefined && !perServing) {
       const candidate = raw[base];
       if (candidate && typeof candidate === 'object' && !Array.isArray(candidate)) {
@@ -139,9 +156,14 @@ function normalizeNutriments(raw, dataPer) {
       }
     }
 
-    // 3. The "as entered" value, converted from its declared unit.
-    if (value === undefined && !perServing) {
-      value = convert(numeric(raw[`${base}_value`]), raw[`${base}_unit`]);
+    // 4. The "as entered" value, converted from its declared unit, and from the
+    //    serving basis when that is what the label used.
+    if (value === undefined) {
+      const entered = convert(numeric(raw[`${base}_value`]), raw[`${base}_unit`]);
+      if (entered !== undefined) {
+        const scaled = perServing ? fromServing(entered) : entered;
+        if (scaled !== undefined) value = Math.round(scaled * 1000) / 1000;
+      }
     }
 
     if (value !== undefined) output[key] = value;
@@ -229,8 +251,16 @@ function slim(record) {
  */
 function fromNutritionSets(nutrition) {
   const output = {};
-  const sets = nutrition && typeof nutrition === 'object' ? nutrition.input_sets : undefined;
-  if (!Array.isArray(sets)) return output;
+  if (!nutrition || typeof nutrition !== 'object') return output;
+
+  // `aggregated_set` is the reconciled view Open Food Facts computes from the
+  // input sets; some products carry only that one.
+  const aggregated = nutrition.aggregated_set;
+  const sets = [
+    ...(Array.isArray(nutrition.input_sets) ? nutrition.input_sets : []),
+    ...(aggregated && typeof aggregated === 'object' ? [aggregated] : []),
+  ];
+  if (!sets.length) return output;
 
   // Only per-100 sets are usable without a serving weight. A manufacturer set
   // is preferred over an estimate when both are present.
@@ -305,7 +335,8 @@ function fromNutriscore(record) {
  * trustworthiness, and fill in what can be derived. Earlier sources win.
  */
 function extractNutriments(record) {
-  const output = { ...normalizeNutriments(record.nutriments, record.nutrition_data_per) };
+  const servingGrams = servingQuantity(record);
+  const output = { ...normalizeNutriments(record.nutriments, record.nutrition_data_per, servingGrams) };
 
   const merge = (source) => {
     for (const [key, value] of Object.entries(source)) {
@@ -360,10 +391,12 @@ function deriveImageUrls(record) {
   if (!images || typeof images !== 'object' || !code) return {};
 
   const language = String(record.lc ?? record.lang ?? '').toLowerCase();
+  const base = `${IMAGE_BASE_URL}/images/products/${imagePath(code)}`;
+  const urls = (name) => ({ image_front_url: `${base}/${name}.400.jpg`, image_front_small_url: `${base}/${name}.200.jpg` });
 
   // Two shapes exist, because Open Food Facts is migrating this field too:
   //
-  //   legacy: images["front_fr"] = { rev, sizes }
+  //   legacy: images["front_fr"] = { rev, sizes }   (also a bare "front")
   //   new:    images.selected.front.fr = { rev, imgid, sizes }
   //
   // Supporting only the legacy one produced an image for fewer than a fifth of
@@ -372,31 +405,38 @@ function deriveImageUrls(record) {
 
   const selected = images.selected?.front;
   if (selected && typeof selected === 'object') {
-    const languages = Object.keys(selected);
-    const order = [language, 'en', ...languages].filter(Boolean);
-    for (const code2 of order) {
-      const entry = selected[code2];
-      if (entry && typeof entry === 'object') candidates.push({ key: `front_${code2}`, entry });
+    for (const lang of [language, 'en', ...Object.keys(selected)].filter(Boolean)) {
+      const entry = selected[lang];
+      if (entry && typeof entry === 'object') candidates.push({ name: `front_${lang}`, entry });
     }
   }
 
-  const legacyKeys = Object.keys(images).filter((name) => name.startsWith('front_'));
-  const legacyOrder = [
-    ...(language ? legacyKeys.filter((name) => name === `front_${language}`) : []),
-    ...legacyKeys.filter((name) => name === 'front_en'),
+  const legacyKeys = Object.keys(images).filter((name) => name === 'front' || name.startsWith('front_'));
+  for (const name of [
+    ...(language ? legacyKeys.filter((key) => key === `front_${language}`) : []),
+    ...legacyKeys.filter((key) => key === 'front_en'),
     ...legacyKeys,
-  ];
-  for (const key of legacyOrder) {
-    const entry = images[key];
-    if (entry && typeof entry === 'object') candidates.push({ key, entry });
+  ]) {
+    const entry = images[name];
+    if (entry && typeof entry === 'object') candidates.push({ name, entry });
   }
 
-  for (const { key, entry } of candidates) {
+  for (const { name, entry } of candidates) {
     const revision = entry.rev ?? entry.revision;
     if (revision === undefined || revision === null || revision === '') continue;
-    const base = `${IMAGE_BASE_URL}/images/products/${imagePath(code)}/${key}.${revision}`;
-    return { image_front_url: `${base}.400.jpg`, image_front_small_url: `${base}.200.jpg` };
+    return urls(`${name}.${revision}`);
   }
+
+  // Last resort: a product with uploaded photos but no selected front image.
+  // Uploaded images are served by their numeric id, and by convention the first
+  // upload is the package front. Better than showing no picture at all, and it
+  // is only reached when no front has been selected by a contributor.
+  const uploaded = images.uploaded && typeof images.uploaded === 'object' ? images.uploaded : images;
+  const numericIds = Object.keys(uploaded)
+    .filter((key) => /^\d+$/.test(key))
+    .map(Number)
+    .sort((left, right) => left - right);
+  if (numericIds.length) return urls(String(numericIds[0]));
 
   return {};
 }
@@ -751,11 +791,18 @@ async function runDiscover(sampleSize) {
   const imageShapes = new Map();       // shape signature -> { count, sample }
   const nutritionShapes = new Map();
 
+  // Bounded on purpose. A shape signature enumerates every key it saw, so on a
+  // full pass nearly every record produced a unique kilobyte-long string and the
+  // process ran out of memory before finishing. Rare shapes are not interesting
+  // anyway: they are collapsed into one bucket.
+  const MAX_TRACKED_SHAPES = 400;
   const bump = (map, key, sample) => {
-    const entry = map.get(key) ?? { count: 0, sample: undefined };
+    const bounded = key.length > 140 ? `${key.slice(0, 140)}...` : key;
+    const finalKey = map.has(bounded) || map.size < MAX_TRACKED_SHAPES ? bounded : '(other, rare shapes)';
+    const entry = map.get(finalKey) ?? { count: 0, sample: undefined };
     entry.count += 1;
     if (entry.sample === undefined && sample !== undefined) entry.sample = String(sample).slice(0, 160);
-    map.set(key, entry);
+    map.set(finalKey, entry);
   };
 
   const nonEmpty = (value) => {
@@ -815,7 +862,10 @@ async function runDiscover(sampleSize) {
     }
 
     if (sampleSize && total >= sampleSize) break;
-    if (total % 500_000 === 0) console.log(`[off]   ...${total} records scanned`);
+    if (total % 250_000 === 0) {
+      const used = Math.round(process.memoryUsage().heapUsed / 1024 / 1024);
+      console.log(`[off]   ...${total} records scanned (nutrition ${nutritionOk}, images ${imageOk}, heap ${used} MB)`);
+    }
   }
   lines.close();
 

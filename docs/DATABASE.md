@@ -161,10 +161,13 @@ Nutrition is not stored in one place. Open Food Facts is migrating onto a newer
 well-known products such as Nutella. The importer therefore reads three sources
 in order of trustworthiness and merges them:
 
+0. Per-serving declarations are converted using `serving_quantity`, and skipped
+   entirely when that weight is unknown — an unconvertible per-serving value must
+   never be recorded as if it were per 100 g.
 1. `nutriments` — the legacy object. Carries `*_100g` keys, bare names (`fat`,
    `sugars`) whose basis is given by `nutrition_data_per`, and `*_value` in the
    unit named by `*_unit`.
-2. `nutrition.input_sets[]` — the new structure. Each set has `per`,
+2. `nutrition.input_sets[]` and `nutrition.aggregated_set` — the new structure. Each set has `per`,
    `per_quantity`, `per_unit` and `nutrients: { name: { value, unit,
    value_computed } }`. Only per-100 sets are used, preferring
    `source: "manufacturer"`, because a per-serving set cannot be converted
