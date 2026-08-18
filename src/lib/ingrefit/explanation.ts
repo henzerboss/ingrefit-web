@@ -31,6 +31,36 @@ const aiResponseSchema = {
   properties: { summary: { type: 'STRING' }, tip: { type: 'STRING' } },
 } as const;
 
+/**
+ * English name of the target language, for the model prompt.
+ *
+ * This used to be hardcoded as "Russian or English", which silently forced every
+ * other locale's Premium summary into English even after the catalog itself was
+ * translated. Intl keeps it correct for any language we add later.
+ */
+function languageName(language: string): string {
+  try {
+    return new Intl.DisplayNames(['en'], { type: 'language' }).of(language) ?? language;
+  } catch {
+    return language;
+  }
+}
+
+/**
+ * Scripts a reply must contain to be plausibly in the requested language.
+ * A model that ignores the language instruction usually answers in English, and
+ * Latin script is not diagnostic, so only non-Latin scripts are checked.
+ */
+const EXPECTED_SCRIPT: Record<string, RegExp> = {
+  ru: /[\u0400-\u04FF]/, uk: /[\u0400-\u04FF]/, sr: /[\u0400-\u04FF]/, bg: /[\u0400-\u04FF]/,
+  kk: /[\u0400-\u04FF]/, mk: /[\u0400-\u04FF]/,
+  zh: /[\u4E00-\u9FFF]/, ja: /[\u3040-\u30FF\u4E00-\u9FFF]/, ko: /[\uAC00-\uD7AF]/,
+  ar: /[\u0600-\u06FF]/, he: /[\u0590-\u05FF]/, el: /[\u0370-\u03FF]/, th: /[\u0E00-\u0E7F]/,
+  hi: /[\u0900-\u097F]/, mr: /[\u0900-\u097F]/, ne: /[\u0900-\u097F]/,
+  bn: /[\u0980-\u09FF]/, pa: /[\u0A00-\u0A7F]/, gu: /[\u0A80-\u0AFF]/,
+  ta: /[\u0B80-\u0BFF]/, te: /[\u0C00-\u0C7F]/, kn: /[\u0C80-\u0CFF]/, ml: /[\u0D00-\u0D7F]/,
+};
+
 function renderSignals(scored: ScoredProduct, language: CatalogLanguage): RenderedSignal[] {
   return scored.signals.map((signal) => {
     const { label, evidence } = renderSignal(signal, language);
@@ -192,7 +222,8 @@ function buildAiPrompt(
     scored.blocked ? 'HARD_RESTRICTION: yes' : 'HARD_RESTRICTION: no',
     `GOALS: ${profile.goals.join(', ')}; DIET: ${profile.diet}`,
     `SIGNALS:\n${lines.join('\n') || 'none'}`,
-    `Write "summary": 2-3 sentences telling the user what this means for their goals. Write "tip": one actionable sentence. Use only the facts above. Do not repeat the score as a number list, do not add health or medical claims, do not invent ingredients. Language must be ${language === 'ru' ? 'Russian' : 'English'}.`,
+    `Write "summary": 2-3 sentences telling the user what this means for their goals. Write "tip": one actionable sentence. Use only the facts above. Do not repeat the score as a number list, do not add health or medical claims, do not invent ingredients.`,
+    `Write BOTH fields entirely in ${languageName(language)} (locale ${locale}). Do not answer in English unless that is the requested language.`,
   ].join('\n');
 }
 
@@ -233,11 +264,14 @@ export async function explainScore(
       validate: (value) => aiSchema.parse(value),
     });
 
-    // Cheap sanity check: for a Cyrillic-script language, a reply with no
-    // Cyrillic means the model ignored the requested language. Keep the
-    // deterministic text rather than showing English to a Russian user.
-    const cyrillicExpected = ['ru', 'uk', 'sr', 'bg', 'kk'].includes(language);
-    if (cyrillicExpected && !/[\u0400-\u04FF]/.test(result.summary)) return deterministic;
+    // Cheap sanity check: if the language uses a non-Latin script and the reply
+    // contains none of it, the model ignored the instruction. Prefer the
+    // deterministic text, which is always correctly localized.
+    const expected = EXPECTED_SCRIPT[language];
+    if (expected && !expected.test(result.summary)) {
+      console.warn(`[ingrefit] Model replied outside the ${language} script; using deterministic text`);
+      return deterministic;
+    }
 
     await writeExplanationCache(scored.fingerprint, language, result);
     return { ...deterministic, summary: result.summary, tip: result.tip };

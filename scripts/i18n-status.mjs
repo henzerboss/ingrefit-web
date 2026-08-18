@@ -67,4 +67,5 @@ function report(title, directory, referenceLocale = 'en') {
 
 report('Website UI (src/messages)', 'src/messages');
 report('Assessment catalog (src/lib/ingrefit/catalog)', 'src/lib/ingrefit/catalog');
+report('Additive names (src/lib/ingrefit/catalog/additives)', 'src/lib/ingrefit/catalog/additives');
 console.log('\nLocales absent from the catalog are served in English by design.');

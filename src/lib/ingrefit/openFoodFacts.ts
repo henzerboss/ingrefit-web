@@ -1,4 +1,5 @@
 import { classifyAdditives } from './additives';
+import { additiveName } from './catalog';
 import { additiveBasisText, allergenTagName, catalogLanguage, labelTagName } from './signalCatalog';
 import { safeDb } from './db';
 import type { IngredientAnalysis, NutrientLevel, NutrientLevels, NutritionFacts, ProductFacts } from './types';
@@ -196,12 +197,13 @@ function toFacts(raw: OpenFoodFactsProduct, barcode: string, locale: string): Pr
   const traceTags = canonicalTags(raw.traces_tags);
   const labelTags = canonicalTags(raw.labels_tags);
   const analysisTags = canonicalTags(raw.ingredients_analysis_tags);
+  const catalog = catalogLanguage(locale);
   const additives = classifyAdditives(canonicalTags(raw.additives_tags)).map((additive) => ({
     code: additive.code,
-    name: language === 'ru' ? additive.nameRu : additive.nameEn,
+    name: additiveName(additive.code, catalog),
     risk: additive.risk,
     basis: additive.basis,
-    basisText: additiveBasisText(additive.basis, catalogLanguage(locale)),
+    basisText: additiveBasisText(additive.basis, catalog),
     known: additive.known,
   }));
 

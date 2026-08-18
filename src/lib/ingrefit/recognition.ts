@@ -4,6 +4,7 @@ import { HttpError } from './http';
 
 import { classifyAdditives } from './additives';
 import { callGemini } from './gemini';
+import { additiveName } from './catalog';
 import { additiveBasisText, catalogLanguage } from './signalCatalog';
 import type { LabelPhoto, NutritionFacts, ProductAdditive, ProductFacts } from './types';
 
@@ -15,7 +16,7 @@ function toAdditives(raw: string[], locale: string): ProductAdditive[] {
   const language = catalogLanguage(locale);
   return classifyAdditives(raw).map((additive) => ({
     code: additive.code,
-    name: language === 'ru' ? additive.nameRu : additive.nameEn,
+    name: additiveName(additive.code, language),
     risk: additive.risk,
     basis: additive.basis,
     basisText: additiveBasisText(additive.basis, language),

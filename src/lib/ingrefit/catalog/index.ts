@@ -1,3 +1,5 @@
+import additivesEn from './additives/en.json';
+import additivesRu from './additives/ru.json';
 import en from './en.json';
 import ru from './ru.json';
 import af from './af.json';
@@ -119,6 +121,29 @@ const CATALOGS: Record<string, unknown> = {
 };
 
 export const CATALOG_LANGUAGES = Object.keys(CATALOGS);
+
+/**
+ * Additive names live in their own files: there are several hundred of them and
+ * they translate independently of the rest of the wording. A language missing
+ * here falls back to English names, which is survivable — the E-number, the risk
+ * tier and the regulatory basis are all still localized.
+ *
+ * To add a language: create `additives/<language>.json` from `additives/en.json`,
+ * import it above and register it here.
+ */
+const ADDITIVE_NAMES: Record<string, Record<string, string>> = {
+  en: additivesEn,
+  ru: additivesRu,
+};
+
+export const ADDITIVE_NAME_LANGUAGES = Object.keys(ADDITIVE_NAMES);
+
+/** Localized additive name, falling back to English, then the bare code. */
+export function additiveName(code: string, language: string): string {
+  const normalized = code.toLowerCase();
+  const localized = ADDITIVE_NAMES[language]?.[normalized] ?? ADDITIVE_NAMES.en?.[normalized];
+  return localized ?? code.toUpperCase();
+}
 
 /**
  * Maps a request locale onto a catalog language: exact match first, then the
