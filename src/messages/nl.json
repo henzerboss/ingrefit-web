@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "IngreFit — AI-voedingsscanner voor jouw doelen",
+    "title": "IngreFit - AI-voedingsscanner voor jouw doelen",
     "description": "Scan een barcode of voedseletiket en krijg een feitelijke, gepersonaliseerde geschiktheidsscore van 1 tot 10 voor jouw voedingsdoelen."
   },
   "nav": {
@@ -44,9 +44,9 @@
     "step1Title": "Scan de barcode",
     "step1Body": "We controleren Open Food Facts op identiteit, ingrediënten, voedingswaarden, allergenen en Nutri-Score- en NOVA-gegevens.",
     "step2Title": "Gebruik een foto wanneer nodig",
-    "step2Body": "Premium kan een ontbrekend verpakkingsetiket lezen vanaf twee foto's — de voorkant en één volledig informatie-etiket — of voedsel zonder verpakking voorzichtig herkennen vanaf één foto.",
+    "step2Body": "Premium kan een ontbrekend verpakkingsetiket lezen vanaf twee foto's - de voorkant en één volledig informatie-etiket - of voedsel zonder verpakking voorzichtig herkennen vanaf één foto.",
     "step3Title": "Krijg jouw score",
-    "step3Body": "Een deterministische score van 1–10 gebruikt alleen beschikbare feiten en de doelen die je hebt gekozen. AI legt het resultaat uit in de actieve app-taal."
+    "step3Body": "Een deterministische score van 1-10 gebruikt alleen beschikbare feiten en de doelen die je hebt gekozen. AI legt het resultaat uit in de actieve app-taal."
   },
   "principle": {
     "eyebrow": "DE INGREFIT-REGEL",
@@ -62,7 +62,7 @@
   "personal": {
     "eyebrow": "ÉÉN PRODUCT, VERSCHILLENDE MENSEN",
     "title": "Persoonlijk is beter dan algemeen",
-    "body": "Dezelfde ontbijtgranen kunnen goed scoren voor een doel met meer vezels en slecht voor iemand die suiker beperkt. Jouw doelen, eetpatroon, allergenen en vermijdlijst veranderen de uitleg — nooit de onderliggende feiten.",
+    "body": "Dezelfde ontbijtgranen kunnen goed scoren voor een doel met meer vezels en slecht voor iemand die suiker beperkt. Jouw doelen, eetpatroon, allergenen en vermijdlijst veranderen de uitleg - nooit de onderliggende feiten.",
     "goal1": "Minder suiker",
     "goal2": "Meer eiwit",
     "goal3": "Glutenvrij",
@@ -138,5 +138,15 @@
     "termsAcceptTitle": "Aanvaardbaar gebruik",
     "termsAcceptBody": "Automatiseer geen misbruikend verkeer, omzeil geen toegangscontroles, test geen beschermde routes, upload geen irrelevante of onrechtmatige afbeeldingen en verstoor de dienst niet.",
     "back": "Terug naar IngreFit"
+  },
+  "gallery": {
+    "previous": "Vorige schermafbeelding",
+    "next": "Volgende schermafbeelding",
+    "screenAlt": "IngreFit-appscherm"
+  },
+  "cookies": {
+    "text": "We gebruiken optionele analytische cookies om IngreFit te verbeteren. De website werkt ook zonder.",
+    "accept": "Analytische cookies toestaan",
+    "reject": "Alleen noodzakelijk"
   }
 }

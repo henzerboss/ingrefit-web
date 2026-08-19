@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "IngreFit — AI scanner ng pagkain para sa mga layunin mo",
+    "title": "IngreFit - AI scanner ng pagkain para sa mga layunin mo",
     "description": "Mag-scan ng barcode o label ng pagkain at makakuha ng personal na 10-puntong marka ng pagkakaangkop na nakabatay sa mga katotohanan at sa mga layunin mo sa nutrisyon."
   },
   "nav": {
@@ -44,9 +44,9 @@
     "step1Title": "I-scan ang barcode",
     "step1Body": "Tinitingnan namin sa Open Food Facts ang pagkakakilanlan ng produkto, mga sangkap, nutrisyon, mga allergen, at datos ng Nutri-Score at NOVA.",
     "step2Title": "Gumamit ng larawan kapag kailangan",
-    "step2Body": "Mababasa ng Premium ang nawawalang label ng pakete mula sa dalawang larawan — ang harap at isang kumpletong label ng impormasyon — o maingat na matutukoy ang pagkaing walang pakete mula sa isang larawan.",
+    "step2Body": "Mababasa ng Premium ang nawawalang label ng pakete mula sa dalawang larawan - ang harap at isang kumpletong label ng impormasyon - o maingat na matutukoy ang pagkaing walang pakete mula sa isang larawan.",
     "step3Title": "Kunin ang marka mo",
-    "step3Body": "Ang 1–10 markang kinakalkula sa tiyak na mga patakaran ay gumagamit lang ng magagamit na mga katotohanan at mga layuning pinili mo. Ipinapaliwanag ng AI ang resulta sa aktibong wika ng app."
+    "step3Body": "Ang 1-10 markang kinakalkula sa tiyak na mga patakaran ay gumagamit lang ng magagamit na mga katotohanan at mga layuning pinili mo. Ipinapaliwanag ng AI ang resulta sa aktibong wika ng app."
   },
   "principle": {
     "eyebrow": "ANG PATARAKAN NG INGREFIT",
@@ -62,7 +62,7 @@
   "personal": {
     "eyebrow": "ISANG PRODUKTO, IBA'T IBANG TAO",
     "title": "Mas mahalaga ang personal kaysa pangkalahatan",
-    "body": "Maaaring mataas ang marka ng parehong cereal para sa layuning mas maraming hibla at mababa para sa taong naglilimita ng asukal. Binabago ng mga layunin, paraan ng pagkain, mga allergen, at listahan ng iniiwasan mo ang paliwanag — hindi ang pinagbabatayang mga katotohanan.",
+    "body": "Maaaring mataas ang marka ng parehong cereal para sa layuning mas maraming hibla at mababa para sa taong naglilimita ng asukal. Binabago ng mga layunin, paraan ng pagkain, mga allergen, at listahan ng iniiwasan mo ang paliwanag - hindi ang pinagbabatayang mga katotohanan.",
     "goal1": "Mas kaunting asukal",
     "goal2": "Mas maraming protina",
     "goal3": "Walang gluten",
@@ -78,7 +78,7 @@
     "f3Body": "I-update anumang oras ang mga layunin, diyeta, at minarkahang sangkap mo mula sa Profile.",
     "f4Title": "Lokal na kasaysayan",
     "f4Body": "Nananatili sa device mo ang mga kamakailang resulta ng produkto para sa mabilis na paghahambing.",
-    "f5Title": "Interface na handa sa maraming wika",
+    "f5Title": "Interface sa 50 wika",
     "f5Body": "Pumili mula sa 50 sinusuportahang wika. Ginagamit ng website at app ang wikang pinili mo.",
     "f6Title": "Walang limitasyong barcode scan",
     "f6Body": "Libre pa rin ang pangunahing paghahanap ng barcode at personal na markang nakabatay sa ebidensya."
@@ -138,5 +138,15 @@
     "termsAcceptTitle": "Katanggap-tanggap na paggamit",
     "termsAcceptBody": "Huwag mag-automate ng mapang-abusong traffic, lampasan ang mga kontrol sa access, subukan ang mga protektadong route, mag-upload ng walang kaugnayan o ilegal na mga larawan, o manghimasok sa serbisyo.",
     "back": "Bumalik sa IngreFit"
+  },
+  "gallery": {
+    "previous": "Nakaraang screenshot",
+    "next": "Susunod na screenshot",
+    "screenAlt": "Screen ng IngreFit app"
+  },
+  "cookies": {
+    "text": "Gumagamit kami ng opsyonal na analytics cookies para mapahusay ang IngreFit. Gumagana ang site kahit wala ang mga ito.",
+    "accept": "Payagan ang analytics",
+    "reject": "Kailangan lang"
   }
 }

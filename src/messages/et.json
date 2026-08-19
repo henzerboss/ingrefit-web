@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "IngreFit — AI-toiduskanner sinu eesmärkide jaoks",
+    "title": "IngreFit - AI-toiduskanner sinu eesmärkide jaoks",
     "description": "Skanni vöötkood või toidumärgis ja saa oma toitumiseesmärkidele faktipõhine, isikupärastatud sobivushinne 10-pallisel skaalal."
   },
   "nav": {
@@ -44,9 +44,9 @@
     "step1Title": "Skanni vöötkood",
     "step1Body": "Kontrollime Open Food Factsist toote identiteeti, koostisosi, toitumisandmeid, allergeene ning Nutri-Score'i ja NOVA andmeid.",
     "step2Title": "Kasuta vajadusel fotot",
-    "step2Body": "Premium saab puuduva pakendimärgise lugeda kahelt fotolt — esiküljelt ja ühelt täielikult infomärgiselt — või tuvastada pakendita toitu ettevaatlikult ühe foto põhjal.",
+    "step2Body": "Premium saab puuduva pakendimärgise lugeda kahelt fotolt - esiküljelt ja ühelt täielikult infomärgiselt - või tuvastada pakendita toitu ettevaatlikult ühe foto põhjal.",
     "step3Title": "Saa oma hinne",
-    "step3Body": "Deterministlik hinne 1–10 kasutab ainult olemasolevaid fakte ja sinu valitud eesmärke. AI selgitab tulemust rakenduse aktiivses keeles."
+    "step3Body": "Deterministlik hinne 1-10 kasutab ainult olemasolevaid fakte ja sinu valitud eesmärke. AI selgitab tulemust rakenduse aktiivses keeles."
   },
   "principle": {
     "eyebrow": "INGREFITI REEGEL",
@@ -62,7 +62,7 @@
   "personal": {
     "eyebrow": "ÜKS TOODE, ERINEVAD INIMESED",
     "title": "Isiklik on parem kui üldine",
-    "body": "Sama hommikuhelbed võivad saada hea hinde suurema kiudainesisalduse eesmärgi puhul ja halva hinde inimesele, kes piirab suhkrut. Sinu eesmärgid, söömisharjumused, allergeenid ja vältimisloend muudavad selgitust — mitte kunagi alusfakte.",
+    "body": "Sama hommikuhelbed võivad saada hea hinde suurema kiudainesisalduse eesmärgi puhul ja halva hinde inimesele, kes piirab suhkrut. Sinu eesmärgid, söömisharjumused, allergeenid ja vältimisloend muudavad selgitust - mitte kunagi alusfakte.",
     "goal1": "Vähem suhkrut",
     "goal2": "Rohkem valku",
     "goal3": "Gluteenivaba",
@@ -138,5 +138,15 @@
     "termsAcceptTitle": "Lubatud kasutus",
     "termsAcceptBody": "Ära automatiseeri kuritarvitavat liiklust, möödu juurdepääsukontrollidest, testi kaitstud marsruute, laadi üles seosetuid või ebaseaduslikke pilte ega häiri teenust.",
     "back": "Tagasi IngreFiti"
+  },
+  "gallery": {
+    "previous": "Eelmine kuvatõmmis",
+    "next": "Järgmine kuvatõmmis",
+    "screenAlt": "IngreFiti rakenduse kuva"
+  },
+  "cookies": {
+    "text": "Kasutame IngreFiti täiustamiseks valikulisi analüütikaküpsiseid. Veebisait töötab ka ilma nendeta.",
+    "accept": "Luba analüütika",
+    "reject": "Ainult vajalikud"
   }
 }

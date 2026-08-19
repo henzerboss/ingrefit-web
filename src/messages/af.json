@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "IngreFit — AI-kosskandeerder vir jou doelwitte",
+    "title": "IngreFit - AI-kosskandeerder vir jou doelwitte",
     "description": "Skandeer 'n strepieskode of voedseletiket en kry 'n feitelike, persoonlike 10-punt-passingstelling vir jou voedingsdoelwitte."
   },
   "nav": {
@@ -44,9 +44,9 @@
     "step1Title": "Skandeer die strepieskode",
     "step1Body": "Ons kyk in Open Food Facts na produkidentiteit, bestanddele, voeding, allergene en Nutri-Score- en NOVA-data.",
     "step2Title": "Gebruik 'n foto wanneer nodig",
-    "step2Body": "Premium kan 'n ontbrekende verpakkingsetiket uit twee foto's lees — die voorkant en een volledige inligtingsetiket — of kos sonder verpakking versigtig uit een foto identifiseer.",
+    "step2Body": "Premium kan 'n ontbrekende verpakkingsetiket uit twee foto's lees - die voorkant en een volledige inligtingsetiket - of kos sonder verpakking versigtig uit een foto identifiseer.",
     "step3Title": "Kry jou telling",
-    "step3Body": "'n Deterministiese telling van 1–10 gebruik net beskikbare feite en die doelwitte wat jy gekies het. AI verduidelik die resultaat in die aktiewe toepassingstaal."
+    "step3Body": "'n Deterministiese telling van 1-10 gebruik net beskikbare feite en die doelwitte wat jy gekies het. AI verduidelik die resultaat in die aktiewe toepassingstaal."
   },
   "principle": {
     "eyebrow": "DIE INGREFIT-REËL",
@@ -62,7 +62,7 @@
   "personal": {
     "eyebrow": "EEN PRODUK, VERSKILLENDE MENSE",
     "title": "Persoonlik klop algemeen",
-    "body": "Dieselfde graankos kan goed vaar vir 'n hoërveseldoel en swak vir iemand wat suiker beperk. Jou doelwitte, eetpatroon, allergene en vermylys verander die verduideliking — nooit die onderliggende feite nie.",
+    "body": "Dieselfde graankos kan goed vaar vir 'n hoërveseldoel en swak vir iemand wat suiker beperk. Jou doelwitte, eetpatroon, allergene en vermylys verander die verduideliking - nooit die onderliggende feite nie.",
     "goal1": "Minder suiker",
     "goal2": "Meer proteïen",
     "goal3": "Glutenvry",
@@ -138,5 +138,15 @@
     "termsAcceptTitle": "Aanvaarbare gebruik",
     "termsAcceptBody": "Moenie misbruikende verkeer outomatiseer, toegangskontroles omseil, beskermde roetes toets, onverwante of onwettige beelde oplaai of met die diens inmeng nie.",
     "back": "Terug na IngreFit"
+  },
+  "gallery": {
+    "previous": "Vorige skermskoot",
+    "next": "Volgende skermskoot",
+    "screenAlt": "IngreFit-toepassingskerm"
+  },
+  "cookies": {
+    "text": "Ons gebruik opsionele ontledingskoekies om IngreFit te verbeter. Die webwerf werk daarsonder.",
+    "accept": "Laat ontleding toe",
+    "reject": "Slegs noodsaaklik"
   }
 }

@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "IngreFit — AI Food Scanner for Your Goals",
+    "title": "IngreFit - AI Food Scanner for Your Goals",
     "description": "Scan a barcode or food label and get a factual, personalized 10-point fit score for your nutrition goals."
   },
   "nav": {
@@ -44,9 +44,9 @@
     "step1Title": "Scan the barcode",
     "step1Body": "We check Open Food Facts for identity, ingredients, nutrition, allergens, Nutri-Score and NOVA data.",
     "step2Title": "Use a photo when needed",
-    "step2Body": "Premium can read a missing package label from two photos — the front and one complete information label — or cautiously identify food without packaging from one photo.",
+    "step2Body": "Premium can read a missing package label from two photos - the front and one complete information label - or cautiously identify food without packaging from one photo.",
     "step3Title": "Get your score",
-    "step3Body": "A deterministic 1–10 score uses only available facts and the goals you selected. AI explains the result in the active app language."
+    "step3Body": "A deterministic 1-10 score uses only available facts and the goals you selected. AI explains the result in the active app language."
   },
   "principle": {
     "eyebrow": "THE INGREFIT RULE",
@@ -62,7 +62,7 @@
   "personal": {
     "eyebrow": "ONE PRODUCT, DIFFERENT PEOPLE",
     "title": "Personal beats generic",
-    "body": "The same cereal may score well for a high-fiber goal and poorly for someone limiting sugar. Your goals, eating pattern, allergens and avoid list change the explanation — never the underlying facts.",
+    "body": "The same cereal may score well for a high-fiber goal and poorly for someone limiting sugar. Your goals, eating pattern, allergens and avoid list change the explanation - never the underlying facts.",
     "goal1": "Less sugar",
     "goal2": "More protein",
     "goal3": "Gluten-free",
@@ -78,7 +78,7 @@
     "f3Body": "Update your goals, diet and flagged ingredients any time from Profile.",
     "f4Title": "Local history",
     "f4Body": "Recent product results stay on your device for quick comparison.",
-    "f5Title": "Language-ready interface",
+    "f5Title": "Available in 50 languages",
     "f5Body": "Choose from 50 supported languages. The website and app use the language you select.",
     "f6Title": "Unlimited barcode scans",
     "f6Body": "Core barcode lookup and the personal evidence-based score stay free."
@@ -138,5 +138,15 @@
     "termsAcceptTitle": "Acceptable use",
     "termsAcceptBody": "Do not automate abusive traffic, bypass access controls, probe protected routes, upload unrelated or unlawful images, or interfere with the service.",
     "back": "Back to IngreFit"
+  },
+  "gallery": {
+    "previous": "Previous screenshot",
+    "next": "Next screenshot",
+    "screenAlt": "IngreFit app screen"
+  },
+  "cookies": {
+    "text": "We use optional analytics cookies to improve IngreFit. The site works without them.",
+    "accept": "Allow analytics",
+    "reject": "Only necessary"
   }
 }

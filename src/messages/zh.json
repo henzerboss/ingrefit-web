@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "IngreFit — 为你的目标打造的 AI 食品扫描器",
+    "title": "IngreFit - 为你的目标打造的 AI 食品扫描器",
     "description": "扫描条形码或食品标签，即可根据你的营养目标获得基于事实、个性化的 10 分适合度评分。"
   },
   "nav": {
@@ -44,9 +44,9 @@
     "step1Title": "扫描条形码",
     "step1Body": "我们会在 Open Food Facts 中查看产品身份、配料、营养信息、过敏原以及 Nutri-Score 和 NOVA 数据。",
     "step2Title": "需要时使用照片",
-    "step2Body": "Premium 可以通过两张照片——正面和一张完整的信息标签——读取缺失的包装标签，也可以通过一张照片谨慎识别无包装食品。",
+    "step2Body": "Premium 可以通过两张照片--正面和一张完整的信息标签--读取缺失的包装标签，也可以通过一张照片谨慎识别无包装食品。",
     "step3Title": "获取你的评分",
-    "step3Body": "确定性的 1–10 分评分只使用现有事实和你选择的目标。AI 会使用当前应用语言解释结果。"
+    "step3Body": "确定性的 1-10 分评分只使用现有事实和你选择的目标。AI 会使用当前应用语言解释结果。"
   },
   "principle": {
     "eyebrow": "INGREFIT 原则",
@@ -138,5 +138,15 @@
     "termsAcceptTitle": "可接受的使用方式",
     "termsAcceptBody": "请勿自动制造滥用流量、绕过访问控制、探测受保护路由、上传无关或违法图片，或干扰服务运行。",
     "back": "返回 IngreFit"
+  },
+  "gallery": {
+    "previous": "上一张截图",
+    "next": "下一张截图",
+    "screenAlt": "IngreFit 应用界面"
+  },
+  "cookies": {
+    "text": "我们使用可选的分析 Cookie 来改进 IngreFit。即使不使用它们，网站也能正常运行。",
+    "accept": "允许分析",
+    "reject": "仅必要 Cookie"
   }
 }

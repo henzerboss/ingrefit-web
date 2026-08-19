@@ -1,0 +1,139 @@
+{
+  "title": "Privacy Policy for IngreFit: AI Food Scanner",
+  "notice": "This policy is only available in English.",
+  "intro": "Effective date: August 18, 2026 Last updated: August 18, 2026 This Privacy Policy explains how IngreFit (“IngreFit,” “we,” “us,” or “our”) collects, uses, discloses, stores, and otherwise processes information when you use the IngreFit mobile application, related website, and associated services (collectively, the “Services”). The data controller responsible for personal data processed through IngreFit is: Evgenii Evsiukov, trading as evsi.store C. Félix Rodríguez de la Fuente, 10, P02 G 03182 Torrevieja, Spain Email: support@evsi.store",
+  "sections": [
+    {
+      "number": 1,
+      "title": "Scope",
+      "body": "This Privacy Policy applies to the IngreFit mobile application, the IngreFit website, backend services used to provide product analysis, subscription-related functionality, customer support, and associated analytics. IngreFit does not currently require users to create a traditional user account with an email address or password. The App uses an installation-specific identifier to operate certain functionality."
+    },
+    {
+      "number": 2,
+      "title": "Information We Process",
+      "body": "",
+      "subsections": [
+        {
+          "number": "2.1",
+          "title": "Information stored primarily on your device",
+          "body": "Depending on how you use IngreFit, the App may store the following information in private application storage on your device: selected nutrition and food-related goals; selected dietary pattern; allergens or sensitivities you choose to flag; ingredients you choose to avoid; language and appearance preferences; recent scan and analysis history; compact thumbnails associated with certain scans; subscription or entitlement status; locally generated installation information; application settings and counters required for App functionality. Recent scan history and locally saved thumbnails are intended to remain on your device unless a particular feature expressly requires server processing. Removing the App or clearing its application data will normally remove locally stored IngreFit data, subject to operating-system behavior and device backups outside our control."
+        },
+        {
+          "number": "2.2",
+          "title": "Information sent when you request a product analysis",
+          "body": "When you scan or analyze food, the App may transmit information necessary to perform the request, including: a pseudonymous installation identifier; a product barcode; App language or locale; subscription or entitlement information; selected goals; selected dietary pattern; allergens or sensitivities you have chosen to flag; ingredients you have chosen to avoid; a food-label image when you request label recognition; a food image when you request photo-based food identification; and technical request information required to provide and secure the service. For label analysis, IngreFit is designed to upload the information-label image required for analysis rather than unnecessarily uploading a package-front image."
+        },
+        {
+          "number": "2.3",
+          "title": "Photos",
+          "body": "Camera access is used only for functionality that requires scanning or photographing products or food. When you use an AI photo feature, the image required for that analysis is transmitted from your device to our backend and may be transmitted to our AI service provider. Our backend is designed not to intentionally retain copies of submitted analysis images after the relevant analysis request has been processed. A smaller thumbnail may remain locally on your device for scan history. You should not photograph people, identity documents, private correspondence, medical records, payment cards, or other unrelated personal or confidential information when using food-analysis features."
+        },
+        {
+          "number": "2.4",
+          "title": "Analytics information",
+          "body": "The native App uses Firebase Analytics to help us understand how IngreFit is used and improve reliability and product experience. Subject to your applicable privacy choices and consent, analytics may include information such as: installation or app-instance identifiers; operating system and basic device/app information; onboarding progress; scan type; feature interactions; analysis status, duration and general result characteristics; selected diet category; counts of selected allergens or avoided ingredients; subscription and paywall interactions; purchase-flow events; App language and appearance settings; and technical error or performance information. IngreFit's intentionally defined application analytics events are not designed to send food photos, product barcodes, product names, ingredient text, or the individual allergen names you select. Firebase or the operating system may nevertheless process technical identifiers and related technical information required to provide analytics. Where consent is legally required, analytics collection is enabled only after the applicable consent is obtained. You may withdraw analytics consent through the privacy controls made available in the App."
+        },
+        {
+          "number": "2.5",
+          "title": "Purchases and subscriptions",
+          "body": "Premium subscriptions are purchased through the applicable App Store or Google Play billing system. We use RevenueCat to assist with subscription entitlement and purchase-status management. Depending on platform and configuration, RevenueCat and the applicable app store may process information such as: an App User ID or installation identifier; device and operating-system information; subscription status; transaction information; Apple purchase receipts; Google purchase tokens; and related entitlement information. We do not directly receive or store your full payment-card number."
+        },
+        {
+          "number": "2.6",
+          "title": "Communications and support",
+          "body": "If you contact us, we may process your email address, the content of your communication, attachments you voluntarily provide, and information reasonably necessary to respond to your request."
+        },
+        {
+          "number": "2.7",
+          "title": "Website information",
+          "body": "When you visit the IngreFit website, we may process ordinary server logs and, subject to applicable consent requirements, website analytics information such as pages viewed, approximate technical information and interactions with website controls."
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "title": "Special-Category and Health-Related Information",
+      "body": "Selections concerning allergies, intolerances or certain health-related dietary restrictions may constitute health-related or special-category personal data under applicable law. IngreFit processes such information only for the purpose of providing the personalization you request and for closely related service functionality. Where applicable law requires explicit consent for this processing, we request such consent separately. You may withdraw that consent at any time through available privacy controls or by contacting us. Withdrawing consent does not affect the lawfulness of processing performed before withdrawal. It may, however, prevent IngreFit from providing personalization features that require the relevant information."
+    },
+    {
+      "number": 4,
+      "title": "Artificial Intelligence Processing",
+      "body": "IngreFit uses third-party artificial intelligence services, currently including Google Gemini, for certain Premium features such as: recognizing visible food from a photo; reading product-label information when ordinary product data is insufficient; translating product information; and generating explanatory text based on available facts. Before personal data is transferred for third-party AI processing, IngreFit provides an in-app disclosure describing the relevant transfer and requests the permission required by applicable platform rules and law. For an AI request, the information provided to the AI service may include the image being analyzed and relevant contextual preferences needed to produce the requested result, such as goals, diet, flagged allergens, avoided ingredients and language. Third-party AI providers may process technical and request information in accordance with their applicable contractual, security and privacy terms. Provider-side retention may include limited logs for security, abuse prevention, legal compliance or service operation. We do not intentionally use submitted food-analysis images or health-related preferences to build advertising profiles or for targeted advertising. AI results may be incomplete, inaccurate or misleading. AI processing is provided for informational product-analysis features and not for medical diagnosis, medical treatment, allergy-safety certification or other safety-critical decision-making."
+    },
+    {
+      "number": 5,
+      "title": "Product Data Sources",
+      "body": "IngreFit may retrieve food-product information from Open Food Facts and may combine that information with visible packaging information or AI-assisted analysis. Open Food Facts is a third-party, crowdsourced database. Information obtained from third parties may be incomplete, outdated or incorrect. A product's current physical packaging and information supplied by its manufacturer remain the primary sources for information such as ingredients and allergen declarations."
+    },
+    {
+      "number": 6,
+      "title": "Purposes for Which We Use Information",
+      "body": "We use information only as reasonably necessary to: provide barcode lookup and product-analysis functionality; provide requested photo and label analysis; personalize results according to preferences you select; calculate and explain product-fit results; provide translations; maintain local scan history and preferences; authenticate subscription entitlements; process and restore purchases through the applicable store; operate, secure, maintain and troubleshoot the Services; prevent fraud, abuse and excessive automated use; understand product usage and improve the Services where permitted; provide customer support; comply with legal obligations; and establish, exercise or defend legal claims where necessary. We do not use allergy information or food-analysis photos for third-party advertising."
+    },
+    {
+      "number": 7,
+      "title": "Legal Bases for Processing in the EEA, UK and Similar Jurisdictions",
+      "body": "Where the GDPR, UK GDPR or comparable law applies, we rely on one or more of the following legal bases: Performance of a contract or steps at your request. For processing necessary to provide the functionality you request, such as barcode analysis, subscription access or requested AI features. Consent. For processing that requires consent, including certain analytics, transfer to third-party AI where required, camera/photo access, and other optional functionality. Explicit consent. Where required for processing allergy or other health-related information that constitutes special-category personal data. Legitimate interests. Where permitted, for limited purposes such as service security, fraud prevention, troubleshooting and protecting our legal rights, provided those interests are not overridden by your rights and freedoms. Legal obligations. Where processing is required to comply with tax, accounting, law-enforcement, consumer-protection or other applicable legal requirements."
+    },
+    {
+      "number": 8,
+      "title": "How We Share Information",
+      "body": "We may disclose information only as described in this Policy and as reasonably necessary to operate the Services. Google Gemini Used for certain AI-based analysis, recognition, translation and explanatory features. Google Firebase Used for native App analytics and related technical functionality. RevenueCat Used to manage subscription status, purchase receipts/tokens and entitlements. Apple and Google The applicable platform provider processes purchases, refunds and store-related information under its own terms and privacy practices. Open Food Facts Product barcodes and related product queries may be used to retrieve available crowdsourced product information. Hosting and infrastructure providers Our backend and related technical services may use hosting, networking, monitoring or security providers that process information on our behalf as necessary to operate the Services. Professional advisers and authorities We may disclose information to professional advisers, courts, regulators, law-enforcement authorities or other parties where required by law or reasonably necessary to establish, exercise or defend legal rights. Business changes If all or part of IngreFit is reorganized, transferred, sold or merged, relevant information may be transferred as part of that transaction, subject to applicable law and appropriate safeguards. We require service providers processing personal data on our behalf to use it only for authorized purposes and to provide appropriate protection."
+    },
+    {
+      "number": 9,
+      "title": "No Sale of Personal Data and No Targeted Advertising",
+      "body": "We do not sell personal data. We do not use food photos, allergy information, dietary preferences or product-analysis data for targeted advertising or cross-context behavioral advertising. The App is not designed around advertising identifiers or an advertising business model."
+    },
+    {
+      "number": 10,
+      "title": "International Data Transfers",
+      "body": "Some service providers may process information in countries other than the country where you live, including countries outside the European Economic Area. Where required by applicable law, international transfers are protected through recognized legal mechanisms such as adequacy decisions, contractual safeguards, Standard Contractual Clauses, or another valid transfer mechanism."
+    },
+    {
+      "number": 11,
+      "title": "Retention",
+      "body": "We retain information only for as long as reasonably necessary for the purposes described in this Policy, subject to legal, security and technical requirements. Local App data. Preferences, history and locally stored thumbnails remain on the device until deleted through available App/device controls, application data is cleared, or the App is uninstalled, subject to operating-system backups outside our control. Analysis images. The IngreFit backend is designed not to intentionally maintain permanent copies of images submitted solely for AI analysis after the relevant request has completed. Third-party AI providers may retain limited request information for the period permitted or required under their applicable service terms, security practices and legal obligations. Analytics. Analytics information is retained according to our configured Firebase/Google Analytics retention settings and applicable legal requirements. Subscription information. Purchase and entitlement information may be retained for as long as reasonably necessary to provide subscription access, restore purchases, prevent fraud and comply with accounting, tax or legal obligations. Store providers and RevenueCat may maintain their own records under their applicable policies. Operational and security records. Technical logs may be retained for as long as reasonably necessary for service operation, security, fraud prevention, dispute resolution and legal compliance. Support correspondence. Support communications may be retained for as long as reasonably necessary to resolve the request and maintain an appropriate record of the interaction."
+    },
+    {
+      "number": 12,
+      "title": "Your Choices and Controls",
+      "body": "You may: change or remove goals, diet and flagged preferences through the App; delete local scan history where the App provides that control; clear application data or uninstall the App to remove local application storage; decline optional AI data sharing and continue using functionality that does not require it; withdraw consent for future AI transfers where applicable; decline or withdraw optional analytics consent; revoke camera access through operating-system settings; and contact us to exercise applicable privacy rights. Because IngreFit does not use a traditional account, we may need your installation identifier or other reasonable information to determine whether server-side information can be associated with your installation."
+    },
+    {
+      "number": 13,
+      "title": "Your Data-Protection Rights",
+      "body": "Depending on where you live, you may have rights concerning your personal data, including the right to: obtain information about processing; request access to personal data; request correction of inaccurate data; request deletion; restrict processing; object to certain processing; request data portability; withdraw consent at any time where processing is based on consent; and lodge a complaint with a competent data-protection authority. If you are in Spain, you may lodge a complaint with the Spanish Data Protection Agency (Agencia Española de Protección de Datos, AEPD). To exercise your rights, contact support@evsi.store. We may need to verify your request before acting on it. Where we cannot reasonably identify information relating to your installation, we may explain the additional information needed to locate it."
+    },
+    {
+      "number": 14,
+      "title": "Automated Scores and Personalization",
+      "body": "IngreFit may automatically calculate a personalized product-fit score using available product facts and preferences selected by the user. The score is an informational product-comparison tool. It is not a medical diagnosis, health-risk assessment, food-safety determination, allergy-safety certification or legally significant automated decision. The score does not determine access to employment, insurance, healthcare, credit, education, public services or any other legal right or similarly significant benefit."
+    },
+    {
+      "number": 15,
+      "title": "Security",
+      "body": "We use reasonable administrative, technical and organizational measures designed to protect information against unauthorized access, loss, misuse, alteration or disclosure. These measures may include encrypted network transport, access controls, data minimization and separation of local and server-side processing. No electronic transmission or storage system can be guaranteed to be completely secure."
+    },
+    {
+      "number": 16,
+      "title": "Children's Privacy",
+      "body": "IngreFit is not directed to individuals under 18 years of age. You must be at least 18 years old to use IngreFit unless we expressly provide a version of the Services that is legally and contractually authorized for younger users. We do not knowingly seek to collect personal information from children through the Services. If we learn that personal information has been processed from a person who was not eligible to use the Services, we will take reasonable steps required by applicable law."
+    },
+    {
+      "number": 17,
+      "title": "Third-Party Services",
+      "body": "Third-party databases, AI providers, analytics providers, app stores and billing providers operate under their own terms and privacy practices. This Policy describes how IngreFit uses those providers but does not control independent processing carried out by a third party for its own purposes."
+    },
+    {
+      "number": 18,
+      "title": "Changes to This Privacy Policy",
+      "body": "We may update this Privacy Policy when the Services, our providers, legal requirements or data practices change. The updated Policy will state a revised effective or “Last updated” date. Where required by law, we will provide additional notice or obtain renewed consent before materially different processing takes effect."
+    },
+    {
+      "number": 19,
+      "title": "Contact",
+      "body": "For privacy questions, requests or complaints, contact: Evgenii Evsiukov / evsi.store Torrevieja, Spain Email: support@evsi.store"
+    }
+  ]
+}

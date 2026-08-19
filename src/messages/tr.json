@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "IngreFit — hedeflerinize göre AI gıda tarayıcı",
+    "title": "IngreFit - hedeflerinize göre AI gıda tarayıcı",
     "description": "Bir barkodu veya gıda etiketini tarayın ve beslenme hedeflerinize göre gerçeklere dayalı, kişiselleştirilmiş 10 üzerinden uygunluk puanı alın."
   },
   "nav": {
@@ -44,9 +44,9 @@
     "step1Title": "Barkodu tara",
     "step1Body": "Open Food Facts üzerinden ürün kimliğini, içerikleri, besin değerlerini, alerjenleri ve Nutri-Score ile NOVA verilerini kontrol ederiz.",
     "step2Title": "Gerektiğinde fotoğraf kullan",
-    "step2Body": "Premium, eksik bir ambalaj etiketini iki fotoğraftan — ön yüz ve bir tam bilgi etiketi — okuyabilir veya ambalajsız gıdayı tek bir fotoğraftan temkinli biçimde tanımlayabilir.",
+    "step2Body": "Premium, eksik bir ambalaj etiketini iki fotoğraftan - ön yüz ve bir tam bilgi etiketi - okuyabilir veya ambalajsız gıdayı tek bir fotoğraftan temkinli biçimde tanımlayabilir.",
     "step3Title": "Puanını al",
-    "step3Body": "Deterministik 1–10 puanı yalnızca mevcut gerçekleri ve seçtiğiniz hedefleri kullanır. AI sonucu uygulamanın etkin dilinde açıklar."
+    "step3Body": "Deterministik 1-10 puanı yalnızca mevcut gerçekleri ve seçtiğiniz hedefleri kullanır. AI sonucu uygulamanın etkin dilinde açıklar."
   },
   "principle": {
     "eyebrow": "INGREFIT KURALI",
@@ -62,7 +62,7 @@
   "personal": {
     "eyebrow": "BİR ÜRÜN, FARKLI İNSANLAR",
     "title": "Kişisel olan genel olandan daha iyidir",
-    "body": "Aynı kahvaltılık gevrek, daha fazla lif hedefi için iyi; şekeri sınırlayan biri için kötü puan alabilir. Hedefleriniz, beslenme biçiminiz, alerjenleriniz ve kaçınılacaklar listeniz açıklamayı değiştirir — temel gerçekleri asla değiştirmez.",
+    "body": "Aynı kahvaltılık gevrek, daha fazla lif hedefi için iyi; şekeri sınırlayan biri için kötü puan alabilir. Hedefleriniz, beslenme biçiminiz, alerjenleriniz ve kaçınılacaklar listeniz açıklamayı değiştirir - temel gerçekleri asla değiştirmez.",
     "goal1": "Daha az şeker",
     "goal2": "Daha fazla protein",
     "goal3": "Glutensiz",
@@ -138,5 +138,15 @@
     "termsAcceptTitle": "Kabul edilebilir kullanım",
     "termsAcceptBody": "Kötüye kullanım amaçlı trafiği otomatikleştirmeyin, erişim kontrollerini aşmayın, korumalı yolları yoklamayın, ilgisiz veya yasa dışı görüntüler yüklemeyin ve hizmete müdahale etmeyin.",
     "back": "IngreFit'e dön"
+  },
+  "gallery": {
+    "previous": "Önceki ekran görüntüsü",
+    "next": "Sonraki ekran görüntüsü",
+    "screenAlt": "IngreFit uygulama ekranı"
+  },
+  "cookies": {
+    "text": "IngreFit’i geliştirmek için isteğe bağlı analiz çerezleri kullanıyoruz. Site bunlar olmadan da çalışır.",
+    "accept": "Analize izin ver",
+    "reject": "Yalnızca gerekli"
   }
 }

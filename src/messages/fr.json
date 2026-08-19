@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "IngreFit — scanner alimentaire IA adapté à vos objectifs",
+    "title": "IngreFit - scanner alimentaire IA adapté à vos objectifs",
     "description": "Scannez un code-barres ou une étiquette alimentaire et obtenez une note de compatibilité personnalisée et factuelle sur 10 selon vos objectifs nutritionnels."
   },
   "nav": {
@@ -44,7 +44,7 @@
     "step1Title": "Scannez le code-barres",
     "step1Body": "Nous consultons Open Food Facts pour l'identité, les ingrédients, les informations nutritionnelles, les allergènes ainsi que les données Nutri-Score et NOVA.",
     "step2Title": "Utilisez une photo si nécessaire",
-    "step2Body": "Premium peut lire une étiquette d'emballage manquante à partir de deux photos — la face avant et une étiquette d'information complète — ou identifier prudemment un aliment sans emballage à partir d'une photo.",
+    "step2Body": "Premium peut lire une étiquette d'emballage manquante à partir de deux photos - la face avant et une étiquette d'information complète - ou identifier prudemment un aliment sans emballage à partir d'une photo.",
     "step3Title": "Obtenez votre note",
     "step3Body": "Une note déterministe de 1 à 10 utilise uniquement les faits disponibles et les objectifs que vous avez choisis. L'IA explique le résultat dans la langue active de l'app."
   },
@@ -62,7 +62,7 @@
   "personal": {
     "eyebrow": "UN PRODUIT, DES PERSONNES DIFFÉRENTES",
     "title": "Le personnel vaut mieux que le générique",
-    "body": "Les mêmes céréales peuvent obtenir une bonne note pour un objectif riche en fibres et une mauvaise pour une personne qui limite le sucre. Vos objectifs, votre mode d'alimentation, vos allergènes et votre liste d'ingrédients à éviter modifient l'explication — jamais les faits sous-jacents.",
+    "body": "Les mêmes céréales peuvent obtenir une bonne note pour un objectif riche en fibres et une mauvaise pour une personne qui limite le sucre. Vos objectifs, votre mode d'alimentation, vos allergènes et votre liste d'ingrédients à éviter modifient l'explication - jamais les faits sous-jacents.",
     "goal1": "Moins de sucre",
     "goal2": "Plus de protéines",
     "goal3": "Sans gluten",
@@ -138,5 +138,15 @@
     "termsAcceptTitle": "Utilisation acceptable",
     "termsAcceptBody": "N'automatisez pas de trafic abusif, ne contournez pas les contrôles d'accès, ne sondez pas les routes protégées, ne téléversez pas d'images sans rapport ou illicites et n'interférez pas avec le service.",
     "back": "Retour à IngreFit"
+  },
+  "gallery": {
+    "previous": "Capture précédente",
+    "next": "Capture suivante",
+    "screenAlt": "Écran de l’app IngreFit"
+  },
+  "cookies": {
+    "text": "Nous utilisons des cookies d’analyse facultatifs pour améliorer IngreFit. Le site fonctionne sans eux.",
+    "accept": "Autoriser l’analyse",
+    "reject": "Nécessaires uniquement"
   }
 }

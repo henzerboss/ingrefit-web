@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "IngreFit — KI-Lebensmittelscanner für deine Ziele",
+    "title": "IngreFit - KI-Lebensmittelscanner für deine Ziele",
     "description": "Scanne einen Barcode oder ein Lebensmitteletikett und erhalte eine faktenbasierte, personalisierte Eignungsbewertung auf einer 10-Punkte-Skala für deine Ernährungsziele."
   },
   "nav": {
@@ -44,9 +44,9 @@
     "step1Title": "Barcode scannen",
     "step1Body": "Wir prüfen Open Food Facts auf Produktidentität, Zutaten, Nährwerte, Allergene sowie Nutri-Score- und NOVA-Daten.",
     "step2Title": "Bei Bedarf ein Foto verwenden",
-    "step2Body": "Premium kann ein fehlendes Verpackungsetikett anhand von zwei Fotos lesen — Vorderseite und ein vollständiges Informationsetikett — oder Lebensmittel ohne Verpackung anhand eines Fotos vorsichtig identifizieren.",
+    "step2Body": "Premium kann ein fehlendes Verpackungsetikett anhand von zwei Fotos lesen - Vorderseite und ein vollständiges Informationsetikett - oder Lebensmittel ohne Verpackung anhand eines Fotos vorsichtig identifizieren.",
     "step3Title": "Deine Bewertung erhalten",
-    "step3Body": "Eine deterministische Bewertung von 1–10 verwendet nur verfügbare Fakten und die von dir gewählten Ziele. Die KI erklärt das Ergebnis in der aktuell gewählten App-Sprache."
+    "step3Body": "Eine deterministische Bewertung von 1-10 verwendet nur verfügbare Fakten und die von dir gewählten Ziele. Die KI erklärt das Ergebnis in der aktuell gewählten App-Sprache."
   },
   "principle": {
     "eyebrow": "DIE INGREFIT-REGEL",
@@ -62,7 +62,7 @@
   "personal": {
     "eyebrow": "EIN PRODUKT, UNTERSCHIEDLICHE MENSCHEN",
     "title": "Persönlich ist besser als allgemein",
-    "body": "Dasselbe Müsli kann für das Ziel „mehr Ballaststoffe“ gut abschneiden und für jemanden, der Zucker begrenzt, schlecht. Deine Ziele, Ernährungsweise, Allergene und Meideliste verändern die Erklärung — niemals die zugrunde liegenden Fakten.",
+    "body": "Dasselbe Müsli kann für das Ziel „mehr Ballaststoffe“ gut abschneiden und für jemanden, der Zucker begrenzt, schlecht. Deine Ziele, Ernährungsweise, Allergene und Meideliste verändern die Erklärung - niemals die zugrunde liegenden Fakten.",
     "goal1": "Weniger Zucker",
     "goal2": "Mehr Protein",
     "goal3": "Glutenfrei",
@@ -138,5 +138,15 @@
     "termsAcceptTitle": "Zulässige Nutzung",
     "termsAcceptBody": "Automatisiere keinen missbräuchlichen Datenverkehr, umgehe keine Zugriffskontrollen, untersuche keine geschützten Routen, lade keine sachfremden oder rechtswidrigen Bilder hoch und störe den Dienst nicht.",
     "back": "Zurück zu IngreFit"
+  },
+  "gallery": {
+    "previous": "Vorheriger Screenshot",
+    "next": "Nächster Screenshot",
+    "screenAlt": "IngreFit App-Bildschirm"
+  },
+  "cookies": {
+    "text": "Wir verwenden optionale Analyse-Cookies, um IngreFit zu verbessern. Die Website funktioniert auch ohne sie.",
+    "accept": "Analyse erlauben",
+    "reject": "Nur notwendige"
   }
 }

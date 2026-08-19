@@ -1,12 +1,13 @@
 {
   "name": "ingrefit-web",
-  "version": "1.9.3",
+  "version": "1.10.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
+    "validate:landing": "node scripts/validate-landing.mjs",
     "db:generate": "prisma generate",
     "db:deploy": "prisma migrate deploy",
     "db:push": "prisma db push",

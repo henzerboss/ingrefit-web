@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "IngreFit — scanner alimentar cu IA pentru obiectivele tale",
+    "title": "IngreFit - scanner alimentar cu IA pentru obiectivele tale",
     "description": "Scanează un cod de bare sau o etichetă alimentară și primește un scor personalizat, bazat pe fapte, de la 1 la 10, pentru obiectivele tale nutriționale."
   },
   "nav": {
@@ -44,7 +44,7 @@
     "step1Title": "Scanează codul de bare",
     "step1Body": "Verificăm Open Food Facts pentru identitate, ingrediente, informații nutriționale, alergeni și date Nutri-Score și NOVA.",
     "step2Title": "Folosește o fotografie când este nevoie",
-    "step2Body": "Premium poate citi o etichetă lipsă de pe ambalaj din două fotografii — partea frontală și o etichetă completă cu informații — sau poate identifica cu prudență un aliment fără ambalaj dintr-o singură fotografie.",
+    "step2Body": "Premium poate citi o etichetă lipsă de pe ambalaj din două fotografii - partea frontală și o etichetă completă cu informații - sau poate identifica cu prudență un aliment fără ambalaj dintr-o singură fotografie.",
     "step3Title": "Primește scorul tău",
     "step3Body": "Un scor determinist de la 1 la 10 folosește doar faptele disponibile și obiectivele selectate. IA explică rezultatul în limba activă a aplicației."
   },
@@ -62,7 +62,7 @@
   "personal": {
     "eyebrow": "UN PRODUS, OAMENI DIFERIȚI",
     "title": "Personal este mai bun decât generic",
-    "body": "Aceleași cereale pot avea un scor bun pentru un obiectiv de mai multe fibre și unul slab pentru cineva care limitează zahărul. Obiectivele, stilul alimentar, alergenii și lista ta de ingrediente de evitat schimbă explicația — niciodată faptele de bază.",
+    "body": "Aceleași cereale pot avea un scor bun pentru un obiectiv de mai multe fibre și unul slab pentru cineva care limitează zahărul. Obiectivele, stilul alimentar, alergenii și lista ta de ingrediente de evitat schimbă explicația - niciodată faptele de bază.",
     "goal1": "Mai puțin zahăr",
     "goal2": "Mai multe proteine",
     "goal3": "Fără gluten",
@@ -138,5 +138,15 @@
     "termsAcceptTitle": "Utilizare acceptabilă",
     "termsAcceptBody": "Nu automatiza trafic abuziv, nu ocoli controalele de acces, nu testa rute protejate, nu încărca imagini fără legătură sau ilegale și nu interfera cu serviciul.",
     "back": "Înapoi la IngreFit"
+  },
+  "gallery": {
+    "previous": "Captura anterioară",
+    "next": "Captura următoare",
+    "screenAlt": "Ecranul aplicației IngreFit"
+  },
+  "cookies": {
+    "text": "Folosim cookie-uri opționale de analiză pentru a îmbunătăți IngreFit. Site-ul funcționează și fără ele.",
+    "accept": "Permite analiza",
+    "reject": "Doar necesare"
   }
 }

@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "IngreFit — pengimbas makanan AI untuk matlamat anda",
+    "title": "IngreFit - pengimbas makanan AI untuk matlamat anda",
     "description": "Imbas kod bar atau label makanan dan dapatkan skor kesesuaian 10 mata yang berasaskan fakta dan diperibadikan mengikut matlamat pemakanan anda."
   },
   "nav": {
@@ -44,9 +44,9 @@
     "step1Title": "Imbas kod bar",
     "step1Body": "Kami menyemak Open Food Facts untuk identiti produk, ramuan, pemakanan, alergen serta data Nutri-Score dan NOVA.",
     "step2Title": "Gunakan foto apabila diperlukan",
-    "step2Body": "Premium boleh membaca label bungkusan yang tiada daripada dua foto — bahagian hadapan dan satu label maklumat lengkap — atau mengenal pasti makanan tanpa bungkusan dengan berhati-hati daripada satu foto.",
+    "step2Body": "Premium boleh membaca label bungkusan yang tiada daripada dua foto - bahagian hadapan dan satu label maklumat lengkap - atau mengenal pasti makanan tanpa bungkusan dengan berhati-hati daripada satu foto.",
     "step3Title": "Dapatkan skor anda",
-    "step3Body": "Skor deterministik 1–10 hanya menggunakan fakta yang tersedia dan matlamat yang anda pilih. AI menerangkan hasil dalam bahasa aplikasi yang aktif."
+    "step3Body": "Skor deterministik 1-10 hanya menggunakan fakta yang tersedia dan matlamat yang anda pilih. AI menerangkan hasil dalam bahasa aplikasi yang aktif."
   },
   "principle": {
     "eyebrow": "PERATURAN INGREFIT",
@@ -62,7 +62,7 @@
   "personal": {
     "eyebrow": "SATU PRODUK, ORANG YANG BERBEZA",
     "title": "Peribadi lebih baik daripada umum",
-    "body": "Bijirin yang sama boleh mendapat skor baik untuk matlamat lebih serat dan skor rendah bagi seseorang yang mengehadkan gula. Matlamat, corak pemakanan, alergen dan senarai bahan yang anda elakkan mengubah penerangan — bukan fakta asas.",
+    "body": "Bijirin yang sama boleh mendapat skor baik untuk matlamat lebih serat dan skor rendah bagi seseorang yang mengehadkan gula. Matlamat, corak pemakanan, alergen dan senarai bahan yang anda elakkan mengubah penerangan - bukan fakta asas.",
     "goal1": "Kurang gula",
     "goal2": "Lebih protein",
     "goal3": "Bebas gluten",
@@ -138,5 +138,15 @@
     "termsAcceptTitle": "Penggunaan yang dibenarkan",
     "termsAcceptBody": "Jangan automasikan trafik yang menyalahgunakan perkhidmatan, pintas kawalan akses, uji laluan terlindung, muat naik imej yang tidak berkaitan atau menyalahi undang-undang, atau mengganggu perkhidmatan.",
     "back": "Kembali ke IngreFit"
+  },
+  "gallery": {
+    "previous": "Tangkapan skrin sebelumnya",
+    "next": "Tangkapan skrin seterusnya",
+    "screenAlt": "Skrin aplikasi IngreFit"
+  },
+  "cookies": {
+    "text": "Kami menggunakan kuki analitik pilihan untuk menambah baik IngreFit. Laman ini berfungsi tanpanya.",
+    "accept": "Benarkan analitik",
+    "reject": "Yang perlu sahaja"
   }
 }

@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "IngreFit — tekoälyä käyttävä ruokaskanneri tavoitteisiisi",
+    "title": "IngreFit - tekoälyä käyttävä ruokaskanneri tavoitteisiisi",
     "description": "Skannaa viivakoodi tai elintarvikkeen etiketti ja saat faktoihin perustuvan, henkilökohtaisen 10 pisteen sopivuusarvion ravitsemustavoitteidesi mukaan."
   },
   "nav": {
@@ -44,9 +44,9 @@
     "step1Title": "Skannaa viivakoodi",
     "step1Body": "Tarkistamme Open Food Factsista tuotteen tunnistetiedot, ainesosat, ravintoarvot, allergeenit sekä Nutri-Score- ja NOVA-tiedot.",
     "step2Title": "Käytä valokuvaa tarvittaessa",
-    "step2Body": "Premium voi lukea puuttuvan pakkausetiketin kahdesta valokuvasta — etupuolesta ja yhdestä täydellisestä tietokilvestä — tai tunnistaa pakkauksettoman ruoan varovaisesti yhdestä valokuvasta.",
+    "step2Body": "Premium voi lukea puuttuvan pakkausetiketin kahdesta valokuvasta - etupuolesta ja yhdestä täydellisestä tietokilvestä - tai tunnistaa pakkauksettoman ruoan varovaisesti yhdestä valokuvasta.",
     "step3Title": "Saat oman pisteesi",
-    "step3Body": "Deterministinen 1–10 pisteen arvio käyttää vain saatavilla olevia faktoja ja valitsemiasi tavoitteita. Tekoäly selittää tuloksen sovelluksen aktiivisella kielellä."
+    "step3Body": "Deterministinen 1-10 pisteen arvio käyttää vain saatavilla olevia faktoja ja valitsemiasi tavoitteita. Tekoäly selittää tuloksen sovelluksen aktiivisella kielellä."
   },
   "principle": {
     "eyebrow": "INGREFITIN SÄÄNTÖ",
@@ -62,7 +62,7 @@
   "personal": {
     "eyebrow": "YKSI TUOTE, ERILAISET IHMISET",
     "title": "Henkilökohtainen voittaa yleisen",
-    "body": "Sama muro voi saada hyvän arvion runsaamman kuidun tavoitteeseen ja huonon henkilölle, joka rajoittaa sokeria. Tavoitteesi, ruokailutapasi, allergeenisi ja vältettävien aineiden listasi muuttavat selitystä — eivät koskaan taustalla olevia faktoja.",
+    "body": "Sama muro voi saada hyvän arvion runsaamman kuidun tavoitteeseen ja huonon henkilölle, joka rajoittaa sokeria. Tavoitteesi, ruokailutapasi, allergeenisi ja vältettävien aineiden listasi muuttavat selitystä - eivät koskaan taustalla olevia faktoja.",
     "goal1": "Vähemmän sokeria",
     "goal2": "Enemmän proteiinia",
     "goal3": "Gluteeniton",
@@ -138,5 +138,15 @@
     "termsAcceptTitle": "Hyväksyttävä käyttö",
     "termsAcceptBody": "Älä automatisoi väärinkäyttävää liikennettä, kierrä pääsynhallintaa, tutki suojattuja reittejä, lataa asiaankuulumattomia tai lainvastaisia kuvia tai häiritse palvelua.",
     "back": "Takaisin IngreFitiin"
+  },
+  "gallery": {
+    "previous": "Edellinen kuvakaappaus",
+    "next": "Seuraava kuvakaappaus",
+    "screenAlt": "IngreFit-sovelluksen näkymä"
+  },
+  "cookies": {
+    "text": "Käytämme valinnaisia analytiikkaevästeitä IngreFitin parantamiseen. Sivusto toimii ilman niitä.",
+    "accept": "Salli analytiikka",
+    "reject": "Vain välttämättömät"
   }
 }

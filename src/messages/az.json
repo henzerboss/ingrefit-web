@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "IngreFit — məqsədləriniz üçün AI qida skaneri",
+    "title": "IngreFit - məqsədləriniz üçün AI qida skaneri",
     "description": "Ştrixkodu və ya qida etiketini skan edin və qidalanma məqsədlərinizə uyğun faktlara əsaslanan, fərdiləşdirilmiş 10 ballıq uyğunluq qiyməti alın."
   },
   "nav": {
@@ -44,9 +44,9 @@
     "step1Title": "Ştrixkodu skan edin",
     "step1Body": "Open Food Facts-də məhsulun kimliyini, inqrediyentləri, qida dəyərlərini, allergenləri və Nutri-Score və NOVA məlumatlarını yoxlayırıq.",
     "step2Title": "Lazım olduqda fotodan istifadə edin",
-    "step2Body": "Premium çatışmayan qablaşdırma etiketini iki fotodan — ön tərəf və bir tam məlumat etiketi — oxuya və ya qablaşdırmasız qidanı bir fotodan ehtiyatla tanıya bilər.",
+    "step2Body": "Premium çatışmayan qablaşdırma etiketini iki fotodan - ön tərəf və bir tam məlumat etiketi - oxuya və ya qablaşdırmasız qidanı bir fotodan ehtiyatla tanıya bilər.",
     "step3Title": "Balınızı əldə edin",
-    "step3Body": "Deterministik 1–10 bal yalnız mövcud faktlardan və seçdiyiniz məqsədlərdən istifadə edir. AI nəticəni tətbiqin aktiv dilində izah edir."
+    "step3Body": "Deterministik 1-10 bal yalnız mövcud faktlardan və seçdiyiniz məqsədlərdən istifadə edir. AI nəticəni tətbiqin aktiv dilində izah edir."
   },
   "principle": {
     "eyebrow": "INGREFIT QAYDASI",
@@ -62,7 +62,7 @@
   "personal": {
     "eyebrow": "BİR MƏHSUL, FƏRQLİ İNSANLAR",
     "title": "Şəxsi yanaşma ümumi yanaşmadan yaxşıdır",
-    "body": "Eyni dənli məhsul daha çox lif məqsədi üçün yaxşı, şəkəri məhdudlaşdıran biri üçün isə zəif bal ala bilər. Məqsədləriniz, qidalanma tərziniz, allergenləriniz və qaçınma siyahınız izahı dəyişir — əsas faktları isə heç vaxt dəyişmir.",
+    "body": "Eyni dənli məhsul daha çox lif məqsədi üçün yaxşı, şəkəri məhdudlaşdıran biri üçün isə zəif bal ala bilər. Məqsədləriniz, qidalanma tərziniz, allergenləriniz və qaçınma siyahınız izahı dəyişir - əsas faktları isə heç vaxt dəyişmir.",
     "goal1": "Daha az şəkər",
     "goal2": "Daha çox protein",
     "goal3": "Qlütensiz",
@@ -138,5 +138,15 @@
     "termsAcceptTitle": "Məqbul istifadə",
     "termsAcceptBody": "Sui-istifadə xarakterli trafiki avtomatlaşdırmayın, giriş nəzarətini keçməyin, qorunan marşrutları yoxlamayın, əlaqəsiz və ya qanunsuz şəkillər yükləməyin və xidmətə müdaxilə etməyin.",
     "back": "IngreFit-ə qayıt"
+  },
+  "gallery": {
+    "previous": "Əvvəlki ekran görüntüsü",
+    "next": "Növbəti ekran görüntüsü",
+    "screenAlt": "IngreFit tətbiq ekranı"
+  },
+  "cookies": {
+    "text": "IngreFit-i yaxşılaşdırmaq üçün istəyə bağlı analitika kukilərindən istifadə edirik. Sayt onlarsız da işləyir.",
+    "accept": "Analitikaya icazə ver",
+    "reject": "Yalnız zəruri"
   }
 }

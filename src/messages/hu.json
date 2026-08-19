@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "IngreFit — AI-alapú élelmiszerszkenner a céljaidhoz",
+    "title": "IngreFit - AI-alapú élelmiszerszkenner a céljaidhoz",
     "description": "Olvasd be a vonalkódot vagy az élelmiszer címkéjét, és kapj tényeken alapuló, személyre szabott, 10 pontos megfelelőségi értékelést a táplálkozási céljaidhoz."
   },
   "nav": {
@@ -44,9 +44,9 @@
     "step1Title": "Olvasd be a vonalkódot",
     "step1Body": "Az Open Food Facts adatbázisában ellenőrizzük a termék azonosítását, összetevőit, tápértékadatait, allergénjeit, valamint a Nutri-Score és NOVA adatait.",
     "step2Title": "Használj fotót, ha szükséges",
-    "step2Body": "A Premium két fotóból — az előlapról és egy teljes információs címkéről — el tud olvasni egy hiányzó csomagolási címkét, vagy egyetlen fotó alapján óvatosan azonosíthat csomagolatlan ételt.",
+    "step2Body": "A Premium két fotóból - az előlapról és egy teljes információs címkéről - el tud olvasni egy hiányzó csomagolási címkét, vagy egyetlen fotó alapján óvatosan azonosíthat csomagolatlan ételt.",
     "step3Title": "Kapd meg a pontszámodat",
-    "step3Body": "Az 1–10 közötti determinisztikus pontszám kizárólag a rendelkezésre álló tényeket és az általad kiválasztott célokat használja. Az AI az alkalmazás aktív nyelvén magyarázza el az eredményt."
+    "step3Body": "Az 1-10 közötti determinisztikus pontszám kizárólag a rendelkezésre álló tényeket és az általad kiválasztott célokat használja. Az AI az alkalmazás aktív nyelvén magyarázza el az eredményt."
   },
   "principle": {
     "eyebrow": "AZ INGREFIT SZABÁLYA",
@@ -62,7 +62,7 @@
   "personal": {
     "eyebrow": "EGY TERMÉK, KÜLÖNBÖZŐ EMBEREK",
     "title": "A személyre szabott jobb az általánosnál",
-    "body": "Ugyanaz a müzli jól teljesíthet egy magasabb rostbevitelre irányuló célnál, és rosszul annál, aki csökkenti a cukrot. A céljaid, étkezési szokásaid, allergénjeid és kerülendő összetevőid megváltoztatják a magyarázatot — az alapul szolgáló tényeket soha.",
+    "body": "Ugyanaz a müzli jól teljesíthet egy magasabb rostbevitelre irányuló célnál, és rosszul annál, aki csökkenti a cukrot. A céljaid, étkezési szokásaid, allergénjeid és kerülendő összetevőid megváltoztatják a magyarázatot - az alapul szolgáló tényeket soha.",
     "goal1": "Kevesebb cukor",
     "goal2": "Több fehérje",
     "goal3": "Gluténmentes",
@@ -138,5 +138,15 @@
     "termsAcceptTitle": "Elfogadható használat",
     "termsAcceptBody": "Ne automatizálj visszaélésszerű forgalmat, ne kerüld meg a hozzáférés-vezérlést, ne vizsgálj védett útvonalakat, ne tölts fel oda nem illő vagy jogellenes képeket, és ne zavard a szolgáltatást.",
     "back": "Vissza az IngreFithez"
+  },
+  "gallery": {
+    "previous": "Előző képernyőkép",
+    "next": "Következő képernyőkép",
+    "screenAlt": "Az IngreFit alkalmazás képernyője"
+  },
+  "cookies": {
+    "text": "Opcionális analitikai sütiket használunk az IngreFit fejlesztéséhez. A webhely ezek nélkül is működik.",
+    "accept": "Analitika engedélyezése",
+    "reject": "Csak szükséges"
   }
 }

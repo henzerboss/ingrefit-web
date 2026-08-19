@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "IngreFit — pemindai makanan AI untuk tujuan Anda",
+    "title": "IngreFit - pemindai makanan AI untuk tujuan Anda",
     "description": "Pindai kode batang atau label makanan dan dapatkan skor kecocokan 10 poin yang faktual dan dipersonalisasi untuk tujuan nutrisi Anda."
   },
   "nav": {
@@ -44,9 +44,9 @@
     "step1Title": "Pindai kode batang",
     "step1Body": "Kami memeriksa Open Food Facts untuk identitas produk, bahan, nutrisi, alergen, serta data Nutri-Score dan NOVA.",
     "step2Title": "Gunakan foto bila diperlukan",
-    "step2Body": "Premium dapat membaca label kemasan yang tidak tersedia dari dua foto — bagian depan dan satu label informasi lengkap — atau dengan hati-hati mengenali makanan tanpa kemasan dari satu foto.",
+    "step2Body": "Premium dapat membaca label kemasan yang tidak tersedia dari dua foto - bagian depan dan satu label informasi lengkap - atau dengan hati-hati mengenali makanan tanpa kemasan dari satu foto.",
     "step3Title": "Dapatkan skor Anda",
-    "step3Body": "Skor deterministik 1–10 hanya menggunakan fakta yang tersedia dan tujuan yang Anda pilih. AI menjelaskan hasilnya dalam bahasa aplikasi yang aktif."
+    "step3Body": "Skor deterministik 1-10 hanya menggunakan fakta yang tersedia dan tujuan yang Anda pilih. AI menjelaskan hasilnya dalam bahasa aplikasi yang aktif."
   },
   "principle": {
     "eyebrow": "ATURAN INGREFIT",
@@ -62,7 +62,7 @@
   "personal": {
     "eyebrow": "SATU PRODUK, ORANG YANG BERBEDA",
     "title": "Yang pribadi lebih baik daripada yang umum",
-    "body": "Sereal yang sama dapat mendapat skor baik untuk tujuan lebih banyak serat dan buruk bagi seseorang yang membatasi gula. Tujuan, pola makan, alergen, dan daftar bahan yang Anda hindari mengubah penjelasan — bukan fakta dasarnya.",
+    "body": "Sereal yang sama dapat mendapat skor baik untuk tujuan lebih banyak serat dan buruk bagi seseorang yang membatasi gula. Tujuan, pola makan, alergen, dan daftar bahan yang Anda hindari mengubah penjelasan - bukan fakta dasarnya.",
     "goal1": "Lebih sedikit gula",
     "goal2": "Lebih banyak protein",
     "goal3": "Bebas gluten",
@@ -138,5 +138,15 @@
     "termsAcceptTitle": "Penggunaan yang diperbolehkan",
     "termsAcceptBody": "Jangan mengotomatiskan lalu lintas yang menyalahgunakan layanan, melewati kontrol akses, menguji rute yang dilindungi, mengunggah gambar yang tidak terkait atau melanggar hukum, atau mengganggu layanan.",
     "back": "Kembali ke IngreFit"
+  },
+  "gallery": {
+    "previous": "Tangkapan layar sebelumnya",
+    "next": "Tangkapan layar berikutnya",
+    "screenAlt": "Layar aplikasi IngreFit"
+  },
+  "cookies": {
+    "text": "Kami menggunakan cookie analitik opsional untuk meningkatkan IngreFit. Situs tetap berfungsi tanpanya.",
+    "accept": "Izinkan analitik",
+    "reject": "Hanya yang diperlukan"
   }
 }

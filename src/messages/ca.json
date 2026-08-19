@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "IngreFit — escàner d'aliments amb IA per als teus objectius",
+    "title": "IngreFit - escàner d'aliments amb IA per als teus objectius",
     "description": "Escaneja un codi de barres o una etiqueta d'aliment i obtén una puntuació d'adequació personalitzada i basada en fets, sobre 10, segons els teus objectius nutricionals."
   },
   "nav": {
@@ -44,7 +44,7 @@
     "step1Title": "Escaneja el codi de barres",
     "step1Body": "Consultem Open Food Facts per obtenir la identitat, els ingredients, la informació nutricional, els al·lèrgens i les dades de Nutri-Score i NOVA.",
     "step2Title": "Utilitza una foto quan calgui",
-    "step2Body": "Premium pot llegir una etiqueta d'envàs que falti a partir de dues fotos —la part frontal i una etiqueta informativa completa— o identificar amb prudència un aliment sense envàs a partir d'una foto.",
+    "step2Body": "Premium pot llegir una etiqueta d'envàs que falti a partir de dues fotos -la part frontal i una etiqueta informativa completa- o identificar amb prudència un aliment sense envàs a partir d'una foto.",
     "step3Title": "Obtén la teva puntuació",
     "step3Body": "Una puntuació determinista d'1 a 10 utilitza només els fets disponibles i els objectius que has seleccionat. La IA explica el resultat en l'idioma actiu de l'app."
   },
@@ -138,5 +138,15 @@
     "termsAcceptTitle": "Ús acceptable",
     "termsAcceptBody": "No automatitzis trànsit abusiu, no eludeixis controls d'accés, no sondeges rutes protegides, no pugis imatges no relacionades o il·lícites ni interfereixis amb el servei.",
     "back": "Torna a IngreFit"
+  },
+  "gallery": {
+    "previous": "Captura anterior",
+    "next": "Captura següent",
+    "screenAlt": "Pantalla de l’app IngreFit"
+  },
+  "cookies": {
+    "text": "Fem servir galetes d’analítica opcionals per millorar IngreFit. El web funciona sense aquestes galetes.",
+    "accept": "Permet l’analítica",
+    "reject": "Només necessàries"
   }
 }

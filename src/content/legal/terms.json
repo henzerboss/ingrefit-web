@@ -1,0 +1,162 @@
+{
+  "title": "Terms of Use for IngreFit: AI Food Scanner",
+  "notice": null,
+  "intro": "Effective date: August 18, 2026 Last updated: August 18, 2026 These Terms of Use (“Terms”) govern your access to and use of the IngreFit mobile application, website and related services (collectively, the “Services”). The Services are provided by Evgenii Evsiukov, trading as evsi.store, Torrevieja, Spain (“IngreFit,” “we,” “us,” or “our”). By downloading, accessing or using IngreFit, you agree to these Terms and acknowledge the Privacy Policy. If you do not agree, do not use the Services.",
+  "sections": [
+    {
+      "number": 1,
+      "title": "Eligibility",
+      "body": "You must be at least 18 years old to use IngreFit. By using the Services, you represent that you meet this age requirement and are legally capable of entering into these Terms. The Services are not directed to children."
+    },
+    {
+      "number": 2,
+      "title": "About IngreFit",
+      "body": "IngreFit is a food-information and product-analysis application. Depending on the feature and subscription level, IngreFit may allow you to: scan packaged-food barcodes; retrieve available product information; view ingredients and nutrition information; view declared allergens and “may contain” information when available; view recognized food additives; view Nutri-Score, NOVA or other third-party product classifications when available; photograph product labels for information extraction; photograph unpackaged food for approximate AI-assisted identification; select nutrition or eating goals; select dietary preferences; flag allergens or sensitivities; specify ingredients you prefer to avoid; receive a personalized product-fit score; receive AI-generated explanations and translations; maintain local scan history; and purchase optional Premium functionality. Features may vary by platform, country, App version, subscription status and technical availability."
+    },
+    {
+      "number": 3,
+      "title": "Informational Service Only",
+      "body": "IngreFit is provided solely for general informational and educational purposes. IngreFit is not a medical device and does not diagnose, treat, cure, or prevent any medical condition. Nothing provided through IngreFit constitutes or should be interpreted as: medical advice; diagnosis; treatment; nutritional therapy; dietetic advice; allergy or intolerance diagnosis; food-safety certification; toxicological advice; emergency guidance; or other professional healthcare advice. You should consult an appropriately qualified healthcare professional for medical advice, diagnosis or treatment and before making decisions concerning a medical condition, allergy, intolerance, therapeutic diet or other health-related restriction. Never delay seeking professional medical care because of information shown by IngreFit. Do not use IngreFit in an emergency."
+    },
+    {
+      "number": 4,
+      "title": "Allergen and Intolerance Disclaimer",
+      "body": "IngreFit may flag allergens or traces that are explicitly stated in available product data or that appear in visible label text. IngreFit does not guarantee: that all allergens have been identified; that a product is free from a particular allergen; that a product is safe for a person with an allergy or intolerance; that a database record is current; that a label photograph is complete or readable; that text recognition is error-free; that AI correctly interpreted the label; that a manufacturer has not changed a recipe; that a product has not been exposed to cross-contact or cross-contamination; or that labeling or third-party database information is correct. Terms such as “blocked,” “warning,” “flagged,” “matches your restriction,” or similar interface wording indicate only that available information matched a preference or restriction selected by the user. A product that is not blocked, flagged or warned about must not be interpreted as safe, allergen-free or suitable for you. If an allergy, intolerance or medical condition could result in harm, always verify the current physical package and manufacturer information and seek qualified professional advice where appropriate."
+    },
+    {
+      "number": 5,
+      "title": "Food Additives and Ingredient Classifications",
+      "body": "IngreFit may display information or an “attention level” concerning recognized additives or ingredients. Any IngreFit additive classification is an informational categorization based on available published scientific or regulatory sources. It is not a determination that an additive, ingredient or product is: toxic; non-toxic; dangerous; harmless; safe; unsafe; carcinogenic in the amount present in the specific product; or appropriate or inappropriate for a particular individual. Scientific and regulatory assessments depend on factors such as dose, exposure, population, evidence quality, jurisdiction and evolving research. An IngreFit classification describes the informational category assigned by IngreFit and does not replace assessments by regulators, manufacturers, physicians, dietitians, toxicologists or other qualified professionals."
+    },
+    {
+      "number": 6,
+      "title": "Nutrition Information and Estimates",
+      "body": "Nutrition information may originate from a product database, visible package information or an AI-generated estimate. Database and package-declared values may be incomplete, outdated or entered incorrectly. For unpackaged foods or products for which reliable declared information is unavailable, IngreFit may display approximate AI-generated nutritional estimates. Such estimates may materially differ from the food actually consumed because of recipe, preparation method, portion size, ingredients, brand and other factors. Estimated information is not laboratory analysis and must not be treated as exact nutritional composition."
+    },
+    {
+      "number": 7,
+      "title": "AI-Generated Results",
+      "body": "Certain IngreFit features use artificial intelligence, including Google Gemini or another AI provider identified in our Privacy Policy or in-app disclosure. AI may be used for label interpretation, food identification, translation or explanatory text. Artificial intelligence can produce inaccurate, incomplete, inconsistent or misleading results, including apparently confident results that are incorrect. You are responsible for independently verifying information before relying on it. AI output must not be used as the sole basis for decisions where an error could reasonably result in injury or serious harm, including decisions concerning: severe allergies; anaphylaxis; medical treatment; medical diagnosis; therapeutic diets; medication interactions; pregnancy-related medical restrictions; emergency care; or other safety-critical circumstances. IngreFit does not use AI as a substitute for a physician, registered dietitian or other qualified professional."
+    },
+    {
+      "number": 8,
+      "title": "Personalized Fit Score",
+      "body": "IngreFit may calculate a numerical or descriptive “fit score” based on available food-product facts and preferences you select. The score is an informational personalization feature. It is not: an objective measure of whether a food is “healthy” or “unhealthy” for every person; a medical risk score; an allergy-safety score; a food-safety score; a clinical recommendation; a guarantee of health outcomes; or a regulatory certification. Different users may receive different assessments of the same product because their selected goals and preferences differ. The score is only as reliable as the underlying product information and user-selected preferences."
+    },
+    {
+      "number": 9,
+      "title": "Third-Party Product Information",
+      "body": "IngreFit may obtain product information from Open Food Facts and other sources. Open Food Facts is a third-party crowdsourced database. Third-party data may be incomplete, inaccurate, outdated or inconsistent with the product currently being sold. The physical package and current manufacturer information should be treated as the controlling sources for a specific product. References to Nutri-Score, NOVA, Open Food Facts or other third-party names, standards or classifications do not imply sponsorship, partnership or endorsement of IngreFit unless expressly stated. Third-party intellectual property remains the property of its respective owners."
+    },
+    {
+      "number": 10,
+      "title": "User Photos and Other Inputs",
+      "body": "You retain any rights you have in photographs, text, preferences or other material you submit through the Services (“User Inputs”). You grant us a limited, non-exclusive, worldwide right to process, reproduce, transmit and technically modify User Inputs only as reasonably necessary to provide, secure and improve the requested Services and as described in the Privacy Policy. Where an AI feature requires third-party processing, the relevant User Input may be transmitted to the identified AI service provider after the applicable disclosure and permission process. You must not upload: photographs of people unless strictly necessary and legally permitted; identity documents; medical records; payment-card information; confidential third-party information; unlawful material; material that infringes another person's intellectual-property or privacy rights; malicious files or code; or unrelated material intended to abuse the food-analysis functionality. You represent that you have the right to submit any User Input you provide."
+    },
+    {
+      "number": 11,
+      "title": "Privacy",
+      "body": "Our processing of personal data is described in the IngreFit Privacy Policy. Where required, specific features may request separate consent for processing, including third-party AI processing, health-related preferences, analytics or device permissions. Withdrawing optional consent may prevent the corresponding optional feature from functioning but will not affect functionality that does not require that processing."
+    },
+    {
+      "number": 12,
+      "title": "Free Service",
+      "body": "The current Free plan may include unlimited ordinary barcode lookups and the core personalized fit score. “Unlimited” refers to ordinary personal use and does not permit: automated scraping; bulk extraction; commercial harvesting; excessive machine-generated requests; attempts to replicate the database or service; or activity that threatens service availability. We may apply reasonable technical, security or anti-abuse rate limits where necessary to protect the Services."
+    },
+    {
+      "number": 13,
+      "title": "Premium Subscriptions",
+      "body": "IngreFit may offer optional auto-renewable Premium subscriptions. Premium functionality may include features such as photo-based recognition, missing-label analysis, translation and expanded AI-generated explanations. Available subscription periods, prices, taxes, trial periods and promotional offers are displayed by the applicable App Store or Google Play interface before purchase. By purchasing a subscription, you authorize the applicable platform to charge the amount displayed at purchase. Automatic renewal Unless otherwise stated by the applicable store, an auto-renewable subscription will renew for the applicable billing period until you cancel it. Cancellation You can manage or cancel a subscription through the subscription settings of the Apple App Store or Google Play account used to make the purchase. Deleting IngreFit does not automatically cancel an active subscription. Cancellation generally prevents future renewal; access may continue until the end of the already-paid subscription period, subject to the applicable store's rules. Refunds Purchases and refund eligibility are administered by the applicable App Store or Google Play billing system and are subject to the platform's rules and mandatory consumer law. Nothing in these Terms limits any refund or cancellation rights that cannot legally be excluded. Price changes Subscription prices may change in accordance with the applicable store's procedures and applicable law. Where required, the store or we will provide notice or request consent before a price change takes effect. Restoring purchases Where supported by the platform, IngreFit provides functionality to restore eligible purchases associated with the relevant store account."
+    },
+    {
+      "number": 14,
+      "title": "Acceptable Use",
+      "body": "You agree not to: use the Services for an unlawful purpose; use IngreFit to provide medical diagnosis or treatment; present IngreFit output to others as certified medical or food-safety advice; attempt to bypass subscription, entitlement, quota or access controls; scrape or systematically extract the Services or product data; make automated requests except through expressly authorized functionality; interfere with servers, networks or security mechanisms; probe or test protected endpoints without authorization; introduce malware or harmful code; reverse engineer, decompile or disassemble the App except to the extent applicable law expressly permits such activity; copy or commercially exploit proprietary IngreFit scoring logic or interface elements; impersonate another person; misuse third-party data accessed through the Services; or use the Services in a way that could damage, disable, overburden or impair IngreFit or another user's access. We may restrict abusive or harmful usage to protect the Services and other users."
+    },
+    {
+      "number": 15,
+      "title": "Intellectual Property",
+      "body": "Except for User Inputs and identified third-party materials, IngreFit and its software, design, branding, scoring methods, original text, graphics, interfaces, databases, compilations and other materials are owned by or licensed to us and are protected by applicable intellectual-property laws. Subject to these Terms, we grant you a limited, revocable, non-exclusive, non-transferable, non-sublicensable license to install and use IngreFit for your personal, lawful use on devices permitted by the applicable platform rules. No ownership rights are transferred to you."
+    },
+    {
+      "number": 16,
+      "title": "Feedback",
+      "body": "If you voluntarily provide suggestions, ideas or feedback about IngreFit, you grant us permission to use that feedback without restriction or compensation, provided that this does not give us ownership of personal information contained in the feedback."
+    },
+    {
+      "number": 17,
+      "title": "Service Availability and Changes",
+      "body": "We aim to maintain reliable Services but do not guarantee uninterrupted or error-free availability. Functionality may be temporarily unavailable because of: maintenance; internet or hosting failures; third-party provider outages; database availability; API limits; changes imposed by Apple, Google or other providers; security incidents; or circumstances outside our reasonable control. We may modify, add or discontinue features where reasonably necessary. If a material change adversely affects a paid subscription, we will comply with applicable consumer law and applicable store requirements."
+    },
+    {
+      "number": 18,
+      "title": "Updates",
+      "body": "The Services may require software updates. You are responsible for maintaining a supported version of the App and compatible operating system. Older versions may cease to operate if continued support would create security, compatibility or legal problems."
+    },
+    {
+      "number": 19,
+      "title": "Suspension and Termination",
+      "body": "You may stop using IngreFit at any time. We may suspend or terminate access if reasonably necessary because: you materially violate these Terms; your use creates security or operational risk; you engage in abuse, fraud or unlawful activity; continued service would violate law or third-party contractual obligations; or the Services are lawfully discontinued. Where appropriate and reasonably possible, we will take proportional action and consider applicable consumer rights. Termination does not automatically cancel an active App Store or Google Play subscription; store subscriptions must be managed through the applicable store account."
+    },
+    {
+      "number": 20,
+      "title": "Disclaimer of Warranties",
+      "body": "To the maximum extent permitted by applicable law, the Services are provided on an “as is” and “as available” basis. We do not warrant that: product data is complete or accurate; AI output is correct; all allergens will be detected or displayed; all ingredients or additives will be recognized; nutritional estimates are exact; a fit score predicts health outcomes; the Services will be uninterrupted or error-free; or the Services will meet every individual dietary, medical or safety requirement. Nothing in this section excludes statutory guarantees or consumer rights that cannot legally be excluded."
+    },
+    {
+      "number": 21,
+      "title": "Limitation of Liability",
+      "body": "Nothing in these Terms excludes or limits liability where such exclusion or limitation is prohibited by applicable law, including liability that cannot lawfully be excluded for fraud, fraudulent misrepresentation, intentional misconduct, gross negligence, death or personal injury where applicable. Subject to those mandatory rights, to the maximum extent permitted by law, we are not liable for indirect, incidental, special, consequential or purely economic losses arising from use of or inability to use the Services. In particular, you acknowledge that IngreFit is not intended to be the sole basis for allergy-safety, medical, emergency or other high-risk decisions. For paid Services, any limitation of liability will be interpreted in a manner consistent with applicable mandatory consumer law."
+    },
+    {
+      "number": 22,
+      "title": "Indemnification",
+      "body": "To the extent permitted by applicable law, you agree to be responsible for losses or claims reasonably resulting from your unlawful misuse of the Services, infringement of another person's rights, or material violation of these Terms. This provision does not apply to the extent liability was caused by us and does not limit mandatory consumer rights."
+    },
+    {
+      "number": 23,
+      "title": "Consumer Rights",
+      "body": "If you are a consumer, you retain all mandatory rights granted to you by the laws applicable in your country of residence. Nothing in these Terms is intended to waive or restrict any consumer right that cannot legally be waived. If there is a conflict between these Terms and mandatory consumer-protection law, the mandatory law prevails."
+    },
+    {
+      "number": 24,
+      "title": "Governing Law and Disputes",
+      "body": "These Terms are governed by the laws of Spain, excluding conflict-of-law principles, except where mandatory consumer law requires the application of another law. If you are a consumer in the European Union, European Economic Area, United Kingdom or another jurisdiction providing mandatory local consumer protections, you retain the benefit of those protections and any mandatory right to bring proceedings in the courts available under applicable consumer law. Before initiating formal proceedings, you are encouraged to contact support@evsi.store so that we can attempt to resolve the issue."
+    },
+    {
+      "number": 25,
+      "title": "Apple App Store Terms",
+      "body": "If you obtained IngreFit through Apple's App Store, the following additional terms apply: these Terms are between you and us, not Apple; Apple is not responsible for IngreFit or its content; we, not Apple, are responsible for maintenance and support except to the extent applicable law requires otherwise; in the event of a failure to conform to an applicable warranty, you may notify Apple and Apple may refund the purchase price, if any, to the extent required by Apple's applicable terms; to the maximum extent permitted by law, Apple has no other warranty obligation concerning IngreFit; we, not Apple, are responsible for addressing claims relating to IngreFit, including product-liability, regulatory and consumer-protection claims, subject to applicable law; we, not Apple, are responsible for investigation, defense, settlement and discharge of intellectual-property infringement claims relating to IngreFit; you must comply with applicable third-party terms when using IngreFit; you represent that you are not prohibited from receiving the Services under applicable trade or sanctions laws; and Apple and its subsidiaries are third-party beneficiaries of these Terms with respect to your licensed use of the iOS App and may enforce the applicable terms against you. Your use of the App is also subject to the applicable App Store rules and terms."
+    },
+    {
+      "number": 26,
+      "title": "Google Play Terms",
+      "body": "If you obtained IngreFit through Google Play: Google is not a party to these Terms between you and us; purchases, refunds and billing are additionally governed by Google Play rules; Google is not responsible for support or product claims concerning IngreFit except as required under its own applicable terms; and your use of the App must comply with applicable Google Play terms."
+    },
+    {
+      "number": 27,
+      "title": "Changes to These Terms",
+      "body": "We may update these Terms when reasonably necessary because of changes to the Services, law, security requirements, third-party services or business practices. The updated Terms will display a new “Last updated” date. If a material change requires notice or consent under applicable law, we will provide the required notice or obtain the required consent before that change applies."
+    },
+    {
+      "number": 28,
+      "title": "Severability",
+      "body": "If any provision of these Terms is found unenforceable, the remaining provisions will remain effective to the maximum extent permitted by law. An unenforceable provision will be interpreted or limited as necessary to most closely reflect its lawful purpose."
+    },
+    {
+      "number": 29,
+      "title": "No Waiver",
+      "body": "Failure to enforce a provision of these Terms does not constitute a waiver of that provision or any other right."
+    },
+    {
+      "number": 30,
+      "title": "Entire Agreement",
+      "body": "These Terms, together with the Privacy Policy, applicable in-app disclosures and mandatory store terms, constitute the agreement governing your use of IngreFit unless another written agreement expressly applies."
+    },
+    {
+      "number": 31,
+      "title": "Contact",
+      "body": "Questions about these Terms may be sent to: Evgenii Evsiukov / evsi.store Torrevieja, Spain Email: support@evsi.store"
+    }
+  ]
+}

@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 
 import { routing } from '@/i18n/routing';
 import { GoogleAnalytics } from '@/components/GoogleAnalytics';
+import { CookieConsent } from '@/components/CookieConsent';
 import { isRtlLocale } from '@/i18n/locales';
 
 import '../globals.css';
@@ -37,7 +38,7 @@ export default async function LocaleLayout({ children, params }: Readonly<{ chil
     <html dir={isRtlLocale(locale) ? 'rtl' : 'ltr'} lang={locale} suppressHydrationWarning>
       <head><script dangerouslySetInnerHTML={{ __html: "try{const t=localStorage.getItem('ingrefit-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}" }} /></head>
       <body>
-        <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider messages={messages}>{children}<CookieConsent /></NextIntlClientProvider>
         <GoogleAnalytics />
       </body>
     </html>

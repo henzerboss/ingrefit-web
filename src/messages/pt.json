@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "IngreFit — scanner de alimentos com IA para os seus objetivos",
+    "title": "IngreFit - scanner de alimentos com IA para os seus objetivos",
     "description": "Digitalize um código de barras ou rótulo alimentar e obtenha uma pontuação de adequação personalizada e factual, de 1 a 10, para os seus objetivos nutricionais."
   },
   "nav": {
@@ -44,7 +44,7 @@
     "step1Title": "Digitalize o código de barras",
     "step1Body": "Consultamos o Open Food Facts para identidade, ingredientes, nutrição, alergénios e dados do Nutri-Score e NOVA.",
     "step2Title": "Use uma fotografia quando necessário",
-    "step2Body": "O Premium pode ler um rótulo de embalagem em falta a partir de duas fotografias — a frente e um rótulo informativo completo — ou identificar com cautela alimentos sem embalagem a partir de uma fotografia.",
+    "step2Body": "O Premium pode ler um rótulo de embalagem em falta a partir de duas fotografias - a frente e um rótulo informativo completo - ou identificar com cautela alimentos sem embalagem a partir de uma fotografia.",
     "step3Title": "Obtenha a sua pontuação",
     "step3Body": "Uma pontuação determinística de 1 a 10 usa apenas os factos disponíveis e os objetivos que selecionou. A IA explica o resultado no idioma ativo da app."
   },
@@ -62,7 +62,7 @@
   "personal": {
     "eyebrow": "UM PRODUTO, PESSOAS DIFERENTES",
     "title": "O pessoal é melhor do que o genérico",
-    "body": "O mesmo cereal pode ter uma boa pontuação para um objetivo de mais fibra e uma má pontuação para alguém que limita o açúcar. Os seus objetivos, padrão alimentar, alergénios e lista de ingredientes a evitar alteram a explicação — nunca os factos subjacentes.",
+    "body": "O mesmo cereal pode ter uma boa pontuação para um objetivo de mais fibra e uma má pontuação para alguém que limita o açúcar. Os seus objetivos, padrão alimentar, alergénios e lista de ingredientes a evitar alteram a explicação - nunca os factos subjacentes.",
     "goal1": "Menos açúcar",
     "goal2": "Mais proteína",
     "goal3": "Sem glúten",
@@ -138,5 +138,15 @@
     "termsAcceptTitle": "Utilização aceitável",
     "termsAcceptBody": "Não automatize tráfego abusivo, não contorne controlos de acesso, não teste rotas protegidas, não carregue imagens não relacionadas ou ilegais nem interfira com o serviço.",
     "back": "Voltar ao IngreFit"
+  },
+  "gallery": {
+    "previous": "Captura anterior",
+    "next": "Captura seguinte",
+    "screenAlt": "Ecrã da app IngreFit"
+  },
+  "cookies": {
+    "text": "Usamos cookies de análise opcionais para melhorar o IngreFit. O site funciona sem eles.",
+    "accept": "Permitir análise",
+    "reject": "Apenas necessários"
   }
 }

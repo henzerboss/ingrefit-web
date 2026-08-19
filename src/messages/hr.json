@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "IngreFit — AI skener hrane za vaše ciljeve",
+    "title": "IngreFit - AI skener hrane za vaše ciljeve",
     "description": "Skenirajte crtični kod ili deklaraciju hrane i dobijte činjeničnu, personaliziranu ocjenu prikladnosti od 1 do 10 za svoje prehrambene ciljeve."
   },
   "nav": {
@@ -44,7 +44,7 @@
     "step1Title": "Skenirajte crtični kod",
     "step1Body": "U Open Food Facts provjeravamo identitet proizvoda, sastojke, nutritivne vrijednosti, alergene te podatke Nutri-Score i NOVA.",
     "step2Title": "Upotrijebite fotografiju kada je potrebno",
-    "step2Body": "Premium može pročitati nedostajuću deklaraciju pakiranja s dvije fotografije — prednje strane i jedne potpune informativne deklaracije — ili oprezno prepoznati hranu bez pakiranja s jedne fotografije.",
+    "step2Body": "Premium može pročitati nedostajuću deklaraciju pakiranja s dvije fotografije - prednje strane i jedne potpune informativne deklaracije - ili oprezno prepoznati hranu bez pakiranja s jedne fotografije.",
     "step3Title": "Dobijte svoju ocjenu",
     "step3Body": "Deterministička ocjena od 1 do 10 koristi samo dostupne činjenice i ciljeve koje ste odabrali. AI objašnjava rezultat na aktivnom jeziku aplikacije."
   },
@@ -62,7 +62,7 @@
   "personal": {
     "eyebrow": "JEDAN PROIZVOD, RAZLIČITI LJUDI",
     "title": "Osobno je bolje od općenitog",
-    "body": "Iste žitarice mogu dobiti dobru ocjenu za cilj s više vlakana i lošu za osobu koja ograničava šećer. Vaši ciljevi, način prehrane, alergeni i popis sastojaka koje izbjegavate mijenjaju objašnjenje — nikad temeljne činjenice.",
+    "body": "Iste žitarice mogu dobiti dobru ocjenu za cilj s više vlakana i lošu za osobu koja ograničava šećer. Vaši ciljevi, način prehrane, alergeni i popis sastojaka koje izbjegavate mijenjaju objašnjenje - nikad temeljne činjenice.",
     "goal1": "Manje šećera",
     "goal2": "Više proteina",
     "goal3": "Bez glutena",
@@ -138,5 +138,15 @@
     "termsAcceptTitle": "Prihvatljiva uporaba",
     "termsAcceptBody": "Nemojte automatizirati zlonamjeran promet, zaobilaziti kontrole pristupa, ispitivati zaštićene rute, učitavati nepovezane ili nezakonite slike niti ometati uslugu.",
     "back": "Natrag na IngreFit"
+  },
+  "gallery": {
+    "previous": "Prethodna snimka zaslona",
+    "next": "Sljedeća snimka zaslona",
+    "screenAlt": "Zaslon aplikacije IngreFit"
+  },
+  "cookies": {
+    "text": "Koristimo neobavezne analitičke kolačiće kako bismo poboljšali IngreFit. Web-mjesto radi i bez njih.",
+    "accept": "Dopusti analitiku",
+    "reject": "Samo nužni"
   }
 }

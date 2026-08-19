@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "title": "IngreFit — skaner żywności AI dopasowany do Twoich celów",
-    "description": "Zeskanuj kod kreskowy lub etykietę produktu i otrzymaj opartą na faktach, spersonalizowaną ocenę dopasowania w skali 1–10 do Twoich celów żywieniowych."
+    "title": "IngreFit - skaner żywności AI dopasowany do Twoich celów",
+    "description": "Zeskanuj kod kreskowy lub etykietę produktu i otrzymaj opartą na faktach, spersonalizowaną ocenę dopasowania w skali 1-10 do Twoich celów żywieniowych."
   },
   "nav": {
     "how": "Jak to działa",
@@ -44,9 +44,9 @@
     "step1Title": "Zeskanuj kod kreskowy",
     "step1Body": "Sprawdzamy w Open Food Facts tożsamość produktu, składniki, wartości odżywcze, alergeny oraz dane Nutri-Score i NOVA.",
     "step2Title": "W razie potrzeby użyj zdjęcia",
-    "step2Body": "Premium może odczytać brakującą etykietę opakowania z dwóch zdjęć — przodu i jednej pełnej etykiety informacyjnej — albo ostrożnie rozpoznać żywność bez opakowania na podstawie jednego zdjęcia.",
+    "step2Body": "Premium może odczytać brakującą etykietę opakowania z dwóch zdjęć - przodu i jednej pełnej etykiety informacyjnej - albo ostrożnie rozpoznać żywność bez opakowania na podstawie jednego zdjęcia.",
     "step3Title": "Otrzymaj swoją ocenę",
-    "step3Body": "Deterministyczna ocena 1–10 wykorzystuje wyłącznie dostępne fakty i wybrane przez Ciebie cele. AI wyjaśnia wynik w aktywnym języku aplikacji."
+    "step3Body": "Deterministyczna ocena 1-10 wykorzystuje wyłącznie dostępne fakty i wybrane przez Ciebie cele. AI wyjaśnia wynik w aktywnym języku aplikacji."
   },
   "principle": {
     "eyebrow": "ZASADA INGREFIT",
@@ -62,7 +62,7 @@
   "personal": {
     "eyebrow": "JEDEN PRODUKT, RÓŻNI LUDZIE",
     "title": "Osobiste jest lepsze niż ogólne",
-    "body": "Te same płatki mogą otrzymać dobrą ocenę dla celu „więcej błonnika” i słabą dla osoby ograniczającej cukier. Twoje cele, sposób odżywiania, alergeny i lista składników do unikania zmieniają wyjaśnienie — nigdy fakty bazowe.",
+    "body": "Te same płatki mogą otrzymać dobrą ocenę dla celu „więcej błonnika” i słabą dla osoby ograniczającej cukier. Twoje cele, sposób odżywiania, alergeny i lista składników do unikania zmieniają wyjaśnienie - nigdy fakty bazowe.",
     "goal1": "Mniej cukru",
     "goal2": "Więcej białka",
     "goal3": "Bez glutenu",
@@ -138,5 +138,15 @@
     "termsAcceptTitle": "Dozwolone korzystanie",
     "termsAcceptBody": "Nie automatyzuj nadużywającego ruchu, nie omijaj kontroli dostępu, nie sonduj chronionych tras, nie przesyłaj niezwiązanych lub niezgodnych z prawem obrazów ani nie zakłócaj działania usługi.",
     "back": "Wróć do IngreFit"
+  },
+  "gallery": {
+    "previous": "Poprzedni zrzut ekranu",
+    "next": "Następny zrzut ekranu",
+    "screenAlt": "Ekran aplikacji IngreFit"
+  },
+  "cookies": {
+    "text": "Używamy opcjonalnych plików cookie do analityki, aby ulepszać IngreFit. Witryna działa bez nich.",
+    "accept": "Zezwól na analitykę",
+    "reject": "Tylko niezbędne"
   }
 }

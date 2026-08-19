@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "IngreFit — 목표에 맞춘 AI 식품 스캐너",
+    "title": "IngreFit - 목표에 맞춘 AI 식품 스캐너",
     "description": "바코드나 식품 라벨을 스캔하고 영양 목표에 맞춘 사실 기반의 개인화된 10점 적합도 점수를 확인하세요."
   },
   "nav": {
@@ -46,7 +46,7 @@
     "step2Title": "필요할 때 사진 사용",
     "step2Body": "Premium은 앞면과 전체 정보 라벨, 두 장의 사진으로 누락된 포장 라벨을 읽거나 포장이 없는 식품을 한 장의 사진으로 신중하게 식별할 수 있습니다.",
     "step3Title": "점수 확인",
-    "step3Body": "결정론적 1–10점 점수는 이용 가능한 사실과 선택한 목표만 사용합니다. AI는 현재 앱 언어로 결과를 설명합니다."
+    "step3Body": "결정론적 1-10점 점수는 이용 가능한 사실과 선택한 목표만 사용합니다. AI는 현재 앱 언어로 결과를 설명합니다."
   },
   "principle": {
     "eyebrow": "INGREFIT 원칙",
@@ -138,5 +138,15 @@
     "termsAcceptTitle": "허용되는 사용",
     "termsAcceptBody": "악용 목적의 트래픽 자동화, 접근 제어 우회, 보호된 경로 탐색, 관련 없거나 불법인 이미지 업로드 또는 서비스 방해를 하지 마세요.",
     "back": "IngreFit으로 돌아가기"
+  },
+  "gallery": {
+    "previous": "이전 스크린샷",
+    "next": "다음 스크린샷",
+    "screenAlt": "IngreFit 앱 화면"
+  },
+  "cookies": {
+    "text": "IngreFit 개선을 위해 선택적 분석 쿠키를 사용합니다. 허용하지 않아도 사이트는 작동합니다.",
+    "accept": "분석 허용",
+    "reject": "필수 항목만"
   }
 }

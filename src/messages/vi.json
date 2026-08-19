@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "IngreFit — máy quét thực phẩm AI theo mục tiêu của bạn",
+    "title": "IngreFit - máy quét thực phẩm AI theo mục tiêu của bạn",
     "description": "Quét mã vạch hoặc nhãn thực phẩm và nhận điểm phù hợp cá nhân hóa theo thang 10 điểm, dựa trên dữ liệu thực tế và mục tiêu dinh dưỡng của bạn."
   },
   "nav": {
@@ -44,9 +44,9 @@
     "step1Title": "Quét mã vạch",
     "step1Body": "Chúng tôi kiểm tra Open Food Facts để lấy thông tin nhận dạng sản phẩm, thành phần, dinh dưỡng, chất gây dị ứng và dữ liệu Nutri-Score, NOVA.",
     "step2Title": "Dùng ảnh khi cần",
-    "step2Body": "Premium có thể đọc nhãn bao bì còn thiếu từ hai ảnh — mặt trước và một nhãn thông tin đầy đủ — hoặc thận trọng nhận diện thực phẩm không có bao bì từ một ảnh.",
+    "step2Body": "Premium có thể đọc nhãn bao bì còn thiếu từ hai ảnh - mặt trước và một nhãn thông tin đầy đủ - hoặc thận trọng nhận diện thực phẩm không có bao bì từ một ảnh.",
     "step3Title": "Nhận điểm của bạn",
-    "step3Body": "Điểm xác định từ 1–10 chỉ sử dụng dữ liệu hiện có và các mục tiêu bạn đã chọn. AI giải thích kết quả bằng ngôn ngữ đang dùng trong ứng dụng."
+    "step3Body": "Điểm xác định từ 1-10 chỉ sử dụng dữ liệu hiện có và các mục tiêu bạn đã chọn. AI giải thích kết quả bằng ngôn ngữ đang dùng trong ứng dụng."
   },
   "principle": {
     "eyebrow": "QUY TẮC INGREFIT",
@@ -62,7 +62,7 @@
   "personal": {
     "eyebrow": "MỘT SẢN PHẨM, NHỮNG NGƯỜI KHÁC NHAU",
     "title": "Cá nhân hóa tốt hơn đánh giá chung",
-    "body": "Cùng một loại ngũ cốc có thể đạt điểm tốt với mục tiêu tăng chất xơ nhưng điểm thấp với người hạn chế đường. Mục tiêu, kiểu ăn uống, chất gây dị ứng và danh sách cần tránh của bạn sẽ thay đổi phần giải thích — không bao giờ thay đổi dữ liệu gốc.",
+    "body": "Cùng một loại ngũ cốc có thể đạt điểm tốt với mục tiêu tăng chất xơ nhưng điểm thấp với người hạn chế đường. Mục tiêu, kiểu ăn uống, chất gây dị ứng và danh sách cần tránh của bạn sẽ thay đổi phần giải thích - không bao giờ thay đổi dữ liệu gốc.",
     "goal1": "Ít đường hơn",
     "goal2": "Nhiều protein hơn",
     "goal3": "Không gluten",
@@ -138,5 +138,15 @@
     "termsAcceptTitle": "Sử dụng được chấp nhận",
     "termsAcceptBody": "Không tự động hóa lưu lượng lạm dụng, vượt qua kiểm soát truy cập, thăm dò tuyến được bảo vệ, tải lên hình ảnh không liên quan hoặc trái pháp luật, hoặc can thiệp vào dịch vụ.",
     "back": "Quay lại IngreFit"
+  },
+  "gallery": {
+    "previous": "Ảnh chụp màn hình trước",
+    "next": "Ảnh chụp màn hình tiếp theo",
+    "screenAlt": "Màn hình ứng dụng IngreFit"
+  },
+  "cookies": {
+    "text": "Chúng tôi dùng cookie phân tích tùy chọn để cải thiện IngreFit. Trang web vẫn hoạt động khi không có chúng.",
+    "accept": "Cho phép phân tích",
+    "reject": "Chỉ cần thiết"
   }
 }

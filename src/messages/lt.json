@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "IngreFit — AI maisto skaitytuvas jūsų tikslams",
+    "title": "IngreFit - AI maisto skaitytuvas jūsų tikslams",
     "description": "Nuskaitykite brūkšninį kodą arba maisto etiketę ir gaukite faktais pagrįstą, individualų 10 balų tinkamumo įvertinimą pagal savo mitybos tikslus."
   },
   "nav": {
@@ -44,9 +44,9 @@
     "step1Title": "Nuskaitykite brūkšninį kodą",
     "step1Body": "Open Food Facts tikriname produkto tapatybę, sudedamąsias dalis, maistinę vertę, alergenus bei Nutri-Score ir NOVA duomenis.",
     "step2Title": "Kai reikia, naudokite nuotrauką",
-    "step2Body": "Premium gali perskaityti trūkstamą pakuotės etiketę iš dviejų nuotraukų — priekinės pusės ir vienos visos informacinės etiketės — arba atsargiai atpažinti nefasuotą maistą iš vienos nuotraukos.",
+    "step2Body": "Premium gali perskaityti trūkstamą pakuotės etiketę iš dviejų nuotraukų - priekinės pusės ir vienos visos informacinės etiketės - arba atsargiai atpažinti nefasuotą maistą iš vienos nuotraukos.",
     "step3Title": "Gaukite savo balą",
-    "step3Body": "Deterministinis 1–10 balas naudoja tik turimus faktus ir jūsų pasirinktus tikslus. AI paaiškina rezultatą aktyvia programėlės kalba."
+    "step3Body": "Deterministinis 1-10 balas naudoja tik turimus faktus ir jūsų pasirinktus tikslus. AI paaiškina rezultatą aktyvia programėlės kalba."
   },
   "principle": {
     "eyebrow": "INGREFIT TAISYKLĖ",
@@ -62,7 +62,7 @@
   "personal": {
     "eyebrow": "VIENAS PRODUKTAS, SKIRTINGI ŽMONĖS",
     "title": "Asmeniška geriau nei bendra",
-    "body": "Tie patys dribsniai gali būti gerai įvertinti siekiant daugiau skaidulų ir prastai žmogui, ribojančiam cukrų. Jūsų tikslai, mitybos įpročiai, alergenai ir vengtinų medžiagų sąrašas keičia paaiškinimą — niekada pagrindinių faktų.",
+    "body": "Tie patys dribsniai gali būti gerai įvertinti siekiant daugiau skaidulų ir prastai žmogui, ribojančiam cukrų. Jūsų tikslai, mitybos įpročiai, alergenai ir vengtinų medžiagų sąrašas keičia paaiškinimą - niekada pagrindinių faktų.",
     "goal1": "Mažiau cukraus",
     "goal2": "Daugiau baltymų",
     "goal3": "Be glitimo",
@@ -112,7 +112,7 @@
     "privacy": "Privatumas",
     "terms": "Sąlygos",
     "disclaimer": "IngreFit pateikia bendrą informaciją, o ne medicinines konsultacijas. Esant alergijoms ar sveikatos sutrikimams visada patikrinkite pakuotę.",
-    "off": "Produktų duomenys gali būti gaunami iš Open Food Facts — bendruomenės kuriamos duomenų bazės, paskelbtos pagal Open Database License (ODbL) v1.0 (https://opendatacommons.org/licenses/odbl/1-0/). Duomenų išsamumas ir tikslumas negarantuojami; pakuotė visada yra lemiamas šaltinis.",
+    "off": "Produktų duomenys gali būti gaunami iš Open Food Facts - bendruomenės kuriamos duomenų bazės, paskelbtos pagal Open Database License (ODbL) v1.0 (https://opendatacommons.org/licenses/odbl/1-0/). Duomenų išsamumas ir tikslumas negarantuojami; pakuotė visada yra lemiamas šaltinis.",
     "attribution": "Nutri-Score yra registruotasis Santé publique France prekių ženklas. IngreFit rodo paskelbtus įvertinimus kaip duomenis ir nėra susijęs, remiamas ar sertifikuotas pagal Nutri-Score, NOVA ar Open Food Facts programas.",
     "aiNotice": "Premium santraukas generuoja AI modelis pagal deterministinį balą. Pats balas niekada nėra kuriamas AI modelio."
   },
@@ -138,5 +138,15 @@
     "termsAcceptTitle": "Priimtinas naudojimas",
     "termsAcceptBody": "Neautomatizuokite piktnaudžiaujamo srauto, neapeikite prieigos kontrolės, netikrinkite apsaugotų maršrutų, nekelkite nesusijusių ar neteisėtų vaizdų ir netrukdykite paslaugai.",
     "back": "Grįžti į IngreFit"
+  },
+  "gallery": {
+    "previous": "Ankstesnė ekrano kopija",
+    "next": "Kita ekrano kopija",
+    "screenAlt": "IngreFit programėlės ekranas"
+  },
+  "cookies": {
+    "text": "Naudojame pasirenkamus analitikos slapukus, kad tobulintume IngreFit. Svetainė veikia ir be jų.",
+    "accept": "Leisti analitiką",
+    "reject": "Tik būtini"
   }
 }

@@ -3,6 +3,8 @@ import { setRequestLocale } from 'next-intl/server';
 
 import { SiteFooter } from '@/components/SiteFooter';
 import { SiteHeader } from '@/components/SiteHeader';
+import { ResultPreview } from '@/components/AppPreview';
+import { ScreenshotGallery } from '@/components/ScreenshotGallery';
 import { TrackedLink } from '@/components/TrackedLink';
 import { SiteIcon, type SiteIconName } from '@/components/SiteIcon';
 import { StoreButton } from '@/components/StoreButton';
@@ -20,12 +22,32 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
 function Landing({ locale }: { locale: LocaleCode }) {
   const hero = useTranslations('hero');
   const demo = useTranslations('demo');
+  const gallery = useTranslations('gallery');
   const how = useTranslations('how');
   const principle = useTranslations('principle');
   const personal = useTranslations('personal');
   const features = useTranslations('features');
   const pricing = useTranslations('pricing');
   const cta = useTranslations('cta');
+  const demoCopy = {
+    brand: demo('brand'),
+    product: demo('product'),
+    scoreLabel: demo('scoreLabel'),
+    scanning: demo('scanning'),
+    signal1: demo('signal1'),
+    signal2: demo('signal2'),
+    signal3: demo('signal3'),
+    source: demo('source'),
+    verdict: demo('verdict'),
+  };
+  const howCopy = {
+    step1Body: how('step1Body'),
+    step1Title: how('step1Title'),
+    step2Body: how('step2Body'),
+    step2Title: how('step2Title'),
+    step3Body: how('step3Body'),
+    step3Title: how('step3Title'),
+  };
 
   return (
     <>
@@ -52,27 +74,27 @@ function Landing({ locale }: { locale: LocaleCode }) {
                 <span><SiteIcon name="shield" />{hero('proof3')}</span>
               </div>
             </div>
-            <div className="phone-stage" aria-label="Example IngreFit result">
-              <div className="leaf leaf-one">✦</div>
-              <div className="leaf leaf-two">✓</div>
-              <div className="phone">
-                <div className="phone-top"><span>9:41</span><span>● ◒</span></div>
-                <div className="phone-brand"><img alt="" className="logo-image logo-image-small" height="26" src="/brand/icon.png" width="26" /><strong>IngreFit</strong></div>
-                <div className="found-pill"><span>✓</span>{demo('scanning')}</div>
-                <div className="product-mini">
-                  <div className="product-art"><SiteIcon name="food" /></div>
-                  <div><strong>{demo('product')}</strong><small>{demo('brand')}</small></div>
-                </div>
-                <div className="score-panel">
-                  <div className="score-ring"><strong>8.6</strong><small>/10</small></div>
-                  <div><small>{demo('scoreLabel')}</small><strong>{demo('verdict')}</strong></div>
-                </div>
-                <div className="signal-row"><b>+</b><span>{demo('signal1')}</span><em>+1.5</em></div>
-                <div className="signal-row"><b>+</b><span>{demo('signal2')}</span><em>+0.5</em></div>
-                <div className="signal-row signal-warn"><b>!</b><span>{demo('signal3')}</span><em>!</em></div>
-                <p className="source-line">◉ {demo('source')}</p>
-              </div>
+            <div className="phone-stage" aria-label={demo('scoreLabel')}>
+              <div className="hero-shape hero-shape-ring" />
+              <div className="hero-shape hero-shape-pill" />
+              <div className="hero-shape hero-shape-dot">✓</div>
+              <ResultPreview copy={demoCopy} />
             </div>
+          </div>
+        </section>
+
+        <section className="section gallery-section" id="screens">
+          <div className="container">
+            <div className="section-heading centered gallery-heading">
+              <p className="eyebrow">{hero('eyebrow')}</p>
+              <h2>{features('f5Title')}</h2>
+              <p>{features('f5Body')}</p>
+            </div>
+            <ScreenshotGallery
+              demo={demoCopy}
+              gallery={{ next: gallery('next'), previous: gallery('previous'), screenAlt: gallery('screenAlt') }}
+              how={howCopy}
+            />
           </div>
         </section>
 

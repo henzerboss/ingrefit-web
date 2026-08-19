@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "IngreFit — AI skener potravin pro vaše cíle",
+    "title": "IngreFit - AI skener potravin pro vaše cíle",
     "description": "Naskenujte čárový kód nebo etiketu potraviny a získejte faktické, personalizované hodnocení vhodnosti na 10bodové škále podle svých výživových cílů."
   },
   "nav": {
@@ -44,9 +44,9 @@
     "step1Title": "Naskenujte čárový kód",
     "step1Body": "V Open Food Facts kontrolujeme identitu produktu, složení, výživové údaje, alergeny a data Nutri-Score a NOVA.",
     "step2Title": "V případě potřeby použijte fotografii",
-    "step2Body": "Premium dokáže přečíst chybějící etiketu obalu ze dvou fotografií — přední strany a jedné úplné informační etikety — nebo opatrně rozpoznat nebalenou potravinu z jedné fotografie.",
+    "step2Body": "Premium dokáže přečíst chybějící etiketu obalu ze dvou fotografií - přední strany a jedné úplné informační etikety - nebo opatrně rozpoznat nebalenou potravinu z jedné fotografie.",
     "step3Title": "Získejte své hodnocení",
-    "step3Body": "Deterministické hodnocení 1–10 používá pouze dostupná fakta a vámi zvolené cíle. AI vysvětluje výsledek v aktivním jazyce aplikace."
+    "step3Body": "Deterministické hodnocení 1-10 používá pouze dostupná fakta a vámi zvolené cíle. AI vysvětluje výsledek v aktivním jazyce aplikace."
   },
   "principle": {
     "eyebrow": "PRAVIDLO INGREFIT",
@@ -62,7 +62,7 @@
   "personal": {
     "eyebrow": "JEDEN PRODUKT, RŮZNÍ LIDÉ",
     "title": "Osobní je lepší než obecné",
-    "body": "Stejné cereálie mohou mít dobré hodnocení pro cíl s vyšším příjmem vlákniny a špatné pro někoho, kdo omezuje cukr. Vaše cíle, způsob stravování, alergeny a seznam složek, kterým se vyhýbáte, mění vysvětlení — nikdy však výchozí fakta.",
+    "body": "Stejné cereálie mohou mít dobré hodnocení pro cíl s vyšším příjmem vlákniny a špatné pro někoho, kdo omezuje cukr. Vaše cíle, způsob stravování, alergeny a seznam složek, kterým se vyhýbáte, mění vysvětlení - nikdy však výchozí fakta.",
     "goal1": "Méně cukru",
     "goal2": "Více bílkovin",
     "goal3": "Bez lepku",
@@ -138,5 +138,15 @@
     "termsAcceptTitle": "Přijatelné používání",
     "termsAcceptBody": "Neautomatizujte zneužívající provoz, neobcházejte řízení přístupu, nezkoušejte chráněné trasy, nenahrávejte nesouvisející nebo protiprávní obrázky a nenarušujte službu.",
     "back": "Zpět na IngreFit"
+  },
+  "gallery": {
+    "previous": "Předchozí snímek",
+    "next": "Další snímek",
+    "screenAlt": "Obrazovka aplikace IngreFit"
+  },
+  "cookies": {
+    "text": "Používáme volitelné analytické soubory cookie ke zlepšování IngreFit. Web funguje i bez nich.",
+    "accept": "Povolit analytiku",
+    "reject": "Jen nezbytné"
   }
 }

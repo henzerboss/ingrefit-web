@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "IngreFit — AI-madscanner til dine mål",
+    "title": "IngreFit - AI-madscanner til dine mål",
     "description": "Scan en stregkode eller fødevareetiket, og få en faktabaseret, personlig egnethedsscore på en 10-punktsskala til dine ernæringsmål."
   },
   "nav": {
@@ -44,9 +44,9 @@
     "step1Title": "Scan stregkoden",
     "step1Body": "Vi tjekker Open Food Facts for produktidentitet, ingredienser, næringsindhold, allergener samt Nutri-Score- og NOVA-data.",
     "step2Title": "Brug et foto, når det er nødvendigt",
-    "step2Body": "Premium kan læse en manglende emballageetiket ud fra to fotos — forsiden og én komplet informationsetiket — eller forsigtigt identificere mad uden emballage ud fra ét foto.",
+    "step2Body": "Premium kan læse en manglende emballageetiket ud fra to fotos - forsiden og én komplet informationsetiket - eller forsigtigt identificere mad uden emballage ud fra ét foto.",
     "step3Title": "Få din score",
-    "step3Body": "En deterministisk score fra 1–10 bruger kun tilgængelige fakta og de mål, du har valgt. AI forklarer resultatet på appens aktive sprog."
+    "step3Body": "En deterministisk score fra 1-10 bruger kun tilgængelige fakta og de mål, du har valgt. AI forklarer resultatet på appens aktive sprog."
   },
   "principle": {
     "eyebrow": "INGREFIT-REGLEN",
@@ -62,7 +62,7 @@
   "personal": {
     "eyebrow": "ÉT PRODUKT, FORSKELLIGE MENNESKER",
     "title": "Personligt er bedre end generelt",
-    "body": "De samme morgenmadsprodukter kan score godt for et mål om flere fibre og dårligt for en person, der begrænser sukker. Dine mål, dit spisemønster, allergener og din liste over ting, du undgår, ændrer forklaringen — aldrig de underliggende fakta.",
+    "body": "De samme morgenmadsprodukter kan score godt for et mål om flere fibre og dårligt for en person, der begrænser sukker. Dine mål, dit spisemønster, allergener og din liste over ting, du undgår, ændrer forklaringen - aldrig de underliggende fakta.",
     "goal1": "Mindre sukker",
     "goal2": "Mere protein",
     "goal3": "Glutenfri",
@@ -138,5 +138,15 @@
     "termsAcceptTitle": "Acceptabel brug",
     "termsAcceptBody": "Automatiser ikke misbrugstrafik, omgå ikke adgangskontroller, test ikke beskyttede ruter, upload ikke uvedkommende eller ulovlige billeder, og forstyr ikke tjenesten.",
     "back": "Tilbage til IngreFit"
+  },
+  "gallery": {
+    "previous": "Forrige skærmbillede",
+    "next": "Næste skærmbillede",
+    "screenAlt": "IngreFit-appskærm"
+  },
+  "cookies": {
+    "text": "Vi bruger valgfrie analysecookies til at forbedre IngreFit. Webstedet fungerer uden dem.",
+    "accept": "Tillad analyse",
+    "reject": "Kun nødvendige"
   }
 }

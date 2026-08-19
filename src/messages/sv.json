@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "IngreFit — AI-matskanner för dina mål",
+    "title": "IngreFit - AI-matskanner för dina mål",
     "description": "Skanna en streckkod eller livsmedelsetikett och få ett faktabaserat, personligt lämplighetsbetyg på en 10-gradig skala för dina kostmål."
   },
   "nav": {
@@ -44,9 +44,9 @@
     "step1Title": "Skanna streckkoden",
     "step1Body": "Vi kontrollerar Open Food Facts för produktidentitet, ingredienser, näringsinnehåll, allergener samt Nutri-Score- och NOVA-data.",
     "step2Title": "Använd ett foto när det behövs",
-    "step2Body": "Premium kan läsa en saknad förpackningsetikett från två foton — framsidan och en fullständig informationsetikett — eller försiktigt identifiera mat utan förpackning från ett foto.",
+    "step2Body": "Premium kan läsa en saknad förpackningsetikett från två foton - framsidan och en fullständig informationsetikett - eller försiktigt identifiera mat utan förpackning från ett foto.",
     "step3Title": "Få ditt betyg",
-    "step3Body": "Ett deterministiskt betyg från 1–10 använder bara tillgängliga fakta och de mål du har valt. AI förklarar resultatet på appens aktiva språk."
+    "step3Body": "Ett deterministiskt betyg från 1-10 använder bara tillgängliga fakta och de mål du har valt. AI förklarar resultatet på appens aktiva språk."
   },
   "principle": {
     "eyebrow": "INGREFIT-REGELN",
@@ -62,7 +62,7 @@
   "personal": {
     "eyebrow": "EN PRODUKT, OLIKA PERSONER",
     "title": "Personligt är bättre än generellt",
-    "body": "Samma flingor kan få ett bra betyg för ett mål om mer fiber och ett dåligt för någon som begränsar socker. Dina mål, ditt ätmönster, allergener och din undviklista ändrar förklaringen — aldrig de bakomliggande fakta.",
+    "body": "Samma flingor kan få ett bra betyg för ett mål om mer fiber och ett dåligt för någon som begränsar socker. Dina mål, ditt ätmönster, allergener och din undviklista ändrar förklaringen - aldrig de bakomliggande fakta.",
     "goal1": "Mindre socker",
     "goal2": "Mer protein",
     "goal3": "Glutenfri",
@@ -138,5 +138,15 @@
     "termsAcceptTitle": "Godtagbar användning",
     "termsAcceptBody": "Automatisera inte otillbörlig trafik, kringgå inte åtkomstkontroller, testa inte skyddade rutter, ladda inte upp orelaterade eller olagliga bilder och stör inte tjänsten.",
     "back": "Tillbaka till IngreFit"
+  },
+  "gallery": {
+    "previous": "Föregående skärmbild",
+    "next": "Nästa skärmbild",
+    "screenAlt": "IngreFit-appskärm"
+  },
+  "cookies": {
+    "text": "Vi använder valfria analyscookies för att förbättra IngreFit. Webbplatsen fungerar utan dem.",
+    "accept": "Tillåt analys",
+    "reject": "Endast nödvändiga"
   }
 }

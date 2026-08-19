@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "IngreFit — escáner de alimentos con IA para tus objetivos",
+    "title": "IngreFit - escáner de alimentos con IA para tus objetivos",
     "description": "Escanea un código de barras o una etiqueta de alimentos y obtén una puntuación personalizada y basada en hechos, sobre 10, según tus objetivos nutricionales."
   },
   "nav": {
@@ -44,7 +44,7 @@
     "step1Title": "Escanea el código de barras",
     "step1Body": "Consultamos Open Food Facts para obtener la identidad, los ingredientes, la información nutricional, los alérgenos y los datos de Nutri-Score y NOVA.",
     "step2Title": "Usa una foto cuando haga falta",
-    "step2Body": "Premium puede leer una etiqueta de envase que falte a partir de dos fotos —el frontal y una etiqueta informativa completa— o identificar con cautela un alimento sin envase a partir de una foto.",
+    "step2Body": "Premium puede leer una etiqueta de envase que falte a partir de dos fotos -el frontal y una etiqueta informativa completa- o identificar con cautela un alimento sin envase a partir de una foto.",
     "step3Title": "Obtén tu puntuación",
     "step3Body": "Una puntuación determinista de 1 a 10 utiliza solo los datos disponibles y los objetivos que hayas elegido. La IA explica el resultado en el idioma activo de la app."
   },
@@ -138,5 +138,15 @@
     "termsAcceptTitle": "Uso aceptable",
     "termsAcceptBody": "No automatices tráfico abusivo, eludas controles de acceso, sondees rutas protegidas, subas imágenes no relacionadas o ilícitas ni interfieras con el servicio.",
     "back": "Volver a IngreFit"
+  },
+  "gallery": {
+    "previous": "Captura anterior",
+    "next": "Captura siguiente",
+    "screenAlt": "Pantalla de la app IngreFit"
+  },
+  "cookies": {
+    "text": "Usamos cookies de analítica opcionales para mejorar IngreFit. El sitio funciona sin ellas.",
+    "accept": "Permitir analítica",
+    "reject": "Solo necesarias"
   }
 }

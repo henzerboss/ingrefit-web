@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "IngreFit — AI pārtikas skeneris jūsu mērķiem",
+    "title": "IngreFit - AI pārtikas skeneris jūsu mērķiem",
     "description": "Noskenējiet svītrkodu vai pārtikas etiķeti un saņemiet uz faktiem balstītu, personalizētu atbilstības vērtējumu 10 punktu skalā atbilstoši saviem uztura mērķiem."
   },
   "nav": {
@@ -44,9 +44,9 @@
     "step1Title": "Skenējiet svītrkodu",
     "step1Body": "Mēs pārbaudām Open Food Facts produkta identitāti, sastāvdaļas, uzturvērtību, alergēnus, kā arī Nutri-Score un NOVA datus.",
     "step2Title": "Izmantojiet fotoattēlu, kad nepieciešams",
-    "step2Body": "Premium var nolasīt trūkstošu iepakojuma etiķeti no diviem fotoattēliem — priekšpuses un vienas pilnas informācijas etiķetes — vai piesardzīgi atpazīt neiepakotu pārtiku no viena fotoattēla.",
+    "step2Body": "Premium var nolasīt trūkstošu iepakojuma etiķeti no diviem fotoattēliem - priekšpuses un vienas pilnas informācijas etiķetes - vai piesardzīgi atpazīt neiepakotu pārtiku no viena fotoattēla.",
     "step3Title": "Saņemiet savu vērtējumu",
-    "step3Body": "Deterministisks vērtējums 1–10 izmanto tikai pieejamos faktus un jūsu izvēlētos mērķus. AI izskaidro rezultātu lietotnes aktīvajā valodā."
+    "step3Body": "Deterministisks vērtējums 1-10 izmanto tikai pieejamos faktus un jūsu izvēlētos mērķus. AI izskaidro rezultātu lietotnes aktīvajā valodā."
   },
   "principle": {
     "eyebrow": "INGREFIT NOTEIKUMS",
@@ -62,7 +62,7 @@
   "personal": {
     "eyebrow": "VIENS PRODUKTS, DAŽĀDI CILVĒKI",
     "title": "Personīgais ir labāks par vispārīgo",
-    "body": "Vienas un tās pašas brokastu pārslas var saņemt labu vērtējumu mērķim ar vairāk šķiedrvielu un sliktu vērtējumu cilvēkam, kurš ierobežo cukuru. Jūsu mērķi, ēšanas paradumi, alergēni un izvairāmo vielu saraksts maina skaidrojumu — nekad pamatā esošos faktus.",
+    "body": "Vienas un tās pašas brokastu pārslas var saņemt labu vērtējumu mērķim ar vairāk šķiedrvielu un sliktu vērtējumu cilvēkam, kurš ierobežo cukuru. Jūsu mērķi, ēšanas paradumi, alergēni un izvairāmo vielu saraksts maina skaidrojumu - nekad pamatā esošos faktus.",
     "goal1": "Mazāk cukura",
     "goal2": "Vairāk olbaltumvielu",
     "goal3": "Bez glutēna",
@@ -112,7 +112,7 @@
     "privacy": "Privātums",
     "terms": "Noteikumi",
     "disclaimer": "IngreFit sniedz vispārīgu informāciju, nevis medicīnisku padomu. Alerģiju vai veselības stāvokļu gadījumā vienmēr pārbaudiet iepakojumu.",
-    "off": "Produktu dati var būt iegūti no Open Food Facts — kopienas veidotas datubāzes, kas publicēta saskaņā ar Open Database License (ODbL) v1.0 (https://opendatacommons.org/licenses/odbl/1-0/). Datu pilnīgums un precizitāte netiek garantēta; iepakojums vienmēr ir noteicošais avots.",
+    "off": "Produktu dati var būt iegūti no Open Food Facts - kopienas veidotas datubāzes, kas publicēta saskaņā ar Open Database License (ODbL) v1.0 (https://opendatacommons.org/licenses/odbl/1-0/). Datu pilnīgums un precizitāte netiek garantēta; iepakojums vienmēr ir noteicošais avots.",
     "attribution": "Nutri-Score ir Santé publique France reģistrēta preču zīme. IngreFit rāda publicētos vērtējumus kā datus un nav saistīts ar Nutri-Score, NOVA vai Open Food Facts programmām, nav to apstiprināts vai sertificēts.",
     "aiNotice": "Premium kopsavilkumus ģenerē AI modelis, pamatojoties uz deterministisko vērtējumu. Pašu vērtējumu nekad nerada AI modelis."
   },
@@ -138,5 +138,15 @@
     "termsAcceptTitle": "Pieņemama izmantošana",
     "termsAcceptBody": "Neautomatizējiet ļaunprātīgu datplūsmu, neapiejiet piekļuves kontroli, nepārbaudiet aizsargātus maršrutus, neaugšupielādējiet nesaistītus vai nelikumīgus attēlus un netraucējiet pakalpojuma darbību.",
     "back": "Atpakaļ uz IngreFit"
+  },
+  "gallery": {
+    "previous": "Iepriekšējais ekrānuzņēmums",
+    "next": "Nākamais ekrānuzņēmums",
+    "screenAlt": "IngreFit lietotnes ekrāns"
+  },
+  "cookies": {
+    "text": "Mēs izmantojam neobligātus analītikas sīkfailus, lai uzlabotu IngreFit. Vietne darbojas arī bez tiem.",
+    "accept": "Atļaut analītiku",
+    "reject": "Tikai nepieciešamie"
   }
 }

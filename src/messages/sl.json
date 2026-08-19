@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "IngreFit — AI-skener hrane za vaše cilje",
+    "title": "IngreFit - AI-skener hrane za vaše cilje",
     "description": "Skenirajte črtno kodo ali etiketo živila in prejmite stvarno, prilagojeno oceno ustreznosti od 1 do 10 glede na svoje prehranske cilje."
   },
   "nav": {
@@ -44,7 +44,7 @@
     "step1Title": "Skenirajte črtno kodo",
     "step1Body": "V Open Food Facts preverimo identiteto izdelka, sestavine, hranilne vrednosti, alergene ter podatke Nutri-Score in NOVA.",
     "step2Title": "Po potrebi uporabite fotografijo",
-    "step2Body": "Premium lahko prebere manjkajočo etiketo embalaže iz dveh fotografij — sprednje strani in ene popolne informativne etikete — ali previdno prepozna hrano brez embalaže iz ene fotografije.",
+    "step2Body": "Premium lahko prebere manjkajočo etiketo embalaže iz dveh fotografij - sprednje strani in ene popolne informativne etikete - ali previdno prepozna hrano brez embalaže iz ene fotografije.",
     "step3Title": "Pridobite svojo oceno",
     "step3Body": "Deterministična ocena od 1 do 10 uporablja samo razpoložljiva dejstva in cilje, ki ste jih izbrali. AI razloži rezultat v aktivnem jeziku aplikacije."
   },
@@ -62,7 +62,7 @@
   "personal": {
     "eyebrow": "EN IZDELEK, RAZLIČNI LJUDJE",
     "title": "Osebno je boljše od splošnega",
-    "body": "Ista žita lahko dobijo dobro oceno za cilj z več vlakninami in slabo za nekoga, ki omejuje sladkor. Vaši cilji, način prehranjevanja, alergeni in seznam sestavin, ki se jim izogibate, spremenijo razlago — nikoli pa osnovnih dejstev.",
+    "body": "Ista žita lahko dobijo dobro oceno za cilj z več vlakninami in slabo za nekoga, ki omejuje sladkor. Vaši cilji, način prehranjevanja, alergeni in seznam sestavin, ki se jim izogibate, spremenijo razlago - nikoli pa osnovnih dejstev.",
     "goal1": "Manj sladkorja",
     "goal2": "Več beljakovin",
     "goal3": "Brez glutena",
@@ -138,5 +138,15 @@
     "termsAcceptTitle": "Sprejemljiva uporaba",
     "termsAcceptBody": "Ne avtomatizirajte zlorabnega prometa, ne zaobidite nadzora dostopa, ne preizkušajte zaščitenih poti, ne nalagajte nepovezanih ali nezakonitih slik in ne motite storitve.",
     "back": "Nazaj na IngreFit"
+  },
+  "gallery": {
+    "previous": "Prejšnji posnetek zaslona",
+    "next": "Naslednji posnetek zaslona",
+    "screenAlt": "Zaslon aplikacije IngreFit"
+  },
+  "cookies": {
+    "text": "Za izboljšanje IngreFit uporabljamo neobvezne analitične piškotke. Spletno mesto deluje tudi brez njih.",
+    "accept": "Dovoli analitiko",
+    "reject": "Samo nujni"
   }
 }
