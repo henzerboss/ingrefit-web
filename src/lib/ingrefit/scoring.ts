@@ -1,5 +1,7 @@
 import { createHash } from 'node:crypto';
 
+import { productDataConfidence } from './dataQuality';
+
 import type {
   AnalysisProfile,
   DietId,
@@ -558,12 +560,29 @@ export function scoreProduct(facts: ProductFacts, profile: AnalysisProfile): Sco
 
   // --- 2. Baseline quality (always) ---------------------------------------
   const base = computeBase(facts);
-  signals.push(...base.signals);
 
-  // --- 3. Normalized personalization --------------------------------------
+  // --- 3. Evidence confidence + normalized personalization -----------------
   const estimated = facts.nutritionBasis === 'estimated_visual' || facts.nutritionBasis === 'estimated_text';
-  const dataConfidence = facts.nutritionBasis === 'estimated_visual' ? 0.55 : facts.nutritionBasis === 'estimated_text' ? 0.75 : 1;
-  const confidence = round(Math.min(base.confidence, dataConfidence), 2);
+  const basisConfidence = facts.nutritionBasis === 'estimated_visual'
+    ? 0.55
+    : facts.nutritionBasis === 'estimated_text'
+      ? 0.75
+      : 1;
+  const confidence = round(Math.min(base.confidence, basisConfidence, productDataConfidence(facts)), 2);
+
+  // Pull the *whole* baseline towards neutral when evidence is incomplete, not
+  // only AI estimates. This prevents a sparse OFF row with favourable zeroes
+  // from inheriting an undamped Nutri-Score A baseline. Scale the displayed
+  // base signals by the same amount so their impacts still reconcile with the
+  // badge shown to the user.
+  const baseAfterConfidence = NEUTRAL_BASE + (base.score - NEUTRAL_BASE) * confidence;
+  const rawBaseSignalDelta = base.signals.reduce((sum, signal) => sum + signal.impact, 0);
+  const adjustedBaseDelta = baseAfterConfidence - NEUTRAL_BASE;
+  const baseSignalFactor = Math.abs(rawBaseSignalDelta) > 0.0001 ? adjustedBaseDelta / rawBaseSignalDelta : 1;
+  signals.push(...base.signals.map((signal) => ({
+    ...signal,
+    impact: round(signal.impact * baseSignalFactor),
+  })));
 
   const outcomes = evaluateRules(facts, profile);
   let weightSum = 0;
@@ -584,11 +603,23 @@ export function scoreProduct(facts: ProductFacts, profile: AnalysisProfile): Sco
 
   let personalDelta = 0;
   if (weightSum > 0) {
-    personalDelta = round((weightedFit / weightSum) * PERSONAL_RANGE * confidence * coverage, 2);
+    const rawPersonalDelta = (weightedFit / weightSum) * PERSONAL_RANGE * coverage;
+
+    // Confidence must be applied to the score the old model would actually
+    // have shown, i.e. after the normal 1..10 clamp. Otherwise a hidden raw
+    // value such as 11.4 can still become 9+ at 60% confidence even though the
+    // visible raw score was only 10. Limit the personal component first, then
+    // pull that visible result towards neutral.
+    const boundedRawScore = Math.max(1, Math.min(10, base.score + rawPersonalDelta));
+    const boundedRawPersonalDelta = boundedRawScore - base.score;
+    const personalScale = Math.abs(rawPersonalDelta) > 0.0001 ? boundedRawPersonalDelta / rawPersonalDelta : 1;
+    personalDelta = round(boundedRawPersonalDelta * confidence, 2);
+
     for (const { outcome, weight, goal } of applicable) {
       // Each signal's displayed impact is its exact share of personalDelta, so
       // the numbers on screen add up to the number in the badge.
-      const share = round(((weight * outcome.fit) / weightSum) * PERSONAL_RANGE * confidence * coverage);
+      const rawShare = ((weight * outcome.fit) / weightSum) * PERSONAL_RANGE * coverage;
+      const share = round(rawShare * personalScale * confidence);
       signals.push({
         id: `personal:${outcome.rule}`,
         code: outcome.code,
@@ -603,12 +634,16 @@ export function scoreProduct(facts: ProductFacts, profile: AnalysisProfile): Sco
   }
 
   // --- 4. Final score ------------------------------------------------------
-  const baseAfterConfidence = NEUTRAL_BASE + (base.score - NEUTRAL_BASE) * (facts.nutritionBasis === 'declared' ? 1 : confidence);
   const warningPenalty = signals
     .filter((signal) => signal.scope === 'blocker' && signal.impact < 0)
     .reduce((total, signal) => total + signal.impact, 0);
 
   let score = baseAfterConfidence + personalDelta + warningPenalty;
+  // Explicit high-risk evidence keeps its hard safety ceiling even when other
+  // parts of the record are incomplete and therefore pulled towards neutral.
+  if (facts.additives.some((additive) => additive.risk === 'high')) {
+    score = Math.min(score, HIGH_RISK_ADDITIVE_CEILING);
+  }
   if (typeof facts.alcoholPercent === 'number' && facts.alcoholPercent > ALCOHOL_CEILING_ABV) {
     score = Math.min(score, ALCOHOL_CEILING);
   }
@@ -616,7 +651,18 @@ export function scoreProduct(facts: ProductFacts, profile: AnalysisProfile): Sco
   if (blocked) score = Math.min(score, BLOCKED_CEILING);
   score = round(score);
 
-  const verdict: Verdict = blocked ? 'blocked' : score >= 8 ? 'great' : score >= 6 ? 'good' : score >= 4 ? 'mixed' : 'poor';
+  // A low-confidence result may still have a numerically high estimate, but it
+  // must not be labelled as a confident "great fit". Recommendations already
+  // require higher confidence; this guard mainly protects direct sparse scans.
+  const verdict: Verdict = blocked
+    ? 'blocked'
+    : score >= 8 && confidence >= 0.7
+      ? 'great'
+      : score >= 6
+        ? 'good'
+        : score >= 4
+          ? 'mixed'
+          : 'poor';
 
   return {
     score,
@@ -637,7 +683,7 @@ export function scoreProduct(facts: ProductFacts, profile: AnalysisProfile): Sco
  */
 function fingerprintOf(score: number, verdict: Verdict, signals: ScoreSignal[], facts: ProductFacts): string {
   const payload = JSON.stringify({
-    v: 2,
+    v: 3,
     score,
     verdict,
     source: facts.source,

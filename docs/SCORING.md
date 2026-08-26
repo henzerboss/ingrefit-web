@@ -4,7 +4,8 @@ The score is deterministic. It is computed before any model is called, and no
 model may change it.
 
 ```
-final = clamp(baseline + personal + warnings, 1, 10)
+raw = clamp(baseline + personal, 1, 10)
+final = clamp(5.5 + (raw - 5.5) × confidence + warnings, 1, 10)
 ```
 
 Two properties are non-negotiable and are covered by `npm run test:scoring`:
@@ -71,7 +72,8 @@ goals** — a maximum, never a sum:
 | Processing | less processing 1.0, balanced 0.4, digestion 0.3, heart 0.2, Mediterranean diet 0.5 |
 
 ```
-personal = (Σ weightᵢ × fitᵢ / Σ weightᵢ) × 2.5 × confidence × coverage
+raw_personal = (Σ weightᵢ × fitᵢ / Σ weightᵢ) × 2.5 × coverage
+personal = bounded(raw_personal) × confidence
 coverage = min(1, 0.5 + Σ weight / 4)
 ```
 
@@ -103,24 +105,27 @@ blocks**, because it cannot see through translations.
 
 ## 4. Confidence
 
-| Basis | Confidence |
+| Evidence | Confidence effect |
 | --- | ---: |
-| Declared package / Open Food Facts values | 1.0 |
-| AI estimate from product identity and ingredients | 0.75 |
-| AI estimate from a photo | 0.55 |
-| Baseline derived without Nutri-Score | ×0.85 |
-| Baseline with <3 nutrient values | ×0.4 |
+| 8 independent nutrient facts | up to 1.00 |
+| 7 / 6 / 5 / 4 nutrient facts | up to 0.95 / 0.90 / 0.82 / 0.72 |
+| Fewer than 4 nutrient facts | up to 0.55 |
+| No ingredient evidence (except trusted simple zero-macro categories such as water) | cap 0.88 |
+| All core macros explicitly zero + no ingredients + non-water category | cap 0.55 |
+| AI estimate from product identity and ingredients | cap 0.75 |
+| AI estimate from a photo | cap 0.55 |
+| Baseline derived without Nutri-Score | cap 0.85 |
+| Baseline with too little nutrition for a proxy | cap 0.40 |
 
-Confidence scales the personal adjustment and pulls an estimated baseline back
-towards neutral, so a guess can never produce a confident-looking extreme.
+Confidence now applies to declared OFF rows as well as estimates. The visible raw score is clamped first, then pulled towards the neutral 5.5 baseline. This prevents a sparse row whose favourable zeroes would previously saturate at 10/10 from retaining an extreme score. Explicit high-risk-additive, alcohol and hard-restriction ceilings remain in force after confidence adjustment.
 
 ## 5. Verdicts
 
 | Condition | Verdict |
 | --- | --- |
 | Any hard restriction | Not suitable |
-| 8.0–10.0 | Great fit |
-| 6.0–7.9 | Good fit |
+| 8.0–10.0 with confidence ≥0.70 | Great fit |
+| 6.0–7.9, or any ≥8.0 result with confidence <0.70 | Good fit |
 | 4.0–5.9 | Mixed fit |
 | 1.0–3.9 | Poor fit |
 

@@ -6,6 +6,7 @@
  * changing a threshold, never after.
  */
 
+import { recommendationQualityGate } from '../src/lib/ingrefit/dataQuality';
 import { scoreProduct } from '../src/lib/ingrefit/scoring';
 import type { AnalysisProfile, DietId, GoalId, ProductFacts } from '../src/lib/ingrefit/types';
 
@@ -51,6 +52,20 @@ const COLA = product({
 const OATS = product({
   name: 'Oats', nutriScore: 'a', novaGroup: 1,
   nutrition: { ...emptyNutrition, energyKcal100g: 370, sugars100g: 1, protein100g: 13, fat100g: 7, saturatedFat100g: 1.2, fiber100g: 10, salt100g: 0.01 },
+});
+
+
+const SERVIVITA_ZERO_SAUCE = product({
+  barcode: '8413412209763', name: 'BBQ Sauce Spicy 0%', brand: 'servivita', quantity: '320ml',
+  categories: ['condiments', 'sauces', 'barbecue sauces', 'groceries'], nutriScore: 'a',
+  nutrition: { ...emptyNutrition, energyKcal100g: 0, protein100g: 0, carbohydrates100g: 0, sugars100g: 0, fat100g: 0, saturatedFat100g: 0, salt100g: 0.2, sodium100g: 0.08 },
+  completeness: 65,
+});
+
+const PLAIN_WATER = product({
+  name: 'Mineral water', categories: ['beverages', 'waters', 'mineral waters'], nutriScore: 'a', nutritionReference: '100ml',
+  nutrition: { ...emptyNutrition, energyKcal100g: 0, protein100g: 0, carbohydrates100g: 0, sugars100g: 0, fat100g: 0, saturatedFat100g: 0, salt100g: 0.02 },
+  completeness: 65,
 });
 
 const ALL_GOALS: GoalId[] = ['balanced', 'weight_loss', 'muscle_gain', 'high_protein', 'low_sugar', 'low_sodium', 'high_fiber', 'minimally_processed', 'heart_health', 'steady_energy', 'digestive_wellness', 'low_saturated_fat'];
@@ -154,6 +169,32 @@ const cases: Case[] = [
     }),
     profile: profile(['high_protein', 'heart_health']),
     expect: (r) => (r.confidence <= 0.6 ? null : `expected low confidence, got ${r.confidence}`),
+  },
+  {
+    title: 'Sparse all-zero sauce cannot present as a fully trusted 10/10',
+    facts: SERVIVITA_ZERO_SAUCE, profile: profile(['low_sugar', 'low_saturated_fat']),
+    expect: (r) => (r.confidence <= 0.55 && r.score <= 8 && r.verdict !== 'great'
+      ? null
+      : `expected confidence <= 0.55, score <= 8 and non-great verdict, got ${r.confidence} / ${r.score} / ${r.verdict}`),
+  },
+  {
+    title: 'Plain water is not treated as a suspicious all-zero food',
+    facts: PLAIN_WATER, profile: profile(['low_sugar']),
+    expect: (r) => (r.confidence >= 0.9 ? null : `expected water confidence >= 0.9, got ${r.confidence}`),
+  },
+  {
+    title: 'Sparse all-zero sauce is rejected as a recommendation',
+    facts: SERVIVITA_ZERO_SAUCE, profile: profile(['balanced']),
+    expect: () => (!recommendationQualityGate(SERVIVITA_ZERO_SAUCE, profile(['balanced'])) ? null : 'expected recommendation quality gate to reject'),
+  },
+  {
+    title: 'Ingredient-sensitive profiles reject candidates without composition evidence',
+    facts: product({ name: 'Well-labelled nutrition', nutriScore: 'a', nutrition: { ...emptyNutrition, energyKcal100g: 120, protein100g: 6, carbohydrates100g: 15, sugars100g: 3, fat100g: 4, saturatedFat100g: 1, salt100g: 0.3 } }),
+    profile: profile(['balanced'], { allergens: ['milk'] }),
+    expect: () => {
+      const candidate = product({ name: 'Well-labelled nutrition', nutriScore: 'a', nutrition: { ...emptyNutrition, energyKcal100g: 120, protein100g: 6, carbohydrates100g: 15, sugars100g: 3, fat100g: 4, saturatedFat100g: 1, salt100g: 0.3 } });
+      return !recommendationQualityGate(candidate, profile(['balanced'], { allergens: ['milk'] })) ? null : 'expected missing ingredients to reject for allergen profile';
+    },
   },
   {
     title: 'Alcohol is penalised regardless of goals',

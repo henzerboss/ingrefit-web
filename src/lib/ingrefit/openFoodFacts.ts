@@ -37,6 +37,9 @@ export interface OpenFoodFactsProduct {
   nutriments?: Record<string, unknown>;
   serving_size?: string;
   nutrition_data_per?: string;
+  nutrition_data_prepared_per?: string;
+  product_quantity?: number | string;
+  product_quantity_unit?: string;
 }
 
 interface OpenFoodFactsResponse {
@@ -53,7 +56,8 @@ const FIELDS = [
   'ingredients_analysis_tags', 'nutrient_levels',
   'nutriscore_grade', 'nutrition_grades', 'nova_group', 'ecoscore_grade', 'environmental_score_grade',
   'alcohol_by_volume', 'alcohol_value', 'alcohol_unit',
-  'nutriments', 'serving_size', 'nutrition_data_per',
+  'nutriments', 'serving_size', 'nutrition_data_per', 'nutrition_data_prepared_per',
+  'product_quantity', 'product_quantity_unit',
 ].join(',');
 
 const CACHE_TTL_DAYS = Number(process.env.INGREFIT_PRODUCT_CACHE_DAYS ?? '30');
@@ -136,9 +140,18 @@ export function hasContaminatedIngredients(value: string | null): boolean {
 }
 
 export function nutritionFieldCount(product: ProductFacts): number {
-  return Object.entries(product.nutrition)
-    .filter(([key]) => key !== 'servingSize')
-    .filter(([, value]) => typeof value === 'number').length;
+  // Salt and sodium describe the same underlying fact and must not count twice.
+  const values: unknown[] = [
+    product.nutrition.energyKcal100g,
+    product.nutrition.protein100g,
+    product.nutrition.carbohydrates100g,
+    product.nutrition.sugars100g,
+    product.nutrition.fat100g,
+    product.nutrition.saturatedFat100g,
+    product.nutrition.fiber100g,
+    product.nutrition.salt100g ?? product.nutrition.sodium100g,
+  ];
+  return values.filter((value) => typeof value === 'number' && Number.isFinite(value)).length;
 }
 
 function normalizeNutrition(product: OpenFoodFactsProduct): NutritionFacts {
@@ -157,14 +170,27 @@ function normalizeNutrition(product: OpenFoodFactsProduct): NutritionFacts {
   };
 }
 
-export function computeCompleteness(product: Pick<ProductFacts, 'name' | 'brand' | 'quantity' | 'ingredientsText' | 'nutrition'>): number {
-  const fieldsToCheck: unknown[] = [
-    product.name, product.brand, product.quantity, product.ingredientsText,
-    product.nutrition.energyKcal100g, product.nutrition.protein100g, product.nutrition.carbohydrates100g,
-    product.nutrition.sugars100g, product.nutrition.fat100g, product.nutrition.saturatedFat100g,
-    product.nutrition.fiber100g, product.nutrition.salt100g ?? product.nutrition.sodium100g,
+export function computeCompleteness(product: Pick<ProductFacts, 'name' | 'brand' | 'quantity' | 'ingredientsText' | 'ingredients' | 'nutrition'>): number {
+  // Completeness is intentionally weighted by usefulness. A product name and
+  // brand should not compensate for a missing ingredient list, and salt/sodium
+  // represent one fact rather than two. Total weight is exactly 10.
+  const weighted: Array<[unknown, number]> = [
+    [product.name, 0.5],
+    [product.brand, 0.25],
+    [product.quantity, 0.25],
+    [product.ingredientsText || product.ingredients.length > 0 ? true : null, 3],
+    [product.nutrition.energyKcal100g, 1],
+    [product.nutrition.protein100g, 0.8],
+    [product.nutrition.carbohydrates100g, 0.8],
+    [product.nutrition.sugars100g, 0.8],
+    [product.nutrition.fat100g, 0.8],
+    [product.nutrition.saturatedFat100g, 0.8],
+    [product.nutrition.fiber100g, 0.5],
+    [product.nutrition.salt100g ?? product.nutrition.sodium100g, 0.5],
   ];
-  return Math.round((fieldsToCheck.filter((value) => value !== null && value !== undefined).length / fieldsToCheck.length) * 100);
+  const available = weighted.reduce((sum, [value, weight]) =>
+    sum + (value !== null && value !== undefined ? weight : 0), 0);
+  return Math.round((available / 10) * 100);
 }
 
 export function unknownFields(product: ProductFacts): string[] {

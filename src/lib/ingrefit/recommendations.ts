@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client';
 
+import { recommendationQualityGate } from './dataQuality';
 import { safeDb } from './db';
 import {
   categoryTagsFromRaw,
@@ -25,7 +26,7 @@ export interface ProductRecommendation {
 const MAX_RECOMMENDATIONS = 10;
 const MIN_SCORE_GAIN = 0.7;
 const MIN_BASE_GAIN = 0.3;
-const MIN_CONFIDENCE = 0.55;
+const MIN_CONFIDENCE = 0.72;
 const WORLD_MARKET_TAG = 'en:world';
 
 const COUNTRY_TAG_OVERRIDES: Record<string, string> = {
@@ -223,7 +224,7 @@ export async function findHealthierRecommendations(input: {
     if (!similarity) continue;
 
     const product = productFactsFromRaw(raw, row.barcode, input.locale);
-    if (!hasEnoughFacts(product)) continue;
+    if (!hasEnoughFacts(product) || !recommendationQualityGate(product, input.profile)) continue;
     const scored = scoreProduct(product, input.profile);
     if (scored.blocked || scored.confidence < MIN_CONFIDENCE) continue;
 

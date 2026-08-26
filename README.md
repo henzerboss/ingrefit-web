@@ -20,10 +20,11 @@ If the local Open Food Facts mirror was imported before market filtering existed
 
 ```bash
 node scripts/import-openfoodfacts.mjs --backfill-countries
+node scripts/import-openfoodfacts.mjs --backfill-nutrition-basis
 psql "$DATABASE_URL" -f scripts/add-recommendation-index.sql
 ```
 
-The indexes are created concurrently. `countries_tags` is stored inside the existing JSON column, so Prisma/database schema migrations are not required. Until both indexes exist, the recommendation endpoint safely falls back to the recent ProductCache pool and never performs an unindexed mirror scan.
+The indexes are created concurrently. `countries_tags` and nutrition-basis metadata are stored inside the existing JSON column, so Prisma/database schema migrations are not required. The nutrition-basis backfill restores `100g` vs `100ml` display metadata for mirrors imported before those fields were retained. Until both indexes exist, the recommendation endpoint safely falls back to the recent ProductCache pool and never performs an unindexed mirror scan.
 
 ## Routes
 

@@ -92,6 +92,7 @@ Enrich an existing mirror once without rebuilding nutrition or images:
 
 ```bash
 node scripts/import-openfoodfacts.mjs --backfill-countries
+node scripts/import-openfoodfacts.mjs --backfill-nutrition-basis
 psql "$DATABASE_URL" -f scripts/add-recommendation-index.sql
 ```
 
@@ -105,6 +106,17 @@ The recommendation endpoint intentionally rejects candidate rows whose market is
 unknown. This can temporarily reduce the number of alternatives during a
 backfill, but it prevents global products from leaking into a local-market
 recommendation list.
+
+
+### Nutrition basis metadata
+
+Older mirrors may contain normalized `*_100g` nutrient keys but lack the OFF metadata that tells the UI whether those values were declared per 100 g or per 100 ml. Run the one-time resumable backfill:
+
+```bash
+node scripts/import-openfoodfacts.mjs --backfill-nutrition-basis
+```
+
+It reuses the same local full OFF archive and patches only rows whose `nutrition_data_per` is currently missing, adding `nutrition_data_per` plus prepared-basis/serving metadata when available. It also recovers `100g`/`100ml` from the newer `nutrition.input_sets` structure when the legacy top-level field is missing. No Prisma migration is required.
 
 Four properties make this safe to run unattended:
 

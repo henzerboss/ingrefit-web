@@ -5,6 +5,7 @@
  *   node scripts/import-openfoodfacts.mjs --full
  *   node scripts/import-openfoodfacts.mjs --delta
  *   node scripts/import-openfoodfacts.mjs --backfill-countries
+ *   node scripts/import-openfoodfacts.mjs --backfill-nutrition-basis
  *
  * `--full` streams the complete JSONL export into the OffProduct table. It is
  * intended to run once, and then again every few months.
@@ -58,8 +59,8 @@ const KEPT_FIELDS = [
   'ingredients_analysis_tags', 'nutrient_levels',
   'nutriscore_grade', 'nutrition_grades', 'nova_group', 'ecoscore_grade', 'environmental_score_grade',
   'alcohol_by_volume', 'alcohol_value', 'alcohol_unit',
-  'nutriments', 'serving_size', 'nutrition_data_per', 'last_modified_t',
-  'nutrition_data_per', 'no_nutriments',
+  'nutriments', 'serving_size', 'nutrition_data_per', 'nutrition_data_prepared_per',
+  'product_quantity', 'product_quantity_unit', 'last_modified_t', 'no_nutriments',
 ];
 
 /** Nutriment keys the app uses; the raw object routinely holds 200+. */
@@ -211,6 +212,36 @@ function stripNul(value) {
   return value;
 }
 
+/**
+ * Recover the declared nutrition basis from either the legacy top-level field
+ * or OFF's newer nutrition input-set structure. This is display metadata: the
+ * normalized nutrient keys keep the historical *_100g naming even when the
+ * label basis is actually 100 ml.
+ */
+function nutritionBasisFromRecord(record) {
+  const direct = typeof record?.nutrition_data_per === 'string'
+    ? record.nutrition_data_per.trim().toLowerCase()
+    : '';
+  if (direct === '100g' || direct === '100ml' || direct === 'serving') return direct;
+
+  const nutrition = record?.nutrition;
+  if (!nutrition || typeof nutrition !== 'object') return undefined;
+  const aggregated = nutrition.aggregated_set;
+  const sets = [
+    ...(Array.isArray(nutrition.input_sets) ? nutrition.input_sets : []),
+    ...(aggregated && typeof aggregated === 'object' ? [aggregated] : []),
+  ];
+  const chosen = sets.find((set) => set?.source === 'manufacturer') ?? sets[0];
+  const per = typeof chosen?.per === 'string' ? chosen.per.trim().toLowerCase() : '';
+  if (per === '100g' || per === '100ml' || per === 'serving') return per;
+  if (Number(chosen?.per_quantity) === 100) {
+    const unit = String(chosen?.per_unit ?? '').trim().toLowerCase();
+    if (unit === 'ml') return '100ml';
+    if (unit === 'g') return '100g';
+  }
+  return undefined;
+}
+
 /** Reduce a raw export record to the fields the backend actually reads. */
 function slim(record) {
   const output = {};
@@ -222,6 +253,9 @@ function slim(record) {
     // Keep only the display text; the nested parse tree is large and unused.
     output.ingredients = record.ingredients.slice(0, 120).map((item) => ({ text: item?.text, id: item?.id }));
   }
+
+  const recoveredBasis = nutritionBasisFromRecord(record);
+  if (recoveredBasis) output.nutrition_data_per = recoveredBasis;
 
   output.nutriments = extractNutriments(record);
   Object.assign(output, deriveImageUrls(record));
@@ -674,6 +708,105 @@ async function runCountriesBackfill() {
   console.log(`[off] countries backfill finished: ${matched} tagged records seen, ${updated} database rows changed`);
 }
 
+async function flushNutritionBasis(batch) {
+  if (!batch.length) return 0;
+  const params = [];
+  const values = batch.map((row, index) => {
+    const offset = index * 2;
+    params.push(row.barcode, JSON.stringify(row.patch));
+    return `($${offset + 1}::text, $${offset + 2}::jsonb)`;
+  }).join(', ');
+  return prisma.$executeRawUnsafe(
+    `UPDATE "OffProduct" AS product
+     SET data = product.data || input.patch
+     FROM (VALUES ${values}) AS input(barcode, patch)
+     WHERE product.barcode = input.barcode
+       AND COALESCE(product.data->>'nutrition_data_per', '') = ''
+       AND NOT (product.data @> input.patch)`,
+    ...params,
+  );
+}
+
+function nutritionBasisPatch(record) {
+  const basis = nutritionBasisFromRecord(record);
+  if (!basis) return {};
+
+  const patch = { nutrition_data_per: basis };
+  for (const field of ['nutrition_data_prepared_per', 'serving_size']) {
+    const value = typeof record?.[field] === 'string' ? record[field].trim() : '';
+    if (value) patch[field] = value;
+  }
+  return stripNul(patch);
+}
+
+/**
+ * One-time enrichment for mirrors imported before nutrition basis metadata was
+ * retained. It reuses the existing full OFF archive and touches only display
+ * metadata (100 g vs 100 ml, prepared basis and serving size).
+ * Nutrient values, images and timestamps are deliberately left unchanged.
+ */
+async function runNutritionBasisBackfill() {
+  const state = readState();
+  const archive = path.join(WORK_DIR, 'openfoodfacts-products.jsonl.gz');
+  if (!existsSync(archive)) {
+    console.log('[off] full archive is not present locally; downloading it once for nutrition-basis backfill');
+    await download(FULL_EXPORT_URL, archive);
+    state.nutritionBasisProcessedLines = 0;
+  }
+
+  const resumeFrom = state.nutritionBasisProcessedLines ?? 0;
+  if (resumeFrom) console.log(`[off] nutrition-basis backfill resuming after line ${resumeFrom}`);
+  const lines = createInterface({ input: createReadStream(archive).pipe(createGunzip()), crlfDelay: Infinity });
+  let index = 0;
+  let tagged = 0;
+  let updated = 0;
+  let batch = [];
+
+  const checkpoint = () => {
+    state.nutritionBasisProcessedLines = index;
+    writeState(state);
+  };
+
+  for await (const line of lines) {
+    index += 1;
+    if (index <= resumeFrom) continue;
+    if (!line.trim()) continue;
+
+    let record;
+    try {
+      record = JSON.parse(line);
+    } catch {
+      continue;
+    }
+
+    const barcode = typeof record.code === 'string' ? record.code.trim() : '';
+    if (!/^\d{6,18}$/.test(barcode)) continue;
+    const patch = nutritionBasisPatch(record);
+    if (!Object.keys(patch).length) continue;
+
+    batch.push({ barcode, patch });
+    tagged += 1;
+
+    if (batch.length >= BATCH_SIZE) {
+      updated += await flushNutritionBasis(batch);
+      batch = [];
+      checkpoint();
+      if (tagged % (BATCH_SIZE * 10) === 0) {
+        console.log(`[off] nutrition basis: line ${index}, tagged ${tagged}, rows changed ${updated}`);
+      }
+    } else if (index % 100_000 === 0) {
+      checkpoint();
+      console.log(`[off] nutrition basis: line ${index}, tagged ${tagged}, rows changed ${updated}`);
+    }
+  }
+
+  updated += await flushNutritionBasis(batch);
+  state.nutritionBasisProcessedLines = 0;
+  state.lastNutritionBasisBackfill = new Date().toISOString();
+  writeState(state);
+  console.log(`[off] nutrition-basis backfill finished: ${tagged} tagged records seen, ${updated} database rows changed`);
+}
+
 async function runDelta() {
   const state = readState();
   const applied = new Set(state.appliedDeltas ?? []);
@@ -992,6 +1125,8 @@ async function main() {
       ? 'delta'
       : process.argv.includes('--backfill-countries')
         ? 'backfill-countries'
+        : process.argv.includes('--backfill-nutrition-basis')
+          ? 'backfill-nutrition-basis'
         : process.argv.includes('--inspect')
         ? 'inspect'
         : process.argv.includes('--stats')
@@ -1000,7 +1135,7 @@ async function main() {
             ? 'discover'
             : null;
   if (!mode) {
-    console.error('Usage: node scripts/import-openfoodfacts.mjs --full | --delta | --backfill-countries | --inspect [barcode] | --stats [head-sample] | --discover [sample]');
+    console.error('Usage: node scripts/import-openfoodfacts.mjs --full | --delta | --backfill-countries | --backfill-nutrition-basis | --inspect [barcode] | --stats [head-sample] | --discover [sample]');
     process.exit(1);
   }
   if (mode === 'discover') {
@@ -1035,6 +1170,7 @@ async function main() {
   try {
     if (mode === 'full') await runFull();
     else if (mode === 'backfill-countries') await runCountriesBackfill();
+    else if (mode === 'backfill-nutrition-basis') await runNutritionBasisBackfill();
     else await runDelta();
     console.log(`[off] done in ${Math.round((Date.now() - started) / 1000)}s`);
   } finally {
