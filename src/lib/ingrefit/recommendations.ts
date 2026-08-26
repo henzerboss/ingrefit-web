@@ -22,7 +22,7 @@ export interface ProductRecommendation {
   delta: number;
 }
 
-const MAX_RECOMMENDATIONS = 3;
+const MAX_RECOMMENDATIONS = 10;
 const MIN_SCORE_GAIN = 0.7;
 const MIN_BASE_GAIN = 0.3;
 const MIN_CONFIDENCE = 0.55;
@@ -152,33 +152,32 @@ async function recommendationIndexesReady(): Promise<boolean> {
 async function mirrorCandidates(barcode: string, focusTags: string[], marketTag: string): Promise<RawProductRow[]> {
   if (process.env.OPEN_FOOD_FACTS_LOCAL !== 'true' || !focusTags.length || !(await recommendationIndexesReady())) return [];
 
-  const found = new Map<string, RawProductRow>();
-  // Query the most specific tag first. Each query is backed by the expression
-  // GIN index from scripts/add-recommendation-index.sql and is capped tightly.
-  for (const tag of focusTags.slice(0, 3)) {
-    const tagJson = JSON.stringify([tag]);
-    const marketJson = JSON.stringify([marketTag]);
-    const worldJson = JSON.stringify([WORLD_MARKET_TAG]);
-    const rows = await safeDb((db) => db.$queryRaw<RawProductRow[]>(Prisma.sql`
-      SELECT barcode, data
-      FROM "OffProduct"
-      WHERE barcode <> ${barcode}
-        AND (data->'categories_tags') @> ${tagJson}::jsonb
-        AND ((data->'countries_tags') @> ${marketJson}::jsonb OR (data->'countries_tags') @> ${worldJson}::jsonb)
-        AND COALESCE(data->>'product_name', data->>'product_name_en', data->>'generic_name', '') <> ''
-      LIMIT 100
-    `));
-    for (const row of rows ?? []) found.set(row.barcode, row);
-    if (found.size >= 140) break;
-  }
-  return [...found.values()];
+  // Only query the single most-specific source category. Expanding to a parent
+  // tag increased recall but could turn green beans into peas or another nearby
+  // aisle product. For alternatives, precision is more important than filling
+  // every slot: fewer genuinely like-for-like products beat ten loose matches.
+  const primaryTag = focusTags[0]!;
+  const tagJson = JSON.stringify([primaryTag]);
+  const marketJson = JSON.stringify([marketTag]);
+  const worldJson = JSON.stringify([WORLD_MARKET_TAG]);
+  return (await safeDb((db) => db.$queryRaw<RawProductRow[]>(Prisma.sql`
+    SELECT barcode, data
+    FROM "OffProduct"
+    WHERE barcode <> ${barcode}
+      AND (data->'categories_tags') @> ${tagJson}::jsonb
+      AND ((data->'countries_tags') @> ${marketJson}::jsonb OR (data->'countries_tags') @> ${worldJson}::jsonb)
+      AND COALESCE(data->>'product_name', data->>'product_name_en', data->>'generic_name', '') <> ''
+    LIMIT 250
+  `))) ?? [];
 }
 
 function categorySimilarity(sourceTags: string[], focusTags: string[], candidateRaw: OpenFoodFactsProduct): number {
   const candidateTags = new Set(categoryTagsFromRaw(candidateRaw));
-  // At least one *specific* exact OFF category is mandatory. This hard gate is
-  // what prevents cross-category suggestions even when nutrition looks alike.
-  if (!focusTags.some((tag) => candidateTags.has(tag))) return 0;
+  // The candidate must share the *most specific* canonical OFF product type.
+  // Parent categories alone are not enough (e.g. beans -> peas). This is a
+  // deliberately strict gate; an empty list is preferable to a loose match.
+  const primaryTag = focusTags[0];
+  if (!primaryTag || !candidateTags.has(primaryTag)) return 0;
 
   let similarity = 0;
   focusTags.forEach((tag, index) => {

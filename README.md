@@ -28,7 +28,8 @@ The indexes are created concurrently. `countries_tags` is stored inside the exis
 ## Routes
 
 - `POST /api/ingrefit/analyze` - barcode, Premium label-photo or Premium unpackaged-food analysis.
-- `POST /api/ingrefit/recommendations` - Premium-only healthier alternatives within the same specific OFF category.
+- `POST /api/ingrefit/recommendations` - Premium-only similar products with a higher IngreFit Score in the same specific OFF product type and market.
+- `POST /api/ingrefit/recommendation-product` - Premium deterministic detail view for a recommended barcode; does not trigger Gemini.
 - `GET /api/ingrefit/usage` - compatibility snapshot; barcode scans have no daily quota.
 - `GET /api/ingrefit/health` - configuration health without secret values.
 - `GET /api/ingrefit/version` - platform-specific latest/minimum version and store URL for the launch update prompt.

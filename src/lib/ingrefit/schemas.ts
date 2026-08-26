@@ -72,3 +72,11 @@ export const recommendationsRequestSchema = z.object({
 });
 
 export type RecommendationsRequest = z.infer<typeof recommendationsRequestSchema>;
+
+export const recommendationProductRequestSchema = z.object({
+  barcode: z.string().regex(/^\d{8,14}$/),
+  locale: z.string().trim().min(2).max(35).default('en'),
+  profile: profileSchema,
+});
+
+export type RecommendationProductRequest = z.infer<typeof recommendationProductRequestSchema>;
