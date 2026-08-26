@@ -12,7 +12,7 @@ import { HttpError } from './http';
  * shopping behaviour and tight enough to make scripted abuse pointless.
  */
 
-export type LimitScope = 'analyze:installation' | 'analyze:ip' | 'ai:installation';
+export type LimitScope = 'analyze:installation' | 'analyze:ip' | 'ai:installation' | 'recommendations:installation' | 'recommendations:ip';
 
 interface LimitConfig {
   limit: number;
@@ -42,6 +42,10 @@ function configFor(scope: LimitScope, premium: boolean): LimitConfig {
           : readInt('INGREFIT_LIMIT_AI_FREE', 10),
         windowMs: HOUR,
       };
+    case 'recommendations:installation':
+      return { limit: readInt('INGREFIT_LIMIT_RECOMMENDATIONS_PREMIUM', 300), windowMs: HOUR };
+    case 'recommendations:ip':
+      return { limit: readInt('INGREFIT_LIMIT_RECOMMENDATIONS_IP', 900), windowMs: HOUR };
     case 'analyze:ip':
       return { limit: readInt('INGREFIT_LIMIT_ANALYZE_IP', 600), windowMs: HOUR };
   }

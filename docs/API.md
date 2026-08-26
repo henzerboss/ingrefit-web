@@ -41,6 +41,39 @@ A readable ingredient statement can support a clearly marked approximate nutrien
 
 Use `mode: unpackaged`, `premiumFeatures: true`, a null barcode and exactly one JPEG image with kind `food`. The response source is `ai_photo`; `identificationConfidence` is 0–1. The response may include a rounded approximate nutrient profile per 100 g with `nutritionBasis: "estimated_visual"` and `nutritionEstimateConfidence`. Ingredients, allergens and exact nutrition remain unknown because appearance cannot prove them.
 
+
+## Premium healthier alternatives
+
+`POST /api/ingrefit/recommendations` is available only to a server-verified Premium installation. It accepts a barcode, locale, ISO-3166 alpha-2 `marketCountry` from the device region, and the same profile shape as analysis. The server never trusts a client score: it reloads the scanned product, scores it again with the deterministic scorer, and returns at most three alternatives.
+
+Candidates must be listed by Open Food Facts for the user's current market (`countries_tags`, or `en:world`) and share at least one specific canonical Open Food Facts category tag with the scanned product. Broad aisle tags such as `foods`, `snacks`, `dairies` and `beverages` are deliberately excluded from the matching gate, so nutrition similarity alone can never turn milk into canned food or chips into an unrelated snack. Candidates that conflict with the user's diet/allergens/avoid list are rejected, and a normal (non-blocked) source product requires both a higher personalized score and a higher base-quality score.
+
+The local OFF mirror should first be enriched with `--backfill-countries` if it predates this feature, then have both expression GIN indexes from `scripts/add-recommendation-index.sql`:
+
+```sql
+CREATE INDEX CONCURRENTLY IF NOT EXISTS off_product_categories_tags_gin
+ON "OffProduct" USING GIN ((data->'categories_tags'));
+CREATE INDEX CONCURRENTLY IF NOT EXISTS off_product_countries_tags_gin
+ON "OffProduct" USING GIN ((data->'countries_tags'));
+```
+
+The endpoint checks for both exact index names before querying the large mirror. If it is not present, it only searches the small recent `ProductCache` pool and otherwise returns an empty list; the main analysis path is never slowed or broken by recommendation infrastructure.
+
+Example response:
+
+```json
+{
+  "recommendations": [
+    {
+      "product": { "barcode": "...", "name": "...", "imageUrl": "..." },
+      "score": 8.1,
+      "baseScore": 7.4,
+      "delta": 1.3
+    }
+  ]
+}
+```
+
 ## Complete response
 
 The response contains normalized `product`, deterministic `assessment` and a compatibility `usage` snapshot.

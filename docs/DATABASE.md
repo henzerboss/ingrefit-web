@@ -81,6 +81,31 @@ Open Food Facts publishes daily delta files; a normal night is a few megabytes.
 Re-run `--full` every few months to pick up deletions and any records the deltas
 missed.
 
+### Recommendation market data
+
+`countries_tags` in Open Food Facts describes the countries where a product is
+sold. The importer now retains it inside `OffProduct.data`, and live OFF cache
+records request it as well. Mirrors imported by an older IngreFit importer do
+not have this field because the previous whitelist discarded it.
+
+Enrich an existing mirror once without rebuilding nutrition or images:
+
+```bash
+node scripts/import-openfoodfacts.mjs --backfill-countries
+psql "$DATABASE_URL" -f scripts/add-recommendation-index.sql
+```
+
+The backfill reuses `openfoodfacts-products.jsonl.gz` already stored in
+`OFF_IMPORT_DIR`, is resumable through the normal import state file, and updates
+only the `countries_tags` key in the existing JSON. If the archive is no longer
+present it downloads the current full export once. Daily `--delta` imports keep
+this field current afterwards.
+
+The recommendation endpoint intentionally rejects candidate rows whose market is
+unknown. This can temporarily reduce the number of alternatives during a
+backfill, but it prevents global products from leaking into a local-market
+recommendation list.
+
 Four properties make this safe to run unattended:
 
 - **The table is never truncated.** Updates are upserts, so a failed run leaves
@@ -111,7 +136,7 @@ Two refinements worth considering later, neither urgent:
   without changing the app.
 - A CDN in front of that proxy once traffic justifies it.
 
-Until then, direct URLs are correct and cost nothing.
+Until then, the API returns the Open Food Facts 200 px front-image derivative when available. The mobile app downloads it once, re-encodes it as a maximum-256 px JPEG in persistent app storage, and then renders the local thumbnail on later launches. The full upstream image is never intentionally kept as persistent app data.
 
 ## Licence obligations
 

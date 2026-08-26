@@ -4,6 +4,7 @@
  *
  *   node scripts/import-openfoodfacts.mjs --full
  *   node scripts/import-openfoodfacts.mjs --delta
+ *   node scripts/import-openfoodfacts.mjs --backfill-countries
  *
  * `--full` streams the complete JSONL export into the OffProduct table. It is
  * intended to run once, and then again every few months.
@@ -53,7 +54,7 @@ const KEPT_FIELDS = [
   'code', 'product_name', 'product_name_en', 'product_name_ru', 'generic_name', 'brands', 'quantity',
   'image_front_url', 'image_front_small_url',
   'ingredients_text', 'ingredients_text_en', 'ingredients_text_ru', 'ingredients',
-  'allergens_tags', 'traces_tags', 'additives_tags', 'labels_tags', 'categories_tags',
+  'allergens_tags', 'traces_tags', 'additives_tags', 'labels_tags', 'categories_tags', 'countries_tags',
   'ingredients_analysis_tags', 'nutrient_levels',
   'nutriscore_grade', 'nutrition_grades', 'nova_group', 'ecoscore_grade', 'environmental_score_grade',
   'alcohol_by_volume', 'alcohol_value', 'alcohol_unit',
@@ -587,6 +588,92 @@ async function runFull() {
   }
 }
 
+async function flushCountryTags(batch) {
+  if (!batch.length) return 0;
+  const params = [];
+  const values = batch.map((row, index) => {
+    const offset = index * 2;
+    params.push(row.barcode, JSON.stringify(row.countriesTags));
+    return `($${offset + 1}::text, $${offset + 2}::jsonb)`;
+  }).join(', ');
+  return prisma.$executeRawUnsafe(
+    `UPDATE "OffProduct" AS product
+     SET data = jsonb_set(product.data, '{countries_tags}', input.countries, true)
+     FROM (VALUES ${values}) AS input(barcode, countries)
+     WHERE product.barcode = input.barcode
+       AND (product.data->'countries_tags') IS DISTINCT FROM input.countries`,
+    ...params,
+  );
+}
+
+/**
+ * One-time lightweight enrichment for mirrors imported before countries_tags
+ * was retained. It reuses the already-downloaded full OFF archive and updates
+ * only the JSON countries_tags field; nutrition, images and timestamps are not
+ * rewritten. Progress is resumable independently from --full.
+ */
+async function runCountriesBackfill() {
+  const state = readState();
+  const archive = path.join(WORK_DIR, 'openfoodfacts-products.jsonl.gz');
+  if (!existsSync(archive)) {
+    console.log('[off] full archive is not present locally; downloading it once for countries backfill');
+    await download(FULL_EXPORT_URL, archive);
+    state.countriesProcessedLines = 0;
+  }
+
+  const resumeFrom = state.countriesProcessedLines ?? 0;
+  if (resumeFrom) console.log(`[off] countries backfill resuming after line ${resumeFrom}`);
+  const lines = createInterface({ input: createReadStream(archive).pipe(createGunzip()), crlfDelay: Infinity });
+  let index = 0;
+  let matched = 0;
+  let updated = 0;
+  let batch = [];
+
+  const checkpoint = () => {
+    state.countriesProcessedLines = index;
+    writeState(state);
+  };
+
+  for await (const line of lines) {
+    index += 1;
+    if (index <= resumeFrom) continue;
+    if (!line.trim()) continue;
+
+    let record;
+    try {
+      record = JSON.parse(line);
+    } catch {
+      continue;
+    }
+    const barcode = typeof record.code === 'string' ? record.code.trim() : '';
+    const countriesTags = Array.isArray(record.countries_tags)
+      ? [...new Set(record.countries_tags.filter((value) => typeof value === 'string' && value.trim()).map((value) => value.trim()))]
+      : [];
+    if (/^\d{6,18}$/.test(barcode) && countriesTags.length) {
+      batch.push({ barcode, countriesTags });
+      matched += 1;
+    }
+
+    if (batch.length >= BATCH_SIZE) {
+      updated += await flushCountryTags(batch);
+      batch = [];
+      checkpoint();
+      if (matched % (BATCH_SIZE * 10) === 0) {
+        console.log(`[off] countries: line ${index}, tagged ${matched}, rows changed ${updated}`);
+      }
+    } else if (index % 100_000 === 0) {
+      checkpoint();
+      console.log(`[off] countries: line ${index}, tagged ${matched}, rows changed ${updated}`);
+    }
+  }
+
+  updated += await flushCountryTags(batch);
+  state.countriesProcessedLines = 0;
+  state.lastCountriesBackfill = new Date().toISOString();
+  writeState(state);
+  console.log(`[off] countries backfill finished: ${matched} tagged records seen, ${updated} database rows changed`);
+}
+
 async function runDelta() {
   const state = readState();
   const applied = new Set(state.appliedDeltas ?? []);
@@ -903,7 +990,9 @@ async function main() {
     ? 'full'
     : process.argv.includes('--delta')
       ? 'delta'
-      : process.argv.includes('--inspect')
+      : process.argv.includes('--backfill-countries')
+        ? 'backfill-countries'
+        : process.argv.includes('--inspect')
         ? 'inspect'
         : process.argv.includes('--stats')
           ? 'stats'
@@ -911,7 +1000,7 @@ async function main() {
             ? 'discover'
             : null;
   if (!mode) {
-    console.error('Usage: node scripts/import-openfoodfacts.mjs --full | --delta | --inspect [barcode] | --stats [head-sample] | --discover [sample]');
+    console.error('Usage: node scripts/import-openfoodfacts.mjs --full | --delta | --backfill-countries | --inspect [barcode] | --stats [head-sample] | --discover [sample]');
     process.exit(1);
   }
   if (mode === 'discover') {
@@ -945,6 +1034,7 @@ async function main() {
   const started = Date.now();
   try {
     if (mode === 'full') await runFull();
+    else if (mode === 'backfill-countries') await runCountriesBackfill();
     else await runDelta();
     console.log(`[off] done in ${Math.round((Date.now() - started) / 1000)}s`);
   } finally {

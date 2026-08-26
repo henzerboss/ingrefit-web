@@ -15,7 +15,7 @@ const goalSchema = z.enum([
   'low_saturated_fat',
 ]);
 
-const profileSchema = z.object({
+export const profileSchema = z.object({
   goals: z.array(goalSchema).min(1).max(12),
   diet: z.enum(['none', 'vegetarian', 'vegan', 'pescatarian', 'gluten_free', 'dairy_free', 'low_carb', 'mediterranean']),
   allergens: z.array(z.string().trim().min(1).max(80)).max(30),
@@ -61,3 +61,14 @@ export const analyzeRequestSchema = z
   });
 
 export type AnalyzeRequest = z.infer<typeof analyzeRequestSchema>;
+
+export const recommendationsRequestSchema = z.object({
+  barcode: z.string().regex(/^\d{8,14}$/),
+  locale: z.string().trim().min(2).max(35).default('en'),
+  // Optional only for backwards compatibility with a briefly shipped/QA client;
+  // missing market means an empty recommendation list, never global fallback.
+  marketCountry: z.string().trim().regex(/^[A-Za-z]{2}$/).transform((value) => value.toUpperCase()).optional(),
+  profile: profileSchema,
+});
+
+export type RecommendationsRequest = z.infer<typeof recommendationsRequestSchema>;

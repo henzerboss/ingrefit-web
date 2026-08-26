@@ -4,7 +4,7 @@ import { additiveBasisText, allergenTagName, catalogLanguage, labelTagName } fro
 import { safeDb } from './db';
 import type { IngredientAnalysis, NutrientLevel, NutrientLevels, NutritionFacts, ProductFacts } from './types';
 
-interface OpenFoodFactsProduct {
+export interface OpenFoodFactsProduct {
   code?: string;
   product_name?: string;
   product_name_en?: string;
@@ -23,6 +23,7 @@ interface OpenFoodFactsProduct {
   additives_tags?: string[];
   labels_tags?: string[];
   categories_tags?: string[];
+  countries_tags?: string[];
   ingredients_analysis_tags?: string[];
   nutrient_levels?: Record<string, string>;
   nutriscore_grade?: string;
@@ -48,7 +49,7 @@ const FIELDS = [
   'code', 'product_name', 'product_name_en', 'product_name_ru', 'generic_name', 'brands', 'quantity',
   'image_front_url', 'image_front_small_url',
   'ingredients_text', 'ingredients_text_en', 'ingredients_text_ru', 'ingredients',
-  'allergens_tags', 'traces_tags', 'additives_tags', 'labels_tags', 'categories_tags',
+  'allergens_tags', 'traces_tags', 'additives_tags', 'labels_tags', 'categories_tags', 'countries_tags',
   'ingredients_analysis_tags', 'nutrient_levels',
   'nutriscore_grade', 'nutrition_grades', 'nova_group', 'ecoscore_grade', 'environmental_score_grade',
   'alcohol_by_volume', 'alcohol_value', 'alcohol_unit',
@@ -76,6 +77,10 @@ function canonicalTags(value: unknown): string[] {
 /** Human-readable version of the same tags. */
 function displayTags(tags: string[]): string[] {
   return tags.map((tag) => tag.replace(/^[a-z]{2}:/i, '').replaceAll('-', ' ').trim()).filter(Boolean);
+}
+
+export function categoryTagsFromRaw(product: OpenFoodFactsProduct): string[] {
+  return canonicalTags(product.categories_tags);
 }
 
 function nutrientLevel(value: unknown): NutrientLevel | null {
@@ -182,7 +187,7 @@ export function hasEnoughFacts(product: ProductFacts): boolean {
 }
 
 /** Localized display strings are derived per request; facts themselves are cached once. */
-function toFacts(raw: OpenFoodFactsProduct, barcode: string, locale: string): ProductFacts {
+export function productFactsFromRaw(raw: OpenFoodFactsProduct, barcode: string, locale: string): ProductFacts {
   const language = locale.toLowerCase().startsWith('ru') ? 'ru' : 'en';
   const localizedName = language === 'ru' ? raw.product_name_ru : raw.product_name_en;
   const localizedIngredients = language === 'ru' ? raw.ingredients_text_ru : raw.ingredients_text_en;
@@ -213,7 +218,9 @@ function toFacts(raw: OpenFoodFactsProduct, barcode: string, locale: string): Pr
     name: text(localizedName) ?? text(raw.product_name) ?? text(raw.generic_name),
     brand: text(raw.brands),
     quantity: text(raw.quantity),
-    imageUrl: text(raw.image_front_url) ?? text(raw.image_front_small_url),
+    // The app renders product artwork at <=82 px and persists a 256 px thumbnail.
+    // Prefer OFF's 200 px derivative so even the one-time network transfer stays small.
+    imageUrl: text(raw.image_front_small_url) ?? text(raw.image_front_url),
     ingredientsText: cleanIngredientsText,
     ingredients: ingredientItems,
     // Display names come from the catalog, not from stripping the tag prefix:
@@ -313,13 +320,13 @@ export interface FactsLookup {
 
 export async function findProductByBarcode(barcode: string, locale = 'en'): Promise<FactsLookup> {
   const cached = await readCachedRaw(barcode);
-  if (cached) return { facts: toFacts(cached, barcode, locale), origin: 'cache' };
+  if (cached) return { facts: productFactsFromRaw(cached, barcode, locale), origin: 'cache' };
 
   const localOnly = process.env.OPEN_FOOD_FACTS_LOCAL_ONLY === 'true';
   const local = await readLocalDataset(barcode);
   let localFacts: ProductFacts | null = null;
   if (local) {
-    localFacts = toFacts(local, barcode, locale);
+    localFacts = productFactsFromRaw(local, barcode, locale);
     // A mirror row can be present but thin: the published exports contain
     // records whose nutriments object is empty even though the API serves full
     // values for the same barcode. Treating such a row as authoritative turned
@@ -368,5 +375,5 @@ export async function findProductByBarcode(barcode: string, locale = 'en'): Prom
   }
 
   await writeCachedRaw(barcode, payload.product);
-  return { facts: toFacts(payload.product, barcode, locale), origin: 'network' };
+  return { facts: productFactsFromRaw(payload.product, barcode, locale), origin: 'network' };
 }

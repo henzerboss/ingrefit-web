@@ -16,9 +16,19 @@ For CloudPanel/Nginx, allow AI photo payloads in the site vhost (for example `cl
 
 Required production values: `GEMINI_API_KEY`, `INGREFIT_CLIENT_TOKENS`, `OPEN_FOOD_FACTS_USER_AGENT`, `REVENUECAT_SECRET_API_KEY` and `REVENUECAT_ENTITLEMENT_ID`.
 
+If the local Open Food Facts mirror was imported before market filtering existed, enrich the existing JSON rows once from the already-downloaded OFF archive, then create the recommendation indexes:
+
+```bash
+node scripts/import-openfoodfacts.mjs --backfill-countries
+psql "$DATABASE_URL" -f scripts/add-recommendation-index.sql
+```
+
+The indexes are created concurrently. `countries_tags` is stored inside the existing JSON column, so Prisma/database schema migrations are not required. Until both indexes exist, the recommendation endpoint safely falls back to the recent ProductCache pool and never performs an unindexed mirror scan.
+
 ## Routes
 
 - `POST /api/ingrefit/analyze` - barcode, Premium label-photo or Premium unpackaged-food analysis.
+- `POST /api/ingrefit/recommendations` - Premium-only healthier alternatives within the same specific OFF category.
 - `GET /api/ingrefit/usage` - compatibility snapshot; barcode scans have no daily quota.
 - `GET /api/ingrefit/health` - configuration health without secret values.
 - `GET /api/ingrefit/version` - platform-specific latest/minimum version and store URL for the launch update prompt.
