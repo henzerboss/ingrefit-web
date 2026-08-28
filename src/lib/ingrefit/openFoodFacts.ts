@@ -49,15 +49,41 @@ interface OpenFoodFactsResponse {
 }
 
 const FIELDS = [
-  'code', 'product_name', 'product_name_en', 'product_name_ru', 'generic_name', 'brands', 'quantity',
-  'image_front_url', 'image_front_small_url',
-  'ingredients_text', 'ingredients_text_en', 'ingredients_text_ru', 'ingredients',
-  'allergens_tags', 'traces_tags', 'additives_tags', 'labels_tags', 'categories_tags', 'countries_tags',
-  'ingredients_analysis_tags', 'nutrient_levels',
-  'nutriscore_grade', 'nutrition_grades', 'nova_group', 'ecoscore_grade', 'environmental_score_grade',
-  'alcohol_by_volume', 'alcohol_value', 'alcohol_unit',
-  'nutriments', 'serving_size', 'nutrition_data_per', 'nutrition_data_prepared_per',
-  'product_quantity', 'product_quantity_unit',
+  'code',
+  'product_name',
+  'product_name_en',
+  'product_name_ru',
+  'generic_name',
+  'brands',
+  'quantity',
+  'image_front_url',
+  'image_front_small_url',
+  'ingredients_text',
+  'ingredients_text_en',
+  'ingredients_text_ru',
+  'ingredients',
+  'allergens_tags',
+  'traces_tags',
+  'additives_tags',
+  'labels_tags',
+  'categories_tags',
+  'countries_tags',
+  'ingredients_analysis_tags',
+  'nutrient_levels',
+  'nutriscore_grade',
+  'nutrition_grades',
+  'nova_group',
+  'ecoscore_grade',
+  'environmental_score_grade',
+  'alcohol_by_volume',
+  'alcohol_value',
+  'alcohol_unit',
+  'nutriments',
+  'serving_size',
+  'nutrition_data_per',
+  'nutrition_data_prepared_per',
+  'product_quantity',
+  'product_quantity_unit',
 ].join(',');
 
 const CACHE_TTL_DAYS = Number(process.env.INGREFIT_PRODUCT_CACHE_DAYS ?? '30');
@@ -68,19 +94,30 @@ function text(value: unknown): string | null {
 
 function number(value: unknown): number | null {
   if (typeof value === 'number' && Number.isFinite(value)) return Math.round(value * 1000) / 1000;
-  if (typeof value === 'string' && value.trim() && Number.isFinite(Number(value))) return Math.round(Number(value) * 1000) / 1000;
+  if (typeof value === 'string' && value.trim() && Number.isFinite(Number(value)))
+    return Math.round(Number(value) * 1000) / 1000;
   return null;
 }
 
 /** Keep canonical `en:` tags for matching. */
 function canonicalTags(value: unknown): string[] {
   if (!Array.isArray(value)) return [];
-  return value.filter((item): item is string => typeof item === 'string').map((item) => item.trim().toLowerCase()).filter(Boolean);
+  return value
+    .filter((item): item is string => typeof item === 'string')
+    .map((item) => item.trim().toLowerCase())
+    .filter(Boolean);
 }
 
 /** Human-readable version of the same tags. */
 function displayTags(tags: string[]): string[] {
-  return tags.map((tag) => tag.replace(/^[a-z]{2}:/i, '').replaceAll('-', ' ').trim()).filter(Boolean);
+  return tags
+    .map((tag) =>
+      tag
+        .replace(/^[a-z]{2}:/i, '')
+        .replaceAll('-', ' ')
+        .trim(),
+    )
+    .filter(Boolean);
 }
 
 export function categoryTagsFromRaw(product: OpenFoodFactsProduct): string[] {
@@ -120,23 +157,42 @@ function extractAlcoholPercent(product: OpenFoodFactsProduct): number | null {
   if (direct !== null) return direct;
   const alcoholValue = number(product.alcohol_value);
   if (alcoholValue !== null && /%|vol/i.test(product.alcohol_unit ?? '')) return alcoholValue;
-  const searchable = [product.ingredients_text, product.ingredients_text_en, product.ingredients_text_ru, ...(product.labels_tags ?? [])]
+  const searchable = [
+    product.ingredients_text,
+    product.ingredients_text_en,
+    product.ingredients_text_ru,
+    ...(product.labels_tags ?? []),
+  ]
     .filter((value): value is string => typeof value === 'string')
     .join(' ');
-  const contextual = searchable.match(/(?:alc(?:ohol)?\.?|алк(?:оголь)?\.?)\s*[:/]?\s*(\d+(?:[.,]\d+)?)\s*%|(?:\b(\d+(?:[.,]\d+)?)\s*%\s*(?:vol|об\.?))/i);
+  const contextual = searchable.match(
+    /(?:alc(?:ohol)?\.?|алк(?:оголь)?\.?)\s*[:/]?\s*(\d+(?:[.,]\d+)?)\s*%|(?:\b(\d+(?:[.,]\d+)?)\s*%\s*(?:vol|об\.?))/i,
+  );
   return number((contextual?.[1] ?? contextual?.[2])?.replace(',', '.'));
 }
 
 function structuredIngredients(product: OpenFoodFactsProduct): string[] {
   if (!Array.isArray(product.ingredients)) return [];
   return product.ingredients
-    .map((item) => text(item.text) ?? text(item.id)?.replace(/^[a-z]{2}:/i, '').replaceAll('-', ' ') ?? null)
+    .map(
+      (item) =>
+        text(item.text) ??
+        text(item.id)
+          ?.replace(/^[a-z]{2}:/i, '')
+          .replaceAll('-', ' ') ??
+        null,
+    )
     .filter((item): item is string => Boolean(item));
 }
 
 export function hasContaminatedIngredients(value: string | null): boolean {
   if (!value) return false;
-  return value.length > 1_200 || /(?:https?:\/\/|www\.|\b(?:infoline|distributor|recommended retail price|best before|consumir preferentemente|produced by|manufactured by)\b|[\w.+-]+@[\w.-]+\.[a-z]{2,})/i.test(value);
+  return (
+    value.length > 1_200 ||
+    /(?:https?:\/\/|www\.|\b(?:infoline|distributor|recommended retail price|best before|consumir preferentemente|produced by|manufactured by)\b|[\w.+-]+@[\w.-]+\.[a-z]{2,})/i.test(
+      value,
+    )
+  );
 }
 
 export function nutritionFieldCount(product: ProductFacts): number {
@@ -170,7 +226,9 @@ function normalizeNutrition(product: OpenFoodFactsProduct): NutritionFacts {
   };
 }
 
-export function computeCompleteness(product: Pick<ProductFacts, 'name' | 'brand' | 'quantity' | 'ingredientsText' | 'ingredients' | 'nutrition'>): number {
+export function computeCompleteness(
+  product: Pick<ProductFacts, 'name' | 'brand' | 'quantity' | 'ingredientsText' | 'ingredients' | 'nutrition'>,
+): number {
   // Completeness is intentionally weighted by usefulness. A product name and
   // brand should not compensate for a missing ingredient list, and salt/sodium
   // represent one fact rather than two. Total weight is exactly 10.
@@ -188,8 +246,10 @@ export function computeCompleteness(product: Pick<ProductFacts, 'name' | 'brand'
     [product.nutrition.fiber100g, 0.5],
     [product.nutrition.salt100g ?? product.nutrition.sodium100g, 0.5],
   ];
-  const available = weighted.reduce((sum, [value, weight]) =>
-    sum + (value !== null && value !== undefined ? weight : 0), 0);
+  const available = weighted.reduce(
+    (sum, [value, weight]) => sum + (value !== null && value !== undefined ? weight : 0),
+    0,
+  );
   return Math.round((available / 10) * 100);
 }
 
@@ -220,9 +280,10 @@ export function productFactsFromRaw(raw: OpenFoodFactsProduct, barcode: string, 
   const nutrition = normalizeNutrition(raw);
   const ingredientItems = structuredIngredients(raw);
   const rawIngredientsText = text(localizedIngredients) ?? text(raw.ingredients_text);
-  const cleanIngredientsText = hasContaminatedIngredients(rawIngredientsText) && ingredientItems.length >= 2
-    ? ingredientItems.join(', ')
-    : rawIngredientsText;
+  const cleanIngredientsText =
+    hasContaminatedIngredients(rawIngredientsText) && ingredientItems.length >= 2
+      ? ingredientItems.join(', ')
+      : rawIngredientsText;
 
   const allergenTags = canonicalTags(raw.allergens_tags);
   const traceTags = canonicalTags(raw.traces_tags);

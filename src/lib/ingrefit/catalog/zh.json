@@ -154,6 +154,10 @@
       "label": "过敏原数据不完整",
       "evidence": "该产品没有可用的过敏原声明，因此无法核对您的过敏原列表。空列表绝不能证明产品不含该过敏原。"
     },
+    "warning.allergen_unverified": {
+      "label": "过敏原未经核实",
+      "evidence": "该产品没有可供机器读取的过敏原声明，因此无法确认或排除{allergens}。购买前请阅读包装。"
+    },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
       "evidence": "Open Food Facts发布该产品的Nutri-Score {grade}；它用于确定应用您的目标之前的基础营养质量。"

@@ -154,6 +154,10 @@
       "label": "Allergen məlumatları natamamdır",
       "evidence": "Bu məhsul üçün allergen bəyanatı yoxdur, buna görə allergen siyahınız yoxlanıla bilmədi. Boş siyahı məhsulun allergendən azad olduğunu heç vaxt sübut etmir."
     },
+    "warning.allergen_unverified": {
+      "label": "Allergenlər yoxlanılmayıb",
+      "evidence": "Bu məhsulun maşınla oxunan allergen bəyannaməsi yoxdur, ona görə {allergens} nə təsdiqlənə, nə də istisna edilə bildi. Almazdan əvvəl qablaşdırmanı oxuyun."
+    },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
       "evidence": "Open Food Facts bu məhsul üçün Nutri-Score {grade} dərc edir; bu, hədəfləriniz tətbiq olunmazdan əvvəl əsas qidalanma keyfiyyətini müəyyən edir."

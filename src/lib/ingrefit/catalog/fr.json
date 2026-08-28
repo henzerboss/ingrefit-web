@@ -154,6 +154,10 @@
       "label": "Données sur les allergènes incomplètes",
       "evidence": "Aucune déclaration d’allergènes n’est disponible pour ce produit, votre liste d’allergènes n’a donc pas pu être vérifiée. Une liste vide ne prouve jamais que le produit en est exempt."
     },
+    "warning.allergen_unverified": {
+      "label": "Allergènes non vérifiés",
+      "evidence": "Ce produit n'a pas de déclaration d'allergènes lisible par machine : {allergens} n'a pu être ni confirmé ni écarté. Lisez l'emballage avant d'acheter."
+    },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
       "evidence": "Open Food Facts publie un Nutri-Score {grade} pour ce produit ; il définit la qualité nutritionnelle de base avant l’application de vos objectifs."

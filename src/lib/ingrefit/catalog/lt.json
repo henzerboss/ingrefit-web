@@ -154,6 +154,10 @@
       "label": "Duomenys apie alergenus neišsamūs",
       "evidence": "Šiam produktui nėra alergenų deklaracijos, todėl jūsų alergenų sąrašo nepavyko patikrinti. Tuščias sąrašas niekada neįrodo, kad produkte nėra alergeno."
     },
+    "warning.allergen_unverified": {
+      "label": "Alergenai nepatikrinti",
+      "evidence": "Šis produktas neturi kompiuteriu nuskaitomos alergenų deklaracijos, todėl {allergens} nepavyko nei patvirtinti, nei atmesti. Prieš pirkdami perskaitykite pakuotę."
+    },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
       "evidence": "Open Food Facts skelbia šio produkto Nutri-Score {grade}; jis nustato bazinę maistinę kokybę prieš pritaikant jūsų tikslus."

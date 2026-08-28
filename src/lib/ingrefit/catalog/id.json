@@ -154,6 +154,10 @@
       "label": "Data alergen tidak lengkap",
       "evidence": "Tidak ada pernyataan alergen yang tersedia untuk produk ini, sehingga daftar alergen Anda tidak dapat diperiksa. Daftar kosong tidak pernah membuktikan bahwa produk bebas dari alergen tersebut."
     },
+    "warning.allergen_unverified": {
+      "label": "Alergen belum diverifikasi",
+      "evidence": "Produk ini tidak memiliki deklarasi alergen yang dapat dibaca mesin, sehingga {allergens} tidak dapat dipastikan ada atau tidak. Baca kemasan sebelum membeli."
+    },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
       "evidence": "Open Food Facts menerbitkan Nutri-Score {grade} untuk produk ini; nilai tersebut menetapkan kualitas gizi dasar sebelum tujuan Anda diterapkan."

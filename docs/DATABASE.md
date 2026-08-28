@@ -1,5 +1,23 @@
 # Database and Open Food Facts self-hosting
 
+
+## Installation identity
+
+`Installation` stores one row per device: the id the app generates at first
+launch and the secret it registered with. It is the only table that is not a
+cache — losing it does not lose user data, but every device has to re-register
+before it can prove possession of its id again, and until it does it is served
+as `free` when `INGREFIT_REQUIRE_INSTALLATION_PROOF=true`.
+
+Nothing else changes: there is still no user account, no scan history and no
+photo stored server-side.
+
+Prune abandoned rows with, for example:
+
+```sql
+DELETE FROM "Installation" WHERE "lastSeenAt" < now() - interval '18 months';
+```
+
 ## Why PostgreSQL
 
 The backend now needs persistence for four things: cached product records,

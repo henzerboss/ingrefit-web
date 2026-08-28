@@ -1,6 +1,46 @@
 # IngreFit API contract
 
-Protected requests require `Authorization: Bearer <client token>` and `X-IngreFit-Installation: <persistent UUID>`. `X-IngreFit-Plan` is a UI hint only; Premium is verified server-side with RevenueCat or a legacy signed entitlement.
+Protected requests require `Authorization: Bearer <client token>` and `X-IngreFit-Installation: <persistent UUID>`. `X-IngreFit-Plan` is a UI hint only; Premium is verified server-side.
+
+## Installation identity
+
+The client token ships inside the mobile bundle and authenticates the app, not the user. The installation id travels in every request header, so on its own it is a bearer credential: anyone who saw it in a log could be served as that subscriber.
+
+On first launch the app generates a 32-byte secret and registers it once:
+
+`POST /api/ingrefit/installation` with `{ "installationId": "...", "secret": "..." }`
+
+Registration is write-once. Re-registering an existing id with a different secret returns `409 INSTALLATION_TAKEN`, so an id observed in a log cannot be hijacked.
+
+Afterwards the secret never leaves the device. Every request carries
+
+`X-IngreFit-Signature: <unixSeconds>.<signature>`
+
+where `signature = SHA256(secret + ":" + SHA256(secret + ":" + payload))` and `payload = installationId + "\n" + timestamp + "\n" + requestPath`. React Native has SHA-256 but no HMAC, hence the nested construction rather than `createHmac`; nesting is what keeps it free of SHA-256 length extension. Signatures older or newer than five minutes are refused.
+
+A registered installation that presents no valid signature is served as `free`. Unregistered installations keep working through the legacy path until `INGREFIT_REQUIRE_INSTALLATION_PROOF=true`, which should be set once no old build is left in the wild.
+
+## Entitlement
+
+`POST /api/ingrefit/entitlement` verifies the subscription once and returns a signed token bound to the installation, valid 24 hours:
+
+```json
+{ "plan": "premium", "token": "<payload>.<signature>", "expiresAt": "2026-08-28T09:00:00.000Z" }
+```
+
+The app sends it back as `X-IngreFit-Entitlement` on every request. This is what keeps RevenueCat out of the per-request path: the subscriber lookup happens about once a day per device instead of once per request. RevenueCat answers are additionally cached in **both** directions, so repeated `X-IngreFit-Plan: premium` claims with throwaway installation ids cannot be turned into outbound requests on our account.
+
+## Rate limits
+
+Every route consumes a per-IP window **before** the plan is resolved, because resolving a plan may reach out to RevenueCat. `/api/ingrefit/usage` is metered like the rest and reports the real remaining budget:
+
+```json
+{
+  "plan": "premium",
+  "analyze": { "used": 12, "limit": 300, "remaining": 288, "resetsAt": "..." },
+  "ai": { "used": 3, "limit": 60, "remaining": 57, "resetsAt": "..." }
+}
+```
 
 ## App version
 
@@ -46,7 +86,11 @@ Use `mode: unpackaged`, `premiumFeatures: true`, a null barcode and exactly one 
 
 `POST /api/ingrefit/recommendations` is available only to a server-verified Premium installation. It accepts a barcode, locale, ISO-3166 alpha-2 `marketCountry` from the device region, and the same profile shape as analysis. The server never trusts a client score: it reloads the scanned product, scores it again with the deterministic scorer, and returns at most ten alternatives.
 
-Candidates must pass a recommendation-specific data-quality gate, be listed by Open Food Facts for the user's current market (`countries_tags`, or `en:world`) and share at least one specific canonical Open Food Facts category tag with the scanned product. Broad aisle tags such as `foods`, `snacks`, `dairies` and `beverages` are deliberately excluded from the matching gate, so nutrition similarity alone can never turn milk into canned food or chips into an unrelated snack. Candidates with fewer than six independent nutrient facts are rejected. Sparse all-zero macro profiles without ingredient evidence are rejected except for categories where that profile is expected (for example plain water). When a profile contains allergens, an avoid list or a diet restriction, ingredient evidence is mandatory. Candidates that conflict with those restrictions are rejected, and a normal (non-blocked) source product requires both a higher personalized score and a higher base-quality score.
+Candidates are fetched with the category and market gates applied **in SQL**, against GIN indexes on both `OffProduct` and `ProductCache` (`scripts/add-recommendation-index.sql`). The most specific canonical category tag is queried first; parent tags are added only while the candidate pool is below target, which keeps a niche category from producing an empty block while still ranking like-for-like matches far above near-misses. Broad aisle tags such as `foods`, `snacks`, `dairies` and `beverages` are excluded from the focus list entirely, so nutrition similarity alone can never turn milk into canned food.
+
+Candidates must also pass a recommendation-specific data-quality gate, be listed by Open Food Facts for the user's current market (`countries_tags`, or `en:world`), and carry at least six independent nutrient facts.
+
+Every request logs a one-line `[ingrefit] Recommendations` record with the candidate count, how many category tags were needed, and a per-reason rejection breakdown (`market`, `category`, `sparse_facts`, `quality_gate`, `blocked`, `low_confidence`, `no_gain`, `duplicate`). Six independent gates sit between a scan and a suggestion, and without those counters an empty block is indistinguishable from "nothing better exists". Sparse all-zero macro profiles without ingredient evidence are rejected except for categories where that profile is expected (for example plain water). When a profile contains allergens, an avoid list or a diet restriction, ingredient evidence is mandatory. Candidates that conflict with those restrictions are rejected, and a normal (non-blocked) source product requires both a higher personalized score and a higher base-quality score.
 
 The local OFF mirror should first be enriched with `--backfill-countries` and `--backfill-nutrition-basis` if it predates this feature, then have both expression GIN indexes from `scripts/add-recommendation-index.sql`:
 

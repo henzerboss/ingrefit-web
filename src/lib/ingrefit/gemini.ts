@@ -43,7 +43,10 @@ function models(): string[] {
 class RetryableGeminiError extends Error {}
 
 function parseJson(text: string): unknown {
-  const cleaned = text.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
+  const cleaned = text
+    .trim()
+    .replace(/^```(?:json)?\s*/i, '')
+    .replace(/\s*```$/, '');
   return JSON.parse(cleaned);
 }
 
@@ -55,7 +58,9 @@ async function attempt<T>(model: string, input: GeminiRequest<T>, apiKey: string
 
   const thinkingConfig = model.startsWith('gemini-3')
     ? { thinkingLevel: 'minimal' }
-    : model.includes('2.5') ? { thinkingBudget: 0 } : undefined;
+    : model.includes('2.5')
+      ? { thinkingBudget: 0 }
+      : undefined;
   const response = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`,
     {
@@ -79,7 +84,8 @@ async function attempt<T>(model: string, input: GeminiRequest<T>, apiKey: string
   const payload = (await response.json().catch(() => ({}))) as GeminiResponse;
   if (!response.ok) {
     const message = payload.error?.message ?? `Gemini ${model} returned HTTP ${response.status}`;
-    const retryable = response.status === 429 || response.status >= 500 || response.status === 404 || response.status === 400;
+    const retryable =
+      response.status === 429 || response.status >= 500 || response.status === 404 || response.status === 400;
     throw retryable ? new RetryableGeminiError(message) : new Error(message);
   }
   const usage = payload.usageMetadata;
@@ -87,21 +93,28 @@ async function attempt<T>(model: string, input: GeminiRequest<T>, apiKey: string
     const promptTokens = usage.promptTokenCount ?? 0;
     const outputTokens = usage.candidatesTokenCount ?? 0;
     const thoughtTokens = usage.thoughtsTokenCount ?? 0;
-    const estimatedCostUsd = model === 'gemini-3.1-flash-lite'
-      ? (promptTokens * 0.25 + (outputTokens + thoughtTokens) * 1.5) / 1_000_000
-      : null;
-    console.info('[ingrefit] Gemini usage', JSON.stringify({
-      operation: input.operation,
-      model,
-      promptTokens,
-      outputTokens,
-      thoughtTokens,
-      cachedTokens: usage.cachedContentTokenCount ?? 0,
-      totalTokens: usage.totalTokenCount ?? promptTokens + outputTokens + thoughtTokens,
-      estimatedCostUsd,
-    }));
+    const estimatedCostUsd =
+      model === 'gemini-3.1-flash-lite'
+        ? (promptTokens * 0.25 + (outputTokens + thoughtTokens) * 1.5) / 1_000_000
+        : null;
+    console.info(
+      '[ingrefit] Gemini usage',
+      JSON.stringify({
+        operation: input.operation,
+        model,
+        promptTokens,
+        outputTokens,
+        thoughtTokens,
+        cachedTokens: usage.cachedContentTokenCount ?? 0,
+        totalTokens: usage.totalTokenCount ?? promptTokens + outputTokens + thoughtTokens,
+        estimatedCostUsd,
+      }),
+    );
   }
-  const text = payload.candidates?.[0]?.content?.parts?.map((part) => part.text ?? '').join('').trim();
+  const text = payload.candidates?.[0]?.content?.parts
+    ?.map((part) => part.text ?? '')
+    .join('')
+    .trim();
   if (!text) throw new RetryableGeminiError(`Gemini ${model} returned an empty response`);
   return input.validate(parseJson(text));
 }

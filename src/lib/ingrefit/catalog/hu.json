@@ -154,6 +154,10 @@
       "label": "Az allergénadatok hiányosak",
       "evidence": "Ehhez a termékhez nem érhető el allergénnyilatkozat, ezért az allergénlistáját nem lehetett ellenőrizni. Az üres lista soha nem bizonyítja, hogy a termék mentes az allergéntől."
     },
+    "warning.allergen_unverified": {
+      "label": "Az allergének nincsenek ellenőrizve",
+      "evidence": "Ehhez a termékhez nincs géppel olvasható allergénnyilatkozat, ezért a(z) {allergens} sem megerősíteni, sem kizárni nem lehetett. Vásárlás előtt olvassa el a csomagolást."
+    },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
       "evidence": "Az Open Food Facts Nutri-Score {grade} besorolást közöl ehhez a termékhez; ez határozza meg az alapvető táplálkozási minőséget a céljai alkalmazása előtt."

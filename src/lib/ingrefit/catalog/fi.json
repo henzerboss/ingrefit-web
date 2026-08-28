@@ -154,6 +154,10 @@
       "label": "Allergeenitiedot ovat puutteelliset",
       "evidence": "Tälle tuotteelle ei ole saatavilla allergeenimerkintää, joten allergeenilistaasi ei voitu tarkistaa. Tyhjä lista ei koskaan todista, että tuote olisi vapaa allergeenista."
     },
+    "warning.allergen_unverified": {
+      "label": "Allergeeneja ei ole varmistettu",
+      "evidence": "Tässä tuotteessa ei ole koneluettavaa allergeeni-ilmoitusta, joten {allergens} ei voitu vahvistaa eikä sulkea pois. Lue pakkaus ennen ostamista."
+    },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
       "evidence": "Open Food Facts julkaisee tälle tuotteelle Nutri-Score-arvosanan {grade}; se määrittää ravitsemuksellisen peruslaadun ennen tavoitteidesi huomioimista."

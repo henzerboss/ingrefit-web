@@ -154,6 +154,10 @@
       "label": "Údaje o alergenech jsou neúplné",
       "evidence": "Pro tento výrobek není k dispozici prohlášení o alergenech, takže váš seznam alergenů nebylo možné zkontrolovat. Prázdný seznam nikdy nedokazuje, že výrobek alergen neobsahuje."
     },
+    "warning.allergen_unverified": {
+      "label": "Alergeny nebyly ověřeny",
+      "evidence": "Tento produkt nemá strojově čitelné prohlášení o alergenech, takže {allergens} nebylo možné potvrdit ani vyloučit. Před nákupem si přečtěte obal."
+    },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
       "evidence": "Open Food Facts pro tento výrobek zveřejňuje Nutri-Score {grade}; ten určuje výchozí nutriční kvalitu před zohledněním vašich cílů."

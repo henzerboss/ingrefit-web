@@ -1,16 +1,8 @@
 import { createHash } from 'node:crypto';
 
-import { productDataConfidence } from './dataQuality';
+import { GREAT_CONFIDENCE, hasIngredientEvidence, productDataConfidence } from './dataQuality';
 
-import type {
-  AnalysisProfile,
-  DietId,
-  GoalId,
-  ProductFacts,
-  ScoreSignal,
-  ScoredProduct,
-  Verdict,
-} from './types';
+import type { AnalysisProfile, DietId, GoalId, ProductFacts, ScoreSignal, ScoredProduct, Verdict } from './types';
 
 /**
  * Deterministic personal fit score.
@@ -71,6 +63,21 @@ function containsTerm(haystack: string, term: string): boolean {
   return Boolean(needle && source.includes(` ${needle} `));
 }
 
+/**
+ * Prefix match on word starts. `orzeszk` matches "orzeszkami", `пшениц`
+ * matches "пшеничная". Scripts without spaces (CJK, Thai) fall back to a plain
+ * substring test, because word boundaries do not exist there.
+ */
+function containsStem(haystack: string, stem: string): boolean {
+  const source = ` ${normalizedText(haystack)} `;
+  const needle = normalizedText(stem);
+  if (!needle) return false;
+  if (!/[\p{Script=Latin}\p{Script=Cyrillic}\p{Script=Greek}\p{Script=Hebrew}\p{Script=Arabic}]/u.test(needle)) {
+    return source.includes(needle);
+  }
+  return source.includes(` ${needle}`);
+}
+
 function saltEquivalent(facts: ProductFacts): number | null {
   const { salt100g, sodium100g } = facts.nutrition;
   if (typeof salt100g === 'number') return salt100g;
@@ -115,34 +122,606 @@ const ALLERGEN_TAGS: Record<string, string[]> = {
 /**
  * Fallback ingredient terms, used only when no normalized allergen tag exists
  * (AI label reading, AI photo, or an Open Food Facts record with no allergen
- * declaration). Covers the languages most likely to appear on packaging in our
- * launch markets.
+ * declaration).
+ *
+ * Entries are matched as PREFIXES on normalized words, not as whole words, so
+ * one entry covers inflections ("orzeszki" covers "orzeszkami"). Coverage is
+ * still finite, which is why an unmatched allergen on a record without
+ * canonical tags produces an explicit "not verified" warning rather than
+ * silence — see `warning.allergen_unverified` in scoreProduct.
  */
 const ALLERGEN_TERMS: Record<string, string[]> = {
-  milk: ['milk', 'lait', 'leche', 'latte', 'milch', 'leite', 'mleko', 'молоко', 'сливки', 'whey', 'casein', 'lactose', 'сыворотка', 'казеин', 'лактоза', 'butter', 'сливочное масло', 'cheese', 'сыр'],
-  eggs: ['egg', 'eggs', 'oeuf', 'huevo', 'uovo', 'ei', 'jajko', 'яйцо', 'яйца', 'albumin', 'яичный'],
-  peanuts: ['peanut', 'peanuts', 'arachide', 'cacahuete', 'erdnuss', 'orzech ziemny', 'арахис'],
-  tree_nuts: ['almond', 'hazelnut', 'walnut', 'cashew', 'pistachio', 'pecan', 'macadamia', 'amande', 'noisette', 'nuez', 'mandel', 'миндаль', 'фундук', 'грецкий орех', 'кешью', 'фисташк', 'орех'],
-  soy: ['soy', 'soya', 'soja', 'soybean', 'соя', 'соев'],
-  wheat: ['wheat', 'ble', 'trigo', 'frumento', 'weizen', 'pszenica', 'пшениц', 'gluten', 'глютен', 'клейковин'],
-  gluten: ['gluten', 'wheat', 'barley', 'rye', 'spelt', 'глютен', 'пшениц', 'ячмен', 'рожь', 'клейковин'],
-  fish: ['fish', 'poisson', 'pescado', 'pesce', 'fisch', 'ryba', 'рыба', 'anchovy', 'анчоус', 'tuna', 'тунец', 'salmon', 'лосось'],
-  crustaceans: ['shrimp', 'prawn', 'crab', 'lobster', 'crevette', 'gamba', 'krabbe', 'креветк', 'краб', 'омар', 'ракообразн'],
-  sesame: ['sesame', 'sesamo', 'sesam', 'кунжут', 'сезам'],
-  celery: ['celery', 'celeri', 'apio', 'sellerie', 'сельдерей'],
-  mustard: ['mustard', 'moutarde', 'mostaza', 'senf', 'горчиц'],
-  sulphites: ['sulphite', 'sulphites', 'sulfite', 'sulfites', 'sulfito', 'сульфит', 'e220', 'e221', 'e222', 'e223', 'e224', 'e226', 'e227', 'e228'],
-  lupin: ['lupin', 'lupine', 'altramuz', 'люпин'],
-  molluscs: ['mollusc', 'mollusk', 'squid', 'octopus', 'mussel', 'oyster', 'clam', 'моллюск', 'кальмар', 'мидии', 'устриц'],
+  milk: [
+    'milk',
+    'lait',
+    'leche',
+    'latte',
+    'milch',
+    'leite',
+    'mleko',
+    'mlieko',
+    'mleko',
+    'mjolk',
+    'melk',
+    'maito',
+    'tej',
+    'lapte',
+    'sut',
+    'susu',
+    'gatas',
+    'sua',
+    'молоко',
+    'молочн',
+    'сливк',
+    'сир',
+    'мляко',
+    'γάλα',
+    'חלב',
+    'حليب',
+    'لبن',
+    '牛乳',
+    '乳',
+    '牛奶',
+    '우유',
+    'นม',
+    'दूध',
+    'দুধ',
+    'பால்',
+    'పాలు',
+    'ಹಾಲು',
+    'പാൽ',
+    'દૂધ',
+    'ਦੁੱਧ',
+    'दूध',
+    'whey',
+    'casein',
+    'casein',
+    'lactose',
+    'lactoserum',
+    'laktoos',
+    'laktoz',
+    'сыворотк',
+    'казеин',
+    'лактоз',
+    'butter',
+    'beurre',
+    'mantequilla',
+    'burro',
+    'сливочное масло',
+    'cheese',
+    'fromage',
+    'queso',
+    'formaggio',
+    'kase',
+    'ser ',
+    'сыр',
+    'сыра',
+    'сыром',
+  ],
+  eggs: [
+    'egg',
+    'oeuf',
+    'œuf',
+    'huevo',
+    'uovo',
+    'uova',
+    'ei',
+    'eier',
+    'jajko',
+    'jaja',
+    'vejce',
+    'tojas',
+    'ou',
+    'oua',
+    'yumurta',
+    'telur',
+    'itlog',
+    'trung',
+    'agg',
+    'aeg',
+    'muna',
+    'яйц',
+    'яєц',
+    'αυγό',
+    'ביצה',
+    'بيض',
+    '卵',
+    '鶏卵',
+    '鸡蛋',
+    '蛋',
+    '계란',
+    '달걀',
+    'ไข่',
+    'अंडा',
+    'ডিম',
+    'முட்டை',
+    'albumin',
+    'ovalbumin',
+  ],
+  peanuts: [
+    'peanut',
+    'arachide',
+    'arachidi',
+    'cacahuete',
+    'cacahuate',
+    'amendoim',
+    'erdnuss',
+    'erdnuesse',
+    'orzech ziemn',
+    'orzeszki ziemn',
+    'orzeszk',
+    'podzemnice',
+    'arasid',
+    'foldimogyoro',
+    'alune de pamant',
+    'yer fistig',
+    'yerfistig',
+    'kacang tanah',
+    'mani',
+    'dau phong',
+    'lac ',
+    'jordnot',
+    'maapahkina',
+    'арахис',
+    'арахід',
+    'фъстъц',
+    'φιστίκι',
+    'בוטן',
+    'فول سوداني',
+    'فستق سوداني',
+    '落花生',
+    'ピーナッツ',
+    '花生',
+    '땅콩',
+    'ถั่วลิสง',
+    'मूंगफली',
+    'চিনাবাদাম',
+    'நிலக்கடலை',
+  ],
+  tree_nuts: [
+    'almond',
+    'hazelnut',
+    'walnut',
+    'cashew',
+    'pistachio',
+    'pecan',
+    'macadamia',
+    'brazil nut',
+    'tree nut',
+    'amande',
+    'noisette',
+    'noix ',
+    'almendra',
+    'avellana',
+    'nuez',
+    'nueces',
+    'mandorla',
+    'nocciola',
+    'mandel',
+    'haselnuss',
+    'walnuss',
+    'migdal',
+    'orzech wlosk',
+    'orzech laskow',
+    'lieskov',
+    'vlassk',
+    'badem',
+    'findik',
+    'ceviz',
+    'kacang mete',
+    'hanh nhan',
+    'миндал',
+    'фундук',
+    'грецкий орех',
+    'кешью',
+    'фисташк',
+    'мигдал',
+    'лісов',
+    'שקד',
+    'לוז',
+    'اللوز',
+    'بندق',
+    'جوز',
+    'アーモンド',
+    'くるみ',
+    'カシューナッツ',
+    '杏仁',
+    '腰果',
+    '核桃',
+    '아몬드',
+    '호두',
+    'อัลมอนด์',
+    'बादाम',
+    'काजू',
+    'কাঠবাদাম',
+  ],
+  soy: [
+    'soy',
+    'soya',
+    'soja',
+    'soybean',
+    'sojov',
+    'szoja',
+    'soia',
+    'sojabohn',
+    'kedelai',
+    'dau nanh',
+    'соя',
+    'соев',
+    'соєв',
+    'סויה',
+    'صويا',
+    '大豆',
+    '黄豆',
+    '대두',
+    '콩',
+    'ถั่วเหลือง',
+    'सोया',
+  ],
+  wheat: [
+    'wheat',
+    'ble',
+    'froment',
+    'trigo',
+    'frumento',
+    'grano tenero',
+    'weizen',
+    'pszen',
+    'psenic',
+    'buza',
+    'grau',
+    'nisasta bugday',
+    'bugday',
+    'lua mi',
+    'vete',
+    'hvede',
+    'vehna',
+    'kvieci',
+    'kviet',
+    'пшениц',
+    'пшенич',
+    'חיטה',
+    'قمح',
+    '小麦',
+    '小麥',
+    '밀',
+    'ข้าวสาลี',
+    'गेहूं',
+    'গম',
+    'gluten',
+    'glutine',
+    'глютен',
+    'клейковин',
+  ],
+  gluten: [
+    'gluten',
+    'glutine',
+    'gluteno',
+    'глютен',
+    'клейковин',
+    'wheat',
+    'ble',
+    'froment',
+    'trigo',
+    'frumento',
+    'weizen',
+    'pszen',
+    'psenic',
+    'buza',
+    'grau',
+    'bugday',
+    'пшениц',
+    'пшенич',
+    'חיטה',
+    'قمح',
+    '小麦',
+    '밀',
+    'ข้าวสาลี',
+    'गेहूं',
+    'barley',
+    'orge',
+    'cebada',
+    'orzo',
+    'gerste',
+    'jeczmien',
+    'ячмен',
+    'ячмін',
+    'شعير',
+    '大麦',
+    'rye',
+    'seigle',
+    'centeno',
+    'segale',
+    'roggen',
+    'zyto',
+    'рожь',
+    'жито',
+    'ライ麦',
+    'spelt',
+    'epeautre',
+    'espelta',
+    'dinkel',
+    'orkisz',
+    'полб',
+    'malt',
+    'malz',
+    'солод',
+  ],
+  fish: [
+    'fish',
+    'poisson',
+    'pescado',
+    'pesce',
+    'fisch',
+    'ryba',
+    'ryby',
+    'hal ',
+    'peste',
+    'balik',
+    'ikan',
+    'ca ',
+    'fisk',
+    'kala',
+    'zivis',
+    'zuvis',
+    'риба',
+    'рыба',
+    'рыбн',
+    'ψάρι',
+    'דג',
+    'سمك',
+    '魚',
+    '鱼',
+    '생선',
+    '어육',
+    'ปลา',
+    'मछली',
+    'মাছ',
+    'மீன்',
+    'anchov',
+    'анчоус',
+    'tuna',
+    'thon',
+    'atun',
+    'тунец',
+    'salmon',
+    'saumon',
+    'лосос',
+    'сельд',
+    'herring',
+    'nuoc mam',
+    'น้ำปลา',
+    'fish sauce',
+  ],
+  crustaceans: [
+    'shrimp',
+    'prawn',
+    'crab',
+    'lobster',
+    'crevette',
+    'gamba',
+    'langostino',
+    'gambero',
+    'krabbe',
+    'garnele',
+    'krewetk',
+    'krab',
+    'rak ',
+    'karides',
+    'udang',
+    'tom ',
+    'reka',
+    'креветк',
+    'краб',
+    'омар',
+    'ракообразн',
+    'שרימפס',
+    'روبيان',
+    'جمبري',
+    'エビ',
+    '海老',
+    '虾',
+    '새우',
+    'กุ้ง',
+    'झींगा',
+  ],
+  sesame: [
+    'sesame',
+    'sesamo',
+    'sesam',
+    'susam',
+    'wijen',
+    'vung',
+    'кунжут',
+    'сезам',
+    'שומשום',
+    'سمسم',
+    'ごま',
+    '胡麻',
+    '芝麻',
+    '참깨',
+    'งา',
+    'तिल',
+    'எள்',
+  ],
+  celery: [
+    'celery',
+    'celeri',
+    'apio',
+    'sedano',
+    'sellerie',
+    'seler',
+    'celer',
+    'zeller',
+    'telina',
+    'kereviz',
+    'сельдерей',
+    'селера',
+    'كرفس',
+    'セロリ',
+    '芹菜',
+    '셀러리',
+    'ขึ้นฉ่าย',
+  ],
+  mustard: [
+    'mustard',
+    'moutarde',
+    'mostaza',
+    'senape',
+    'senf',
+    'gorczyc',
+    'musztard',
+    'horcice',
+    'mustar',
+    'hardal',
+    'горчиц',
+    'гірчиц',
+    'خردل',
+    'マスタード',
+    '芥子',
+    '芥末',
+    '겨자',
+    'มัสตาร์ด',
+    'सरसों',
+  ],
+  sulphites: [
+    'sulphite',
+    'sulfite',
+    'sulfito',
+    'solfito',
+    'sulfit',
+    'siarczyn',
+    'сульфит',
+    'сульфіт',
+    'كبريتيت',
+    '亜硫酸',
+    '亚硫酸',
+    '아황산',
+    'e220',
+    'e221',
+    'e222',
+    'e223',
+    'e224',
+    'e226',
+    'e227',
+    'e228',
+  ],
+  lupin: ['lupin', 'lupine', 'altramuz', 'lupino', 'lubin', 'люпин', 'ترمس', 'ルピナス'],
+  molluscs: [
+    'mollusc',
+    'mollusk',
+    'molusco',
+    'mollusch',
+    'weichtier',
+    'mieczak',
+    'squid',
+    'octopus',
+    'mussel',
+    'oyster',
+    'clam',
+    'calamar',
+    'pulpo',
+    'mejillon',
+    'ostra',
+    'seppia',
+    'vongole',
+    'моллюск',
+    'кальмар',
+    'мидии',
+    'устриц',
+    'رخويات',
+    'イカ',
+    'タコ',
+    '貝',
+    '鱿鱼',
+    '오징어',
+    'หอย',
+  ],
+};
+
+/**
+ * Phrases that contain an allergen word but are not that allergen. Without
+ * these, "coconut milk" blocks a dairy allergy and "мускатный орех" (nutmeg)
+ * blocks a tree-nut allergy. A false block is not a safe default: it teaches
+ * the user to distrust real blocks.
+ */
+const ALLERGEN_EXCLUSIONS: Record<string, string[]> = {
+  milk: [
+    'coconut milk',
+    'almond milk',
+    'soy milk',
+    'soya milk',
+    'oat milk',
+    'rice milk',
+    'cashew milk',
+    'lait de coco',
+    'leche de coco',
+    'latte di cocco',
+    'kokosmilch',
+    'mleko kokosowe',
+    'кокосовое молоко',
+    'миндальное молоко',
+    'соевое молоко',
+    'овсяное молоко',
+    'рисовое молоко',
+    'milk thistle',
+    'молочай',
+    'молочная кислота',
+    'lactic acid',
+    'acide lactique',
+    'acido lactico',
+    'кокосовые сливки',
+    'coconut cream',
+    'nut butter',
+    'peanut butter',
+    'арахисовая паста',
+  ],
+  tree_nuts: [
+    'nutmeg',
+    'noix de muscade',
+    'nuez moscada',
+    'noce moscata',
+    'muskatnuss',
+    'galka muszkatolowa',
+    'мускатный орех',
+    'мускатний горіх',
+    'coconut',
+    'noix de coco',
+    'кокосовый орех',
+    'кокос',
+    'water chestnut',
+    'земляной орех',
+    'peanut',
+    'арахис',
+    'nutrition',
+    'nutriment',
+  ],
+  peanuts: ['peanut free', 'sans arachide', 'без арахиса'],
+  fish: ['fishless', 'jellyfish', 'shellfish'],
 };
 
 function allergenKey(value: string): string {
-  return value.toLowerCase().trim().replace(/[\s-]+/g, '_');
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[\s-]+/g, '_');
 }
 
 interface AllergenHit {
   kind: 'declared' | 'ingredient' | 'traces';
   match: string;
+}
+
+/** Text with every known false-positive phrase for this allergen removed. */
+function haystackWithoutExclusions(haystack: string, key: string): string {
+  const exclusions = ALLERGEN_EXCLUSIONS[key];
+  if (!exclusions?.length) return haystack;
+  let text = ` ${normalizedText(haystack)} `;
+  for (const phrase of exclusions) {
+    const needle = normalizedText(phrase);
+    if (needle) text = text.split(needle).join(' ');
+  }
+  return text;
 }
 
 function findAllergen(facts: ProductFacts, allergen: string): AllergenHit | null {
@@ -160,8 +739,19 @@ function findAllergen(facts: ProductFacts, allergen: string): AllergenHit | null
     .filter(Boolean)
     .join(' ');
   if (!haystack) return null;
-  const term = (ALLERGEN_TERMS[key] ?? [allergen]).find((candidate) => containsTerm(haystack, candidate));
+  const searchable = haystackWithoutExclusions(haystack, key);
+  const term = (ALLERGEN_TERMS[key] ?? [allergen]).find((candidate) => containsStem(searchable, candidate));
   return term ? { kind: 'ingredient', match: term } : null;
+}
+
+/**
+ * True when the record carries machine-readable allergen evidence, i.e. an
+ * answer we can trust in any language. Canonical Open Food Facts tags qualify;
+ * so do the closed-enum tags the label reader now returns. Free ingredient text
+ * does NOT: our term lists are finite and cannot cover 50 languages.
+ */
+function hasVerifiedAllergenEvidence(facts: ProductFacts): boolean {
+  return facts.allergenTags.length > 0 || facts.traceTags.length > 0 || facts.allergensVerified === true;
 }
 
 // ---------------------------------------------------------------------------
@@ -169,11 +759,99 @@ function findAllergen(facts: ProductFacts, allergen: string): AllergenHit | null
 // ---------------------------------------------------------------------------
 
 const DIET_FALLBACK_TERMS: Partial<Record<DietId, string[]>> = {
-  vegan: ['milk', 'whey', 'casein', 'butter', 'cream', 'cheese', 'egg', 'eggs', 'honey', 'gelatin', 'gelatine', 'fish', 'chicken', 'beef', 'pork', 'lard', 'carmine', 'lait', 'leche', 'huevo', 'miel', 'молоко', 'сыворотка', 'казеин', 'сливочное масло', 'сливки', 'сыр', 'яйцо', 'яйца', 'мёд', 'мед', 'желатин', 'рыба', 'курица', 'говядина', 'свинина', 'сало'],
-  vegetarian: ['gelatin', 'gelatine', 'fish', 'anchovy', 'anchovies', 'chicken', 'beef', 'pork', 'lard', 'rennet', 'carmine', 'желатин', 'рыба', 'анчоус', 'курица', 'говядина', 'свинина', 'сало', 'сычужн'],
-  pescatarian: ['chicken', 'beef', 'pork', 'lard', 'turkey', 'gelatin', 'poulet', 'boeuf', 'cerdo', 'курица', 'говядина', 'свинина', 'сало', 'индейка'],
+  vegan: [
+    'milk',
+    'whey',
+    'casein',
+    'butter',
+    'cream',
+    'cheese',
+    'egg',
+    'eggs',
+    'honey',
+    'gelatin',
+    'gelatine',
+    'fish',
+    'chicken',
+    'beef',
+    'pork',
+    'lard',
+    'carmine',
+    'lait',
+    'leche',
+    'huevo',
+    'miel',
+    'молоко',
+    'сыворотка',
+    'казеин',
+    'сливочное масло',
+    'сливки',
+    'сыр',
+    'яйцо',
+    'яйца',
+    'мёд',
+    'мед',
+    'желатин',
+    'рыба',
+    'курица',
+    'говядина',
+    'свинина',
+    'сало',
+  ],
+  vegetarian: [
+    'gelatin',
+    'gelatine',
+    'fish',
+    'anchovy',
+    'anchovies',
+    'chicken',
+    'beef',
+    'pork',
+    'lard',
+    'rennet',
+    'carmine',
+    'желатин',
+    'рыба',
+    'анчоус',
+    'курица',
+    'говядина',
+    'свинина',
+    'сало',
+    'сычужн',
+  ],
+  pescatarian: [
+    'chicken',
+    'beef',
+    'pork',
+    'lard',
+    'turkey',
+    'gelatin',
+    'poulet',
+    'boeuf',
+    'cerdo',
+    'курица',
+    'говядина',
+    'свинина',
+    'сало',
+    'индейка',
+  ],
   gluten_free: ['wheat', 'barley', 'rye', 'gluten', 'spelt', 'malt', 'пшениц', 'ячмен', 'рожь', 'глютен', 'солод'],
-  dairy_free: ['milk', 'whey', 'casein', 'butter', 'cream', 'cheese', 'lactose', 'молоко', 'сыворотка', 'казеин', 'сливочное масло', 'сливки', 'сыр', 'лактоза'],
+  dairy_free: [
+    'milk',
+    'whey',
+    'casein',
+    'butter',
+    'cream',
+    'cheese',
+    'lactose',
+    'молоко',
+    'сыворотка',
+    'казеин',
+    'сливочное масло',
+    'сливки',
+    'сыр',
+    'лактоза',
+  ],
 };
 
 type DietVerdict = { status: 'conflict' | 'uncertain'; evidence: string } | null;
@@ -187,7 +865,8 @@ function evaluateDiet(facts: ProductFacts, diet: DietId): DietVerdict {
   }
   if (diet === 'vegetarian') {
     if (analysis.vegetarian === 'no') return { status: 'conflict', evidence: 'Open Food Facts ingredient analysis' };
-    if (analysis.vegetarian === 'maybe') return { status: 'uncertain', evidence: 'Open Food Facts ingredient analysis' };
+    if (analysis.vegetarian === 'maybe')
+      return { status: 'uncertain', evidence: 'Open Food Facts ingredient analysis' };
   }
   if (diet === 'gluten_free') {
     if (facts.allergenTags.includes('en:gluten')) return { status: 'conflict', evidence: 'declared allergens' };
@@ -227,8 +906,22 @@ type RuleId = 'protein' | 'sugars' | 'fiber' | 'salt' | 'saturated_fat' | 'energ
 /** How strongly each goal cares about each rule. Weight = max, never a sum. */
 const GOAL_INTEREST: Record<RuleId, Partial<Record<GoalId, number>>> = {
   protein: { high_protein: 1, muscle_gain: 1, steady_energy: 0.4, weight_loss: 0.3 },
-  sugars: { low_sugar: 1, steady_energy: 0.7, weight_loss: 0.5, balanced: 0.5, heart_health: 0.3, digestive_wellness: 0.2 },
-  fiber: { high_fiber: 1, digestive_wellness: 0.9, heart_health: 0.4, steady_energy: 0.4, balanced: 0.4, weight_loss: 0.3 },
+  sugars: {
+    low_sugar: 1,
+    steady_energy: 0.7,
+    weight_loss: 0.5,
+    balanced: 0.5,
+    heart_health: 0.3,
+    digestive_wellness: 0.2,
+  },
+  fiber: {
+    high_fiber: 1,
+    digestive_wellness: 0.9,
+    heart_health: 0.4,
+    steady_energy: 0.4,
+    balanced: 0.4,
+    weight_loss: 0.3,
+  },
   salt: { low_sodium: 1, heart_health: 0.7, balanced: 0.3 },
   saturated_fat: { low_saturated_fat: 1, heart_health: 0.8, balanced: 0.3, weight_loss: 0.2 },
   energy: { weight_loss: 1, balanced: 0.2 },
@@ -278,7 +971,13 @@ function evaluateRules(facts: ProductFacts, profile: AnalysisProfile): RuleOutco
   const reference = facts.nutritionReference ?? '100g';
   const nutrition = facts.nutrition;
 
-  const push = (rule: RuleId, code: string, fit: number, value: number | string, extra: Record<string, string | number> = {}) => {
+  const push = (
+    rule: RuleId,
+    code: string,
+    fit: number,
+    value: number | string,
+    extra: Record<string, string | number> = {},
+  ) => {
     outcomes.push({
       rule,
       code,
@@ -289,39 +988,137 @@ function evaluateRules(facts: ProductFacts, profile: AnalysisProfile): RuleOutco
 
   if (typeof nutrition.protein100g === 'number') {
     const value = nutrition.protein100g;
-    push('protein', 'personal.protein', band(value, [[5, -0.6], [8, -0.1], [12, 0.25], [20, 0.6]], 1), round(value));
+    push(
+      'protein',
+      'personal.protein',
+      band(
+        value,
+        [
+          [5, -0.6],
+          [8, -0.1],
+          [12, 0.25],
+          [20, 0.6],
+        ],
+        1,
+      ),
+      round(value),
+    );
   }
 
   if (typeof nutrition.sugars100g === 'number') {
     const value = nutrition.sugars100g;
     const scaled = beverage ? value * 2 : value;
-    push('sugars', 'personal.sugars', band(scaled, [[2, 1], [5, 0.7], [10, 0.2], [15, -0.3], [25, -0.7]], -1), round(value));
+    push(
+      'sugars',
+      'personal.sugars',
+      band(
+        scaled,
+        [
+          [2, 1],
+          [5, 0.7],
+          [10, 0.2],
+          [15, -0.3],
+          [25, -0.7],
+        ],
+        -1,
+      ),
+      round(value),
+    );
   }
 
   if (typeof nutrition.fiber100g === 'number') {
     const value = nutrition.fiber100g;
-    push('fiber', 'personal.fiber', band(value, [[1.5, -0.6], [3, 0], [6, 0.5]], 1), round(value));
+    push(
+      'fiber',
+      'personal.fiber',
+      band(
+        value,
+        [
+          [1.5, -0.6],
+          [3, 0],
+          [6, 0.5],
+        ],
+        1,
+      ),
+      round(value),
+    );
   }
 
   const salt = saltEquivalent(facts);
   if (salt !== null) {
-    push('salt', 'personal.salt', band(salt, [[0.3, 1], [0.75, 0.4], [1.25, 0], [1.5, -0.4]], -1), round(salt, 2));
+    push(
+      'salt',
+      'personal.salt',
+      band(
+        salt,
+        [
+          [0.3, 1],
+          [0.75, 0.4],
+          [1.25, 0],
+          [1.5, -0.4],
+        ],
+        -1,
+      ),
+      round(salt, 2),
+    );
   }
 
   if (typeof nutrition.saturatedFat100g === 'number') {
     const value = nutrition.saturatedFat100g;
-    push('saturated_fat', 'personal.saturated_fat', band(value, [[1.5, 1], [3, 0.4], [5, -0.1], [10, -0.6]], -1), round(value));
+    push(
+      'saturated_fat',
+      'personal.saturated_fat',
+      band(
+        value,
+        [
+          [1.5, 1],
+          [3, 0.4],
+          [5, -0.1],
+          [10, -0.6],
+        ],
+        -1,
+      ),
+      round(value),
+    );
   }
 
   if (typeof nutrition.energyKcal100g === 'number') {
     const value = nutrition.energyKcal100g;
     const scaled = beverage ? value * 2.5 : value;
-    push('energy', 'personal.energy', band(scaled, [[80, 1], [150, 0.6], [250, 0.2], [400, -0.3]], -0.8), Math.round(value));
+    push(
+      'energy',
+      'personal.energy',
+      band(
+        scaled,
+        [
+          [80, 1],
+          [150, 0.6],
+          [250, 0.2],
+          [400, -0.3],
+        ],
+        -0.8,
+      ),
+      Math.round(value),
+    );
   }
 
   if (typeof nutrition.carbohydrates100g === 'number') {
     const value = nutrition.carbohydrates100g;
-    push('carbs', 'personal.carbs', band(value, [[5, 1], [10, 0.6], [20, 0], [40, -0.6]], -1), round(value));
+    push(
+      'carbs',
+      'personal.carbs',
+      band(
+        value,
+        [
+          [5, 1],
+          [10, 0.6],
+          [20, 0],
+          [40, -0.6],
+        ],
+        -1,
+      ),
+      round(value),
+    );
   }
 
   if (facts.novaGroup !== null) {
@@ -356,7 +1153,13 @@ function computeBase(facts: ProductFacts): BaseResult {
   let score = NEUTRAL_BASE;
   let confidence = 1;
 
-  const add = (id: string, code: string, impact: number, severity: ScoreSignal['severity'], params: Record<string, string | number> = {}) => {
+  const add = (
+    id: string,
+    code: string,
+    impact: number,
+    severity: ScoreSignal['severity'],
+    params: Record<string, string | number> = {},
+  ) => {
     const rounded = round(impact);
     signals.push({ id, code, scope: 'base', impact: rounded, severity, params });
     score += rounded;
@@ -367,14 +1170,33 @@ function computeBase(facts: ProductFacts): BaseResult {
 
   const grade = facts.nutriScore?.toLowerCase().trim();
   if (grade && NUTRISCORE_BASE[grade] !== undefined) {
-    add('base:nutriscore', 'base.nutriscore', NUTRISCORE_BASE[grade] - NEUTRAL_BASE, grade <= 'b' ? 'positive' : grade === 'c' ? 'neutral' : 'caution', { grade });
+    add(
+      'base:nutriscore',
+      'base.nutriscore',
+      NUTRISCORE_BASE[grade] - NEUTRAL_BASE,
+      grade <= 'b' ? 'positive' : grade === 'c' ? 'neutral' : 'caution',
+      { grade },
+    );
   } else {
     const proxy = nutritionProxy(facts);
     if (proxy) {
-      add('base:profile', 'base.nutrition_profile', proxy.impact, proxy.impact > 0.3 ? 'positive' : proxy.impact < -0.3 ? 'caution' : 'neutral', { detail: proxy.detail, ...estimateFlag });
+      add(
+        'base:profile',
+        'base.nutrition_profile',
+        proxy.impact,
+        proxy.impact > 0.3 ? 'positive' : proxy.impact < -0.3 ? 'caution' : 'neutral',
+        { detail: proxy.detail, ...estimateFlag },
+      );
       confidence = Math.min(confidence, 0.85);
     } else {
-      signals.push({ id: 'base:unknown', code: 'base.nutrition_unknown', scope: 'base', impact: 0, severity: 'neutral', params: {} });
+      signals.push({
+        id: 'base:unknown',
+        code: 'base.nutrition_unknown',
+        scope: 'base',
+        impact: 0,
+        severity: 'neutral',
+        params: {},
+      });
       confidence = Math.min(confidence, 0.4);
     }
   }
@@ -401,7 +1223,13 @@ function computeBase(facts: ProductFacts): BaseResult {
       count: moderate.length,
     });
   }
-  if (!high.length && !moderate.length && facts.additives.length === 0 && facts.source === 'openfoodfacts' && facts.ingredientsText) {
+  if (
+    !high.length &&
+    !moderate.length &&
+    facts.additives.length === 0 &&
+    facts.source === 'openfoodfacts' &&
+    facts.ingredientsText
+  ) {
     add('base:additives-clean', 'base.additives_clean', 0.2, 'positive');
   }
 
@@ -411,7 +1239,9 @@ function computeBase(facts: ProductFacts): BaseResult {
 
   if (typeof facts.fruitsVegetablesNuts100g === 'number' && facts.fruitsVegetablesNuts100g >= 40) {
     const impact = facts.fruitsVegetablesNuts100g >= 80 ? 0.5 : 0.3;
-    add('base:fruit-veg', 'base.fruit_veg', impact, 'positive', { percent: Math.round(facts.fruitsVegetablesNuts100g) });
+    add('base:fruit-veg', 'base.fruit_veg', impact, 'positive', {
+      percent: Math.round(facts.fruitsVegetablesNuts100g),
+    });
   }
 
   if (facts.organic) {
@@ -451,23 +1281,95 @@ function nutritionProxy(facts: ProductFacts): { impact: number; detail: string }
 
   if (typeof nutrition.sugars100g === 'number') {
     const scaled = beverage ? nutrition.sugars100g * 2 : nutrition.sugars100g;
-    push(scaled, band(scaled, [[5, 0.5], [10, 0.1], [22.5, -0.7]], -1.3), `sugars=${round(nutrition.sugars100g)}`);
+    push(
+      scaled,
+      band(
+        scaled,
+        [
+          [5, 0.5],
+          [10, 0.1],
+          [22.5, -0.7],
+        ],
+        -1.3,
+      ),
+      `sugars=${round(nutrition.sugars100g)}`,
+    );
   }
   if (typeof nutrition.saturatedFat100g === 'number') {
-    push(nutrition.saturatedFat100g, band(nutrition.saturatedFat100g, [[1.5, 0.4], [5, -0.2], [10, -0.7]], -1.1), `saturated_fat=${round(nutrition.saturatedFat100g)}`);
+    push(
+      nutrition.saturatedFat100g,
+      band(
+        nutrition.saturatedFat100g,
+        [
+          [1.5, 0.4],
+          [5, -0.2],
+          [10, -0.7],
+        ],
+        -1.1,
+      ),
+      `saturated_fat=${round(nutrition.saturatedFat100g)}`,
+    );
   }
   if (salt !== null) {
-    push(salt, band(salt, [[0.3, 0.4], [1, 0], [1.5, -0.5]], -0.9), `salt=${round(salt, 2)}`);
+    push(
+      salt,
+      band(
+        salt,
+        [
+          [0.3, 0.4],
+          [1, 0],
+          [1.5, -0.5],
+        ],
+        -0.9,
+      ),
+      `salt=${round(salt, 2)}`,
+    );
   }
   if (typeof nutrition.fiber100g === 'number') {
-    push(nutrition.fiber100g, band(nutrition.fiber100g, [[1.5, -0.3], [3, 0.2], [6, 0.5]], 0.8), `fiber=${round(nutrition.fiber100g)}`);
+    push(
+      nutrition.fiber100g,
+      band(
+        nutrition.fiber100g,
+        [
+          [1.5, -0.3],
+          [3, 0.2],
+          [6, 0.5],
+        ],
+        0.8,
+      ),
+      `fiber=${round(nutrition.fiber100g)}`,
+    );
   }
   if (typeof nutrition.protein100g === 'number') {
-    push(nutrition.protein100g, band(nutrition.protein100g, [[3, -0.2], [8, 0.1], [15, 0.4]], 0.6), `protein=${round(nutrition.protein100g)}`);
+    push(
+      nutrition.protein100g,
+      band(
+        nutrition.protein100g,
+        [
+          [3, -0.2],
+          [8, 0.1],
+          [15, 0.4],
+        ],
+        0.6,
+      ),
+      `protein=${round(nutrition.protein100g)}`,
+    );
   }
   if (typeof nutrition.energyKcal100g === 'number') {
     const scaled = beverage ? nutrition.energyKcal100g * 2.5 : nutrition.energyKcal100g;
-    push(scaled, band(scaled, [[150, 0.3], [300, 0], [450, -0.4]], -0.7), `energy=${Math.round(nutrition.energyKcal100g)}`);
+    push(
+      scaled,
+      band(
+        scaled,
+        [
+          [150, 0.3],
+          [300, 0],
+          [450, -0.4],
+        ],
+        -0.7,
+      ),
+      `energy=${Math.round(nutrition.energyKcal100g)}`,
+    );
   }
 
   if (known < 3) return null;
@@ -483,9 +1385,13 @@ export function scoreProduct(facts: ProductFacts, profile: AnalysisProfile): Sco
   let blocked = false;
 
   // --- 1. Blockers ---------------------------------------------------------
+  const uncheckedAllergens: string[] = [];
   for (const allergen of profile.allergens) {
     const hit = findAllergen(facts, allergen);
-    if (!hit) continue;
+    if (!hit) {
+      uncheckedAllergens.push(allergenKey(allergen));
+      continue;
+    }
     if (hit.kind === 'traces') {
       signals.push({
         id: `traces:${allergenKey(allergen)}`,
@@ -508,14 +1414,31 @@ export function scoreProduct(facts: ProductFacts, profile: AnalysisProfile): Sco
     });
   }
 
-  if (profile.allergens.length && !facts.allergenTags.length && !facts.ingredientsText && facts.source !== 'openfoodfacts') {
+  // Allergen evidence quality. Three distinct states, and the difference
+  // matters more than the score does:
+  //
+  //   verified    canonical tags (Open Food Facts) or the label reader's
+  //               closed-enum tags -> a "not found" answer is meaningful.
+  //   unverified  ingredient text exists but no machine-readable declaration.
+  //               Our multilingual term lists cover a minority of the 50
+  //               supported languages, so "not found" means "not checked".
+  //               Saying nothing here is what let a Japanese peanut label
+  //               through as an ordinary low score.
+  //   missing     no declaration and no ingredient text at all.
+  //
+  // Only the allergens we did NOT find are reported: once one of them blocks
+  // the product, telling the user the check was unreliable adds nothing.
+  let allergenEvidence: 'verified' | 'unverified' | 'missing' = 'verified';
+  if (uncheckedAllergens.length && !hasVerifiedAllergenEvidence(facts)) {
+    const hasText = Boolean(facts.ingredientsText?.trim() || facts.ingredients.length);
+    allergenEvidence = hasText ? 'unverified' : 'missing';
     signals.push({
-      id: 'allergen:no-data',
-      code: 'warning.allergen_data_missing',
+      id: hasText ? 'allergen:unverified' : 'allergen:no-data',
+      code: hasText ? 'warning.allergen_unverified' : 'warning.allergen_data_missing',
       scope: 'blocker',
       impact: 0,
       severity: 'caution',
-      params: {},
+      params: { allergens: uncheckedAllergens.join(', ') },
     });
   }
 
@@ -563,12 +1486,17 @@ export function scoreProduct(facts: ProductFacts, profile: AnalysisProfile): Sco
 
   // --- 3. Evidence confidence + normalized personalization -----------------
   const estimated = facts.nutritionBasis === 'estimated_visual' || facts.nutritionBasis === 'estimated_text';
-  const basisConfidence = facts.nutritionBasis === 'estimated_visual'
-    ? 0.55
-    : facts.nutritionBasis === 'estimated_text'
-      ? 0.75
-      : 1;
-  const confidence = round(Math.min(base.confidence, basisConfidence, productDataConfidence(facts)), 2);
+  const basisConfidence =
+    facts.nutritionBasis === 'estimated_visual' ? 0.55 : facts.nutritionBasis === 'estimated_text' ? 0.75 : 1;
+  // An unverifiable allergen declaration is a real gap in the evidence the
+  // result rests on, so it lowers confidence just like a missing nutrient
+  // panel does. This also keeps such a product out of the "great fit" verdict
+  // and out of the recommendation pool.
+  const allergenConfidence = allergenEvidence === 'verified' ? 1 : allergenEvidence === 'unverified' ? 0.7 : 0.6;
+  const confidence = round(
+    Math.min(base.confidence, basisConfidence, productDataConfidence(facts), allergenConfidence),
+    2,
+  );
 
   // Pull the *whole* baseline towards neutral when evidence is incomplete, not
   // only AI estimates. This prevents a sparse OFF row with favourable zeroes
@@ -579,10 +1507,12 @@ export function scoreProduct(facts: ProductFacts, profile: AnalysisProfile): Sco
   const rawBaseSignalDelta = base.signals.reduce((sum, signal) => sum + signal.impact, 0);
   const adjustedBaseDelta = baseAfterConfidence - NEUTRAL_BASE;
   const baseSignalFactor = Math.abs(rawBaseSignalDelta) > 0.0001 ? adjustedBaseDelta / rawBaseSignalDelta : 1;
-  signals.push(...base.signals.map((signal) => ({
-    ...signal,
-    impact: round(signal.impact * baseSignalFactor),
-  })));
+  signals.push(
+    ...base.signals.map((signal) => ({
+      ...signal,
+      impact: round(signal.impact * baseSignalFactor),
+    })),
+  );
 
   const outcomes = evaluateRules(facts, profile);
   let weightSum = 0;
@@ -626,11 +1556,22 @@ export function scoreProduct(facts: ProductFacts, profile: AnalysisProfile): Sco
         scope: 'personal',
         impact: share,
         severity: severityOf(outcome.fit),
-        params: { ...outcome.params, goal: goal ?? profile.goals[0] ?? 'balanced', ...(estimated ? { estimated: 1 } : {}) },
+        params: {
+          ...outcome.params,
+          goal: goal ?? profile.goals[0] ?? 'balanced',
+          ...(estimated ? { estimated: 1 } : {}),
+        },
       });
     }
   } else {
-    signals.push({ id: 'personal:none', code: 'personal.no_data', scope: 'personal', impact: 0, severity: 'neutral', params: {} });
+    signals.push({
+      id: 'personal:none',
+      code: 'personal.no_data',
+      scope: 'personal',
+      impact: 0,
+      severity: 'neutral',
+      params: {},
+    });
   }
 
   // --- 4. Final score ------------------------------------------------------
@@ -652,11 +1593,16 @@ export function scoreProduct(facts: ProductFacts, profile: AnalysisProfile): Sco
   score = round(score);
 
   // A low-confidence result may still have a numerically high estimate, but it
-  // must not be labelled as a confident "great fit". Recommendations already
-  // require higher confidence; this guard mainly protects direct sparse scans.
+  // must not be labelled as a confident "great fit".
+  //
+  // The bar used to be confidence >= 0.7, which a minimal record (four
+  // nutrients, no ingredient list) cleared with 0.02 to spare — while the
+  // recommendation gate demanded six nutrients for the same product. Both now
+  // use GREAT_CONFIDENCE, and "great" additionally requires knowing what is in
+  // the product, not only its macros.
   const verdict: Verdict = blocked
     ? 'blocked'
-    : score >= 8 && confidence >= 0.7
+    : score >= 8 && confidence >= GREAT_CONFIDENCE && hasIngredientEvidence(facts)
       ? 'great'
       : score >= 6
         ? 'good'

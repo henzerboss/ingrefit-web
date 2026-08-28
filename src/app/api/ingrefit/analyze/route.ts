@@ -10,24 +10,36 @@ import { analyzeRequestSchema } from '@/lib/ingrefit/schemas';
 export const runtime = 'nodejs';
 export const maxDuration = 60;
 
-const MAX_REQUEST_BYTES = 16 * 1024 * 1024;
+const MAX_REQUEST_BYTES = 24 * 1024 * 1024;
+
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers':
+    'Authorization, Content-Type, X-IngreFit-Installation, X-IngreFit-Plan, X-IngreFit-Entitlement, X-IngreFit-Signature',
+  'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+} as const;
 
 export async function POST(request: NextRequest) {
   try {
     const installationId = requireClient(request);
-    const plan = await resolvePlan(request, installationId);
 
     const contentLength = Number(request.headers.get('content-length') ?? '0');
     if (Number.isFinite(contentLength) && contentLength > MAX_REQUEST_BYTES) {
       throw new HttpError(413, 'PAYLOAD_TOO_LARGE', 'The analysis request is too large.');
     }
 
-    // Two independent windows: one per installation so a single extracted
-    // client token cannot drain the Gemini budget, and one per IP so a farm of
-    // generated installation ids cannot do the same.
+    // Rate limiting runs BEFORE the plan is resolved.
+    //
+    // resolvePlan can call RevenueCat, so doing it first meant an unmetered
+    // caller could turn every request into an outbound request on our account.
+    // The per-IP window is consumed at the free rate here because the plan is
+    // not known yet; the per-installation window is consumed afterwards at the
+    // correct rate.
+    await enforceLimit('analyze:ip', clientIp(request.headers), false);
+
+    const plan = await resolvePlan(request, installationId);
     const premium = plan === 'premium';
     const limit = await enforceLimit('analyze:installation', installationId, premium);
-    await enforceLimit('analyze:ip', clientIp(request.headers), premium);
 
     const raw = await request.json().catch(() => null);
     const parsed = analyzeRequestSchema.safeParse(raw);
@@ -44,6 +56,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(result, {
       headers: {
+        ...CORS_HEADERS,
         'Cache-Control': 'no-store',
         'X-IngreFit-Fact-Source': origin,
         'X-RateLimit-Limit': String(limit.limit),
@@ -57,12 +70,5 @@ export async function POST(request: NextRequest) {
 }
 
 export function OPTIONS() {
-  return new NextResponse(null, {
-    status: 204,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Headers': 'Authorization, Content-Type, X-IngreFit-Installation, X-IngreFit-Plan, X-IngreFit-Entitlement',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    },
-  });
+  return new NextResponse(null, { status: 204, headers: CORS_HEADERS });
 }

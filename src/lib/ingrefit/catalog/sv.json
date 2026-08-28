@@ -154,6 +154,10 @@
       "label": "Allergenuppgifterna är ofullständiga",
       "evidence": "Det finns ingen allergendeklaration för produkten, så din allergenlista kunde inte kontrolleras. En tom lista bevisar aldrig att produkten är fri från allergenet."
     },
+    "warning.allergen_unverified": {
+      "label": "Allergener är inte verifierade",
+      "evidence": "Den här produkten har ingen maskinläsbar allergendeklaration, så {allergens} kunde varken bekräftas eller uteslutas. Läs förpackningen innan du köper."
+    },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
       "evidence": "Open Food Facts publicerar Nutri-Score {grade} för produkten; det anger den grundläggande näringskvaliteten innan dina mål tillämpas."

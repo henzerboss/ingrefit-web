@@ -154,6 +154,10 @@
       "label": "Allergeeniandmed on puudulikud",
       "evidence": "Selle toote kohta puudub allergeenide deklaratsioon, seega ei saanud sinu allergeenide loendit kontrollida. Tühi loend ei tõesta kunagi, et toode on allergeenist vaba."
     },
+    "warning.allergen_unverified": {
+      "label": "Allergeene ei kontrollitud",
+      "evidence": "Sellel tootel puudub masinloetav allergeenide deklaratsioon, seega ei saanud {allergens} ei kinnitada ega välistada. Lugege enne ostmist pakendit."
+    },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
       "evidence": "Open Food Facts avaldab selle toote kohta Nutri-Score {grade}; see määrab baas-toiteväärtuse kvaliteedi enne sinu eesmärkide rakendamist."

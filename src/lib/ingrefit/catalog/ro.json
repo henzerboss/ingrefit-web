@@ -154,6 +154,10 @@
       "label": "Datele despre alergeni sunt incomplete",
       "evidence": "Nu este disponibilă nicio declarație de alergeni pentru acest produs, astfel încât lista ta de alergeni nu a putut fi verificată. O listă goală nu dovedește niciodată că produsul nu conține alergenul."
     },
+    "warning.allergen_unverified": {
+      "label": "Alergenii nu au fost verificați",
+      "evidence": "Acest produs nu are o declarație de alergeni lizibilă automat, așa că {allergens} nu a putut fi nici confirmat, nici exclus. Citiți ambalajul înainte de a cumpăra."
+    },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
       "evidence": "Open Food Facts publică Nutri-Score {grade} pentru acest produs; acesta stabilește calitatea nutrițională de bază înainte de aplicarea obiectivelor tale."

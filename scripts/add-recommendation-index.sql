@@ -8,3 +8,13 @@ ON "OffProduct" USING GIN ((data->'categories_tags'));
 -- `node scripts/import-openfoodfacts.mjs --backfill-countries` first.
 CREATE INDEX CONCURRENTLY IF NOT EXISTS off_product_countries_tags_gin
 ON "OffProduct" USING GIN ((data->'countries_tags'));
+
+-- Same two gates for the network/cache table. Without these the API had to read
+-- the 400 most recently refreshed rows and discard almost all of them after a
+-- full deserialize, which is the single most expensive thing a recommendation
+-- request used to do.
+CREATE INDEX CONCURRENTLY IF NOT EXISTS product_cache_categories_tags_gin
+ON "ProductCache" USING GIN ((facts->'categories_tags'));
+
+CREATE INDEX CONCURRENTLY IF NOT EXISTS product_cache_countries_tags_gin
+ON "ProductCache" USING GIN ((facts->'countries_tags'));

@@ -6,11 +6,7 @@ import { enrichProductFromText, recognizeFoodPhoto, recognizeLabel } from './rec
 import { enforceLimit } from './rateLimit';
 import { scoreProduct } from './scoring';
 import type { AnalyzeRequest } from './schemas';
-import type { Plan, ProductFacts, UsageSnapshot } from './types';
-
-function unlimitedUsage(plan: Plan): UsageSnapshot {
-  return { used: 0, limit: 0, remaining: 0, plan, resetsAt: new Date(0).toISOString() };
-}
+import type { Plan, ProductFacts } from './types';
 
 export async function analyzeProduct(request: AnalyzeRequest, installationId: string, plan: Plan) {
   const photoMode = request.mode === 'label' || request.mode === 'unpackaged';
@@ -33,7 +29,11 @@ export async function analyzeProduct(request: AnalyzeRequest, installationId: st
     alreadyLocalized = true;
     factsOrigin = 'ai_photo';
     if (!hasEnoughFacts(product)) {
-      throw new HttpError(422, 'INSUFFICIENT_PHOTO_DATA', 'The supplied photo does not support a useful food and nutrition estimate.');
+      throw new HttpError(
+        422,
+        'INSUFFICIENT_PHOTO_DATA',
+        'The supplied photo does not support a useful food and nutrition estimate.',
+      );
     }
   } else if (request.mode === 'label') {
     product = await recognizeLabel(request.barcode ?? null, request.photos!, request.locale);
@@ -47,9 +47,14 @@ export async function analyzeProduct(request: AnalyzeRequest, installationId: st
       }
     }
     if (!hasEnoughFacts(product)) {
-      throw new HttpError(422, 'INSUFFICIENT_LABEL_DATA', 'The supplied photos do not contain enough legible product facts.', {
-        unknownFields: product.unknownFields,
-      });
+      throw new HttpError(
+        422,
+        'INSUFFICIENT_LABEL_DATA',
+        'The supplied photos do not contain enough legible product facts.',
+        {
+          unknownFields: product.unknownFields,
+        },
+      );
     }
   } else {
     let found: ProductFacts | null = null;
@@ -61,13 +66,20 @@ export async function analyzeProduct(request: AnalyzeRequest, installationId: st
       console.error('[ingrefit] Open Food Facts lookup failed', error);
       throw new HttpError(502, 'OPEN_FOOD_FACTS_UNAVAILABLE', 'The product database is temporarily unavailable.');
     }
-    const canEnrichFromText = Boolean(found && (found.ingredientsText || found.ingredients.length || found.categories.length));
-    if (found && request.premiumFeatures && canEnrichFromText && (!hasEnoughFacts(found) || hasContaminatedIngredients(found.ingredientsText))) {
+    const canEnrichFromText = Boolean(
+      found && (found.ingredientsText || found.ingredients.length || found.categories.length),
+    );
+    if (
+      found &&
+      request.premiumFeatures &&
+      canEnrichFromText &&
+      (!hasEnoughFacts(found) || hasContaminatedIngredients(found.ingredientsText))
+    ) {
       try {
         await enforceLimit('ai:installation', installationId, plan === 'premium');
         found = await enrichProductFromText(found, request.locale);
         alreadyLocalized = true;
-        factsOrigin = factsOrigin ? `${factsOrigin}+ai` as FactsOrigin : 'network';
+        factsOrigin = factsOrigin ? (`${factsOrigin}+ai` as FactsOrigin) : 'network';
       } catch (error) {
         console.error('[ingrefit] Text-based product enrichment failed; requesting label photos', error);
       }
@@ -83,6 +95,17 @@ export async function analyzeProduct(request: AnalyzeRequest, installationId: st
     product = found;
   }
 
+  // Score FIRST, on the source-language facts.
+  //
+  // Allergen and diet detection falls back to multilingual ingredient-term
+  // matching whenever no canonical Open Food Facts tag exists (every AI-read
+  // label, and sparse database rows). Translating the ingredient statement
+  // before scoring rewrote exactly the text those terms match against, so a
+  // Premium user could lose a peanut blocker that a free user would have seen.
+  // The scorer therefore never sees translated text; translation is a display
+  // concern and happens afterwards.
+  const scored = scoreProduct(product, request.profile);
+
   let translated = request.premiumFeatures && alreadyLocalized;
   if (request.premiumFeatures && !alreadyLocalized) {
     const localized = await localizeProductFacts(product, request.locale);
@@ -90,14 +113,12 @@ export async function analyzeProduct(request: AnalyzeRequest, installationId: st
     translated = localized.translated;
   }
 
-  const scored = scoreProduct(product, request.profile);
   const assessment = await explainScore(product, request.profile, scored, request.locale, request.premiumFeatures);
 
   return {
     status: 'complete' as const,
     product,
     assessment: { ...assessment, aiEnhanced: request.premiumFeatures, translated },
-    usage: unlimitedUsage(plan),
     /** Diagnostic only: which source answered. Clients may ignore this. */
     factsOrigin,
   };

@@ -154,6 +154,10 @@
       "label": "Allergeendata is onvolledig",
       "evidence": "Geen allergeenverklaring is vir hierdie produk beskikbaar nie, daarom kon jou allergeenlys nie nagegaan word nie. ’n Leë lys bewys nooit dat die produk vry van die allergeen is nie."
     },
+    "warning.allergen_unverified": {
+      "label": "Allergeenkontrole nie geverifieer nie",
+      "evidence": "Hierdie produk het geen masjienleesbare allergeenverklaring nie, dus kon {allergens} nie bevestig of uitgesluit word nie. Lees die verpakking voordat jy koop."
+    },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
       "evidence": "Open Food Facts publiseer Nutri-Score {grade} vir hierdie produk; dit bepaal die basiese voedingsgehalte voordat jou doelwitte toegepas word."

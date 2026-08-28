@@ -1,13 +1,8 @@
 import { Prisma } from '@prisma/client';
 
-import { recommendationQualityGate } from './dataQuality';
+import { GREAT_CONFIDENCE, recommendationQualityGate } from './dataQuality';
 import { safeDb } from './db';
-import {
-  categoryTagsFromRaw,
-  hasEnoughFacts,
-  productFactsFromRaw,
-  type OpenFoodFactsProduct,
-} from './openFoodFacts';
+import { categoryTagsFromRaw, hasEnoughFacts, productFactsFromRaw, type OpenFoodFactsProduct } from './openFoodFacts';
 import { scoreProduct } from './scoring';
 import type { AnalysisProfile, ProductFacts } from './types';
 
@@ -24,9 +19,12 @@ export interface ProductRecommendation {
 }
 
 const MAX_RECOMMENDATIONS = 10;
-const MIN_SCORE_GAIN = 0.7;
-const MIN_BASE_GAIN = 0.3;
-const MIN_CONFIDENCE = 0.72;
+// A gain smaller than this is inside the noise of the model itself.
+const MIN_SCORE_GAIN = 0.5;
+// The alternative must be better as a product, not only better for this
+// profile — otherwise "healthier" would just mean "matches your goals".
+const MIN_BASE_GAIN = 0.2;
+const MIN_CONFIDENCE = GREAT_CONFIDENCE;
 const WORLD_MARKET_TAG = 'en:world';
 
 const COUNTRY_TAG_OVERRIDES: Record<string, string> = {
@@ -67,7 +65,11 @@ function marketTagForCountry(countryCode?: string | null): string | null {
 
 function hasMarketAvailability(raw: OpenFoodFactsProduct, marketTag: string): boolean {
   const tags = Array.isArray(raw.countries_tags)
-    ? new Set(raw.countries_tags.filter((tag): tag is string => typeof tag === 'string').map((tag) => tag.trim().toLowerCase()))
+    ? new Set(
+        raw.countries_tags
+          .filter((tag): tag is string => typeof tag === 'string')
+          .map((tag) => tag.trim().toLowerCase()),
+      )
     : new Set<string>();
   return tags.has(marketTag) || tags.has(WORLD_MARKET_TAG);
 }
@@ -114,9 +116,7 @@ function normalizeIdentity(value: string | null): string {
 /** OFF emits category tags from broad to specific in normal product records. */
 function focusCategoryTags(raw: OpenFoodFactsProduct): string[] {
   const tags = categoryTagsFromRaw(raw);
-  const specific = [...tags]
-    .reverse()
-    .filter((tag) => tag.startsWith('en:') && !BROAD_CATEGORY_TAGS.has(tag));
+  const specific = [...tags].reverse().filter((tag) => tag.startsWith('en:') && !BROAD_CATEGORY_TAGS.has(tag));
   return [...new Set(specific)].slice(0, 4);
 }
 
@@ -128,64 +128,193 @@ async function readSourceRaw(barcode: string): Promise<OpenFoodFactsProduct | nu
     if (cached) return cached.facts as unknown as OpenFoodFactsProduct;
     if (process.env.OPEN_FOOD_FACTS_LOCAL !== 'true') return null;
     const local = await db.offProduct.findUnique({ where: { barcode }, select: { data: true } });
-    return local ? local.data as unknown as OpenFoodFactsProduct : null;
+    return local ? (local.data as unknown as OpenFoodFactsProduct) : null;
   });
 }
 
-async function recentCachedCandidates(barcode: string): Promise<RawProductRow[]> {
-  return (await safeDb((db) => db.productCache.findMany({
-    where: { barcode: { not: barcode } },
-    orderBy: { refreshedAt: 'desc' },
-    take: 400,
-    select: { barcode: true, facts: true },
-  }).then((rows) => rows.map((row) => ({ barcode: row.barcode, data: row.facts }))))) ?? [];
+/**
+ * Candidate sourcing.
+ *
+ * Both tables are queried with the SAME two gates the ranker would apply
+ * anyway — category containment and market availability — so the rows that come
+ * back are already plausible. Previously the cache table was read as "the 400
+ * most recently refreshed products, whatever they are" and almost all of them
+ * were thrown away after a full `productFactsFromRaw` deserialize.
+ *
+ * `focusTags` is ordered most-specific first. The primary tag is tried alone;
+ * if it yields too few candidates the parent tags are added, which is what
+ * keeps the alternatives block from being empty for niche categories.
+ */
+const CANDIDATE_TARGET = 60;
+const CANDIDATE_HARD_LIMIT = 200;
+
+interface IndexAvailability {
+  mirror: boolean;
+  cache: boolean;
 }
 
-async function recommendationIndexesReady(): Promise<boolean> {
-  const rows = await safeDb((db) => db.$queryRaw<Array<{ categories: string | null; countries: string | null }>>`
+let indexAvailability: { value: IndexAvailability; checkedAt: number } | null = null;
+const INDEX_CHECK_TTL_MS = 10 * 60_000;
+
+/**
+ * Which GIN indexes exist. Cached: the answer changes at most once per
+ * deployment, and this used to run a catalog query on every single request.
+ */
+async function recommendationIndexes(): Promise<IndexAvailability> {
+  if (indexAvailability && Date.now() - indexAvailability.checkedAt < INDEX_CHECK_TTL_MS) {
+    return indexAvailability.value;
+  }
+  const rows = await safeDb(
+    (db) => db.$queryRaw<
+      Array<{
+        categories: string | null;
+        countries: string | null;
+        cacheCategories: string | null;
+        cacheCountries: string | null;
+      }>
+    >`
     SELECT
       to_regclass('public.off_product_categories_tags_gin')::text AS categories,
-      to_regclass('public.off_product_countries_tags_gin')::text AS countries
-  `);
-  return Boolean(rows?.[0]?.categories && rows?.[0]?.countries);
+      to_regclass('public.off_product_countries_tags_gin')::text AS countries,
+      to_regclass('public.product_cache_categories_tags_gin')::text AS "cacheCategories",
+      to_regclass('public.product_cache_countries_tags_gin')::text AS "cacheCountries"
+  `,
+  );
+  const value: IndexAvailability = {
+    mirror: Boolean(rows?.[0]?.categories && rows?.[0]?.countries),
+    cache: Boolean(rows?.[0]?.cacheCategories && rows?.[0]?.cacheCountries),
+  };
+  indexAvailability = { value, checkedAt: Date.now() };
+  return value;
 }
 
-async function mirrorCandidates(barcode: string, focusTags: string[], marketTag: string): Promise<RawProductRow[]> {
-  if (process.env.OPEN_FOOD_FACTS_LOCAL !== 'true' || !focusTags.length || !(await recommendationIndexesReady())) return [];
+/**
+ * Category-containment OR market-availability filter, expressed so PostgreSQL
+ * can serve both halves from the GIN indexes (`@>` is index-backed, unlike a
+ * function call on the JSON value).
+ */
+function tagFilterSql(column: 'facts' | 'data', tags: string[], marketTag: string): Prisma.Sql {
+  const json = Prisma.raw(`"${column}"`);
+  const categoryClauses = tags.map(
+    (tag) => Prisma.sql`(${json}->'categories_tags') @> ${JSON.stringify([tag])}::jsonb`,
+  );
+  return Prisma.sql`
+    (${Prisma.join(categoryClauses, ' OR ')})
+    AND (
+      (${json}->'countries_tags') @> ${JSON.stringify([marketTag])}::jsonb
+      OR (${json}->'countries_tags') @> ${JSON.stringify([WORLD_MARKET_TAG])}::jsonb
+    )
+  `;
+}
 
-  // Only query the single most-specific source category. Expanding to a parent
-  // tag increased recall but could turn green beans into peas or another nearby
-  // aisle product. For alternatives, precision is more important than filling
-  // every slot: fewer genuinely like-for-like products beat ten loose matches.
-  const primaryTag = focusTags[0]!;
-  const tagJson = JSON.stringify([primaryTag]);
-  const marketJson = JSON.stringify([marketTag]);
-  const worldJson = JSON.stringify([WORLD_MARKET_TAG]);
-  return (await safeDb((db) => db.$queryRaw<RawProductRow[]>(Prisma.sql`
+async function cachedCandidates(barcode: string, tags: string[], marketTag: string): Promise<RawProductRow[]> {
+  if (!tags.length) return [];
+  const indexes = await recommendationIndexes();
+  if (indexes.cache) {
+    return (
+      (await safeDb((db) =>
+        db.$queryRaw<RawProductRow[]>(Prisma.sql`
+      SELECT barcode, facts AS data
+      FROM "ProductCache"
+      WHERE barcode <> ${barcode}
+        AND ${tagFilterSql('facts', tags, marketTag)}
+      ORDER BY "refreshedAt" DESC
+      LIMIT ${CANDIDATE_HARD_LIMIT}
+    `),
+      )) ?? []
+    );
+  }
+  // No index yet: keep the old behaviour so the feature still works during a
+  // deploy, but read far fewer rows since they are filtered in JS anyway.
+  const rows = await safeDb((db) =>
+    db.productCache.findMany({
+      where: { barcode: { not: barcode } },
+      orderBy: { refreshedAt: 'desc' },
+      take: CANDIDATE_HARD_LIMIT,
+      select: { barcode: true, facts: true },
+    }),
+  );
+  return (rows ?? []).map((row: { barcode: string; facts: unknown }) => ({ barcode: row.barcode, data: row.facts }));
+}
+
+async function mirrorCandidates(barcode: string, tags: string[], marketTag: string): Promise<RawProductRow[]> {
+  if (process.env.OPEN_FOOD_FACTS_LOCAL !== 'true' || !tags.length) return [];
+  if (!(await recommendationIndexes()).mirror) return [];
+  return (
+    (await safeDb((db) =>
+      db.$queryRaw<RawProductRow[]>(Prisma.sql`
     SELECT barcode, data
     FROM "OffProduct"
     WHERE barcode <> ${barcode}
-      AND (data->'categories_tags') @> ${tagJson}::jsonb
-      AND ((data->'countries_tags') @> ${marketJson}::jsonb OR (data->'countries_tags') @> ${worldJson}::jsonb)
+      AND ${tagFilterSql('data', tags, marketTag)}
       AND COALESCE(data->>'product_name', data->>'product_name_en', data->>'generic_name', '') <> ''
-    LIMIT 250
-  `))) ?? [];
+    LIMIT ${CANDIDATE_HARD_LIMIT}
+  `),
+    )) ?? []
+  );
 }
+
+async function collectCandidates(
+  barcode: string,
+  focusTags: string[],
+  marketTag: string,
+): Promise<{ pool: Map<string, RawProductRow>; tagsUsed: number }> {
+  const pool = new Map<string, RawProductRow>();
+  // Widen one parent tag at a time. Precision still wins the ranking — a
+  // candidate sharing the primary tag always outranks one that only shares a
+  // parent — but an empty block helps nobody, and niche categories (a single
+  // "en:green-beans" product in the market) used to produce exactly that.
+  let tagsUsed = 0;
+  for (let depth = 1; depth <= focusTags.length; depth += 1) {
+    const tags = focusTags.slice(0, depth);
+    tagsUsed = depth;
+    const [cached, mirrored] = await Promise.all([
+      cachedCandidates(barcode, tags, marketTag),
+      mirrorCandidates(barcode, tags, marketTag),
+    ]);
+    for (const row of cached) pool.set(row.barcode, row);
+    for (const row of mirrored) pool.set(row.barcode, row);
+    if (pool.size >= CANDIDATE_TARGET) break;
+  }
+  return { pool, tagsUsed };
+}
+
+/**
+ * How close a candidate is to the scanned product.
+ *
+ * The primary (most specific) shared tag is worth an order of magnitude more
+ * than a parent tag, so a like-for-like match always outranks a near-miss. A
+ * parent-only match is allowed rather than rejected outright: refusing it made
+ * the alternatives block empty for any category with a single product in the
+ * market, which reads to the user as "nothing better exists".
+ */
+const PRIMARY_TAG_WEIGHT = 100;
 
 function categorySimilarity(sourceTags: string[], focusTags: string[], candidateRaw: OpenFoodFactsProduct): number {
   const candidateTags = new Set(categoryTagsFromRaw(candidateRaw));
-  // The candidate must share the *most specific* canonical OFF product type.
-  // Parent categories alone are not enough (e.g. beans -> peas). This is a
-  // deliberately strict gate; an empty list is preferable to a loose match.
   const primaryTag = focusTags[0];
-  if (!primaryTag || !candidateTags.has(primaryTag)) return 0;
+  if (!primaryTag) return 0;
 
-  let similarity = 0;
+  let similarity = candidateTags.has(primaryTag) ? PRIMARY_TAG_WEIGHT : 0;
   focusTags.forEach((tag, index) => {
-    if (candidateTags.has(tag)) similarity += Math.max(1, 5 - index);
+    if (index > 0 && candidateTags.has(tag)) similarity += Math.max(1, 5 - index);
   });
   for (const tag of sourceTags) if (candidateTags.has(tag)) similarity += 0.1;
-  return similarity;
+  // A candidate that shares nothing but generic aisles is not an alternative.
+  return similarity >= 1 ? similarity : 0;
+}
+
+/** Why a candidate was dropped. Logged in aggregate so an empty block is diagnosable. */
+type RejectionReason =
+  'market' | 'category' | 'sparse_facts' | 'quality_gate' | 'blocked' | 'low_confidence' | 'no_gain' | 'duplicate';
+
+export interface RecommendationDiagnostics {
+  /** Set when the whole request could not produce anything, with the reason. */
+  outcome: 'ok' | 'no_market' | 'unknown_source' | 'no_category' | 'sparse_source' | 'empty';
+  candidates: number;
+  tagsUsed: number;
+  accepted: number;
+  rejected: Partial<Record<RejectionReason, number>>;
 }
 
 export async function findHealthierRecommendations(input: {
@@ -194,56 +323,123 @@ export async function findHealthierRecommendations(input: {
   marketCountry?: string;
   profile: AnalysisProfile;
 }): Promise<ProductRecommendation[]> {
+  return (await findHealthierRecommendationsWithDiagnostics(input)).recommendations;
+}
+
+/**
+ * Same as `findHealthierRecommendations`, but also reports why candidates were
+ * dropped.
+ *
+ * Six independent gates sit between a scan and a suggestion, each defensible on
+ * its own. Their combined effect on real traffic was never measured, so an
+ * empty alternatives block was indistinguishable from "nothing better exists".
+ * The counters below are what makes that difference visible in the logs.
+ */
+export async function findHealthierRecommendationsWithDiagnostics(input: {
+  barcode: string;
+  locale: string;
+  marketCountry?: string;
+  profile: AnalysisProfile;
+}): Promise<{ recommendations: ProductRecommendation[]; diagnostics: RecommendationDiagnostics }> {
+  const rejected: Partial<Record<RejectionReason, number>> = {};
+  const drop = (reason: RejectionReason) => {
+    rejected[reason] = (rejected[reason] ?? 0) + 1;
+  };
+  const done = (
+    outcome: RecommendationDiagnostics['outcome'],
+    recommendations: ProductRecommendation[],
+    candidates = 0,
+    tagsUsed = 0,
+  ) => {
+    const diagnostics: RecommendationDiagnostics = {
+      outcome,
+      candidates,
+      tagsUsed,
+      accepted: recommendations.length,
+      rejected,
+    };
+    console.info('[ingrefit] Recommendations', JSON.stringify({ barcode: input.barcode, ...diagnostics }));
+    return { recommendations, diagnostics };
+  };
+
   const marketTag = marketTagForCountry(input.marketCountry);
-  if (!marketTag) return [];
+  if (!marketTag) return done('no_market', []);
 
   const sourceRaw = await readSourceRaw(input.barcode);
-  if (!sourceRaw) return [];
+  if (!sourceRaw) return done('unknown_source', []);
 
   const sourceTags = categoryTagsFromRaw(sourceRaw);
   const focusTags = focusCategoryTags(sourceRaw);
-  if (!focusTags.length) return [];
+  if (!focusTags.length) return done('no_category', []);
 
   const sourceFacts = productFactsFromRaw(sourceRaw, input.barcode, input.locale);
-  if (!hasEnoughFacts(sourceFacts)) return [];
+  if (!hasEnoughFacts(sourceFacts)) return done('sparse_source', []);
   const sourceScore = scoreProduct(sourceFacts, input.profile);
 
-  const pool = new Map<string, RawProductRow>();
-  for (const row of await recentCachedCandidates(input.barcode)) pool.set(row.barcode, row);
-  for (const row of await mirrorCandidates(input.barcode, focusTags, marketTag)) pool.set(row.barcode, row);
+  const { pool, tagsUsed } = await collectCandidates(input.barcode, focusTags, marketTag);
 
-  const ranked: Array<{ product: ProductFacts; score: number; baseScore: number; delta: number; similarity: number }> = [];
+  const ranked: Array<{ product: ProductFacts; score: number; baseScore: number; delta: number; similarity: number }> =
+    [];
   const seenIdentities = new Set<string>();
   for (const row of pool.values()) {
     const raw = row.data as OpenFoodFactsProduct;
     // Unknown market is treated as unavailable. This intentionally prefers an
     // empty recommendation block over suggesting a product the user may not be
     // able to buy in their country.
-    if (!hasMarketAvailability(raw, marketTag)) continue;
+    if (!hasMarketAvailability(raw, marketTag)) {
+      drop('market');
+      continue;
+    }
     const similarity = categorySimilarity(sourceTags, focusTags, raw);
-    if (!similarity) continue;
+    if (!similarity) {
+      drop('category');
+      continue;
+    }
 
     const product = productFactsFromRaw(raw, row.barcode, input.locale);
-    if (!hasEnoughFacts(product) || !recommendationQualityGate(product, input.profile)) continue;
+    if (!hasEnoughFacts(product)) {
+      drop('sparse_facts');
+      continue;
+    }
+    if (!recommendationQualityGate(product, input.profile)) {
+      drop('quality_gate');
+      continue;
+    }
     const scored = scoreProduct(product, input.profile);
-    if (scored.blocked || scored.confidence < MIN_CONFIDENCE) continue;
+    if (scored.blocked) {
+      drop('blocked');
+      continue;
+    }
+    if (scored.confidence < MIN_CONFIDENCE) {
+      drop('low_confidence');
+      continue;
+    }
 
     const delta = Math.round((scored.score - sourceScore.score) * 10) / 10;
     const baseGain = scored.baseScore - sourceScore.baseScore;
     if (sourceScore.blocked) {
-      if (delta < 1 || scored.score < 4.5) continue;
+      // The scanned product is unusable for this user, so anything genuinely
+      // safe and decent is an improvement, whatever the numeric delta says.
+      if (scored.score < 4.5) {
+        drop('no_gain');
+        continue;
+      }
     } else if (delta < MIN_SCORE_GAIN || baseGain < MIN_BASE_GAIN) {
+      drop('no_gain');
       continue;
     }
 
     const identity = `${normalizeIdentity(product.brand)}|${normalizeIdentity(product.name)}`;
-    if (!identity || seenIdentities.has(identity)) continue;
+    if (!identity || seenIdentities.has(identity)) {
+      drop('duplicate');
+      continue;
+    }
     seenIdentities.add(identity);
     ranked.push({ product, score: scored.score, baseScore: scored.baseScore, delta, similarity });
   }
 
   ranked.sort((a, b) => b.similarity - a.similarity || b.score - a.score || b.delta - a.delta);
-  return ranked.slice(0, MAX_RECOMMENDATIONS).map(({ product, score, baseScore, delta }) => ({
+  const recommendations = ranked.slice(0, MAX_RECOMMENDATIONS).map(({ product, score, baseScore, delta }) => ({
     product: {
       source: product.source,
       barcode: product.barcode,
@@ -256,4 +452,6 @@ export async function findHealthierRecommendations(input: {
     baseScore,
     delta,
   }));
+
+  return done(recommendations.length ? 'ok' : 'empty', recommendations, pool.size, tagsUsed);
 }

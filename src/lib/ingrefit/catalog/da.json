@@ -154,6 +154,10 @@
       "label": "Allergendata er ufuldstændige",
       "evidence": "Der findes ingen allergendeklaration for dette produkt, så din allergenliste kunne ikke kontrolleres. En tom liste beviser aldrig, at produktet er fri for allergenet."
     },
+    "warning.allergen_unverified": {
+      "label": "Allergener er ikke bekræftet",
+      "evidence": "Dette produkt har ingen maskinlæsbar allergendeklaration, så {allergens} kunne hverken bekræftes eller udelukkes. Læs emballagen, før du køber."
+    },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
       "evidence": "Open Food Facts offentliggør Nutri-Score {grade} for dette produkt; den fastlægger den grundlæggende ernæringskvalitet, før dine mål anvendes."

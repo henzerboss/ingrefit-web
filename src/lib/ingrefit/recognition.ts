@@ -5,8 +5,34 @@ import { HttpError } from './http';
 import { classifyAdditives } from './additives';
 import { callGemini } from './gemini';
 import { additiveName } from './catalog';
-import { additiveBasisText, catalogLanguage } from './signalCatalog';
+import { additiveBasisText, allergenTagName, catalogLanguage } from './signalCatalog';
 import type { LabelPhoto, NutritionFacts, ProductAdditive, ProductFacts } from './types';
+
+/**
+ * Closed vocabulary the label reader must map printed allergen words onto.
+ *
+ * This is the fix for allergen detection outside the handful of languages our
+ * ingredient-term lists cover: the model sees the package in its own language
+ * and returns a canonical tag, exactly like Open Food Facts does. The scorer
+ * then matches tags, never translated substrings.
+ */
+const ALLERGEN_TAG_VALUES = [
+  'en:milk',
+  'en:eggs',
+  'en:peanuts',
+  'en:nuts',
+  'en:soybeans',
+  'en:gluten',
+  'en:wheat',
+  'en:fish',
+  'en:crustaceans',
+  'en:sesame-seeds',
+  'en:celery',
+  'en:mustard',
+  'en:sulphur-dioxide-and-sulphites',
+  'en:lupin',
+  'en:molluscs',
+] as const;
 
 const EMPTY_ANALYSIS = { vegan: null, vegetarian: null, palmOil: null } as const;
 const EMPTY_LEVELS = { fat: null, saturatedFat: null, sugars: null, salt: null } as const;
@@ -33,6 +59,8 @@ const extractedSchema = z.object({
   ingredients: z.array(z.string().trim().min(1)).max(100),
   allergens: z.array(z.string().trim().min(1)).max(30),
   traces: z.array(z.string().trim().min(1)).max(30),
+  allergenTags: z.array(z.enum(ALLERGEN_TAG_VALUES)).max(20),
+  traceTags: z.array(z.enum(ALLERGEN_TAG_VALUES)).max(20),
   additives: z.array(z.string().trim().min(1)).max(50),
   labels: z.array(z.string().trim().min(1)).max(30),
   alcoholPercent: nullableNumber,
@@ -54,7 +82,23 @@ const extractedSchema = z.object({
 
 const responseSchema = {
   type: 'OBJECT',
-  required: ['name', 'brand', 'quantity', 'ingredientsText', 'ingredients', 'allergens', 'traces', 'additives', 'labels', 'alcoholPercent', 'nutritionReference', 'nutrition', 'unknownFields'],
+  required: [
+    'name',
+    'brand',
+    'quantity',
+    'ingredientsText',
+    'ingredients',
+    'allergens',
+    'traces',
+    'allergenTags',
+    'traceTags',
+    'additives',
+    'labels',
+    'alcoholPercent',
+    'nutritionReference',
+    'nutrition',
+    'unknownFields',
+  ],
   properties: {
     name: { type: 'STRING', nullable: true },
     brand: { type: 'STRING', nullable: true },
@@ -63,13 +107,26 @@ const responseSchema = {
     ingredients: { type: 'ARRAY', items: { type: 'STRING' } },
     allergens: { type: 'ARRAY', items: { type: 'STRING' } },
     traces: { type: 'ARRAY', items: { type: 'STRING' } },
+    allergenTags: { type: 'ARRAY', maxItems: 20, items: { type: 'STRING', enum: [...ALLERGEN_TAG_VALUES] } },
+    traceTags: { type: 'ARRAY', maxItems: 20, items: { type: 'STRING', enum: [...ALLERGEN_TAG_VALUES] } },
     additives: { type: 'ARRAY', items: { type: 'STRING' } },
     labels: { type: 'ARRAY', items: { type: 'STRING' } },
     alcoholPercent: { type: 'NUMBER', nullable: true },
     nutritionReference: { type: 'STRING', enum: ['100g', '100ml', 'serving'], nullable: true },
     nutrition: {
       type: 'OBJECT',
-      required: ['energyKcal100g', 'protein100g', 'carbohydrates100g', 'sugars100g', 'fat100g', 'saturatedFat100g', 'fiber100g', 'salt100g', 'sodium100g', 'servingSize'],
+      required: [
+        'energyKcal100g',
+        'protein100g',
+        'carbohydrates100g',
+        'sugars100g',
+        'fat100g',
+        'saturatedFat100g',
+        'fiber100g',
+        'salt100g',
+        'sodium100g',
+        'servingSize',
+      ],
       properties: {
         energyKcal100g: { type: 'NUMBER', nullable: true },
         protein100g: { type: 'NUMBER', nullable: true },
@@ -92,6 +149,7 @@ const textEnrichmentSchema = z.object({
   name: z.string().trim().min(1).max(180).nullable(),
   ingredientsText: z.string().trim().min(1).max(4_000).nullable(),
   ingredients: z.array(z.string().trim().min(1).max(180)).max(100),
+  allergenTags: z.array(z.enum(ALLERGEN_TAG_VALUES)).max(20),
   alcoholPercent: nullableNumber,
   nutritionReference: z.enum(['100g', '100ml']),
   estimatedNutrition: z.object({
@@ -109,17 +167,37 @@ const textEnrichmentSchema = z.object({
 
 const textEnrichmentResponseSchema = {
   type: 'OBJECT',
-  required: ['usable', 'name', 'ingredientsText', 'ingredients', 'alcoholPercent', 'nutritionReference', 'estimatedNutrition', 'nutritionEstimateConfidence'],
+  required: [
+    'usable',
+    'name',
+    'ingredientsText',
+    'ingredients',
+    'allergenTags',
+    'alcoholPercent',
+    'nutritionReference',
+    'estimatedNutrition',
+    'nutritionEstimateConfidence',
+  ],
   properties: {
     usable: { type: 'BOOLEAN' },
     name: { type: 'STRING', nullable: true },
     ingredientsText: { type: 'STRING', nullable: true },
     ingredients: { type: 'ARRAY', maxItems: 100, items: { type: 'STRING' } },
+    allergenTags: { type: 'ARRAY', maxItems: 20, items: { type: 'STRING', enum: [...ALLERGEN_TAG_VALUES] } },
     alcoholPercent: { type: 'NUMBER', nullable: true },
     nutritionReference: { type: 'STRING', enum: ['100g', '100ml'] },
     estimatedNutrition: {
       type: 'OBJECT',
-      required: ['energyKcal100g', 'protein100g', 'carbohydrates100g', 'sugars100g', 'fat100g', 'saturatedFat100g', 'fiber100g', 'salt100g'],
+      required: [
+        'energyKcal100g',
+        'protein100g',
+        'carbohydrates100g',
+        'sugars100g',
+        'fat100g',
+        'saturatedFat100g',
+        'fiber100g',
+        'salt100g',
+      ],
       properties: {
         energyKcal100g: { type: 'NUMBER', nullable: true },
         protein100g: { type: 'NUMBER', nullable: true },
@@ -135,7 +213,13 @@ const textEnrichmentResponseSchema = {
   },
 } as const;
 
-function completeness(value: { name: string | null; brand: string | null; quantity: string | null; ingredientsText: string | null; nutrition: NutritionFacts }): number {
+function completeness(value: {
+  name: string | null;
+  brand: string | null;
+  quantity: string | null;
+  ingredientsText: string | null;
+  nutrition: NutritionFacts;
+}): number {
   const checked: unknown[] = [
     value.name,
     value.brand,
@@ -175,6 +259,7 @@ export async function enrichProductFromText(product: ProductFacts, locale: strin
       'First isolate the actual product name and coherent ingredient declaration. Remove addresses, contacts, URLs, dates, promotions, legal boilerplate and duplicated multilingual label fragments.',
       'For ingredientsText and ingredients, preserve only ingredients present in the supplied record. Never add an ingredient, allergen, claim or product variant that is not supported by the source text.',
       'Extract alcoholPercent only when an alcohol-by-volume percentage is explicitly present in the supplied record. Never infer alcohol from a product category or name.',
+      'allergenTags is mandatory: map every allergen present in the supplied ingredient declaration onto the canonical tags in the schema enum, in whatever language the record is written. This is a safety field, so include a tag whenever the corresponding ingredient is plainly present. Return an empty array only when the ingredient declaration is readable and contains none of them.',
       'Separately provide a cautious approximate nutrient profile for the identified product using general food-composition knowledge and the supplied ingredient order. These values are estimates, not declared package facts.',
       'Use rounded plausible values per 100 g or 100 ml and never false precision. Return null when a useful estimate is not reliable.',
       'Set usable to true only when the identity is credible and at least four nutrient values can be estimated. Otherwise set usable to false.',
@@ -210,8 +295,19 @@ export async function enrichProductFromText(product: ProductFacts, locale: strin
   const nutrition: NutritionFacts = useEstimate
     ? { ...result.estimatedNutrition, servingSize: product.nutrition.servingSize, sodium100g: null }
     : product.nutrition;
+  const readableIngredients = Boolean(result.ingredientsText || result.ingredients.length);
   const enriched: ProductFacts = {
     ...product,
+    // Union rather than replacement: a canonical tag already published by Open
+    // Food Facts is stronger evidence than anything re-read from text.
+    allergenTags: [...new Set([...product.allergenTags, ...result.allergenTags])],
+    allergens: [
+      ...new Set([
+        ...product.allergens,
+        ...result.allergenTags.map((tag) => allergenTagName(tag, catalogLanguage(locale))),
+      ]),
+    ],
+    allergensVerified: product.allergenTags.length > 0 || readableIngredients,
     name: result.name ?? product.name,
     ingredientsText: result.ingredientsText ?? (result.ingredients.length ? result.ingredients.join(', ') : null),
     ingredients: result.ingredients.length ? result.ingredients : product.ingredients,
@@ -241,9 +337,10 @@ export async function recognizeLabel(
   if (!readablePhotos.length) {
     throw new HttpError(400, 'MISSING_LABEL_PHOTO', 'At least one information-label photo is required.');
   }
-  const captureGuide = readablePhotos.length === 1
-    ? 'The supplied image is one information-label photo that should contain the ingredient statement, explicit allergen/traces statement and nutrition table. Read every legible section.'
-    : 'The supplied images are label sections ordered as ingredients/allergens, then nutrition table. Read every legible section from all of them.';
+  const captureGuide =
+    readablePhotos.length === 1
+      ? 'The supplied image is one information-label photo that should contain the ingredient statement, explicit allergen/traces statement and nutrition table. Read every legible section.'
+      : 'The supplied images are label sections ordered as ingredients/allergens, then nutrition table. Read every legible section from all of them.';
   const result = await callGemini({
     operation: 'label_recognition',
     systemInstruction: [
@@ -252,6 +349,7 @@ export async function recognizeLabel(
       'Never use product knowledge, web knowledge, typical values, estimates, calculations, or assumptions to fill a field.',
       'If a value or unit is absent, cropped, ambiguous, or unreadable, return null (for scalar fields) or omit it from the relevant array.',
       'Do not infer allergens from ingredients. Put an allergen in allergens only when the package explicitly declares or emphasizes it as an allergen.',
+      'allergenTags and traceTags are different and mandatory: map EVERY allergen you can read on the package onto the canonical tags in the schema enum, whatever language the package is printed in. Include a tag when the corresponding ingredient is plainly present in the ingredient list (for example a peanut ingredient yields en:peanuts), not only when an allergen statement highlights it. Put tags from a "may contain" statement in traceTags instead. If the ingredient statement is legible and you find none, return empty arrays.',
       'Do not infer labels such as vegan, gluten-free, organic, or sugar-free unless the package explicitly prints that claim.',
       'Set alcoholPercent only when an alcohol-by-volume percentage is explicitly legible. Never infer it from the product type.',
       'Transcribe ingredients in the language printed on the package. Preserve the printed nutrition basis as 100g, 100ml or serving. Never convert between them.',
@@ -280,10 +378,22 @@ export async function recognizeLabel(
     imageUrl: null,
     ingredientsText: result.ingredientsText,
     ingredients: result.ingredients,
-    allergens: result.allergens,
-    traces: result.traces,
-    allergenTags: [],
-    traceTags: [],
+    // Union of what the package printed and what the canonical tags say, so a
+    // tag the reader recognised is never invisible to the user.
+    allergens: [
+      ...new Set([
+        ...result.allergens,
+        ...result.allergenTags.map((tag) => allergenTagName(tag, catalogLanguage(locale))),
+      ]),
+    ],
+    traces: [
+      ...new Set([...result.traces, ...result.traceTags.map((tag) => allergenTagName(tag, catalogLanguage(locale)))]),
+    ],
+    allergenTags: result.allergenTags,
+    traceTags: result.traceTags,
+    // The reader was asked for canonical tags over the whole legible label, so
+    // an empty result is a real answer rather than an unchecked one.
+    allergensVerified: Boolean(result.ingredientsText || result.ingredients.length),
     additives: toAdditives(result.additives, locale),
     labels: result.labels,
     labelTags: [],
@@ -326,14 +436,44 @@ const foodPhotoSchema = z.object({
 
 const foodPhotoResponseSchema = {
   type: 'OBJECT',
-  required: ['name', 'confidence', 'visualDescription', 'visibleComponents', 'possibleAlternatives', 'visualCategories', 'estimatedNutritionPer100g', 'nutritionEstimateConfidence'],
+  required: [
+    'name',
+    'confidence',
+    'visualDescription',
+    'visibleComponents',
+    'possibleAlternatives',
+    'visualCategories',
+    'estimatedNutritionPer100g',
+    'nutritionEstimateConfidence',
+  ],
   properties: {
-    name: { type: 'STRING' }, confidence: { type: 'NUMBER' }, visualDescription: { type: 'STRING' }, visibleComponents: { type: 'ARRAY', maxItems: 12, items: { type: 'STRING' } }, possibleAlternatives: { type: 'ARRAY', maxItems: 3, items: { type: 'STRING' } }, visualCategories: { type: 'ARRAY', maxItems: 5, items: { type: 'STRING' } },
+    name: { type: 'STRING' },
+    confidence: { type: 'NUMBER' },
+    visualDescription: { type: 'STRING' },
+    visibleComponents: { type: 'ARRAY', maxItems: 12, items: { type: 'STRING' } },
+    possibleAlternatives: { type: 'ARRAY', maxItems: 3, items: { type: 'STRING' } },
+    visualCategories: { type: 'ARRAY', maxItems: 5, items: { type: 'STRING' } },
     estimatedNutritionPer100g: {
       type: 'OBJECT',
-      required: ['energyKcal100g', 'protein100g', 'carbohydrates100g', 'sugars100g', 'fat100g', 'saturatedFat100g', 'fiber100g', 'salt100g'],
+      required: [
+        'energyKcal100g',
+        'protein100g',
+        'carbohydrates100g',
+        'sugars100g',
+        'fat100g',
+        'saturatedFat100g',
+        'fiber100g',
+        'salt100g',
+      ],
       properties: {
-        energyKcal100g: { type: 'NUMBER', nullable: true }, protein100g: { type: 'NUMBER', nullable: true }, carbohydrates100g: { type: 'NUMBER', nullable: true }, sugars100g: { type: 'NUMBER', nullable: true }, fat100g: { type: 'NUMBER', nullable: true }, saturatedFat100g: { type: 'NUMBER', nullable: true }, fiber100g: { type: 'NUMBER', nullable: true }, salt100g: { type: 'NUMBER', nullable: true },
+        energyKcal100g: { type: 'NUMBER', nullable: true },
+        protein100g: { type: 'NUMBER', nullable: true },
+        carbohydrates100g: { type: 'NUMBER', nullable: true },
+        sugars100g: { type: 'NUMBER', nullable: true },
+        fat100g: { type: 'NUMBER', nullable: true },
+        saturatedFat100g: { type: 'NUMBER', nullable: true },
+        fiber100g: { type: 'NUMBER', nullable: true },
+        salt100g: { type: 'NUMBER', nullable: true },
       },
     },
     nutritionEstimateConfidence: { type: 'NUMBER' },
@@ -355,7 +495,10 @@ export async function recognizeFoodPhoto(photo: LabelPhoto, locale: string): Pro
       'Use sensible rounded values, never false precision. Return null for a nutrient when the food identity or recipe ambiguity makes even a broad estimate unreliable. nutritionEstimateConfidence must reflect that uncertainty.',
       'Return all strings in the requested device language. Return JSON only and follow the schema exactly.',
     ].join(' '),
-    prompt: [`REQUIRED_OUTPUT_LANGUAGE: ${locale}`, 'First inspect the full object and its texture. Then name the visible food cautiously, describe the visual evidence, list plausible alternatives only if needed, and provide a rounded estimated nutrient profile when the identity is reliable enough. Ingredients, allergens and exact nutrition remain unknown.'].join('\n'),
+    prompt: [
+      `REQUIRED_OUTPUT_LANGUAGE: ${locale}`,
+      'First inspect the full object and its texture. Then name the visible food cautiously, describe the visual evidence, list plausible alternatives only if needed, and provide a rounded estimated nutrient profile when the identity is reliable enough. Ingredients, allergens and exact nutrition remain unknown.',
+    ].join('\n'),
     responseSchema: foodPhotoResponseSchema,
     images: [{ base64: photo.base64, mimeType: photo.mimeType }],
     temperature: 0,
@@ -364,12 +507,38 @@ export async function recognizeFoodPhoto(photo: LabelPhoto, locale: string): Pro
   });
   const nutrition: NutritionFacts = { ...result.estimatedNutritionPer100g, sodium100g: null, servingSize: null };
   return {
-    source: 'ai_photo', barcode: null, name: result.name, brand: null, quantity: null, imageUrl: null,
-    ingredientsText: null, ingredients: [], allergens: [], traces: [], allergenTags: [], traceTags: [], additives: [], labels: [], labelTags: [],
+    source: 'ai_photo',
+    barcode: null,
+    name: result.name,
+    brand: null,
+    quantity: null,
+    imageUrl: null,
+    ingredientsText: null,
+    ingredients: [],
+    allergens: [],
+    traces: [],
+    allergenTags: [],
+    traceTags: [],
+    additives: [],
+    labels: [],
+    labelTags: [],
     categories: [...result.visualCategories, ...result.visibleComponents],
-    ingredientAnalysis: { ...EMPTY_ANALYSIS }, nutrientLevels: { ...EMPTY_LEVELS }, fruitsVegetablesNuts100g: null,
-    nutriScore: null, novaGroup: null, ecoScore: null, organic: false, alcoholPercent: null, nutrition, nutritionReference: '100g', nutritionBasis: 'estimated_visual', nutritionEstimateConfidence: result.nutritionEstimateConfidence, completeness: 18,
-    unknownFields: ['exact ingredients', 'declared allergens', 'declared nutrition', 'quantity'], identificationConfidence: result.confidence,
-    visualDescription: result.visualDescription, possibleAlternatives: result.possibleAlternatives,
+    ingredientAnalysis: { ...EMPTY_ANALYSIS },
+    nutrientLevels: { ...EMPTY_LEVELS },
+    fruitsVegetablesNuts100g: null,
+    nutriScore: null,
+    novaGroup: null,
+    ecoScore: null,
+    organic: false,
+    alcoholPercent: null,
+    nutrition,
+    nutritionReference: '100g',
+    nutritionBasis: 'estimated_visual',
+    nutritionEstimateConfidence: result.nutritionEstimateConfidence,
+    completeness: 18,
+    unknownFields: ['exact ingredients', 'declared allergens', 'declared nutrition', 'quantity'],
+    identificationConfidence: result.confidence,
+    visualDescription: result.visualDescription,
+    possibleAlternatives: result.possibleAlternatives,
   };
 }

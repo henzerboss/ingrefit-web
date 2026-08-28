@@ -154,6 +154,10 @@
       "label": "Dati par alergēniem ir nepilnīgi",
       "evidence": "Šim produktam nav pieejama alergēnu deklarācija, tāpēc jūsu alergēnu sarakstu nevarēja pārbaudīt. Tukšs saraksts nekad nepierāda, ka produkts nesatur alergēnu."
     },
+    "warning.allergen_unverified": {
+      "label": "Alergēni nav pārbaudīti",
+      "evidence": "Šim produktam nav mašīnlasāmas alergēnu deklarācijas, tāpēc {allergens} nevarēja ne apstiprināt, ne izslēgt. Pirms pirkšanas izlasiet iepakojumu."
+    },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
       "evidence": "Open Food Facts publicē šim produktam Nutri-Score {grade}; tas nosaka pamata uzturvērtības kvalitāti pirms jūsu mērķu piemērošanas."

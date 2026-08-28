@@ -52,13 +52,29 @@ function languageName(language: string): string {
  * Latin script is not diagnostic, so only non-Latin scripts are checked.
  */
 const EXPECTED_SCRIPT: Record<string, RegExp> = {
-  ru: /[\u0400-\u04FF]/, uk: /[\u0400-\u04FF]/, sr: /[\u0400-\u04FF]/, bg: /[\u0400-\u04FF]/,
-  kk: /[\u0400-\u04FF]/, mk: /[\u0400-\u04FF]/,
-  zh: /[\u4E00-\u9FFF]/, ja: /[\u3040-\u30FF\u4E00-\u9FFF]/, ko: /[\uAC00-\uD7AF]/,
-  ar: /[\u0600-\u06FF]/, he: /[\u0590-\u05FF]/, el: /[\u0370-\u03FF]/, th: /[\u0E00-\u0E7F]/,
-  hi: /[\u0900-\u097F]/, mr: /[\u0900-\u097F]/, ne: /[\u0900-\u097F]/,
-  bn: /[\u0980-\u09FF]/, pa: /[\u0A00-\u0A7F]/, gu: /[\u0A80-\u0AFF]/,
-  ta: /[\u0B80-\u0BFF]/, te: /[\u0C00-\u0C7F]/, kn: /[\u0C80-\u0CFF]/, ml: /[\u0D00-\u0D7F]/,
+  ru: /[\u0400-\u04FF]/,
+  uk: /[\u0400-\u04FF]/,
+  sr: /[\u0400-\u04FF]/,
+  bg: /[\u0400-\u04FF]/,
+  kk: /[\u0400-\u04FF]/,
+  mk: /[\u0400-\u04FF]/,
+  zh: /[\u4E00-\u9FFF]/,
+  ja: /[\u3040-\u30FF\u4E00-\u9FFF]/,
+  ko: /[\uAC00-\uD7AF]/,
+  ar: /[\u0600-\u06FF]/,
+  he: /[\u0590-\u05FF]/,
+  el: /[\u0370-\u03FF]/,
+  th: /[\u0E00-\u0E7F]/,
+  hi: /[\u0900-\u097F]/,
+  mr: /[\u0900-\u097F]/,
+  ne: /[\u0900-\u097F]/,
+  bn: /[\u0980-\u09FF]/,
+  pa: /[\u0A00-\u0A7F]/,
+  gu: /[\u0A80-\u0AFF]/,
+  ta: /[\u0B80-\u0BFF]/,
+  te: /[\u0C00-\u0C7F]/,
+  kn: /[\u0C80-\u0CFF]/,
+  ml: /[\u0D00-\u0D7F]/,
 };
 
 function renderSignals(scored: ScoredProduct, language: CatalogLanguage): RenderedSignal[] {
@@ -97,9 +113,13 @@ function buildSummary(
     .map((signal) => signal.label.toLocaleLowerCase(language));
 
   const delta = scored.personalDelta;
-  const personalKey = delta > 0.2 ? 'summary.personalUp' : delta < -0.2 ? 'summary.personalDown' : 'summary.personalFlat';
+  const personalKey =
+    delta > 0.2 ? 'summary.personalUp' : delta < -0.2 ? 'summary.personalDown' : 'summary.personalFlat';
   const personal = fill(phrase(language, personalKey), {
-    goals: profile.goals.slice(0, 3).map((goal) => goalName(goal as GoalId, language)).join(', '),
+    goals: profile.goals
+      .slice(0, 3)
+      .map((goal) => goalName(goal as GoalId, language))
+      .join(', '),
     delta: formatNumber(language, Math.abs(delta)),
   });
 
@@ -115,7 +135,8 @@ function buildDataNotice(facts: ProductFacts, scored: ScoredProduct, language: C
   if (facts.source === 'ai_photo') {
     return fill(phrase(language, 'dataNotice.aiPhoto'), { confidence });
   }
-  const source = facts.source === 'openfoodfacts' ? 'Open Food Facts (ODbL)' : phrase(language, 'dataNotice.sourcePackage');
+  const source =
+    facts.source === 'openfoodfacts' ? 'Open Food Facts (ODbL)' : phrase(language, 'dataNotice.sourcePackage');
   if (facts.nutritionBasis === 'estimated_text') {
     return fill(phrase(language, 'dataNotice.estimatedText'), { source, confidence });
   }
@@ -126,7 +147,12 @@ function buildDataNotice(facts: ProductFacts, scored: ScoredProduct, language: C
   });
 }
 
-function buildTip(facts: ProductFacts, profile: AnalysisProfile, scored: ScoredProduct, language: CatalogLanguage): string {
+function buildTip(
+  facts: ProductFacts,
+  profile: AnalysisProfile,
+  scored: ScoredProduct,
+  language: CatalogLanguage,
+): string {
   if (scored.blocked) return phrase(language, 'tip.blocked');
 
   const highRisk = facts.additives.find((additive) => additive.risk === 'high');
@@ -155,8 +181,14 @@ export function renderAssessment(
     blocked: scored.blocked,
     summary: buildSummary(facts, profile, scored, signals, language),
     tip: buildTip(facts, profile, scored, language),
-    positives: signals.filter((signal) => signal.severity === 'positive').map((signal) => signal.evidence).slice(0, 6),
-    cautions: signals.filter((signal) => signal.severity === 'caution' || signal.severity === 'critical').map((signal) => signal.evidence).slice(0, 6),
+    positives: signals
+      .filter((signal) => signal.severity === 'positive')
+      .map((signal) => signal.evidence)
+      .slice(0, 6),
+    cautions: signals
+      .filter((signal) => signal.severity === 'caution' || signal.severity === 'critical')
+      .map((signal) => signal.evidence)
+      .slice(0, 6),
     signals,
     dataNotice: buildDataNotice(facts, scored, language),
   };

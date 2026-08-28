@@ -14,7 +14,8 @@ export type GoalId =
   | 'digestive_wellness'
   | 'low_saturated_fat';
 
-export type DietId = 'none' | 'vegetarian' | 'vegan' | 'pescatarian' | 'gluten_free' | 'dairy_free' | 'low_carb' | 'mediterranean';
+export type DietId =
+  'none' | 'vegetarian' | 'vegan' | 'pescatarian' | 'gluten_free' | 'dairy_free' | 'low_carb' | 'mediterranean';
 export type Plan = 'free' | 'premium';
 
 export interface AnalysisProfile {
@@ -83,6 +84,13 @@ export interface ProductFacts {
   /** Canonical `en:` tags used for matching. Never shown to the user. */
   allergenTags: string[];
   traceTags: string[];
+  /**
+   * True when allergen information is machine-readable rather than inferred
+   * from free ingredient text: canonical Open Food Facts tags, or the label
+   * reader's closed-enum output. When false, "no allergen found" means "not
+   * checked", and the scorer says so instead of staying silent.
+   */
+  allergensVerified?: boolean;
   additives: ProductAdditive[];
   labels: string[];
   labelTags: string[];

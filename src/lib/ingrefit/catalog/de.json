@@ -154,6 +154,10 @@
       "label": "Allergendaten sind unvollständig",
       "evidence": "Für dieses Produkt liegt keine Allergenkennzeichnung vor, daher konnte deine Allergenliste nicht geprüft werden. Eine leere Liste beweist niemals, dass das Produkt frei davon ist."
     },
+    "warning.allergen_unverified": {
+      "label": "Allergene nicht geprüft",
+      "evidence": "Für dieses Produkt liegt keine maschinenlesbare Allergendeklaration vor, daher konnte {allergens} weder bestätigt noch ausgeschlossen werden. Lesen Sie die Verpackung vor dem Kauf."
+    },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
       "evidence": "Open Food Facts veröffentlicht für dieses Produkt den Nutri-Score {grade}; er legt die grundlegende Nährwertqualität fest, bevor deine Ziele berücksichtigt werden."

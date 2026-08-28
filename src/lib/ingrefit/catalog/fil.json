@@ -154,6 +154,10 @@
       "label": "Hindi kumpleto ang datos ng alerdyen",
       "evidence": "Walang magagamit na deklarasyon ng alerdyen para sa produktong ito, kaya hindi nasuri ang listahan ng mga alerdyen mo. Ang walang laman na listahan ay hindi kailanman nagpapatunay na wala sa produkto ang alerdyen na iyon."
     },
+    "warning.allergen_unverified": {
+      "label": "Hindi na-verify ang allergen",
+      "evidence": "Walang machine-readable na deklarasyon ng allergen ang produktong ito, kaya hindi makumpirma o maalis ang {allergens}. Basahin ang pakete bago bumili."
+    },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
       "evidence": "Inilalathala ng Open Food Facts ang Nutri-Score {grade} para sa produktong ito; ito ang nagtatakda ng batayang kalidad ng nutrisyon bago ilapat ang mga layunin mo."

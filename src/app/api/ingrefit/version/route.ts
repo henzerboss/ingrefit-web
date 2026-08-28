@@ -12,7 +12,11 @@ const STORE_URLS = {
 } as const;
 
 function compareVersions(left: string, right: string): number {
-  const parts = (value: string) => value.split('-')[0]!.split('.').map((part) => Number.parseInt(part, 10) || 0);
+  const parts = (value: string) =>
+    value
+      .split('-')[0]!
+      .split('.')
+      .map((part) => Number.parseInt(part, 10) || 0);
   const a = parts(left);
   const b = parts(right);
   for (let index = 0; index < Math.max(a.length, b.length, 3); index += 1) {
@@ -34,12 +38,15 @@ export async function GET(request: NextRequest) {
     const prefix = platform === 'ios' ? 'INGREFIT_IOS' : 'INGREFIT_ANDROID';
     const latestVersion = process.env[`${prefix}_LATEST_VERSION`]?.trim() || '1.6.0';
     const minimumVersion = process.env[`${prefix}_MINIMUM_VERSION`]?.trim() || '1.0.0';
-    return NextResponse.json({
-      latestVersion,
-      updateAvailable: compareVersions(latestVersion, currentVersion) > 0,
-      required: compareVersions(minimumVersion, currentVersion) > 0,
-      storeUrl: STORE_URLS[platform],
-    }, { headers: { 'Cache-Control': 'no-store' } });
+    return NextResponse.json(
+      {
+        latestVersion,
+        updateAvailable: compareVersions(latestVersion, currentVersion) > 0,
+        required: compareVersions(minimumVersion, currentVersion) > 0,
+        storeUrl: STORE_URLS[platform],
+      },
+      { headers: { 'Cache-Control': 'no-store' } },
+    );
   } catch (error) {
     return errorResponse(error);
   }

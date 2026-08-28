@@ -25,8 +25,5 @@ export function errorResponse(error: unknown): NextResponse {
   }
 
   console.error('[ingrefit] Unhandled API error', error);
-  return NextResponse.json(
-    { code: 'INTERNAL_ERROR', message: 'The product could not be analyzed.' },
-    { status: 500 },
-  );
+  return NextResponse.json({ code: 'INTERNAL_ERROR', message: 'The product could not be analyzed.' }, { status: 500 });
 }

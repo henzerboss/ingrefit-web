@@ -154,6 +154,10 @@
       "label": "Dữ liệu chất gây dị ứng chưa đầy đủ",
       "evidence": "Không có thông tin khai báo chất gây dị ứng cho sản phẩm này, nên không thể đối chiếu danh sách dị ứng của bạn. Danh sách trống không bao giờ chứng minh rằng sản phẩm không có chất gây dị ứng đó."
     },
+    "warning.allergen_unverified": {
+      "label": "Chưa xác minh chất gây dị ứng",
+      "evidence": "Sản phẩm này không có công bố chất gây dị ứng ở dạng máy đọc được, nên không thể xác nhận hay loại trừ {allergens}. Hãy đọc bao bì trước khi mua."
+    },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
       "evidence": "Open Food Facts công bố Nutri-Score {grade} cho sản phẩm này; đây là mức chất lượng dinh dưỡng cơ sở trước khi áp dụng các mục tiêu của bạn."

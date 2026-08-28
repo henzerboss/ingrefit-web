@@ -154,6 +154,10 @@
       "label": "Alerjen verileri eksik",
       "evidence": "Bu ürün için alerjen beyanı bulunmadığından alerjen listeniz kontrol edilemedi. Boş bir liste, ürünün alerjeni içermediğini asla kanıtlamaz."
     },
+    "warning.allergen_unverified": {
+      "label": "Alerjenler doğrulanmadı",
+      "evidence": "Bu üründe makine tarafından okunabilir bir alerjen beyanı yok; bu nedenle {allergens} ne doğrulanabildi ne de elenebildi. Satın almadan önce ambalajı okuyun."
+    },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
       "evidence": "Open Food Facts bu ürün için Nutri-Score {grade} yayımlıyor; bu, hedefleriniz uygulanmadan önceki temel beslenme kalitesini belirler."

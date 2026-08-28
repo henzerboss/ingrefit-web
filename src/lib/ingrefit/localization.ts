@@ -32,7 +32,17 @@ type LocalizedStrings = z.infer<typeof localizedSchema>;
 
 const responseSchema = {
   type: 'OBJECT',
-  required: ['name', 'ingredientsText', 'ingredients', 'allergens', 'traces', 'labels', 'categories', 'visualDescription', 'possibleAlternatives'],
+  required: [
+    'name',
+    'ingredientsText',
+    'ingredients',
+    'allergens',
+    'traces',
+    'labels',
+    'categories',
+    'visualDescription',
+    'possibleAlternatives',
+  ],
   properties: {
     name: { type: 'STRING', nullable: true },
     ingredientsText: { type: 'STRING', nullable: true },
@@ -48,14 +58,39 @@ const responseSchema = {
 
 /** Words that reliably mark a non-English European label. */
 const FOREIGN_MARKERS = [
-  'azucar', 'aceite', 'leche', 'harina', 'agua', 'sal marina',
-  'zucker', 'wasser', 'weizenmehl', 'zutaten', 'milch',
-  'sucre', 'eau', 'lait', 'farine', 'ingredients :',
-  'zucchero', 'acqua', 'latte', 'farina',
-  'cukier', 'woda', 'maka', 'mleko',
-  'acucar', 'agua', 'leite',
-  'suiker', 'water', 'tarwebloem',
-  'cukr', 'voda', 'mouka',
+  'azucar',
+  'aceite',
+  'leche',
+  'harina',
+  'agua',
+  'sal marina',
+  'zucker',
+  'wasser',
+  'weizenmehl',
+  'zutaten',
+  'milch',
+  'sucre',
+  'eau',
+  'lait',
+  'farine',
+  'ingredients :',
+  'zucchero',
+  'acqua',
+  'latte',
+  'farina',
+  'cukier',
+  'woda',
+  'maka',
+  'mleko',
+  'acucar',
+  'agua',
+  'leite',
+  'suiker',
+  'water',
+  'tarwebloem',
+  'cukr',
+  'voda',
+  'mouka',
 ];
 
 function cyrillicRatio(value: string): number {
@@ -111,7 +146,9 @@ function reconcile(source: LocalizedStrings, result: LocalizedStrings): Localize
 }
 
 async function readCache(barcode: string, language: string): Promise<LocalizedStrings | null> {
-  const row = await safeDb((db) => db.productLocalization.findUnique({ where: { barcode_language: { barcode, language } } }));
+  const row = await safeDb((db) =>
+    db.productLocalization.findUnique({ where: { barcode_language: { barcode, language } } }),
+  );
   if (!row) return null;
   const parsed = localizedSchema.safeParse(row.strings);
   return parsed.success ? parsed.data : null;
@@ -157,10 +194,7 @@ export async function localizeProductFacts(
         'An empty input array must remain empty. Never infer allergens, ingredients, claims or nutrition.',
         'Return JSON only and follow the response schema exactly.',
       ].join(' '),
-      prompt: [
-        `REQUIRED_OUTPUT_LANGUAGE: ${locale}`,
-        `SOURCE_FACT_STRINGS: ${JSON.stringify(source)}`,
-      ].join('\n'),
+      prompt: [`REQUIRED_OUTPUT_LANGUAGE: ${locale}`, `SOURCE_FACT_STRINGS: ${JSON.stringify(source)}`].join('\n'),
       responseSchema,
       temperature: 0,
       maxOutputTokens: 1_600,

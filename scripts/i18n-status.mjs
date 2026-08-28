@@ -1,71 +1,73 @@
 #!/usr/bin/env node
 /**
- * Translation completeness report.
+ * Translation completeness report for the backend.
  *
  *   node scripts/i18n-status.mjs            # summary
  *   node scripts/i18n-status.mjs --missing  # list every missing key per locale
  *
- * Covers both translatable surfaces of the website:
- *   - src/messages/<locale>.json        website UI
- *   - src/lib/ingrefit/catalog/*.json   product assessment wording (the API's output)
+ * Three independent string sets ship with the server and they drift apart
+ * silently, because every one of them falls back to English per key at runtime:
  *
- * English is the reference for both. A missing key is not a crash: it falls back
- * to English at runtime. This report exists so the fallback never goes unnoticed.
+ *   src/messages                     marketing site
+ *   src/lib/ingrefit/catalog         score explanations shown in the app
+ *   src/lib/ingrefit/catalog/additives  additive names and their basis text
+ *
+ * A missing key is never a crash, which is exactly why it needs a report.
  */
 
 import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 
+const SETS = [
+  { label: 'Marketing site', directory: 'src/messages' },
+  { label: 'Score catalog', directory: 'src/lib/ingrefit/catalog' },
+  { label: 'Additives', directory: 'src/lib/ingrefit/catalog/additives' },
+];
+
 const showMissing = process.argv.includes('--missing');
 
 function flatten(value, prefix = '', out = new Set()) {
   for (const [key, nested] of Object.entries(value)) {
-    if (key.startsWith('_')) continue;
-    const full = prefix ? `${prefix}>${key}` : key;
+    const full = prefix ? `${prefix}.${key}` : key;
     if (nested && typeof nested === 'object' && !Array.isArray(nested)) flatten(nested, full, out);
     else out.add(full);
   }
   return out;
 }
 
-function read(file) {
-  return JSON.parse(readFileSync(file, 'utf8'));
-}
+let incomplete = 0;
 
-function report(title, directory, referenceLocale = 'en') {
-  const files = readdirSync(directory).filter((name) => name.endsWith('.json'));
-  if (!files.includes(`${referenceLocale}.json`)) {
-    console.log(`\n${title}: no ${referenceLocale}.json reference, skipping`);
-    return;
-  }
-  const reference = flatten(read(path.join(directory, `${referenceLocale}.json`)));
-  console.log(`\n${title}`);
-  console.log(`  reference: ${referenceLocale}.json with ${reference.size} keys, ${files.length} locale file(s)`);
+for (const set of SETS) {
+  const files = readdirSync(set.directory)
+    .filter((name) => name.endsWith('.json'))
+    .sort();
+  const reference = flatten(JSON.parse(readFileSync(path.join(set.directory, 'en.json'), 'utf8')));
 
-  const rows = [];
-  for (const file of files.sort()) {
-    const locale = file.replace('.json', '');
-    if (locale === referenceLocale) continue;
-    const present = flatten(read(path.join(directory, file)));
-    const missing = [...reference].filter((key) => !present.has(key));
-    rows.push({ locale, missing });
-  }
+  const complete = [];
+  const partial = [];
 
-  const complete = rows.filter((row) => row.missing.length === 0).map((row) => row.locale);
-  const partial = rows.filter((row) => row.missing.length > 0);
-
-  console.log(`  complete: ${complete.length ? complete.join(', ') : 'none'}`);
-  if (partial.length) {
-    console.log('  incomplete:');
-    for (const row of partial) {
-      console.log(`    ${row.locale.padEnd(5)} missing ${row.missing.length}/${reference.size}`);
-      if (showMissing) for (const key of row.missing) console.log(`        ${key.replaceAll('>', '.')}`);
+  for (const file of files) {
+    const code = file.replace(/\.json$/, '');
+    if (code === 'en') continue;
+    const keys = flatten(JSON.parse(readFileSync(path.join(set.directory, file), 'utf8')));
+    const missing = [...reference].filter((key) => !keys.has(key));
+    if (!missing.length) {
+      complete.push(code);
+      continue;
     }
+    partial.push({ code, missing });
+    incomplete += 1;
+  }
+
+  console.log(`\n${set.label}: reference en.json with ${reference.size} keys, ${files.length} locale file(s)`);
+  if (complete.length) console.log(`  complete: ${complete.join(', ')}`);
+  for (const entry of partial) {
+    console.log(`  ${entry.code}: ${entry.missing.length} missing`);
+    if (showMissing) for (const key of entry.missing) console.log(`      ${key}`);
   }
 }
 
-report('Website UI (src/messages)', 'src/messages');
-report('Assessment catalog (src/lib/ingrefit/catalog)', 'src/lib/ingrefit/catalog');
-report('Additive names (src/lib/ingrefit/catalog/additives)', 'src/lib/ingrefit/catalog/additives');
-console.log('\nLocales absent from the catalog are served in English by design.');
+if (incomplete) {
+  console.log(`\n${incomplete} locale file(s) fall back to English for at least one key.`);
+}

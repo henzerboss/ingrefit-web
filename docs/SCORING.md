@@ -89,12 +89,35 @@ score" that can be weighed against other numbers.
 
 | Restriction | Detection |
 | --- | --- |
-| Selected allergen | canonical `en:` allergen tag, else multilingual ingredient terms |
+| Selected allergen | canonical `en:` allergen tag, else multilingual ingredient stems |
 | Ingredient on the avoid list | ingredient text match |
 | Diet conflict | Open Food Facts `ingredients_analysis_tags`, or allergen tags for gluten/dairy |
 
 Non-blocking warnings: declared traces of a selected allergen (−0.3), an
-unconfirmed diet status (−0.5), and missing allergen data (informational).
+unconfirmed diet status (−0.5), missing allergen data (informational), and an
+**unverified** allergen check (informational, confidence capped at 0.70).
+
+### Allergen evidence has three states, not two
+
+The score is computed before any translation, on the source-language facts, so
+Premium translation can never remove the text the matcher reads.
+
+| State | Meaning | Effect |
+| --- | --- | --- |
+| verified | canonical Open Food Facts tags, or the label reader's closed-enum tags | "not found" is a real answer |
+| unverified | ingredient text exists but carries no machine-readable declaration | `warning.allergen_unverified`, confidence ≤ 0.70 |
+| missing | no declaration and no ingredient text | `warning.allergen_data_missing`, confidence ≤ 0.60 |
+
+The ingredient-stem lists cover a minority of the 50 supported languages, so an
+unmatched allergen on an unverified record means *not checked*, not *not
+present*, and the result says so. The label reader is therefore asked for
+canonical `en:` allergen tags as well as transcribed text: it sees the package
+in whatever language it is printed in, which is the only detection path that
+scales past the word lists.
+
+Stems are matched at word starts (`orzeszk` covers `orzeszkami`), and each
+allergen carries an exclusion list so that "coconut milk" does not block a dairy
+allergy and "мускатный орех" does not block a tree-nut allergy.
 
 Diet conflicts rely on Open Food Facts ingredient analysis (`en:non-vegan`,
 `en:non-vegetarian`, `en:palm-oil`) rather than translated substring matching.
@@ -116,6 +139,8 @@ blocks**, because it cannot see through translations.
 | AI estimate from a photo | cap 0.55 |
 | Baseline derived without Nutri-Score | cap 0.85 |
 | Baseline with too little nutrition for a proxy | cap 0.40 |
+| Allergen declaration present but not machine-readable | cap 0.70 |
+| No allergen declaration and no ingredient text | cap 0.60 |
 
 Confidence now applies to declared OFF rows as well as estimates. The visible raw score is clamped first, then pulled towards the neutral 5.5 baseline. This prevents a sparse row whose favourable zeroes would previously saturate at 10/10 from retaining an extreme score. Explicit high-risk-additive, alcohol and hard-restriction ceilings remain in force after confidence adjustment.
 
@@ -124,23 +149,37 @@ Confidence now applies to declared OFF rows as well as estimates. The visible ra
 | Condition | Verdict |
 | --- | --- |
 | Any hard restriction | Not suitable |
-| 8.0–10.0 with confidence ≥0.70 | Great fit |
-| 6.0–7.9, or any ≥8.0 result with confidence <0.70 | Good fit |
+| 8.0–10.0 with confidence ≥0.80 **and** a known ingredient list | Great fit |
+| 6.0–7.9, or any ≥8.0 result that misses the confidence/ingredient bar | Good fit |
 | 4.0–5.9 | Mixed fit |
 | 1.0–3.9 | Poor fit |
 
+`0.80` is the single `GREAT_CONFIDENCE` constant in `dataQuality.ts`, shared
+with the recommendation gate. The two used to disagree — a four-nutrient record
+with no ingredient list cleared the old `0.70` verdict bar with 0.02 to spare
+while the recommender demanded six nutrients for the same product, so the app
+could call a record confident enough to celebrate but not confident enough to
+suggest.
+
 ## 6. Worked examples
 
-Produced by `npm run test:scoring`:
+Regenerate with `npm run test:scoring -- --markdown` and paste. Do not edit by
+hand: this table is the one part of the document that silently rots.
 
-| Product | Profile | Baseline | Personal | Final |
-| --- | --- | ---: | ---: | ---: |
-| Salami, NOVA 4, salt 4 g, nitrite | more protein + less sugar | 1.0 | +2.5 | **3.5** |
-| Raw broccoli | more protein | 9.6 | −1.1 | **8.5** |
-| Cola | less salt | 1.4 | +1.9 | **3.3** |
-| Oats | balanced only | 9.1 | +0.9 | **10.0** |
-| Oats | all twelve goals | 9.1 | +2.2 | **10.0** |
-| Beer 5% | balanced | 4.0 (capped) | +1.5 | **4.0** |
+<!-- BEGIN worked-examples -->
+| Product | Profile | Baseline | Personal | Final | Verdict |
+| --- | --- | ---: | ---: | ---: | --- |
+| Salami, NOVA 4, salt 4 g, nitrite | more protein + less sugar | 1.5 | +2.2 | **3.7** | poor |
+| Raw broccoli | more protein | 9.1 | -1.0 | **8.1** | good |
+| Cola | less salt | 1.9 | +1.7 | **3.5** | poor |
+| Oats | balanced only | 8.7 | +0.8 | **9.5** | good |
+| Oats | all twelve goals | 8.7 | +0.8 | **9.5** | good |
+| Beer 5% | balanced | 4.3 | +1.4 | **4.0** | mixed |
+<!-- END worked-examples -->
 
-For comparison, the previous release scored the same salami **8.2/10 "Great
-fit"** and the same broccoli **4.8/10 "Mixed fit"**.
+The oats fixture declares no ingredient list, which is why a 9.5 reads as "good
+fit" rather than "great": the verdict bar asks what is in the product, not only
+what its macros are.
+
+For comparison, an earlier release scored the same salami **8.2/10 "Great fit"**
+and the same broccoli **4.8/10 "Mixed fit"**.

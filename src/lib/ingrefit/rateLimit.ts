@@ -12,7 +12,15 @@ import { HttpError } from './http';
  * shopping behaviour and tight enough to make scripted abuse pointless.
  */
 
-export type LimitScope = 'analyze:installation' | 'analyze:ip' | 'ai:installation' | 'recommendations:installation' | 'recommendations:ip';
+export type LimitScope =
+  | 'analyze:installation'
+  | 'analyze:ip'
+  | 'ai:installation'
+  | 'recommendations:installation'
+  | 'recommendations:ip'
+  | 'usage:installation'
+  | 'usage:ip'
+  | 'installation:ip';
 
 interface LimitConfig {
   limit: number;
@@ -30,16 +38,12 @@ function configFor(scope: LimitScope, premium: boolean): LimitConfig {
   switch (scope) {
     case 'analyze:installation':
       return {
-        limit: premium
-          ? readInt('INGREFIT_LIMIT_ANALYZE_PREMIUM', 300)
-          : readInt('INGREFIT_LIMIT_ANALYZE_FREE', 120),
+        limit: premium ? readInt('INGREFIT_LIMIT_ANALYZE_PREMIUM', 300) : readInt('INGREFIT_LIMIT_ANALYZE_FREE', 120),
         windowMs: HOUR,
       };
     case 'ai:installation':
       return {
-        limit: premium
-          ? readInt('INGREFIT_LIMIT_AI_PREMIUM', 60)
-          : readInt('INGREFIT_LIMIT_AI_FREE', 10),
+        limit: premium ? readInt('INGREFIT_LIMIT_AI_PREMIUM', 60) : readInt('INGREFIT_LIMIT_AI_FREE', 10),
         windowMs: HOUR,
       };
     case 'recommendations:installation':
@@ -48,18 +52,29 @@ function configFor(scope: LimitScope, premium: boolean): LimitConfig {
       return { limit: readInt('INGREFIT_LIMIT_RECOMMENDATIONS_IP', 900), windowMs: HOUR };
     case 'analyze:ip':
       return { limit: readInt('INGREFIT_LIMIT_ANALYZE_IP', 600), windowMs: HOUR };
+    case 'usage:installation':
+      return { limit: readInt('INGREFIT_LIMIT_USAGE', 120), windowMs: HOUR };
+    case 'usage:ip':
+      return { limit: readInt('INGREFIT_LIMIT_USAGE_IP', 600), windowMs: HOUR };
+    // Registration happens once per install, so this only has to stop a script
+    // from filling the Installation table.
+    case 'installation:ip':
+      return { limit: readInt('INGREFIT_LIMIT_INSTALLATION_IP', 30), windowMs: HOUR };
   }
 }
 
 // In-memory fallback so the limiter still works before the database exists.
 const memory = new Map<string, { count: number; resetAt: number }>();
 
-setInterval(() => {
-  const now = Date.now();
-  for (const [key, entry] of memory) {
-    if (entry.resetAt <= now) memory.delete(key);
-  }
-}, 10 * 60 * 1000).unref?.();
+setInterval(
+  () => {
+    const now = Date.now();
+    for (const [key, entry] of memory) {
+      if (entry.resetAt <= now) memory.delete(key);
+    }
+  },
+  10 * 60 * 1000,
+).unref?.();
 
 function consumeInMemory(key: string, config: LimitConfig): { allowed: boolean; resetAt: number; remaining: number } {
   const now = Date.now();
@@ -124,6 +139,36 @@ export async function enforceLimit(scope: LimitScope, key: string, premium: bool
   return { remaining: outcome.remaining, resetAt: outcome.resetAt, limit: config.limit };
 }
 
+export interface LimitSnapshot {
+  used: number;
+  limit: number;
+  remaining: number;
+  resetAt: number;
+}
+
+/** Read a window without consuming it. Used by the usage endpoint. */
+export async function peekLimit(scope: LimitScope, key: string, premium: boolean): Promise<LimitSnapshot> {
+  const config = configFor(scope, premium);
+  const now = Date.now();
+  const windowStart = Math.floor(now / config.windowMs) * config.windowMs;
+  const resetAt = windowStart + config.windowMs;
+  const id = `${scope}:${key}:${windowStart}`;
+
+  const persisted = await (async () => {
+    const db = getDb();
+    if (!db) return null;
+    try {
+      return await db.rateLimitWindow.findUnique({ where: { id }, select: { count: true } });
+    } catch (error) {
+      console.error('[ingrefit] Rate limit read failed', error);
+      return null;
+    }
+  })();
+
+  const used = persisted?.count ?? memory.get(`${scope}:${key}`)?.count ?? 0;
+  return { used, limit: config.limit, remaining: Math.max(0, config.limit - used), resetAt };
+}
+
 /** Best-effort cleanup of expired counter rows. */
 export async function pruneRateLimitWindows(): Promise<void> {
   const db = getDb();
@@ -148,8 +193,7 @@ export async function pruneRateLimitWindows(): Promise<void> {
  * boot value is used, which still avoids storing raw addresses but resets the
  * counters on restart.
  */
-const IP_HASH_SECRET =
-  process.env.INGREFIT_IP_HASH_SECRET ?? `ephemeral-${process.pid}-${Date.now()}`;
+const IP_HASH_SECRET = process.env.INGREFIT_IP_HASH_SECRET ?? `ephemeral-${process.pid}-${Date.now()}`;
 
 export function clientIp(headers: Headers): string {
   const forwarded = headers.get('x-forwarded-for');

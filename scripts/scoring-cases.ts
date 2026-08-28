@@ -197,6 +197,64 @@ const cases: Case[] = [
     },
   },
   {
+    title: 'An allergen written in an uncovered language is reported, never silently cleared',
+    facts: product({
+      source: 'ai_label', name: 'Biskuti', ingredientsText: 'unga wa ngano, sukari, karanga, chumvi',
+      nutrition: { ...emptyNutrition, energyKcal100g: 480, protein100g: 8, carbohydrates100g: 60, sugars100g: 25, fat100g: 24, saturatedFat100g: 10, salt100g: 0.6 },
+    }),
+    profile: profile(['balanced'], { allergens: ['peanuts'] }),
+    expect: (r) => (r.signals.some((s) => s.code === 'warning.allergen_unverified')
+      ? null
+      : 'expected an explicit "not verified" allergen warning'),
+  },
+  {
+    title: 'A peanut declaration outside the English word list still blocks',
+    facts: product({
+      source: 'ai_label', name: 'Kurabiye', ingredientsText: 'bugday unu, seker, yer fistigi, tuz',
+      nutrition: { ...emptyNutrition, energyKcal100g: 480, protein100g: 8, carbohydrates100g: 60, sugars100g: 25, fat100g: 24, saturatedFat100g: 10, salt100g: 0.6 },
+    }),
+    profile: profile(['balanced'], { allergens: ['peanuts'] }),
+    expect: (r) => (r.blocked ? null : 'expected the Turkish peanut declaration to block'),
+  },
+  {
+    title: 'Coconut milk does not block a dairy allergy',
+    facts: product({
+      source: 'ai_label', name: 'Coconut drink', ingredientsText: 'water, coconut milk, sugar',
+      nutrition: { ...emptyNutrition, energyKcal100g: 70, protein100g: 1, carbohydrates100g: 6, sugars100g: 5, fat100g: 5, saturatedFat100g: 4, salt100g: 0.05 },
+    }),
+    profile: profile(['balanced'], { allergens: ['milk'] }),
+    expect: (r) => (!r.blocked ? null : 'coconut milk is not dairy and must not block'),
+  },
+  {
+    title: 'Nutmeg does not block a tree-nut allergy',
+    facts: product({
+      source: 'ai_label', name: 'Spice cake', ingredientsText: 'мука, сахар, мускатный орех, соль',
+      nutrition: { ...emptyNutrition, energyKcal100g: 380, protein100g: 6, carbohydrates100g: 55, sugars100g: 28, fat100g: 14, saturatedFat100g: 7, salt100g: 0.5 },
+    }),
+    profile: profile(['balanced'], { allergens: ['tree_nuts'] }),
+    expect: (r) => (!r.blocked ? null : 'nutmeg is not a tree nut and must not block'),
+  },
+  {
+    title: 'Verified allergen tags silence the warning',
+    facts: product({
+      source: 'ai_label', name: 'Rice cakes', ingredientsText: 'rice, salt', allergensVerified: true,
+      nutrition: { ...emptyNutrition, energyKcal100g: 380, protein100g: 8, carbohydrates100g: 80, sugars100g: 1, fat100g: 3, saturatedFat100g: 0.5, salt100g: 0.3 },
+    }),
+    profile: profile(['balanced'], { allergens: ['peanuts'] }),
+    expect: (r) => (!r.signals.some((s) => s.code.startsWith('warning.allergen'))
+      ? null
+      : 'a machine-readable declaration must not produce an uncertainty warning'),
+  },
+  {
+    title: 'A minimal record cannot reach the "great fit" verdict',
+    facts: product({
+      name: 'Sparse but favourable', nutriScore: 'a', completeness: 50,
+      nutrition: { ...emptyNutrition, energyKcal100g: 50, protein100g: 1, sugars100g: 1, fat100g: 0 },
+    }),
+    profile: profile(['weight_loss']),
+    expect: (r) => (r.verdict !== 'great' ? null : `four nutrients and no ingredients must not read as "great", got ${r.score}/${r.confidence}`),
+  },
+  {
     title: 'Alcohol is penalised regardless of goals',
     facts: product({ name: 'Beer', alcoholPercent: 5, nutritionReference: '100ml', categories: ['beverages'], nutrition: { ...emptyNutrition, energyKcal100g: 43, sugars100g: 0.5, carbohydrates100g: 3.6, protein100g: 0.5, salt100g: 0 } }),
     profile: profile(['balanced']),
@@ -213,6 +271,38 @@ for (const testCase of cases) {
     console.error(`FAIL  ${testCase.title}\n      ${problem}`);
   } else {
     console.log(`ok    ${testCase.title}  (${result.score}/10, base ${result.baseScore}, personal ${result.personalDelta})`);
+  }
+}
+
+/**
+ * Worked examples for docs/SCORING.md.
+ *
+ * The table in that document used to be maintained by hand and had drifted from
+ * the code by up to 0.5 points while still being labelled "produced by
+ * npm run test:scoring". `npm run test:scoring -- --markdown` now prints the
+ * exact block to paste, so it cannot drift again.
+ */
+const WORKED_EXAMPLES: Array<{ label: string; facts: ProductFacts; profile: AnalysisProfile; note: string }> = [
+  { label: 'Salami, NOVA 4, salt 4 g, nitrite', facts: SALAMI, profile: profile(['high_protein', 'low_sugar']), note: 'more protein + less sugar' },
+  { label: 'Raw broccoli', facts: BROCCOLI, profile: profile(['high_protein']), note: 'more protein' },
+  { label: 'Cola', facts: COLA, profile: profile(['low_sodium']), note: 'less salt' },
+  { label: 'Oats', facts: OATS, profile: profile(['balanced']), note: 'balanced only' },
+  { label: 'Oats', facts: OATS, profile: profile(ALL_GOALS), note: 'all twelve goals' },
+  {
+    label: 'Beer 5%',
+    facts: product({ name: 'Beer', alcoholPercent: 5, nutritionReference: '100ml', categories: ['beverages'], nutrition: { ...emptyNutrition, energyKcal100g: 43, sugars100g: 0.5, carbohydrates100g: 3.6, protein100g: 0.5, salt100g: 0 } }),
+    profile: profile(['balanced']),
+    note: 'balanced',
+  },
+];
+
+if (process.argv.includes('--markdown')) {
+  console.log('\n| Product | Profile | Baseline | Personal | Final | Verdict |');
+  console.log('| --- | --- | ---: | ---: | ---: | --- |');
+  for (const example of WORKED_EXAMPLES) {
+    const r = scoreProduct(example.facts, example.profile);
+    const personal = `${r.personalDelta >= 0 ? '+' : ''}${r.personalDelta.toFixed(1)}`;
+    console.log(`| ${example.label} | ${example.note} | ${r.baseScore.toFixed(1)} | ${personal} | **${r.score.toFixed(1)}** | ${r.verdict} |`);
   }
 }
 

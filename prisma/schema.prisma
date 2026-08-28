@@ -15,8 +15,11 @@ datasource db {
 }
 
 /// Normalized product facts keyed by barcode.
-/// `facts` holds the source-language ProductFacts exactly as normalized from
-/// Open Food Facts. Localized variants live in ProductLocalization.
+/// `facts` holds the RAW Open Food Facts product record as returned by the API,
+/// not a normalized ProductFacts value: normalization is cheap, deterministic
+/// and locale-dependent, so it is redone per request by
+/// `openFoodFacts.productFactsFromRaw`. Localized user-facing strings live in
+/// ProductLocalization.
 model ProductCache {
   barcode     String   @id
   facts       Json
@@ -53,6 +56,21 @@ model ExplanationCache {
   lastUsedAt  DateTime @updatedAt
 
   @@index([lastUsedAt])
+}
+
+/// Per-installation shared secret, registered once at first launch.
+///
+/// The installation id travels in every request header, so on its own it is a
+/// bearer credential: anyone who saw it could be served as that subscriber.
+/// The secret never leaves the device after registration; requests carry a
+/// signature over it instead. See lib/ingrefit/installation.ts.
+model Installation {
+  id         String   @id
+  secret     String
+  createdAt  DateTime @default(now())
+  lastSeenAt DateTime @default(now())
+
+  @@index([lastSeenAt])
 }
 
 /// Fixed-window request counters. One row per (scope, key, window).

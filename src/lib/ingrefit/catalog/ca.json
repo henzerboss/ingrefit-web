@@ -154,6 +154,10 @@
       "label": "Les dades d’al·lèrgens són incompletes",
       "evidence": "No hi ha cap declaració d’al·lèrgens disponible per a aquest product, de manera que no s’ha pogut comprovar la teva llista. Una llista buida mai no demostra que el producte n’estigui lliure."
     },
+    "warning.allergen_unverified": {
+      "label": "Al·lèrgens no verificats",
+      "evidence": "Aquest producte no té una declaració d'al·lèrgens llegible per màquina, així que no s'ha pogut confirmar ni descartar {allergens}. Llegiu l'envàs abans de comprar."
+    },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
       "evidence": "Open Food Facts publica un Nutri-Score {grade} per a aquest producte; estableix la qualitat nutricional de base abans d’aplicar els teus objectius."

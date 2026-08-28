@@ -154,6 +154,10 @@
       "label": "Podaci o alergenima su nepotpuni",
       "evidence": "Za ovaj proizvod nije dostupna deklaracija alergena, pa vaš popis alergena nije bilo moguće provjeriti. Prazan popis nikada ne dokazuje da proizvod ne sadrži alergen."
     },
+    "warning.allergen_unverified": {
+      "label": "Alergeni nisu provjereni",
+      "evidence": "Ovaj proizvod nema strojno čitljivu deklaraciju alergena pa se {allergens} nije moglo ni potvrditi ni isključiti. Pročitajte ambalažu prije kupnje."
+    },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
       "evidence": "Open Food Facts objavljuje Nutri-Score {grade} za ovaj proizvod; on određuje osnovnu nutritivnu kvalitetu prije primjene vaših ciljeva."

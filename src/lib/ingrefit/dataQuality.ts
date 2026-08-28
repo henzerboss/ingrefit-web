@@ -7,6 +7,18 @@ import type { AnalysisProfile, ProductFacts } from './types';
  * evidence is too easy to over-score unless the category itself makes that
  * profile unsurprising (plain water is the canonical example).
  */
+/**
+ * Shared confidence bar for "we are sure about this product".
+ *
+ * One constant for the "great fit" verdict and the recommendation gate, so the
+ * app cannot call a record confident enough to celebrate but not confident
+ * enough to suggest.
+ */
+export const GREAT_CONFIDENCE = 0.8;
+
+/** Minimum independently declared nutrient facts before a record can be recommended. */
+export const RECOMMENDATION_MIN_NUTRIENTS = 6;
+
 export function hasIngredientEvidence(facts: ProductFacts): boolean {
   return Boolean(facts.ingredientsText?.trim() || facts.ingredients.some((item) => item.trim()));
 }
@@ -41,7 +53,9 @@ function normalizedCategories(facts: ProductFacts): string {
 /** Categories where an all-zero macro panel is expected rather than suspicious. */
 export function isTrustedZeroMacroCategory(facts: ProductFacts): boolean {
   const categories = ` ${normalizedCategories(facts)} `;
-  return /\b(water|waters|mineral water|mineral waters|spring water|spring waters|sparkling water|sparkling waters)\b/.test(categories);
+  return /\b(water|waters|mineral water|mineral waters|spring water|spring waters|sparkling water|sparkling waters)\b/.test(
+    categories,
+  );
 }
 
 /**
@@ -71,17 +85,18 @@ export function hasSuspiciousSparseZeroProfile(facts: ProductFacts): boolean {
  */
 export function productDataConfidence(facts: ProductFacts): number {
   const nutrientCount = nutritionEvidenceCount(facts);
-  let confidence = nutrientCount >= 8
-    ? 1
-    : nutrientCount === 7
-      ? 0.95
-      : nutrientCount === 6
-        ? 0.9
-        : nutrientCount === 5
-          ? 0.82
-          : nutrientCount === 4
-            ? 0.72
-            : 0.55;
+  let confidence =
+    nutrientCount >= 8
+      ? 1
+      : nutrientCount === 7
+        ? 0.95
+        : nutrientCount === 6
+          ? 0.9
+          : nutrientCount === 5
+            ? 0.82
+            : nutrientCount === 4
+              ? 0.72
+              : 0.55;
 
   if (!hasIngredientEvidence(facts) && !isTrustedZeroMacroCategory(facts)) {
     confidence = Math.min(confidence, 0.88);
@@ -106,14 +121,12 @@ export function productDataConfidence(facts: ProductFacts): number {
  * actively suggesting them to the user.
  */
 export function recommendationQualityGate(facts: ProductFacts, profile: AnalysisProfile): boolean {
-  if (!facts.name || nutritionEvidenceCount(facts) < 6) return false;
+  if (!facts.name || nutritionEvidenceCount(facts) < RECOMMENDATION_MIN_NUTRIENTS) return false;
   if (hasSuspiciousSparseZeroProfile(facts)) return false;
 
   const profileNeedsIngredientSafety =
-    profile.allergens.length > 0 ||
-    profile.avoidedIngredients.length > 0 ||
-    profile.diet !== 'none';
+    profile.allergens.length > 0 || profile.avoidedIngredients.length > 0 || profile.diet !== 'none';
 
   if (profileNeedsIngredientSafety && !hasIngredientEvidence(facts)) return false;
-  return productDataConfidence(facts) >= 0.72;
+  return productDataConfidence(facts) >= GREAT_CONFIDENCE;
 }

@@ -72,7 +72,10 @@ const TAG_TO_ALLERGEN: Record<string, string> = {
 };
 
 function prettifySlug(tag: string): string {
-  return tag.replace(/^[a-z]{2}:/i, '').replaceAll('-', ' ').trim();
+  return tag
+    .replace(/^[a-z]{2}:/i, '')
+    .replaceAll('-', ' ')
+    .trim();
 }
 
 /** Localized name for an allergen or traces tag. */
@@ -139,6 +142,14 @@ export function renderSignal(signal: ScoreSignal, language: CatalogLanguage): { 
     goal: params.goal === undefined ? undefined : goalName(String(params.goal) as GoalId, language),
     diet: params.diet === undefined ? undefined : dietName(String(params.diet) as DietId, language),
     allergen: params.allergen === undefined ? undefined : allergenName(String(params.allergen), language),
+    allergens:
+      params.allergens === undefined
+        ? undefined
+        : String(params.allergens)
+            .split(',')
+            .map((item) => allergenName(item.trim(), language))
+            .filter(Boolean)
+            .join(', '),
     grade: params.grade === undefined ? undefined : String(params.grade).toUpperCase(),
     basis: params.basis === undefined ? undefined : additiveBasisText(String(params.basis) as AdditiveBasis, language),
     detail: params.detail === undefined ? undefined : renderNutrientDetail(String(params.detail), language),

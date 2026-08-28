@@ -154,6 +154,10 @@
       "label": "アレルゲン情報が不十分",
       "evidence": "この商品にはアレルゲン表示データがないため、あなたのアレルゲン一覧を確認できませんでした。空の一覧は、そのアレルゲンを含まないことの証明にはなりません。"
     },
+    "warning.allergen_unverified": {
+      "label": "アレルゲンは未確認です",
+      "evidence": "この商品には機械可読のアレルゲン表示がないため、{allergens}の有無を確認できませんでした。購入前にパッケージをご確認ください。"
+    },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
       "evidence": "Open Food Factsはこの商品にNutri-Score {grade}を掲載しています。これは、あなたの目標を反映する前の基本的な栄養品質を定めます。"
