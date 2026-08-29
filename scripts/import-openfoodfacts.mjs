@@ -836,7 +836,11 @@ async function runLocalizationBackfill() {
     delete strings.ingredients_text;
 
     if (Object.keys(strings).length) {
-      batch.push({ barcode, strings });
+      // The export contains records with stray NUL bytes in text fields, and
+      // PostgreSQL refuses them inside jsonb. slim() has always run every row
+      // through stripNul before writing; this backfill builds its own payload
+      // and has to do the same.
+      batch.push({ barcode, strings: stripNul(strings) });
       matched += 1;
     }
 

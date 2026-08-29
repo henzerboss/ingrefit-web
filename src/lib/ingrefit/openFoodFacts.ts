@@ -66,6 +66,13 @@ interface OpenFoodFactsResponse {
  */
 const OFF_LANGUAGES = LOCALE_CODES.filter((code) => code !== 'fil');
 
+// Asking for every language makes the query string about 2.6 KB, which is well
+// inside the 8 KB header buffer Open Food Facts' nginx allows. It is requested
+// for all languages rather than only the caller's because one fetch populates
+// ProductCache for every user of that barcode: narrowing the request would save
+// a little bandwidth once and cost a translation call for the next user in a
+// different language.
+
 const FIELDS = [
   'code',
   'product_name',
@@ -400,12 +407,33 @@ async function readCachedRaw(barcode: string): Promise<OpenFoodFactsProduct | nu
   return row.facts as OpenFoodFactsProduct;
 }
 
+/**
+ * PostgreSQL rejects U+0000 inside jsonb, and the Open Food Facts corpus does
+ * contain stray NUL bytes in free-text fields. The importer has always stripped
+ * them; the network path now requests ninety-eight more text fields, so it needs
+ * the same guard rather than relying on never having hit one.
+ */
+function stripNul<T>(value: T): T {
+  if (typeof value === 'string') {
+    return (value.includes('\u0000') ? value.replaceAll('\u0000', '') : value) as T;
+  }
+  if (Array.isArray(value)) return value.map(stripNul) as T;
+  if (value && typeof value === 'object') {
+    const output: Record<string, unknown> = {};
+    for (const [key, nested] of Object.entries(value)) {
+      output[stripNul(key)] = stripNul(nested);
+    }
+    return output as T;
+  }
+  return value;
+}
+
 async function writeCachedRaw(barcode: string, raw: OpenFoodFactsProduct): Promise<void> {
   // Round-trip through JSON before storing. This both satisfies Prisma's Json
   // input type and guarantees the value is plain JSON: the upstream payload can
   // carry `undefined` entries that would otherwise be silently dropped or
   // rejected at the driver level.
-  const facts = JSON.parse(JSON.stringify(raw));
+  const facts = stripNul(JSON.parse(JSON.stringify(raw)));
   await safeDb((db) =>
     db.productCache.upsert({
       where: { barcode },
