@@ -25,6 +25,9 @@ import { HttpError } from './http';
 /** How far a client clock may drift before its signature is refused. */
 const SIGNATURE_WINDOW_SECONDS = 300;
 
+/** How long after creation a registration may still correct its own secret. */
+const REGISTRATION_GRACE_MS = 10 * 60_000;
+
 export const INSTALLATION_ID_PATTERN = /^[A-Za-z0-9_-]{16,128}$/;
 export const INSTALLATION_SECRET_PATTERN = /^[A-Za-z0-9_-]{32,128}$/;
 
@@ -127,9 +130,24 @@ export async function registerInstallation(installationId: string, secret: strin
     throw new HttpError(503, 'INSTALLATION_UNAVAILABLE', 'Installation registration is temporarily unavailable.');
   }
 
-  const existing = await db.installation.findUnique({ where: { id: installationId }, select: { secret: true } });
+  const existing = await db.installation.findUnique({
+    where: { id: installationId },
+    select: { secret: true, createdAt: true },
+  });
   if (existing) {
     if (!safeEqual(existing.secret, secret)) {
+      // A brand-new registration may legitimately arrive twice with different
+      // secrets if the device generated one, wrote it, and re-registered before
+      // the write settled. Allowing an overwrite for a few minutes after
+      // creation repairs that without opening a hijack window worth the name:
+      // an attacker would have to learn the id within minutes of its first use.
+      if (Date.now() - existing.createdAt.getTime() < REGISTRATION_GRACE_MS) {
+        await db.installation.update({
+          where: { id: installationId },
+          data: { secret, lastSeenAt: new Date() },
+        });
+        return;
+      }
       throw new HttpError(409, 'INSTALLATION_TAKEN', 'This installation id is already registered.');
     }
     await db.installation.update({ where: { id: installationId }, data: { lastSeenAt: new Date() } });

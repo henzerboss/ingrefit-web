@@ -211,10 +211,27 @@ export async function resolvePlanContext(request: NextRequest, installationId: s
   );
   if (proof.proven) touchInstallation(installationId);
 
-  // A registered installation that does not sign its request is either a stale
-  // build or somebody replaying an id they saw in a log. Either way it must not
-  // reach the paid path.
-  const trusted = proof.proven || (!proof.registered && !proofRequired());
+  // While unsigned clients are still allowed, a failed or missing signature must
+  // never downgrade anyone.
+  //
+  // This previously read `proof.proven || (!proof.registered && !proofRequired())`,
+  // which is fail-closed: as soon as a build registered its secret, any problem
+  // with signing — a clock skew, a crypto call that threw, a secret that lost a
+  // race with itself during first launch — silently turned that device into a
+  // free user. That is the opposite of what the compatibility flag promises, and
+  // it made a client-side fault look like a billing failure.
+  //
+  // The flag now means exactly what it says: false accepts everyone, true
+  // requires proof from everyone.
+  const trusted = proof.proven || !proofRequired();
+
+  if (proof.registered && !proof.proven) {
+    // Worth a log line either way: during the compatibility window it is the
+    // only signal that signing is broken before turning the flag on.
+    console.warn(
+      `[ingrefit] Installation signature not verified (enforcing=${proofRequired()}) for ${installationId.slice(0, 8)}…`,
+    );
+  }
 
   const entitlement = request.headers.get('x-ingrefit-entitlement');
   if (trusted && entitlement && verifyEntitlement(entitlement, installationId)) {
