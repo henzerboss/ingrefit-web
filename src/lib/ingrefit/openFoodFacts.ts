@@ -2,9 +2,18 @@ import { classifyAdditives } from './additives';
 import { additiveName } from './catalog';
 import { additiveBasisText, allergenTagName, catalogLanguage, labelTagName } from './signalCatalog';
 import { safeDb } from './db';
+import { LOCALE_CODES } from '@/i18n/locales';
 import type { IngredientAnalysis, NutrientLevel, NutrientLevels, NutritionFacts, ProductFacts } from './types';
 
 export interface OpenFoodFactsProduct {
+  /**
+   * Open Food Facts publishes one `product_name_<lang>` and one
+   * `ingredients_text_<lang>` per language actually printed on the package.
+   * Those are read dynamically for all supported locales, so the type has to
+   * admit keys that are not known statically.
+   */
+  [key: `product_name_${string}`]: string | undefined;
+  [key: `ingredients_text_${string}`]: string | undefined;
   code?: string;
   product_name?: string;
   product_name_en?: string;
@@ -48,19 +57,26 @@ interface OpenFoodFactsResponse {
   product?: OpenFoodFactsProduct;
 }
 
+/**
+ * Open Food Facts language codes we ask for.
+ *
+ * Derived from the locales the app ships, minus the ones whose OFF code differs
+ * from ours. Asking for a language OFF does not know is harmless — the field is
+ * simply absent from the response.
+ */
+const OFF_LANGUAGES = LOCALE_CODES.filter((code) => code !== 'fil');
+
 const FIELDS = [
   'code',
   'product_name',
-  'product_name_en',
-  'product_name_ru',
+  ...OFF_LANGUAGES.map((code) => `product_name_${code}`),
   'generic_name',
   'brands',
   'quantity',
   'image_front_url',
   'image_front_small_url',
   'ingredients_text',
-  'ingredients_text_en',
-  'ingredients_text_ru',
+  ...OFF_LANGUAGES.map((code) => `ingredients_text_${code}`),
   'ingredients',
   'allergens_tags',
   'traces_tags',
@@ -274,12 +290,30 @@ export function hasEnoughFacts(product: ProductFacts): boolean {
 
 /** Localized display strings are derived per request; facts themselves are cached once. */
 export function productFactsFromRaw(raw: OpenFoodFactsProduct, barcode: string, locale: string): ProductFacts {
-  const language = locale.toLowerCase().startsWith('ru') ? 'ru' : 'en';
-  const localizedName = language === 'ru' ? raw.product_name_ru : raw.product_name_en;
-  const localizedIngredients = language === 'ru' ? raw.ingredients_text_ru : raw.ingredients_text_en;
+  // Prefer the user's own language, then English, then whatever the record's
+  // default field holds.
+  //
+  // This used to be `startsWith('ru') ? 'ru' : 'en'`, so a Spanish user got the
+  // English name even when product_name_es sat in the same record. Every
+  // non-Russian, non-English user was shown foreign text on the free tier and
+  // had a Gemini translation bought for them on Premium — for a string the
+  // database already had.
+  // Fallback order is target language, then the record's default field, then
+  // English — and that middle step matters.
+  //
+  // Open Food Facts usually copies the default text into the field for the
+  // package's own language, and the importer drops those exact duplicates to
+  // keep the mirror small. So for a Spanish product `ingredients_text_es` is
+  // often absent while `ingredients_text` holds the Spanish text. Reaching for
+  // English before the default would hand a Spanish user an English list and
+  // then buy a translation back into Spanish.
+  const language = catalogLanguage(locale);
+  const localizedName = text(raw[`product_name_${language}`]) ?? text(raw.product_name) ?? text(raw.product_name_en);
+  const localizedIngredients =
+    text(raw[`ingredients_text_${language}`]) ?? text(raw.ingredients_text) ?? text(raw.ingredients_text_en);
   const nutrition = normalizeNutrition(raw);
   const ingredientItems = structuredIngredients(raw);
-  const rawIngredientsText = text(localizedIngredients) ?? text(raw.ingredients_text);
+  const rawIngredientsText = localizedIngredients;
   const cleanIngredientsText =
     hasContaminatedIngredients(rawIngredientsText) && ingredientItems.length >= 2
       ? ingredientItems.join(', ')
@@ -302,7 +336,7 @@ export function productFactsFromRaw(raw: OpenFoodFactsProduct, barcode: string, 
   const facts: ProductFacts = {
     source: 'openfoodfacts',
     barcode: text(raw.code) ?? barcode,
-    name: text(localizedName) ?? text(raw.product_name) ?? text(raw.generic_name),
+    name: localizedName ?? text(raw.generic_name),
     brand: text(raw.brands),
     quantity: text(raw.quantity),
     // The app renders product artwork at <=82 px and persists a 256 px thumbnail.

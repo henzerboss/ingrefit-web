@@ -14,13 +14,32 @@ cost; it never logs photos, barcodes, product names or ingredient text.
 | Model fallback | retried on every error, including schema failures | retries only on 429/5xx/timeout/network |
 | Free tier | English text in 64 of 66 languages | fully rendered locally, no model call |
 
-### Translation is now conditional
+### Translation is conditional, and now correct for all 50 languages
 
 `needsTranslation()` inspects the product strings before spending anything.
-Open Food Facts already stores localized name and ingredient fields for many
-products, so a Russian user scanning a Russian product now costs nothing to
-localize. Results are additionally cached per `barcode + language` forever, so
-each product is translated at most once across all users.
+Results are cached per `barcode + language` forever, so each product is
+translated at most once across all users.
+
+Until 1.11 the check had exactly two branches — "target is Russian" and "target
+is English" — and the other 48 locales all fell into the second. Two failures
+followed from that:
+
+- a Spanish user scanning a Spanish product tripped the diacritics test and
+  paid for a Spanish-to-Spanish translation;
+- a German user scanning an English product tripped nothing, so the translation
+  never ran and a paying user was shown English.
+
+It now detects the language of the text and compares it with the target: script
+first, then distinctive label words within the Latin script, with Cyrillic
+refined by letters unique to Ukrainian, Serbian, Kazakh and Bulgarian. When the
+answer is uncertain it translates, because one cached call is cheaper than
+showing a paying user a foreign ingredient list.
+
+The larger saving is upstream: `productFactsFromRaw` now reads
+`product_name_<lang>` and `ingredients_text_<lang>` for every supported locale,
+so most scans of a locally printed product never reach the model at all. That
+also fixes the free tier, which previously showed non-Russian, non-English users
+whatever language the record happened to default to.
 
 ### Explanations are cached by signal fingerprint
 

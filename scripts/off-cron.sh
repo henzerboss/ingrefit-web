@@ -4,6 +4,7 @@
 #
 #   ./scripts/off-cron.sh          # nightly delta import + counter cleanup
 #   ./scripts/off-cron.sh full     # one-off complete dataset import
+#   ./scripts/off-cron.sh backfill-languages   # one-off: add localized fields
 #   ./scripts/off-cron.sh prune    # counter cleanup only
 #
 # This is the entry point a panel cron job should call. It exists because cron
@@ -108,9 +109,9 @@ case "$MODE" in
     prune_counters
     log "prune finished"
     ;;
-  full|delta)
-    # A full import runs for hours. flock makes an overrun skip the next night
-    # rather than start a second import against the same table.
+  full|delta|backfill-languages|backfill-countries|backfill-nutrition-basis)
+    # A full import or a backfill runs for hours. flock makes an overrun skip
+    # the next night rather than start a second pass against the same table.
     exec 9>"$LOCK_FILE"
     if ! flock -n 9; then
       log "another import is still running, skipping"
@@ -127,7 +128,7 @@ case "$MODE" in
     fi
     ;;
   *)
-    echo "Usage: $0 [delta|full|prune]" >&2
+    echo "Usage: $0 [delta|full|prune|backfill-languages|backfill-countries|backfill-nutrition-basis]" >&2
     exit 1
     ;;
 esac

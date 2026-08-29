@@ -5,6 +5,7 @@
  *   node scripts/import-openfoodfacts.mjs --full
  *   node scripts/import-openfoodfacts.mjs --delta
  *   node scripts/import-openfoodfacts.mjs --backfill-countries
+ *   node scripts/import-openfoodfacts.mjs --backfill-languages
  *   node scripts/import-openfoodfacts.mjs --backfill-nutrition-basis
  *
  * `--full` streams the complete JSONL export into the OffProduct table. It is
@@ -50,11 +51,31 @@ const DELTA_BASE_URL = process.env.OFF_DELTA_BASE_URL ?? 'https://static.openfoo
 const USER_AGENT = process.env.OPEN_FOOD_FACTS_USER_AGENT ?? 'IngreFit/1.0 (https://ingrefit.com)';
 const BATCH_SIZE = Number(process.env.OFF_IMPORT_BATCH ?? '2000');
 
+/**
+ * Languages whose localized name and ingredient fields are kept.
+ *
+ * Mirrors src/i18n/locales.ts. Kept as a literal rather than imported because
+ * this script runs under plain node without the TypeScript path aliases.
+ *
+ * Storing these is what lets a Spanish user read a Spanish ingredient list
+ * without a Gemini call: the string is already in the record, it was simply
+ * being thrown away at import time. Products carry variants only for the
+ * languages actually printed on the package — typically two or three — so this
+ * costs a few hundred bytes per row, not fifty copies of the ingredient list.
+ */
+const KEPT_LANGUAGES = [
+  'af', 'ar', 'az', 'bg', 'bn', 'ca', 'cs', 'da', 'de', 'el', 'en', 'es', 'et', 'fi', 'fr', 'gu',
+  'he', 'hi', 'hr', 'hu', 'id', 'it', 'ja', 'kk', 'kn', 'ko', 'lt', 'lv', 'ml', 'mr', 'ms', 'nl',
+  'no', 'pa', 'pl', 'pt', 'ro', 'ru', 'sk', 'sl', 'sr', 'sv', 'ta', 'te', 'th', 'tr', 'uk', 'vi', 'zh',
+];
+
+const LOCALIZED_FIELDS = KEPT_LANGUAGES.flatMap((code) => [`product_name_${code}`, `ingredients_text_${code}`]);
+
 /** Only the fields the scorer and the UI read. Everything else is discarded. */
 const KEPT_FIELDS = [
-  'code', 'product_name', 'product_name_en', 'product_name_ru', 'generic_name', 'brands', 'quantity',
+  'code', 'product_name', 'generic_name', 'brands', 'quantity',
   'image_front_url', 'image_front_small_url',
-  'ingredients_text', 'ingredients_text_en', 'ingredients_text_ru', 'ingredients',
+  'ingredients_text', 'ingredients', ...LOCALIZED_FIELDS,
   'allergens_tags', 'traces_tags', 'additives_tags', 'labels_tags', 'categories_tags', 'countries_tags',
   'ingredients_analysis_tags', 'nutrient_levels',
   'nutriscore_grade', 'nutrition_grades', 'nova_group', 'ecoscore_grade', 'environmental_score_grade',
@@ -242,6 +263,25 @@ function nutritionBasisFromRecord(record) {
   return undefined;
 }
 
+/** Remove localized variants that merely repeat the default field verbatim. */
+function dropDuplicateLocalizations(output) {
+  for (const [base, fallback] of [['product_name', output.product_name], ['ingredients_text', output.ingredients_text]]) {
+    if (typeof fallback !== 'string') continue;
+    const normalized = fallback.trim();
+    for (const code of KEPT_LANGUAGES) {
+      const key = `${base}_${code}`;
+      const value = output[key];
+      if (typeof value === 'string' && value.trim() === normalized) delete output[key];
+    }
+  }
+  for (const code of KEPT_LANGUAGES) {
+    for (const base of ['product_name', 'ingredients_text']) {
+      const key = `${base}_${code}`;
+      if (typeof output[key] === 'string' && !output[key].trim()) delete output[key];
+    }
+  }
+}
+
 /** Reduce a raw export record to the fields the backend actually reads. */
 function slim(record) {
   const output = {};
@@ -253,6 +293,13 @@ function slim(record) {
     // Keep only the display text; the nested parse tree is large and unused.
     output.ingredients = record.ingredients.slice(0, 120).map((item) => ({ text: item?.text, id: item?.id }));
   }
+
+  // Open Food Facts routinely copies the default text into the field for the
+  // package's own language, so most records would otherwise store the same
+  // ingredient list twice. Dropping exact duplicates removes the bulk of what
+  // the localized fields would add, and the reader falls back to
+  // `ingredients_text` anyway when a variant is absent.
+  dropDuplicateLocalizations(output);
 
   const recoveredBasis = nutritionBasisFromRecord(record);
   if (recoveredBasis) output.nutrition_data_per = recoveredBasis;
@@ -708,6 +755,111 @@ async function runCountriesBackfill() {
   console.log(`[off] countries backfill finished: ${matched} tagged records seen, ${updated} database rows changed`);
 }
 
+async function flushLocalizations(batch) {
+  if (!batch.length) return 0;
+  const params = [];
+  const values = batch
+    .map((row, index) => {
+      const offset = index * 2;
+      params.push(row.barcode, JSON.stringify(row.strings));
+      return `($${offset + 1}::text, $${offset + 2}::jsonb)`;
+    })
+    .join(', ');
+  // Merge rather than replace: only the localized keys are touched, so
+  // nutrition, tags, images and timestamps in the same row are left alone.
+  return prisma.$executeRawUnsafe(
+    `UPDATE "OffProduct" AS product
+     SET data = product.data || input.strings
+     FROM (VALUES ${values}) AS input(barcode, strings)
+     WHERE product.barcode = input.barcode
+       AND NOT (product.data @> input.strings)`,
+    ...params,
+  );
+}
+
+/**
+ * Fill in localized name and ingredient fields on a mirror imported before they
+ * were retained.
+ *
+ * Reuses the already-downloaded full archive and rewrites nothing else, so it
+ * is far cheaper than a fresh --full run. Resumable independently, like the
+ * other backfills.
+ *
+ * After this finishes, a user scanning a product printed in their own language
+ * reads it straight from the mirror, with no translation call at all.
+ */
+async function runLocalizationBackfill() {
+  const state = readState();
+  const archive = path.join(WORK_DIR, 'openfoodfacts-products.jsonl.gz');
+  if (!existsSync(archive)) {
+    console.log('[off] full archive is not present locally; downloading it once for localization backfill');
+    await download(FULL_EXPORT_URL, archive);
+    state.localizationProcessedLines = 0;
+  }
+
+  const resumeFrom = state.localizationProcessedLines ?? 0;
+  if (resumeFrom) console.log(`[off] localization backfill resuming after line ${resumeFrom}`);
+  const lines = createInterface({ input: createReadStream(archive).pipe(createGunzip()), crlfDelay: Infinity });
+  let index = 0;
+  let matched = 0;
+  let updated = 0;
+  let batch = [];
+
+  const checkpoint = () => {
+    state.localizationProcessedLines = index;
+    writeState(state);
+  };
+
+  for await (const line of lines) {
+    index += 1;
+    if (index <= resumeFrom) continue;
+    if (!line.trim()) continue;
+
+    let record;
+    try {
+      record = JSON.parse(line);
+    } catch {
+      continue;
+    }
+    const barcode = typeof record.code === 'string' ? record.code.trim() : '';
+    if (!/^\d{6,18}$/.test(barcode)) continue;
+
+    const strings = {};
+    for (const field of LOCALIZED_FIELDS) {
+      const value = record[field];
+      if (typeof value === 'string' && value.trim()) strings[field] = value;
+    }
+    if (typeof record.product_name === 'string') strings.product_name = record.product_name;
+    if (typeof record.ingredients_text === 'string') strings.ingredients_text = record.ingredients_text;
+    dropDuplicateLocalizations(strings);
+    delete strings.product_name;
+    delete strings.ingredients_text;
+
+    if (Object.keys(strings).length) {
+      batch.push({ barcode, strings });
+      matched += 1;
+    }
+
+    if (batch.length >= BATCH_SIZE) {
+      updated += await flushLocalizations(batch);
+      batch = [];
+      checkpoint();
+      if (matched % (BATCH_SIZE * 10) === 0) {
+        console.log(`[off] localization: line ${index}, localized ${matched}, rows changed ${updated}`);
+      }
+    } else if (index % 100_000 === 0) {
+      checkpoint();
+      console.log(`[off] localization: line ${index}, localized ${matched}, rows changed ${updated}`);
+    }
+  }
+
+  updated += await flushLocalizations(batch);
+  state.localizationProcessedLines = 0;
+  state.lastLocalizationBackfill = new Date().toISOString();
+  writeState(state);
+  console.log(`[off] localization backfill finished: ${matched} localized records seen, ${updated} database rows changed`);
+}
+
 async function flushNutritionBasis(batch) {
   if (!batch.length) return 0;
   const params = [];
@@ -1125,6 +1277,8 @@ async function main() {
       ? 'delta'
       : process.argv.includes('--backfill-countries')
         ? 'backfill-countries'
+        : process.argv.includes('--backfill-languages')
+          ? 'backfill-languages'
         : process.argv.includes('--backfill-nutrition-basis')
           ? 'backfill-nutrition-basis'
         : process.argv.includes('--inspect')
@@ -1135,7 +1289,7 @@ async function main() {
             ? 'discover'
             : null;
   if (!mode) {
-    console.error('Usage: node scripts/import-openfoodfacts.mjs --full | --delta | --backfill-countries | --backfill-nutrition-basis | --inspect [barcode] | --stats [head-sample] | --discover [sample]');
+    console.error('Usage: node scripts/import-openfoodfacts.mjs --full | --delta | --backfill-countries | --backfill-languages | --backfill-nutrition-basis | --inspect [barcode] | --stats [head-sample] | --discover [sample]');
     process.exit(1);
   }
   if (mode === 'discover') {
@@ -1170,6 +1324,7 @@ async function main() {
   try {
     if (mode === 'full') await runFull();
     else if (mode === 'backfill-countries') await runCountriesBackfill();
+    else if (mode === 'backfill-languages') await runLocalizationBackfill();
     else if (mode === 'backfill-nutrition-basis') await runNutritionBasisBackfill();
     else await runDelta();
     console.log(`[off] done in ${Math.round((Date.now() - started) / 1000)}s`);

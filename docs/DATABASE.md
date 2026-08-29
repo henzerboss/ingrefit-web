@@ -55,6 +55,38 @@ ingredients, tags, the nutrients used by the scorer), which brings the stored
 size down by more than an order of magnitude. Budget tens of gigabytes for the
 table plus its index, not hundreds.
 
+Since 1.11 that set also includes `product_name_<lang>` and
+`ingredients_text_<lang>` for all 49 supported Open Food Facts languages. A
+product carries variants only for the languages actually printed on its
+package — typically two or three — and the importer drops any variant that
+merely repeats the default `ingredients_text`, which is what Open Food Facts
+usually stores for the package's own language. The practical cost is a few
+hundred bytes per row.
+
+It buys a lot: a user scanning a product printed in their own language now
+reads it straight from the mirror instead of having a Gemini translation
+bought for them, and free-tier users get localized text at all.
+
+### Backfilling localized fields
+
+A mirror imported before 1.11 has only the Russian and English variants. Fill
+in the rest without a full re-import:
+
+```bash
+./scripts/off-cron.sh backfill-languages
+```
+
+or directly:
+
+```bash
+node scripts/import-openfoodfacts.mjs --backfill-languages
+```
+
+It reuses the archive already in `OFF_IMPORT_DIR`, merges only the localized
+keys into each row (`data || input`), leaves nutrition, tags, images and
+timestamps untouched, and is resumable from a state file like the other
+backfills. Expect a few hours for a full pass.
+
 ### First import
 
 Run it through the wrapper, which loads `.env` and resolves node the same way
