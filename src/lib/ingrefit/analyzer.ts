@@ -1,6 +1,7 @@
 import { HttpError } from './http';
 import { explainScore } from './explanation';
 import { localizeProductFacts } from './localization';
+import { contributeProduct } from './community';
 import { findProductByBarcode, hasContaminatedIngredients, hasEnoughFacts, type FactsOrigin } from './openFoodFacts';
 import { enrichProductFromText, recognizeFoodPhoto, recognizeLabel } from './recognition';
 import { enforceLimit } from './rateLimit';
@@ -46,6 +47,24 @@ export async function analyzeProduct(request: AnalyzeRequest, installationId: st
         console.error('[ingrefit] Label text enrichment failed', error);
       }
     }
+    // Contribute the reading back, so the next person to scan this barcode gets
+    // an instant answer instead of being asked for photos again.
+    //
+    // Done here rather than through a new client call on purpose: the photos and
+    // the recognised facts are already in hand, so app builds that predate this
+    // feature contribute on every successful label scan without an update, and
+    // nothing about the request or response shape changes.
+    if (request.barcode && hasEnoughFacts(product)) {
+      void contributeProduct({
+        barcode: request.barcode,
+        facts: product,
+        installationId,
+        marketCountry: request.marketCountry,
+        frontPhotoBase64: request.photos?.find((photo) => photo.kind === 'front')?.base64 ?? null,
+        confidence: product.completeness / 100,
+      });
+    }
+
     if (!hasEnoughFacts(product)) {
       throw new HttpError(
         422,

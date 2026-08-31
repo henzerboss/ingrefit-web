@@ -58,6 +58,55 @@ model ExplanationCache {
   @@index([lastUsedAt])
 }
 
+/// Products contributed by users, stored beside the Open Food Facts mirror.
+///
+/// `data` deliberately uses the SAME field names as an Open Food Facts record
+/// (`product_name`, `ingredients_text`, `categories_tags`, `nutriments`, …).
+/// That single decision is what keeps the rest of the system unchanged: the
+/// existing normalizer, category extraction, market gate, scorer and
+/// recommendation SQL all read a community record without knowing it is one.
+///
+/// Rows are created server-side when a label scan resolves a barcode that no
+/// Open Food Facts source knew, so app builds that predate this feature start
+/// contributing without an update.
+model CommunityProduct {
+  barcode String @id
+
+  /// Open-Food-Facts-shaped record. See lib/ingrefit/community.ts.
+  data Json
+
+  /// published — served to everyone. hidden — kept but never served.
+  /// pending — awaiting review; served only if COMMUNITY_AUTOPUBLISH is on.
+  status String @default("published")
+
+  /// Recognition confidence reported by the model, 0..1.
+  confidence Float @default(0)
+
+  /// Installation that contributed it. Not shown anywhere; used to rate-limit
+  /// abuse and to remove everything from one bad actor at once.
+  contributorId String
+
+  /// Denormalized so the admin list can sort and search without opening JSON.
+  name   String?
+  brands String?
+
+  /// Relative path of the stored front-photo thumbnail, served by
+  /// /api/ingrefit/community-image.
+  imagePath String?
+
+  /// How many times this record has been served. A popular record deserves
+  /// review before an unpopular one.
+  views Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, createdAt])
+  @@index([contributorId])
+  @@index([name])
+  @@index([brands])
+}
+
 /// Per-installation shared secret, registered once at first launch.
 ///
 /// The installation id travels in every request header, so on its own it is a

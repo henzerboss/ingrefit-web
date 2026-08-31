@@ -52,6 +52,15 @@ const photoSchema = z.object({
 
 export const analyzeRequestSchema = z
   .object({
+    // Optional: older builds do not send it. Without a market a contributed
+    // record is still served by barcode, it simply cannot enter anyone's
+    // recommendation list until a client that reports one refreshes it.
+    marketCountry: z
+      .string()
+      .trim()
+      .regex(/^[A-Za-z]{2}$/)
+      .transform((value) => value.toUpperCase())
+      .optional(),
     barcode: z
       .string()
       .regex(/^\d{8,14}$/)

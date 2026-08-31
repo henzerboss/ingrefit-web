@@ -1,6 +1,7 @@
 import { classifyAdditives } from './additives';
 import { additiveName } from './catalog';
 import { additiveBasisText, allergenTagName, catalogLanguage, labelTagName } from './signalCatalog';
+import { findCommunityRecord } from './community';
 import { safeDb } from './db';
 import { LOCALE_CODES } from '@/i18n/locales';
 import type { IngredientAnalysis, NutrientLevel, NutrientLevels, NutritionFacts, ProductFacts } from './types';
@@ -495,11 +496,23 @@ async function writeCachedRaw(barcode: string, raw: OpenFoodFactsProduct): Promi
  *               because LOCAL_ONLY is set or the network failed
  *   network     a live call to the Open Food Facts API
  */
-export type FactsOrigin = 'cache' | 'mirror' | 'mirror_thin' | 'network';
+export type FactsOrigin = 'cache' | 'mirror' | 'mirror_thin' | 'network' | 'community';
 
 export interface FactsLookup {
   facts: ProductFacts | null;
   origin: FactsOrigin | null;
+}
+
+/**
+ * Products contributed by our own users, consulted only after every Open Food
+ * Facts source has missed. Open Food Facts stays authoritative: a community
+ * record never shadows an upstream one, so an upstream record appearing later
+ * silently takes over.
+ */
+async function communityFacts(barcode: string, locale: string): Promise<FactsLookup | null> {
+  const record = await findCommunityRecord(barcode);
+  if (!record) return null;
+  return { facts: productFactsFromRaw(record, barcode, locale), origin: 'community' };
 }
 
 export async function findProductByBarcode(barcode: string, locale = 'en'): Promise<FactsLookup> {
@@ -525,7 +538,8 @@ export async function findProductByBarcode(barcode: string, locale = 'en'): Prom
   // dataset" answer. Falling through to the network would only reintroduce the
   // rate limit for barcodes we already know are absent.
   if (process.env.OPEN_FOOD_FACTS_LOCAL === 'true' && localOnly) {
-    return { facts: null, origin: null };
+    const contributed = await communityFacts(barcode, locale);
+    return contributed ?? { facts: null, origin: null };
   }
 
   const userAgent = process.env.OPEN_FOOD_FACTS_USER_AGENT;
@@ -546,7 +560,10 @@ export async function findProductByBarcode(barcode: string, locale = 'en'): Prom
     throw error;
   }
 
-  if (response.status === 404) return { facts: localFacts, origin: localFacts ? 'mirror_thin' : null };
+  if (response.status === 404) {
+    if (localFacts) return { facts: localFacts, origin: 'mirror_thin' };
+    return (await communityFacts(barcode, locale)) ?? { facts: null, origin: null };
+  }
   if (!response.ok) {
     if (localFacts) return { facts: localFacts, origin: 'mirror_thin' };
     if (response.status === 429) throw new Error('Open Food Facts rate limit reached');
@@ -555,7 +572,8 @@ export async function findProductByBarcode(barcode: string, locale = 'en'): Prom
 
   const payload = (await response.json()) as OpenFoodFactsResponse;
   if (!payload.product || payload.status === 0 || payload.status === 'failure') {
-    return { facts: localFacts, origin: localFacts ? 'mirror_thin' : null };
+    if (localFacts) return { facts: localFacts, origin: 'mirror_thin' };
+    return (await communityFacts(barcode, locale)) ?? { facts: null, origin: null };
   }
 
   await writeCachedRaw(barcode, payload.product);

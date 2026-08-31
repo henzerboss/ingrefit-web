@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client';
 
+import { communityCandidates, findCommunityRecord } from './community';
 import { GREAT_CONFIDENCE, recommendationQualityGate } from './dataQuality';
 import { safeDb } from './db';
 import {
@@ -199,7 +200,7 @@ function focusCategoryTags(raw: OpenFoodFactsProduct): string[] {
 }
 
 async function readSourceRaw(barcode: string): Promise<OpenFoodFactsProduct | null> {
-  return safeDb(async (db) => {
+  const upstream = await safeDb(async (db) => {
     // Follow the same precedence as barcode analysis: a recent network/cache
     // record wins, and the local mirror is consulted only when it is enabled.
     const cached = await db.productCache.findUnique({ where: { barcode }, select: { facts: true } });
@@ -208,6 +209,10 @@ async function readSourceRaw(barcode: string): Promise<OpenFoodFactsProduct | nu
     const local = await db.offProduct.findUnique({ where: { barcode }, select: { data: true } });
     return local ? (local.data as unknown as OpenFoodFactsProduct) : null;
   });
+  if (upstream) return upstream;
+  // A product that only exists because a user contributed it must still get
+  // alternatives of its own; otherwise contributing is a dead end.
+  return findCommunityRecord(barcode);
 }
 
 /**
@@ -349,6 +354,15 @@ async function mirrorCandidates(barcode: string, tags: string[], marketTag: stri
   );
 }
 
+/**
+ * Products contributed by our users. Small table, plain query, filtered in JS —
+ * it does not need the mirror's GIN indexes and will not for a long time.
+ */
+async function contributedCandidates(barcode: string, tags: string[], marketTag: string): Promise<RawProductRow[]> {
+  const rows = await communityCandidates(barcode, tags, marketTag, CANDIDATE_HARD_LIMIT);
+  return rows.map((row) => ({ barcode: row.barcode, data: row.data }));
+}
+
 async function collectCandidates(
   barcode: string,
   focusTags: string[],
@@ -363,12 +377,16 @@ async function collectCandidates(
   for (let depth = 1; depth <= focusTags.length; depth += 1) {
     const tags = focusTags.slice(0, depth);
     tagsUsed = depth;
-    const [cached, mirrored] = await Promise.all([
+    const [cached, mirrored, contributed] = await Promise.all([
       cachedCandidates(barcode, tags, marketTag),
       mirrorCandidates(barcode, tags, marketTag),
+      contributedCandidates(barcode, tags, marketTag),
     ]);
     for (const row of cached) pool.set(row.barcode, row);
     for (const row of mirrored) pool.set(row.barcode, row);
+    // Contributed records are added last so an Open Food Facts row for the same
+    // barcode always wins the deduplication.
+    for (const row of contributed) if (!pool.has(row.barcode)) pool.set(row.barcode, row);
     if (pool.size >= CANDIDATE_TARGET) break;
   }
   return { pool, tagsUsed };
