@@ -22,9 +22,29 @@ import type { ProductFacts } from './types';
  * knowing that the feature exists.
  */
 
-/** Where front-photo thumbnails live. Served through /api/ingrefit/community-image. */
+/**
+ * Where front-photo thumbnails live. Served through /api/ingrefit/community-image.
+ *
+ * Defaults to a sibling of the checkout — `../ingrefit-data/community-images`
+ * — rather than somewhere under it. Two reasons, and only the second is really
+ * about the path:
+ *
+ *  - A deploy that rebuilds the directory from git (a fresh clone, an rsync
+ *    with --delete, a container image) would take the photos with it. Nothing
+ *    else in the app is unrecoverable; these are.
+ *  - Anything inside `public/` is served by the static handler, which knows
+ *    nothing about moderation. Hiding a record in the admin would leave its
+ *    photo reachable by URL. Going through an API route is what makes `hidden`
+ *    mean hidden.
+ *
+ * It is deliberately NOT under /var/lib: a directory the app user already owns
+ * needs no root to create, and a feature that requires sudo to switch on tends
+ * not to get switched on.
+ */
 function imageRoot(): string {
-  return process.env.INGREFIT_COMMUNITY_IMAGE_DIR ?? '/var/lib/ingrefit/community-images';
+  const configured = process.env.INGREFIT_COMMUNITY_IMAGE_DIR?.trim();
+  if (configured) return configured;
+  return path.join(process.cwd(), '..', 'ingrefit-data', 'community-images');
 }
 
 function publicImageUrl(barcode: string): string {
@@ -124,7 +144,10 @@ async function storeThumbnail(barcode: string, jpegBase64: string): Promise<stri
     return file;
   } catch (error) {
     // A missing image is cosmetic; never fail a contribution over it.
-    console.error('[ingrefit] Could not store community thumbnail', error);
+    // Loud, because the usual cause is a directory the node user cannot write
+    // to, and the symptom otherwise is only "contributed products have no
+    // photo" noticed weeks later.
+    console.error(`[ingrefit] Could not store community thumbnail in ${imageRoot()}`, error);
     return null;
   }
 }
