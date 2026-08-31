@@ -17,7 +17,8 @@
     "off:delta": "./scripts/off-cron.sh delta",
     "i18n:status": "node scripts/i18n-status.mjs",
     "lint": "eslint .",
-    "format": "prettier --write \"src/**/*.{ts,tsx,json}\""
+    "format": "prettier --write \"src/**/*.{ts,tsx,json}\"",
+    "i18n:untranslated": "node scripts/i18n-status.mjs --untranslated"
   },
   "dependencies": {
     "@prisma/client": "^6.12.0",

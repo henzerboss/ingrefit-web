@@ -77,6 +77,8 @@ const KEPT_FIELDS = [
   'image_front_url', 'image_front_small_url',
   'ingredients_text', 'ingredients', ...LOCALIZED_FIELDS,
   'allergens_tags', 'traces_tags', 'additives_tags', 'labels_tags', 'categories_tags', 'countries_tags',
+  // Fallback taxonomy for the ~57% of records that carry no categories_tags.
+  'food_groups_tags',
   'ingredients_analysis_tags', 'nutrient_levels',
   'nutriscore_grade', 'nutrition_grades', 'nova_group', 'ecoscore_grade', 'environmental_score_grade',
   'alcohol_by_volume', 'alcohol_value', 'alcohol_unit',
@@ -788,6 +790,78 @@ async function flushLocalizations(batch) {
  * After this finishes, a user scanning a product printed in their own language
  * reads it straight from the mirror, with no translation call at all.
  */
+/**
+ * Fill in `food_groups_tags` for mirrors imported before it was retained.
+ *
+ * This is the fallback taxonomy for products that carry no `categories_tags` —
+ * roughly 57% of the export — and without it those products can never be
+ * compared to anything, so their alternatives block is permanently empty.
+ * Merges only that one key, like the other backfills.
+ */
+async function runFoodGroupsBackfill() {
+  const state = readState();
+  const archive = path.join(WORK_DIR, 'openfoodfacts-products.jsonl.gz');
+  if (!existsSync(archive)) {
+    console.log('[off] full archive is not present locally; downloading it once for food-groups backfill');
+    await download(FULL_EXPORT_URL, archive);
+    state.foodGroupsProcessedLines = 0;
+  }
+
+  const resumeFrom = state.foodGroupsProcessedLines ?? 0;
+  if (resumeFrom) console.log(`[off] food-groups backfill resuming after line ${resumeFrom}`);
+  const lines = createInterface({ input: createReadStream(archive).pipe(createGunzip()), crlfDelay: Infinity });
+  let index = 0;
+  let matched = 0;
+  let updated = 0;
+  let batch = [];
+
+  const checkpoint = () => {
+    state.foodGroupsProcessedLines = index;
+    writeState(state);
+  };
+
+  for await (const line of lines) {
+    index += 1;
+    if (index <= resumeFrom) continue;
+    if (!line.trim()) continue;
+
+    let record;
+    try {
+      record = JSON.parse(line);
+    } catch {
+      continue;
+    }
+    const barcode = typeof record.code === 'string' ? record.code.trim() : '';
+    if (!/^\d{6,18}$/.test(barcode)) continue;
+
+    const tags = Array.isArray(record.food_groups_tags)
+      ? [...new Set(record.food_groups_tags.filter((value) => typeof value === 'string' && value.trim()))]
+      : [];
+    if (!tags.length) continue;
+
+    batch.push({ barcode, strings: stripNul({ food_groups_tags: tags }) });
+    matched += 1;
+
+    if (batch.length >= BATCH_SIZE) {
+      updated += await flushLocalizations(batch);
+      batch = [];
+      checkpoint();
+      if (matched % (BATCH_SIZE * 10) === 0) {
+        console.log(`[off] food groups: line ${index}, seen ${matched}, rows changed ${updated}`);
+      }
+    } else if (index % 100_000 === 0) {
+      checkpoint();
+      console.log(`[off] food groups: line ${index}, seen ${matched}, rows changed ${updated}`);
+    }
+  }
+
+  updated += await flushLocalizations(batch);
+  state.foodGroupsProcessedLines = 0;
+  state.lastFoodGroupsBackfill = new Date().toISOString();
+  writeState(state);
+  console.log(`[off] food-groups backfill finished: ${matched} records seen, ${updated} database rows changed`);
+}
+
 async function runLocalizationBackfill() {
   const state = readState();
   const archive = path.join(WORK_DIR, 'openfoodfacts-products.jsonl.gz');
@@ -1283,6 +1357,8 @@ async function main() {
         ? 'backfill-countries'
         : process.argv.includes('--backfill-languages')
           ? 'backfill-languages'
+        : process.argv.includes('--backfill-food-groups')
+          ? 'backfill-food-groups'
         : process.argv.includes('--backfill-nutrition-basis')
           ? 'backfill-nutrition-basis'
         : process.argv.includes('--inspect')
@@ -1293,7 +1369,7 @@ async function main() {
             ? 'discover'
             : null;
   if (!mode) {
-    console.error('Usage: node scripts/import-openfoodfacts.mjs --full | --delta | --backfill-countries | --backfill-languages | --backfill-nutrition-basis | --inspect [barcode] | --stats [head-sample] | --discover [sample]');
+    console.error('Usage: node scripts/import-openfoodfacts.mjs --full | --delta | --backfill-countries | --backfill-languages | --backfill-food-groups | --backfill-nutrition-basis | --inspect [barcode] | --stats [head-sample] | --discover [sample]');
     process.exit(1);
   }
   if (mode === 'discover') {
@@ -1329,6 +1405,7 @@ async function main() {
     if (mode === 'full') await runFull();
     else if (mode === 'backfill-countries') await runCountriesBackfill();
     else if (mode === 'backfill-languages') await runLocalizationBackfill();
+    else if (mode === 'backfill-food-groups') await runFoodGroupsBackfill();
     else if (mode === 'backfill-nutrition-basis') await runNutritionBasisBackfill();
     else await runDelta();
     console.log(`[off] done in ${Math.round((Date.now() - started) / 1000)}s`);

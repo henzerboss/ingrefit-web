@@ -67,6 +67,24 @@ It buys a lot: a user scanning a product printed in their own language now
 reads it straight from the mirror instead of having a Gemini translation
 bought for them, and free-tier users get localized text at all.
 
+### Backfilling the fallback taxonomy
+
+Fewer than half of the export's records carry `categories_tags`, and without a
+category a product cannot be compared to anything — its alternatives block is
+permanently empty. `food_groups_tags` is Open Food Facts' own coarser grouping,
+populated for a partly different set of records, and is used as a fallback.
+
+```bash
+./scripts/off-cron.sh backfill-food-groups
+```
+
+Measure the gain first; on some mirrors the two fields are missing together:
+
+```sql
+SELECT count(*) FILTER (WHERE data ? 'food_groups_tags') AS rescued
+FROM "OffProduct" WHERE NOT (data ? 'categories_tags');
+```
+
 ### Backfilling localized fields
 
 A mirror imported before 1.11 has only the Russian and English variants. Fill

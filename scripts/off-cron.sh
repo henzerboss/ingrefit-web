@@ -109,7 +109,7 @@ case "$MODE" in
     prune_counters
     log "prune finished"
     ;;
-  full|delta|backfill-languages|backfill-countries|backfill-nutrition-basis)
+  full|delta|backfill-languages|backfill-food-groups|backfill-countries|backfill-nutrition-basis)
     # A full import or a backfill runs for hours. flock makes an overrun skip
     # the next night rather than start a second pass against the same table.
     exec 9>"$LOCK_FILE"
@@ -128,7 +128,7 @@ case "$MODE" in
     fi
     ;;
   *)
-    echo "Usage: $0 [delta|full|prune|backfill-languages|backfill-countries|backfill-nutrition-basis]" >&2
+    echo "Usage: $0 [delta|full|prune|backfill-languages|backfill-food-groups|backfill-countries|backfill-nutrition-basis]" >&2
     exit 1
     ;;
 esac

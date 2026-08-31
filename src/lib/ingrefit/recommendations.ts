@@ -112,6 +112,76 @@ const BROAD_CATEGORY_TAGS = new Set([
   'en:bread-and-bakery-products',
 ]);
 
+/**
+ * Whether a product is eaten as sold or has to be cooked first.
+ *
+ * Open Food Facts puts sliced cured ham and a raw pork tenderloin under the
+ * same `en:meats` / `en:pork` branch, so "most specific shared tag" happily
+ * matches them to each other. Nutritionally that swap is defensible — raw meat
+ * really does beat a NOVA 4 cold cut — but it is not an alternative the user
+ * can act on: one goes straight into a sandwich, the other needs a pan. The
+ * suggestion reads as a mistake even though every number behind it is right.
+ *
+ * Only applied when both sides are known, so an unclassified product is never
+ * excluded by it.
+ */
+type PreparationClass = 'ready' | 'raw' | 'unknown';
+
+const READY_TO_EAT_MARKERS = [
+  'prepared-meats',
+  'charcuterie',
+  'delicatessen',
+  'cold-cuts',
+  'hams',
+  'cooked-ham',
+  'cured-',
+  'sausages',
+  'salami',
+  'pates',
+  'pate',
+  'canned-',
+  'tinned-',
+  'prepared-meals',
+  'ready-',
+  'smoked-',
+  'dried-',
+  'sandwich',
+  'salads',
+  'desserts',
+  'snacks',
+  'biscuits',
+  'cheeses',
+  'yogurts',
+];
+
+const RAW_MARKERS = [
+  'fresh-meats',
+  'fresh-poultry',
+  'fresh-fish',
+  'fresh-seafood',
+  'raw-',
+  'meat-cuts',
+  'fresh-vegetables',
+  'fresh-fruits',
+  'flours',
+  'dried-legumes',
+  'frozen-raw-',
+];
+
+function preparationClass(tags: string[]): PreparationClass {
+  let ready = false;
+  let raw = false;
+  for (const tag of tags) {
+    const body = tag.replace(/^[a-z]{2}:/, '');
+    if (READY_TO_EAT_MARKERS.some((marker) => body.includes(marker))) ready = true;
+    if (RAW_MARKERS.some((marker) => body.includes(marker))) raw = true;
+  }
+  // A product marked both ways (a cooked ham inside "fresh meats") tells us
+  // nothing, so it is left unknown rather than guessed.
+  if (ready === raw) return 'unknown';
+  return ready ? 'ready' : 'raw';
+}
+
 function normalizeIdentity(value: string | null): string {
   return (value ?? '')
     .normalize('NFKD')
@@ -331,7 +401,15 @@ function categorySimilarity(sourceTags: string[], focusTags: string[], candidate
 
 /** Why a candidate was dropped. Logged in aggregate so an empty block is diagnosable. */
 type RejectionReason =
-  'market' | 'category' | 'sparse_facts' | 'quality_gate' | 'blocked' | 'low_confidence' | 'no_gain' | 'duplicate';
+  | 'market'
+  | 'category'
+  | 'preparation'
+  | 'sparse_facts'
+  | 'quality_gate'
+  | 'blocked'
+  | 'low_confidence'
+  | 'no_gain'
+  | 'duplicate';
 
 export interface RecommendationDiagnostics {
   /** Set when the whole request could not produce anything, with the reason. */
@@ -404,6 +482,7 @@ export async function findHealthierRecommendationsWithDiagnostics(input: {
   if (!hasEnoughNutritionFacts(sourceFacts)) return done('sparse_source', []);
   const sourceScore = scoreProduct(sourceFacts, input.profile);
 
+  const sourcePreparation = preparationClass(sourceTags);
   const { pool, tagsUsed } = await collectCandidates(input.barcode, focusTags, marketTag);
 
   const ranked: Array<{ product: ProductFacts; score: number; baseScore: number; delta: number; similarity: number }> =
@@ -422,6 +501,13 @@ export async function findHealthierRecommendationsWithDiagnostics(input: {
     if (!similarity) {
       drop('category');
       continue;
+    }
+    if (sourcePreparation !== 'unknown') {
+      const candidatePreparation = preparationClass(categoryTagsFromRaw(raw));
+      if (candidatePreparation !== 'unknown' && candidatePreparation !== sourcePreparation) {
+        drop('preparation');
+        continue;
+      }
     }
 
     const product = productFactsFromRaw(raw, row.barcode, input.locale);

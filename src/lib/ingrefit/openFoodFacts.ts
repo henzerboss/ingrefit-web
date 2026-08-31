@@ -32,6 +32,8 @@ export interface OpenFoodFactsProduct {
   additives_tags?: string[];
   labels_tags?: string[];
   categories_tags?: string[];
+  /** Coarser grouping, used when categories_tags is absent. */
+  food_groups_tags?: string[];
   countries_tags?: string[];
   ingredients_analysis_tags?: string[];
   nutrient_levels?: Record<string, string>;
@@ -90,6 +92,7 @@ const FIELDS = [
   'additives_tags',
   'labels_tags',
   'categories_tags',
+  'food_groups_tags',
   'countries_tags',
   'ingredients_analysis_tags',
   'nutrient_levels',
@@ -143,8 +146,23 @@ function displayTags(tags: string[]): string[] {
     .filter(Boolean);
 }
 
+/**
+ * Category tags, with `food_groups_tags` as a fallback.
+ *
+ * Fewer than half of the records in the full export carry `categories_tags`,
+ * and without them a product cannot be compared to anything — the user sees an
+ * empty alternatives block for a product that is otherwise fully described.
+ *
+ * `food_groups_tags` is Open Food Facts' own coarser grouping and is populated
+ * for a different, overlapping set of records. It is deliberately used only as
+ * a fallback: it is broad enough that matching on it alone would pair loosely
+ * related products, so the ranker's parent-tag weighting keeps such matches far
+ * below a real category match.
+ */
 export function categoryTagsFromRaw(product: OpenFoodFactsProduct): string[] {
-  return canonicalTags(product.categories_tags);
+  const categories = canonicalTags(product.categories_tags);
+  if (categories.length) return categories;
+  return canonicalTags(product.food_groups_tags);
 }
 
 function nutrientLevel(value: unknown): NutrientLevel | null {
