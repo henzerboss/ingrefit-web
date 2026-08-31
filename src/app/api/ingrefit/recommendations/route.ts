@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 import { requireClient, resolvePlan } from '@/lib/ingrefit/auth';
 import { errorResponse, HttpError } from '@/lib/ingrefit/http';
 import { clientIp, enforceLimit } from '@/lib/ingrefit/rateLimit';
-import { findHealthierRecommendations } from '@/lib/ingrefit/recommendations';
+import { findHealthierRecommendationsWithDiagnostics } from '@/lib/ingrefit/recommendations';
 import { recommendationsRequestSchema } from '@/lib/ingrefit/schemas';
 
 export const runtime = 'nodejs';
@@ -31,8 +31,15 @@ export async function POST(request: NextRequest) {
       throw new HttpError(400, 'INVALID_REQUEST', 'The recommendations request is invalid.');
     }
 
-    const recommendations = await findHealthierRecommendations(parsed.data);
-    return NextResponse.json({ recommendations }, { headers: { ...CORS_HEADERS, 'Cache-Control': 'no-store' } });
+    const { recommendations, diagnostics } = await findHealthierRecommendationsWithDiagnostics(parsed.data);
+    // `reason` lets the client tell "nothing better exists" apart from "this
+    // product could not be compared at all". Both used to render as a reassuring
+    // green tick, which is the wrong thing to say when the truth is that Open
+    // Food Facts has no category for the product.
+    return NextResponse.json(
+      { recommendations, reason: diagnostics.outcome },
+      { headers: { ...CORS_HEADERS, 'Cache-Control': 'no-store' } },
+    );
   } catch (error) {
     return errorResponse(error);
   }

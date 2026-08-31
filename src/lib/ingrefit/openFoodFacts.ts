@@ -292,7 +292,24 @@ export function hasEnoughFacts(product: ProductFacts): boolean {
   // An ingredient string alone cannot support weight, protein, sugar, salt or
   // heart-related goals. Do not turn a sparse database record into a neutral
   // result: require an identifiable product and a useful nutrient set.
-  return Boolean(product.name && nutritionFieldCount(product) >= 4);
+  return Boolean(product.name && hasEnoughNutritionFacts(product));
+}
+
+/**
+ * The nutrient half of `hasEnoughFacts`, without the name requirement.
+ *
+ * A name is needed to *show* a product, which is why candidates and analysis
+ * results must have one. It is not needed to *compare against* one: the user is
+ * holding the package and already knows what it is.
+ *
+ * Open Food Facts carries plenty of records with a full nutrition panel and an
+ * empty `product_name` — barcode 7622210114730 is one. Analysis handled those
+ * fine because Premium enrichment fills the name in, but the recommendation
+ * endpoint reads the record directly and rejected them as `sparse_source`,
+ * so the same product was scoreable and yet had no alternatives.
+ */
+export function hasEnoughNutritionFacts(product: ProductFacts): boolean {
+  return nutritionFieldCount(product) >= 4;
 }
 
 /** Localized display strings are derived per request; facts themselves are cached once. */

@@ -2,7 +2,13 @@ import { Prisma } from '@prisma/client';
 
 import { GREAT_CONFIDENCE, recommendationQualityGate } from './dataQuality';
 import { safeDb } from './db';
-import { categoryTagsFromRaw, hasEnoughFacts, productFactsFromRaw, type OpenFoodFactsProduct } from './openFoodFacts';
+import {
+  categoryTagsFromRaw,
+  hasEnoughFacts,
+  hasEnoughNutritionFacts,
+  productFactsFromRaw,
+  type OpenFoodFactsProduct,
+} from './openFoodFacts';
 import { scoreProduct } from './scoring';
 import type { AnalysisProfile, ProductFacts } from './types';
 
@@ -18,7 +24,9 @@ export interface ProductRecommendation {
   delta: number;
 }
 
-const MAX_RECOMMENDATIONS = 10;
+// The client pages through these five at a time, so the ceiling is what the
+// user can reach by tapping "show more" rather than what fits on one screen.
+const MAX_RECOMMENDATIONS = 50;
 // A gain smaller than this is inside the noise of the model itself.
 const MIN_SCORE_GAIN = 0.5;
 // The alternative must be better as a product, not only better for this
@@ -145,8 +153,10 @@ async function readSourceRaw(barcode: string): Promise<OpenFoodFactsProduct | nu
  * if it yields too few candidates the parent tags are added, which is what
  * keeps the alternatives block from being empty for niche categories.
  */
-const CANDIDATE_TARGET = 60;
-const CANDIDATE_HARD_LIMIT = 200;
+// Enough candidates to fill the 50-item ceiling after every gate has taken its
+// share, without going back to reading the whole table.
+const CANDIDATE_TARGET = 150;
+const CANDIDATE_HARD_LIMIT = 400;
 
 interface IndexAvailability {
   mirror: boolean;
@@ -237,9 +247,24 @@ async function cachedCandidates(barcode: string, tags: string[], marketTag: stri
   return (rows ?? []).map((row: { barcode: string; facts: unknown }) => ({ barcode: row.barcode, data: row.facts }));
 }
 
+let mirrorIndexWarned = false;
+
 async function mirrorCandidates(barcode: string, tags: string[], marketTag: string): Promise<RawProductRow[]> {
   if (process.env.OPEN_FOOD_FACTS_LOCAL !== 'true' || !tags.length) return [];
-  if (!(await recommendationIndexes()).mirror) return [];
+  if (!(await recommendationIndexes()).mirror) {
+    // Without the GIN indexes the mirror cannot be queried at acceptable cost,
+    // so it is skipped entirely — and that silently reduces the candidate pool
+    // to whatever happens to be in the request cache. Say so once per process
+    // instead of letting it look like "no better product exists".
+    if (!mirrorIndexWarned) {
+      mirrorIndexWarned = true;
+      console.warn(
+        '[ingrefit] Local Open Food Facts mirror is enabled but its recommendation indexes are missing; ' +
+          'candidates come from the request cache only. Run scripts/add-recommendation-index.sql.',
+      );
+    }
+    return [];
+  }
   return (
     (await safeDb((db) =>
       db.$queryRaw<RawProductRow[]>(Prisma.sql`
@@ -373,7 +398,10 @@ export async function findHealthierRecommendationsWithDiagnostics(input: {
   if (!focusTags.length) return done('no_category', []);
 
   const sourceFacts = productFactsFromRaw(sourceRaw, input.barcode, input.locale);
-  if (!hasEnoughFacts(sourceFacts)) return done('sparse_source', []);
+  // Nutrition only. Requiring a name here rejected products the user had just
+  // been given a score for; candidates below are still held to the full check,
+  // because those do have to be displayed.
+  if (!hasEnoughNutritionFacts(sourceFacts)) return done('sparse_source', []);
   const sourceScore = scoreProduct(sourceFacts, input.profile);
 
   const { pool, tagsUsed } = await collectCandidates(input.barcode, focusTags, marketTag);
