@@ -38,7 +38,7 @@ const SHARED_VALUES = new Set([
   'Premium', 'IngreFit', 'Open Food Facts', 'Nutri-Score', 'NOVA', 'Eco-Score',
   'Vegan', 'Halal', 'Kosher', 'Gluten', 'Protein', 'Bio', 'g', 'ml', 'kcal',
   'per 100 g', 'per 100 ml', '100 g', '100 ml',
-  'Halal', 'Kosher', 'Lupin', 'Mustard', 'Sesame', 'Soy', 'Vegetarian',
+  'Halal', 'Kosher', 'Lupin', 'Mustard', 'Sesame', 'Soy', 'Vegetarian', 'Ingredients', 'Nutrition',
 ]);
 
 function flatten(value, prefix = '', out = new Set()) {

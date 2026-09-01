@@ -514,6 +514,11 @@ export async function recognizeLabel(
       `Known barcode: ${barcode ?? 'not available'}. Do not derive product facts from the barcode itself.`,
       `The attached images are ordered as: ${readablePhotos.map((photo) => photo.kind).join(', ')}.`,
       captureGuide,
+      // Many European labels print two columns — per 100 g and per portion —
+      // and the per-portion one is often the wider, bolder of the two. Reading
+      // it as if it were the 100 g column would silently misstate every value.
+      'Nutrition tables often show more than one column, for example per 100 g and per serving. Always read the per-100-g (or per-100-ml) column and ignore the others. Set nutritionReference to what that column is measured in.',
+      'The nutrition table may sit directly beneath the ingredient statement in the same photo. Read it whenever it is legible, even if you were not told to expect it.',
       'For unknownFields, list the important requested fields that could not be read.',
     ].join('\n'),
     responseSchema,

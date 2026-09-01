@@ -47,6 +47,21 @@ export async function POST(request: NextRequest) {
     // Four is the same bar the scorer uses to decide a record is usable.
     const nutritionReadable = nutritionFieldCount(facts) >= 4;
 
+    // Logged because the client can only report "we asked for another photo",
+    // never why. When a nutrition panel that is plainly in the frame is
+    // reported missing, this line is the difference between guessing and
+    // knowing which half failed.
+    console.info(
+      '[ingrefit] Inspect label',
+      JSON.stringify({
+        photos: parsed.data.photos.map((photo) => photo.kind),
+        name: facts.name,
+        ingredientsReadable,
+        nutritionFields: nutritionFieldCount(facts),
+        nutritionReadable,
+      }),
+    );
+
     return NextResponse.json(
       {
         // What the reader could see, so the client can name the product back to
