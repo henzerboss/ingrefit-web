@@ -199,20 +199,31 @@ function focusCategoryTags(raw: OpenFoodFactsProduct): string[] {
   return [...new Set(specific)].slice(0, 4);
 }
 
+/** Which store answered for the scanned product. Reported in the diagnostics. */
+let lastSourceOrigin: 'cache' | 'mirror' | 'community' | null = null;
+
 async function readSourceRaw(barcode: string): Promise<OpenFoodFactsProduct | null> {
+  lastSourceOrigin = null;
   const upstream = await safeDb(async (db) => {
     // Follow the same precedence as barcode analysis: a recent network/cache
     // record wins, and the local mirror is consulted only when it is enabled.
     const cached = await db.productCache.findUnique({ where: { barcode }, select: { facts: true } });
-    if (cached) return cached.facts as unknown as OpenFoodFactsProduct;
+    if (cached) {
+      lastSourceOrigin = 'cache';
+      return cached.facts as unknown as OpenFoodFactsProduct;
+    }
     if (process.env.OPEN_FOOD_FACTS_LOCAL !== 'true') return null;
     const local = await db.offProduct.findUnique({ where: { barcode }, select: { data: true } });
-    return local ? (local.data as unknown as OpenFoodFactsProduct) : null;
+    if (!local) return null;
+    lastSourceOrigin = 'mirror';
+    return local.data as unknown as OpenFoodFactsProduct;
   });
   if (upstream) return upstream;
   // A product that only exists because a user contributed it must still get
   // alternatives of its own; otherwise contributing is a dead end.
-  return findCommunityRecord(barcode);
+  const contributed = await findCommunityRecord(barcode);
+  if (contributed) lastSourceOrigin = 'community';
+  return contributed;
 }
 
 /**
@@ -432,6 +443,8 @@ type RejectionReason =
 export interface RecommendationDiagnostics {
   /** Set when the whole request could not produce anything, with the reason. */
   outcome: 'ok' | 'no_market' | 'unknown_source' | 'no_category' | 'sparse_source' | 'empty';
+  /** Which store the scanned product itself came from, when it was found. */
+  sourceOrigin: 'cache' | 'mirror' | 'community' | null;
   candidates: number;
   tagsUsed: number;
   accepted: number;
@@ -474,6 +487,7 @@ export async function findHealthierRecommendationsWithDiagnostics(input: {
   ) => {
     const diagnostics: RecommendationDiagnostics = {
       outcome,
+      sourceOrigin: lastSourceOrigin,
       candidates,
       tagsUsed,
       accepted: recommendations.length,

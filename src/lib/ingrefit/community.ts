@@ -251,14 +251,25 @@ export async function contributeProduct(input: ContributionInput): Promise<void>
 
 /** Look up a contributed product. Only published records are served. */
 export async function findCommunityRecord(barcode: string): Promise<OpenFoodFactsProduct | null> {
-  if (!communityEnabled()) return null;
+  if (!communityEnabled()) {
+    console.info('[ingrefit] Community lookup skipped: INGREFIT_COMMUNITY_ENABLED=false');
+    return null;
+  }
   const row = await safeDb((db) =>
     db.communityProduct.findFirst({
       where: { barcode, status: 'published' },
       select: { data: true },
     }),
   );
-  if (!row) return null;
+  if (!row) {
+    // Distinguishes "no such record" from "record exists but is hidden", which
+    // look the same from the app and have opposite fixes.
+    const any = await safeDb((db) => db.communityProduct.findUnique({ where: { barcode }, select: { status: true } }));
+    console.info(
+      `[ingrefit] Community lookup miss for ${barcode}${any ? ` (record exists with status "${any.status}")` : ''}`,
+    );
+    return null;
+  }
   // Best-effort popularity counter; a failure here must not block the lookup.
   void safeDb((db) => db.communityProduct.update({ where: { barcode }, data: { views: { increment: 1 } } }));
   return row.data as unknown as OpenFoodFactsProduct;
