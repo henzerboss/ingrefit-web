@@ -19,7 +19,8 @@
     "lint": "eslint .",
     "format": "prettier --write \"src/**/*.{ts,tsx,json}\"",
     "i18n:untranslated": "node scripts/i18n-status.mjs --untranslated",
-    "test:schemas": "tsx scripts/schema-check.ts"
+    "test:schemas": "tsx scripts/schema-check.ts",
+    "test:gemini": "node scripts/gemini-check.mjs"
   },
   "dependencies": {
     "@prisma/client": "^6.12.0",

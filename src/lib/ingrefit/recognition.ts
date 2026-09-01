@@ -141,6 +141,11 @@ const LABEL_TAG_VALUES = [
   'en:low-salt',
 ] as const;
 
+type CategoryTag = (typeof CATEGORY_TAG_VALUES)[number];
+type LabelTag = (typeof LABEL_TAG_VALUES)[number];
+const CATEGORY_TAG_SET: ReadonlySet<string> = new Set(CATEGORY_TAG_VALUES);
+const LABEL_TAG_SET: ReadonlySet<string> = new Set(LABEL_TAG_VALUES);
+
 const EMPTY_ANALYSIS = { vegan: null, vegetarian: null, palmOil: null } as const;
 const EMPTY_LEVELS = { fat: null, saturatedFat: null, sugars: null, salt: null } as const;
 
@@ -168,9 +173,27 @@ const extractedSchema = z.object({
   traces: z.array(z.string().trim().min(1)).max(30),
   allergenTags: z.array(z.enum(ALLERGEN_TAG_VALUES)).max(20),
   traceTags: z.array(z.enum(ALLERGEN_TAG_VALUES)).max(20),
-  categoryTags: z.array(z.enum(CATEGORY_TAG_VALUES)).max(6),
-  labelTags: z.array(z.enum(LABEL_TAG_VALUES)).max(12),
-  novaGroup: z.number().int().min(1).max(4).nullable(),
+  // Requested as free strings and filtered here rather than constrained by a
+  // schema enum. A seventy-value enum is the largest thing we ask Gemini's
+  // schema subset to swallow, and when it objects it answers with a bare 400
+  // that names nothing. The guarantee is unchanged — an invented tag is dropped
+  // below, so nothing outside the closed list ever reaches the database — but
+  // it now comes from code we can read instead of a remote validator.
+  categoryTags: z
+    .array(z.string())
+    .max(12)
+    .transform((tags) => tags.filter((tag): tag is CategoryTag => CATEGORY_TAG_SET.has(tag)).slice(0, 6)),
+  labelTags: z
+    .array(z.string())
+    .max(20)
+    .transform((tags) => tags.filter((tag): tag is LabelTag => LABEL_TAG_SET.has(tag))),
+  // Requested as a string enum, then narrowed here. Gemini's schema subset is
+  // most reliable with STRING + enum; a nullable INTEGER is the kind of thing
+  // that gets rejected with a bare 400 and no useful message.
+  novaGroup: z
+    .enum(['1', '2', '3', '4', 'unknown'])
+    .transform((value) => (value === 'unknown' ? null : Number(value)))
+    .nullable(),
   additives: z.array(z.string().trim().min(1)).max(50),
   labels: z.array(z.string().trim().min(1)).max(30),
   alcoholPercent: nullableNumber,
@@ -224,11 +247,11 @@ const responseSchema = {
     ingredients: { type: 'ARRAY', items: { type: 'STRING' } },
     allergens: { type: 'ARRAY', items: { type: 'STRING' } },
     traces: { type: 'ARRAY', items: { type: 'STRING' } },
-    allergenTags: { type: 'ARRAY', maxItems: 20, items: { type: 'STRING', enum: [...ALLERGEN_TAG_VALUES] } },
-    traceTags: { type: 'ARRAY', maxItems: 20, items: { type: 'STRING', enum: [...ALLERGEN_TAG_VALUES] } },
-    categoryTags: { type: 'ARRAY', maxItems: 6, items: { type: 'STRING', enum: [...CATEGORY_TAG_VALUES] } },
-    labelTags: { type: 'ARRAY', maxItems: 12, items: { type: 'STRING', enum: [...LABEL_TAG_VALUES] } },
-    novaGroup: { type: 'INTEGER', nullable: true },
+    allergenTags: { type: 'ARRAY', items: { type: 'STRING', enum: [...ALLERGEN_TAG_VALUES] } },
+    traceTags: { type: 'ARRAY', items: { type: 'STRING', enum: [...ALLERGEN_TAG_VALUES] } },
+    categoryTags: { type: 'ARRAY', items: { type: 'STRING' } },
+    labelTags: { type: 'ARRAY', items: { type: 'STRING' } },
+    novaGroup: { type: 'STRING', enum: ['1', '2', '3', '4', 'unknown'] },
     additives: { type: 'ARRAY', items: { type: 'STRING' } },
     labels: { type: 'ARRAY', items: { type: 'STRING' } },
     alcoholPercent: { type: 'NUMBER', nullable: true },
@@ -303,7 +326,7 @@ const textEnrichmentResponseSchema = {
     name: { type: 'STRING', nullable: true },
     ingredientsText: { type: 'STRING', nullable: true },
     ingredients: { type: 'ARRAY', maxItems: 100, items: { type: 'STRING' } },
-    allergenTags: { type: 'ARRAY', maxItems: 20, items: { type: 'STRING', enum: [...ALLERGEN_TAG_VALUES] } },
+    allergenTags: { type: 'ARRAY', items: { type: 'STRING', enum: [...ALLERGEN_TAG_VALUES] } },
     alcoholPercent: { type: 'NUMBER', nullable: true },
     nutritionReference: { type: 'STRING', enum: ['100g', '100ml'] },
     estimatedNutrition: {
@@ -509,9 +532,9 @@ export async function recognizeLabel(
       'Do not infer allergens from ingredients. Put an allergen in allergens only when the package explicitly declares or emphasizes it as an allergen.',
       'allergenTags and traceTags are different and mandatory: map EVERY allergen you can read on the package onto the canonical tags in the schema enum, whatever language the package is printed in. Include a tag when the corresponding ingredient is plainly present in the ingredient list (for example a peanut ingredient yields en:peanuts), not only when an allergen statement highlights it. Put tags from a "may contain" statement in traceTags instead. If the ingredient statement is legible and you find none, return empty arrays.',
       'Do not infer labels such as vegan, gluten-free, organic, or sugar-free unless the package explicitly prints that claim.',
-      'categoryTags is mandatory and must come from the schema enum. Choose from the most specific that clearly applies down to the broadest, at most four. These tags are what lets the product be compared with others, so an approximate but correct tag is far better than none.',
-      'labelTags must only contain claims actually printed on the package, mapped onto the schema enum.',
-      'novaGroup is the NOVA processing classification from 1 to 4, judged from the ingredient list: 1 unprocessed, 2 culinary ingredient, 3 processed, 4 ultra-processed with additives, isolates or cosmetic ingredients. Return null if the ingredient list is not legible.',
+      `categoryTags is mandatory. Use ONLY these exact values, most specific first, at most four: ${CATEGORY_TAG_VALUES.join(', ')}. Anything outside this list is discarded, so an approximate but listed tag is far better than an invented one. These tags are what lets the product be compared with others.`,
+      `labelTags may only contain claims actually printed on the package, using ONLY these exact values: ${LABEL_TAG_VALUES.join(', ')}.`,
+      'novaGroup is the NOVA processing classification, judged from the ingredient list: "1" unprocessed, "2" culinary ingredient, "3" processed, "4" ultra-processed with additives, isolates or cosmetic ingredients. Return "unknown" if the ingredient list is not legible.',
       'Set alcoholPercent only when an alcohol-by-volume percentage is explicitly legible. Never infer it from the product type.',
       'Transcribe ingredients in the language printed on the package. Preserve the printed nutrition basis as 100g, 100ml or serving. Never convert between them.',
       'Return JSON only and follow the response schema exactly.',

@@ -18,7 +18,11 @@ interface GeminiRequest<T> {
 
 interface GeminiResponse {
   candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
-  error?: { message?: string };
+  /**
+   * Google returns the useful part in `details`, not `message`: a 400 says
+   * "Request contains an invalid argument" and only the details name the field.
+   */
+  error?: { message?: string; status?: string; details?: unknown };
   usageMetadata?: {
     promptTokenCount?: number;
     candidatesTokenCount?: number;
@@ -28,8 +32,16 @@ interface GeminiResponse {
   };
 }
 
+/**
+ * Models tried in order, first to last.
+ *
+ * Overridden with INGREFIT_GEMINI_MODELS. Keep the list short and current:
+ * Google retires older names, and a retired fallback is worse than none — it
+ * turns every failure into two, and the second one's error message buries the
+ * first one's, which is the real reason the label path looked broken.
+ */
 function models(): string[] {
-  return (process.env.INGREFIT_GEMINI_MODELS ?? 'gemini-3.1-flash-lite,gemini-2.5-flash-lite')
+  return (process.env.INGREFIT_GEMINI_MODELS ?? 'gemini-3.1-flash-lite,gemini-3.5-flash-lite')
     .split(',')
     .map((model) => model.trim())
     .filter(Boolean);
@@ -83,9 +95,17 @@ async function attempt<T>(model: string, input: GeminiRequest<T>, apiKey: string
   );
   const payload = (await response.json().catch(() => ({}))) as GeminiResponse;
   if (!response.ok) {
-    const message = payload.error?.message ?? `Gemini ${model} returned HTTP ${response.status}`;
-    const retryable =
-      response.status === 429 || response.status >= 500 || response.status === 404 || response.status === 400;
+    const details = payload.error?.details ? ` details=${JSON.stringify(payload.error.details)}` : '';
+    const message = `${payload.error?.message ?? `Gemini ${model} returned HTTP ${response.status}`}${details}`;
+    // A 400 is the request's fault, not the model's. Retrying it against
+    // another model cannot help, wastes quota, and — worse — buries the one
+    // message that says which field Google objected to under three identical
+    // failures. Only a rejected *prompt* is worth another model.
+    const badRequest = response.status === 400;
+    if (badRequest) {
+      console.error(`[ingrefit] Gemini rejected the request for ${input.operation}: ${message}`);
+    }
+    const retryable = response.status === 429 || response.status >= 500 || response.status === 404;
     throw retryable ? new RetryableGeminiError(message) : new Error(message);
   }
   const usage = payload.usageMetadata;
@@ -133,6 +153,12 @@ export async function callGemini<T>(input: GeminiRequest<T>): Promise<T> {
       lastError = error;
       const isNetwork = error instanceof TypeError || (error instanceof Error && error.name === 'TimeoutError');
       const shouldFallOver = error instanceof RetryableGeminiError || isNetwork;
+      const text = error instanceof Error ? error.message : String(error);
+      if (/no longer available|not found for API version/i.test(text)) {
+        console.error(
+          `[ingrefit] Gemini model "${model}" has been retired by Google. Remove it from INGREFIT_GEMINI_MODELS.`,
+        );
+      }
       console.error(`[ingrefit] Gemini model ${model} failed (retrying: ${shouldFallOver})`, error);
       if (!shouldFallOver) break;
     }
