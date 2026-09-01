@@ -3,6 +3,7 @@ import { mkdir, writeFile, unlink } from 'node:fs/promises';
 import path from 'node:path';
 
 import { getDb, safeDb } from './db';
+import { detectLanguage } from './localization';
 import { computeNutriScore } from './nutriScore';
 import type { OpenFoodFactsProduct } from './openFoodFacts';
 import type { ProductFacts } from './types';
@@ -87,18 +88,35 @@ function hashContributor(installationId: string): string {
  */
 export function communityRecordFromFacts(
   facts: ProductFacts,
-  options: { barcode: string; marketCountry?: string | null; imageUrl?: string | null },
+  options: {
+    barcode: string;
+    marketCountry?: string | null;
+    imageUrl?: string | null;
+    /** Two-letter code of the language printed on the package, when detected. */
+    sourceLanguage?: string | null;
+  },
 ): OpenFoodFactsProduct {
   const marketTag = options.marketCountry
     ? `en:${options.marketCountry.toLowerCase() === 'gb' ? 'united-kingdom' : options.marketCountry.toLowerCase()}`
     : null;
 
+  // Text is stored exactly as printed on the package, never in the
+  // contributor's app language. `recognizeLabel` transcribes rather than
+  // translates for this reason: a Spanish package contributed by a Russian user
+  // has to read as Spanish, because that is what the next person will be
+  // holding — and because Open Food Facts records work the same way, the same
+  // per-language display path applies to both without a special case.
   const record: OpenFoodFactsProduct = {
     code: options.barcode,
     product_name: facts.name ?? undefined,
     brands: facts.brand ?? undefined,
     quantity: facts.quantity ?? undefined,
     ingredients_text: facts.ingredientsText ?? undefined,
+    // Stored under the package's own language too when we can tell what it is,
+    // so a later reader picks it up through the normal localized-field path.
+    ...(options.sourceLanguage
+      ? { [`ingredients_text_${options.sourceLanguage}`]: facts.ingredientsText ?? undefined }
+      : {}),
     ingredients: facts.ingredients.map((text) => ({ text })),
     allergens_tags: facts.allergenTags,
     traces_tags: facts.traceTags,
@@ -197,6 +215,7 @@ export async function contributeProduct(input: ContributionInput): Promise<void>
       barcode: input.barcode,
       marketCountry: input.marketCountry,
       imageUrl: imagePath ? publicImageUrl(input.barcode) : null,
+      sourceLanguage: detectLanguage(input.facts.ingredientsText ?? ''),
     });
 
     await db.communityProduct.upsert({

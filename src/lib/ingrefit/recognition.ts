@@ -202,6 +202,13 @@ const responseSchema = {
     'traces',
     'allergenTags',
     'traceTags',
+    // Must be listed here as well as in the zod schema. Gemini only guarantees
+    // a property when the response schema marks it required; the parser then
+    // rejected every response for a missing field, and the whole label path
+    // failed as AI_UNAVAILABLE.
+    'categoryTags',
+    'labelTags',
+    'novaGroup',
     'additives',
     'labels',
     'alcoholPercent',
