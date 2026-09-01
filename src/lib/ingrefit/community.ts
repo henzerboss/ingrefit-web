@@ -196,12 +196,24 @@ export async function contributeProduct(input: ContributionInput): Promise<void>
   try {
     const existing = await db.communityProduct.findUnique({
       where: { barcode: input.barcode },
-      select: { imagePath: true, status: true, confidence: true },
+      select: { imagePath: true, status: true, confidence: true, data: true },
     });
 
-    // An existing record is only replaced by a more confident reading, and a
-    // record a human has hidden or edited is never overwritten by a scan.
-    if (existing && (existing.status !== 'published' || existing.confidence >= input.confidence)) {
+    // A record with no category can never be compared to anything, so a later
+    // reading that does have one is an improvement regardless of how the two
+    // confidences compare. Without this, the first scan's failure to classify a
+    // product was permanent: every later scan was discarded as "not more
+    // confident" and the product had no alternatives forever.
+    const existingCategories = existing
+      ? ((existing.data as { categories_tags?: unknown })?.categories_tags ?? [])
+      : [];
+    const existingHasCategory = Array.isArray(existingCategories) && existingCategories.length > 0;
+    const incomingHasCategory = input.facts.categories.length > 0;
+    const addsCategory = !existingHasCategory && incomingHasCategory;
+
+    // Otherwise an existing record is only replaced by a more confident
+    // reading, and a record a human has hidden or edited is never overwritten.
+    if (existing && !addsCategory && (existing.status !== 'published' || existing.confidence >= input.confidence)) {
       await db.communityProduct.update({
         where: { barcode: input.barcode },
         data: { views: { increment: 0 }, updatedAt: new Date() },

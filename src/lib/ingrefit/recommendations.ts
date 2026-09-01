@@ -445,6 +445,8 @@ export interface RecommendationDiagnostics {
   outcome: 'ok' | 'no_market' | 'unknown_source' | 'no_category' | 'sparse_source' | 'empty';
   /** Which store the scanned product itself came from, when it was found. */
   sourceOrigin: 'cache' | 'mirror' | 'community' | null;
+  /** The category tags the match was attempted on. Empty explains no_category. */
+  focusTags: string[];
   candidates: number;
   tagsUsed: number;
   accepted: number;
@@ -479,6 +481,7 @@ export async function findHealthierRecommendationsWithDiagnostics(input: {
   const drop = (reason: RejectionReason) => {
     rejected[reason] = (rejected[reason] ?? 0) + 1;
   };
+  let focusTagsSeen: string[] = [];
   const done = (
     outcome: RecommendationDiagnostics['outcome'],
     recommendations: ProductRecommendation[],
@@ -488,6 +491,7 @@ export async function findHealthierRecommendationsWithDiagnostics(input: {
     const diagnostics: RecommendationDiagnostics = {
       outcome,
       sourceOrigin: lastSourceOrigin,
+      focusTags: focusTagsSeen,
       candidates,
       tagsUsed,
       accepted: recommendations.length,
@@ -505,7 +509,16 @@ export async function findHealthierRecommendationsWithDiagnostics(input: {
 
   const sourceTags = categoryTagsFromRaw(sourceRaw);
   const focusTags = focusCategoryTags(sourceRaw);
-  if (!focusTags.length) return done('no_category', []);
+  focusTagsSeen = focusTags;
+  if (!focusTags.length) {
+    // Log what the record actually carried, not only that nothing survived the
+    // filter: "no categories at all" and "only broad aisle tags" are different
+    // problems with different fixes.
+    console.info(
+      `[ingrefit] No usable category for ${input.barcode}; record tags: ${JSON.stringify(categoryTagsFromRaw(sourceRaw))}`,
+    );
+    return done('no_category', []);
+  }
 
   const sourceFacts = productFactsFromRaw(sourceRaw, input.barcode, input.locale);
   // Nutrition only. Requiring a name here rejected products the user had just
