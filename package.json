@@ -20,7 +20,8 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,json}\"",
     "i18n:untranslated": "node scripts/i18n-status.mjs --untranslated",
     "test:schemas": "tsx scripts/schema-check.ts",
-    "test:gemini": "node scripts/gemini-check.mjs"
+    "test:gemini": "node scripts/gemini-check.mjs",
+    "doctor:community": "node scripts/community-doctor.mjs"
   },
   "dependencies": {
     "@prisma/client": "^6.12.0",
