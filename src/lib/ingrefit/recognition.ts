@@ -5,6 +5,8 @@ import { HttpError } from './http';
 import { classifyAdditives } from './additives';
 import { callGemini } from './gemini';
 import { additiveName } from './catalog';
+import { createHash } from 'node:crypto';
+
 import { additiveBasisText, allergenTagName, catalogLanguage } from './signalCatalog';
 import type { LabelPhoto, NutritionFacts, ProductAdditive, ProductFacts } from './types';
 
@@ -435,11 +437,49 @@ export async function enrichProductFromText(product: ProductFacts, locale: strin
   return enriched;
 }
 
+/**
+ * Recognition results, keyed by the exact photos that produced them.
+ *
+ * The capture flow reads the first photo before the user has finished, to
+ * decide whether a nutrition shot is still needed. Without this cache that
+ * check would double the cost of every label scan; with it, a user who needs no
+ * second photo pays for exactly one recognition, because the final analysis
+ * finds the same photo set already read.
+ *
+ * Bounded and short-lived: this is a within-one-capture optimisation, not a
+ * product cache.
+ */
+const RECOGNITION_TTL_MS = 10 * 60_000;
+const RECOGNITION_MAX_ENTRIES = 200;
+const recognitionCache = new Map<string, { facts: ProductFacts; until: number }>();
+
+function recognitionKey(barcode: string | null, photos: LabelPhoto[], locale: string): string {
+  const digest = createHash('sha256');
+  digest.update(`${barcode ?? ''}|${catalogLanguage(locale)}`);
+  for (const photo of photos) digest.update(`|${photo.kind}:${photo.base64.length}:${photo.base64.slice(0, 256)}`);
+  return digest.digest('hex');
+}
+
+function rememberRecognition(key: string, facts: ProductFacts): void {
+  if (recognitionCache.size >= RECOGNITION_MAX_ENTRIES) {
+    const now = Date.now();
+    for (const [entry, value] of recognitionCache) if (value.until <= now) recognitionCache.delete(entry);
+    const oldest = recognitionCache.keys().next().value;
+    if (recognitionCache.size >= RECOGNITION_MAX_ENTRIES && typeof oldest === 'string') {
+      recognitionCache.delete(oldest);
+    }
+  }
+  recognitionCache.set(key, { facts, until: Date.now() + RECOGNITION_TTL_MS });
+}
+
 export async function recognizeLabel(
   barcode: string | null,
   photos: LabelPhoto[],
   locale: string,
 ): Promise<ProductFacts> {
+  const cacheKey = recognitionKey(barcode, photos, locale);
+  const cached = recognitionCache.get(cacheKey);
+  if (cached && cached.until > Date.now()) return cached.facts;
   // The package front carries no extractable facts: the ingredient statement,
   // allergen declaration and nutrition table are all on the information label.
   // Sending it would cost roughly a third of the request's input tokens for
@@ -483,7 +523,7 @@ export async function recognizeLabel(
     validate: (value) => extractedSchema.parse(value),
   });
 
-  return {
+  const facts: ProductFacts = {
     source: 'ai_label',
     barcode,
     name: result.name,
@@ -529,6 +569,9 @@ export async function recognizeLabel(
     completeness: completeness(result),
     unknownFields: result.unknownFields,
   };
+
+  rememberRecognition(cacheKey, facts);
+  return facts;
 }
 
 const foodPhotoSchema = z.object({

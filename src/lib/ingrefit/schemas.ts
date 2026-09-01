@@ -67,6 +67,15 @@ export const analyzeRequestSchema = z
       .nullable()
       .optional(),
     locale: z.string().trim().min(2).max(35).default('en'),
+    /**
+     * `unpackaged` is no longer offered by the app: guessing a fruit or a
+     * cooked dish from a photo produced a record with no brand, no ingredient
+     * list and no declared nutrition, which sits badly in a product whose claim
+     * is exact figures read off a package.
+     *
+     * The backend still accepts it, because builds that offer it are installed
+     * on phones and removing it server-side would break them mid-scan.
+     */
     mode: z.enum(['barcode', 'label', 'unpackaged']).default('barcode'),
     premiumFeatures: z.boolean().default(false),
     profile: profileSchema,
@@ -122,6 +131,18 @@ export const recommendationProductRequestSchema = z.object({
 });
 
 export type RecommendationProductRequest = z.infer<typeof recommendationProductRequestSchema>;
+
+export const inspectLabelRequestSchema = z.object({
+  barcode: z
+    .string()
+    .regex(/^\d{8,14}$/)
+    .nullable()
+    .optional(),
+  locale: z.string().trim().min(2).max(35).default('en'),
+  photos: z.array(photoSchema).min(1).max(2),
+});
+
+export type InspectLabelRequest = z.infer<typeof inspectLabelRequestSchema>;
 
 export const installationRegistrationSchema = z.object({
   installationId: z.string().regex(/^[A-Za-z0-9_-]{16,128}$/),
