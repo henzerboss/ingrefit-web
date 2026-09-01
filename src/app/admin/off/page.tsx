@@ -144,9 +144,26 @@ export default async function OffAdminPage({
                         style={input}
                       />
                       <div style={{ display: 'flex', gap: 8 }}>
-                        <button type="submit">Save</button>
+                        <button type="submit">Save tags</button>
                         <Link href={back}>Cancel</Link>
                       </div>
+                    </form>
+
+                    <form action="/api/admin/off" method="post" style={{ display: 'grid', gap: 8, marginTop: 12 }}>
+                      <input name="barcode" type="hidden" value={row.barcode} />
+                      <input name="action" type="hidden" value="save-json" />
+                      <input name="back" type="hidden" value={back} />
+                      <label htmlFor={`json-${row.barcode}`} style={{ fontSize: 12 }}>
+                        Full record — overwritten by the next --delta import
+                      </label>
+                      <textarea
+                        defaultValue={JSON.stringify(record, null, 2)}
+                        id={`json-${row.barcode}`}
+                        name="json"
+                        rows={16}
+                        style={{ ...input, fontFamily: 'ui-monospace, monospace', fontSize: 12 }}
+                      />
+                      <button type="submit">Save full record</button>
                     </form>
                   </td>
                 ) : (

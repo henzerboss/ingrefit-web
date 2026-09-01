@@ -27,6 +27,16 @@ export async function POST(request: NextRequest) {
 
   if (action === 'delete') {
     await db.offProduct.delete({ where: { barcode } }).catch(() => undefined);
+  } else if (action === 'save-json') {
+    const raw = String(form.get('json') ?? '');
+    try {
+      const record = JSON.parse(raw) as Record<string, unknown>;
+      if (!record || typeof record !== 'object' || Array.isArray(record)) throw new Error('not an object');
+      await db.offProduct.update({ where: { barcode }, data: { data: record as never } });
+    } catch (error) {
+      console.error('[ingrefit] Admin JSON edit rejected', error);
+      return NextResponse.redirect(new URL(`${back}&edit=${barcode}&error=json`, request.url), { status: 303 });
+    }
   } else if (action === 'save') {
     const row = await db.offProduct.findUnique({ where: { barcode }, select: { data: true } });
     if (row) {

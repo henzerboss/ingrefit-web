@@ -28,6 +28,7 @@ interface Row {
   confidence: number;
   views: number;
   createdAt: Date;
+  updatedAt: Date;
   imagePath: string | null;
   data: unknown;
 }
@@ -135,12 +136,14 @@ export default async function CommunityAdminPage({
             return (
               <tr key={row.barcode}>
                 <td style={cell}>
+                  {/* Cache-busted by updatedAt so a replaced photo is not
+                      served from the browser's day-long cache. */}
                   {row.imagePath ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
                       alt=""
                       height={52}
-                      src={`/api/ingrefit/community-image/${row.barcode}`}
+                      src={`/api/ingrefit/community-image/${row.barcode}?v=${row.updatedAt.getTime()}`}
                       style={{ borderRadius: 6, objectFit: 'cover' }}
                       width={52}
                     />
@@ -193,9 +196,33 @@ export default async function CommunityAdminPage({
                         style={input}
                       />
                       <div style={{ display: 'flex', gap: 8 }}>
-                        <button type="submit">Save</button>
+                        <button type="submit">Save fields</button>
                         <Link href={back}>Cancel</Link>
                       </div>
+                    </form>
+
+                    {/* Everything else. The named inputs above cover the common
+                        edits; this covers the rest of the Open Food Facts shape
+                        without inventing an input per field. */}
+                    <form
+                      action="/api/admin/community"
+                      method="post"
+                      style={{ display: 'grid', gap: 8, marginTop: 12 }}
+                    >
+                      <input name="barcode" type="hidden" value={row.barcode} />
+                      <input name="action" type="hidden" value="save-json" />
+                      <input name="back" type="hidden" value={back} />
+                      <label htmlFor={`json-${row.barcode}`} style={{ fontSize: 12 }}>
+                        Full record
+                      </label>
+                      <textarea
+                        defaultValue={JSON.stringify(record, null, 2)}
+                        id={`json-${row.barcode}`}
+                        name="json"
+                        rows={16}
+                        style={{ ...input, fontFamily: 'ui-monospace, monospace', fontSize: 12 }}
+                      />
+                      <button type="submit">Save full record</button>
                     </form>
                   </td>
                 ) : (

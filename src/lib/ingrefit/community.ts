@@ -158,7 +158,9 @@ async function storeThumbnail(barcode: string, jpegBase64: string): Promise<stri
     const directory = imageRoot();
     await mkdir(directory, { recursive: true });
     const file = `${barcode}.jpg`;
-    await writeFile(path.join(directory, file), Buffer.from(jpegBase64, 'base64'));
+    const target = path.join(directory, file);
+    await writeFile(target, Buffer.from(jpegBase64, 'base64'));
+    console.info(`[ingrefit] Stored community thumbnail at ${target}`);
     return file;
   } catch (error) {
     // A missing image is cosmetic; never fail a contribution over it.
@@ -207,6 +209,9 @@ export async function contributeProduct(input: ContributionInput): Promise<void>
       return;
     }
 
+    if (!input.frontPhotoBase64) {
+      console.info(`[ingrefit] Community record ${input.barcode} has no front photo; storing without an image`);
+    }
     const imagePath = input.frontPhotoBase64
       ? await storeThumbnail(input.barcode, input.frontPhotoBase64)
       : (existing?.imagePath ?? null);

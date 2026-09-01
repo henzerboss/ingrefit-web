@@ -55,7 +55,11 @@ export async function analyzeProduct(request: AnalyzeRequest, installationId: st
     // feature contribute on every successful label scan without an update, and
     // nothing about the request or response shape changes.
     if (request.barcode && hasEnoughFacts(product)) {
-      void contributeProduct({
+      // Awaited, not fired and forgotten. The result screen asks for
+      // alternatives the moment it opens, and that request reads the same
+      // record: leaving the write in flight meant the person who contributed a
+      // product was the only one who never saw alternatives for it.
+      await contributeProduct({
         barcode: request.barcode,
         facts: product,
         installationId,

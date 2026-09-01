@@ -32,6 +32,31 @@ export async function POST(request: NextRequest) {
       where: { barcode },
       data: { status: action === 'publish' ? 'published' : 'hidden' },
     });
+  } else if (action === 'save-json') {
+    // The complete record, edited as JSON.
+    //
+    // The named fields below cover what a reviewer changes most often, but a
+    // contributed product carries thirty-odd Open Food Facts fields and an
+    // admin that can only reach five of them is an admin you end up bypassing
+    // with psql. Parsing is strict: a malformed edit is discarded rather than
+    // written half-applied.
+    const raw = String(form.get('json') ?? '');
+    try {
+      const record = JSON.parse(raw) as Record<string, unknown>;
+      if (!record || typeof record !== 'object' || Array.isArray(record)) throw new Error('not an object');
+      await db.communityProduct.update({
+        where: { barcode },
+        data: {
+          data: record as never,
+          name: typeof record.product_name === 'string' ? record.product_name : null,
+          brands: typeof record.brands === 'string' ? record.brands : null,
+          confidence: 1,
+        },
+      });
+    } catch (error) {
+      console.error('[ingrefit] Admin JSON edit rejected', error);
+      return NextResponse.redirect(new URL(`${back}&edit=${barcode}&error=json`, request.url), { status: 303 });
+    }
   } else if (action === 'save') {
     const row = await db.communityProduct.findUnique({ where: { barcode }, select: { data: true } });
     if (row) {
