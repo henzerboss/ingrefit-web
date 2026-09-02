@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
-import { adminConfigured, issueAdminCookie } from '@/lib/ingrefit/admin';
+import { adminConfigured, issueAdminCookie, publicUrl } from '@/lib/ingrefit/admin';
 import { clientIp, enforceLimit } from '@/lib/ingrefit/rateLimit';
 
 export const runtime = 'nodejs';
@@ -19,9 +19,9 @@ export async function POST(request: NextRequest) {
 
   const form = await request.formData();
   const cookie = issueAdminCookie(String(form.get('password') ?? ''));
-  if (!cookie) return NextResponse.redirect(new URL('/admin?error=1', request.url), { status: 303 });
+  if (!cookie) return NextResponse.redirect(publicUrl(request, '/admin?error=1'), { status: 303 });
 
-  const response = NextResponse.redirect(new URL('/admin/community', request.url), { status: 303 });
+  const response = NextResponse.redirect(publicUrl(request, '/admin/community'), { status: 303 });
   response.cookies.set(cookie.name, cookie.value, {
     httpOnly: true,
     sameSite: 'lax',

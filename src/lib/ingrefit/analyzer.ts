@@ -2,7 +2,13 @@ import { HttpError } from './http';
 import { explainScore } from './explanation';
 import { localizeProductFacts } from './localization';
 import { contributeProduct } from './community';
-import { findProductByBarcode, hasContaminatedIngredients, hasEnoughFacts, type FactsOrigin } from './openFoodFacts';
+import {
+  findProductByBarcode,
+  hasContaminatedIngredients,
+  hasEnoughFacts,
+  nutritionFieldCount,
+  type FactsOrigin,
+} from './openFoodFacts';
 import { enrichProductFromText, recognizeFoodPhoto, recognizeLabel } from './recognition';
 import { enforceLimit } from './rateLimit';
 import { scoreProduct } from './scoring';
@@ -54,6 +60,14 @@ export async function analyzeProduct(request: AnalyzeRequest, installationId: st
     // the recognised facts are already in hand, so app builds that predate this
     // feature contribute on every successful label scan without an update, and
     // nothing about the request or response shape changes.
+    // Logged either way. "The product is not in the database" and "we never
+    // tried to put it there" look identical from the app, and only one of them
+    // is a race worth retrying.
+    console.info(
+      `[ingrefit] Contribution check ${request.barcode ?? 'no-barcode'}: ` +
+        `enoughFacts=${hasEnoughFacts(product)} name=${JSON.stringify(product.name)} ` +
+        `nutrients=${nutritionFieldCount(product)} categories=${product.categories.length}`,
+    );
     if (request.barcode && hasEnoughFacts(product)) {
       // Awaited, not fired and forgotten. The result screen asks for
       // alternatives the moment it opens, and that request reads the same

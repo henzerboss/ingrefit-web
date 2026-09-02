@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
-import { isAdmin } from '@/lib/ingrefit/admin';
+import { isAdmin, publicUrl } from '@/lib/ingrefit/admin';
 import { getDb } from '@/lib/ingrefit/db';
 
 export const runtime = 'nodejs';
@@ -15,7 +15,7 @@ export const runtime = 'nodejs';
  * offering something we cannot keep.
  */
 export async function POST(request: NextRequest) {
-  if (!(await isAdmin())) return NextResponse.redirect(new URL('/admin', request.url), { status: 303 });
+  if (!(await isAdmin())) return NextResponse.redirect(publicUrl(request, '/admin'), { status: 303 });
   const db = getDb();
   if (!db) return NextResponse.json({ error: 'Database unavailable' }, { status: 503 });
 
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
   const barcode = String(form.get('barcode') ?? '');
   const action = String(form.get('action') ?? '');
   const back = String(form.get('back') ?? '/admin/off');
-  if (!/^\d{6,18}$/.test(barcode)) return NextResponse.redirect(new URL(back, request.url), { status: 303 });
+  if (!/^\d{6,18}$/.test(barcode)) return NextResponse.redirect(publicUrl(request, back), { status: 303 });
 
   if (action === 'delete') {
     await db.offProduct.delete({ where: { barcode } }).catch(() => undefined);
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
       await db.offProduct.update({ where: { barcode }, data: { data: record as never } });
     } catch (error) {
       console.error('[ingrefit] Admin JSON edit rejected', error);
-      return NextResponse.redirect(new URL(`${back}&edit=${barcode}&error=json`, request.url), { status: 303 });
+      return NextResponse.redirect(publicUrl(request, `${back}&edit=${barcode}&error=json`), { status: 303 });
     }
   } else if (action === 'save') {
     const row = await db.offProduct.findUnique({ where: { barcode }, select: { data: true } });
@@ -52,5 +52,5 @@ export async function POST(request: NextRequest) {
       await db.offProduct.update({ where: { barcode }, data: { data: record as never } });
     }
   }
-  return NextResponse.redirect(new URL(back, request.url), { status: 303 });
+  return NextResponse.redirect(publicUrl(request, back), { status: 303 });
 }

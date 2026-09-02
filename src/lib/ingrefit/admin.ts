@@ -52,3 +52,24 @@ export async function isAdmin(): Promise<boolean> {
 }
 
 export const ADMIN_COOKIE = COOKIE;
+
+/**
+ * Absolute URL for a redirect, seen from the browser rather than from node.
+ *
+ * Behind a reverse proxy `request.url` is the internal address the proxy dialled
+ * — `http://localhost:3020/...` — and redirecting to it sends the operator's
+ * browser to a port that is not published. The public origin comes from
+ * INGREFIT_PUBLIC_URL when set, otherwise from the forwarding headers, and only
+ * then from the request itself.
+ */
+export function publicUrl(request: { url: string; headers: Headers }, path: string): URL {
+  const configured = process.env.INGREFIT_PUBLIC_URL?.trim();
+  if (configured) return new URL(path, configured.replace(/\/$/, '') + '/');
+
+  const host = request.headers.get('x-forwarded-host') ?? request.headers.get('host');
+  if (host) {
+    const proto = request.headers.get('x-forwarded-proto') ?? 'https';
+    return new URL(path, `${proto}://${host}`);
+  }
+  return new URL(path, request.url);
+}
