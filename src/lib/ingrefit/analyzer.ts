@@ -12,6 +12,7 @@ import {
 import { enrichProductFromText, recognizeFoodPhoto, recognizeLabel } from './recognition';
 import { enforceLimit } from './rateLimit';
 import { scoreProduct } from './scoring';
+import { findHealthierRecommendationsWithDiagnostics, type ProductRecommendation } from './recommendations';
 import type { AnalyzeRequest } from './schemas';
 import type { Plan, ProductFacts } from './types';
 
@@ -158,5 +159,39 @@ export async function analyzeProduct(request: AnalyzeRequest, installationId: st
     assessment: { ...assessment, aiEnhanced: request.premiumFeatures, translated },
     /** Diagnostic only: which source answered. Clients may ignore this. */
     factsOrigin,
+    ...(await attachRecommendations(request, product)),
   };
+}
+
+/**
+ * Alternatives computed in the same request that produced the product.
+ *
+ * A label scan writes the product to the database and the client then asks a
+ * different endpoint to compare it — two requests down two paths, racing. The
+ * client lost that race often enough that "we have never heard of this barcode"
+ * became the normal first-scan experience, and three rounds of retries and
+ * logging did not settle it.
+ *
+ * Computing them here cannot race: the record was written moments ago by this
+ * very function, in this process. The client still fetches on its own when this
+ * is absent, so older builds and barcode scans are unaffected.
+ */
+async function attachRecommendations(
+  request: AnalyzeRequest,
+  product: ProductFacts,
+): Promise<{ recommendations?: ProductRecommendation[]; recommendationsReason?: string }> {
+  if (request.mode !== 'label' || !request.premiumFeatures || !product.barcode) return {};
+  try {
+    const { recommendations, diagnostics } = await findHealthierRecommendationsWithDiagnostics({
+      barcode: product.barcode,
+      locale: request.locale,
+      marketCountry: request.marketCountry,
+      profile: request.profile,
+    });
+    return { recommendations, recommendationsReason: diagnostics.outcome };
+  } catch (error) {
+    // Never fail a scan over the section the user did not come for.
+    console.error('[ingrefit] Inline recommendations failed', error);
+    return {};
+  }
 }
