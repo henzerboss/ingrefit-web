@@ -91,6 +91,15 @@ export interface ProductFacts {
    * checked", and the scorer says so instead of staying silent.
    */
   allergensVerified?: boolean;
+  /**
+   * True when the facts come from a product contributed by another user.
+   *
+   * Distinct from `source`, which stays `ai_label` for these so that app builds
+   * predating the feature render an honest label they already have a string
+   * for. This flag is what the data notice uses to name IngreFit as the source
+   * instead of Open Food Facts or "the package text".
+   */
+  communityRecord?: boolean;
   additives: ProductAdditive[];
   labels: string[];
   labelTags: string[];

@@ -502,6 +502,51 @@ function rememberRecognition(key: string, facts: ProductFacts): void {
   recognitionCache.set(key, { facts, until: Date.now() + RECOGNITION_TTL_MS });
 }
 
+/**
+ * Assign a category to a product that has none.
+ *
+ * Text only — name, brand and ingredients — so it costs a small fraction of a
+ * vision call. It exists because a product without a category can never be
+ * compared to anything, and that is the state of more than half the Open Food
+ * Facts export: for those, Premium was paying for an alternatives feature that
+ * could not run.
+ *
+ * The answer is filtered against the same closed list the label reader uses, so
+ * an invented tag is dropped rather than stored.
+ */
+export async function inferCategoryTags(input: {
+  name: string | null;
+  brand: string | null;
+  ingredientsText: string | null;
+}): Promise<string[]> {
+  if (!input.name && !input.ingredientsText) return [];
+
+  const result = await callGemini({
+    operation: 'category_inference',
+    systemInstruction: [
+      'You classify a packaged food into a fixed list of categories.',
+      `Use ONLY these exact values: ${CATEGORY_TAG_VALUES.join(', ')}.`,
+      'Return the most specific value that clearly applies, then its broader parents, at most three in total.',
+      'Return an empty array rather than guessing when the description is too vague to place.',
+    ].join('\n'),
+    prompt: JSON.stringify({
+      name: input.name,
+      brand: input.brand,
+      ingredients: input.ingredientsText?.slice(0, 600) ?? null,
+    }),
+    temperature: 0,
+    maxOutputTokens: 120,
+    responseSchema: {
+      type: 'OBJECT',
+      properties: { categoryTags: { type: 'ARRAY', items: { type: 'STRING' } } },
+      required: ['categoryTags'],
+    } as const,
+    validate: (value) => z.object({ categoryTags: z.array(z.string()).max(8) }).parse(value),
+  });
+
+  return result.categoryTags.filter((tag) => CATEGORY_TAG_SET.has(tag)).slice(0, 3);
+}
+
 export async function recognizeLabel(
   barcode: string | null,
   photos: LabelPhoto[],

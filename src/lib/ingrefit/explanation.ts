@@ -135,8 +135,13 @@ function buildDataNotice(facts: ProductFacts, scored: ScoredProduct, language: C
   if (facts.source === 'ai_photo') {
     return fill(phrase(language, 'dataNotice.aiPhoto'), { confidence });
   }
-  const source =
-    facts.source === 'openfoodfacts' ? 'Open Food Facts (ODbL)' : phrase(language, 'dataNotice.sourcePackage');
+  // A brand name needs no translation, which is why this one string can be
+  // used in all fifty languages without a catalog entry.
+  const source = facts.communityRecord
+    ? 'IngreFit'
+    : facts.source === 'openfoodfacts'
+      ? 'Open Food Facts (ODbL)'
+      : phrase(language, 'dataNotice.sourcePackage');
   if (facts.nutritionBasis === 'estimated_text') {
     return fill(phrase(language, 'dataNotice.estimatedText'), { source, confidence });
   }

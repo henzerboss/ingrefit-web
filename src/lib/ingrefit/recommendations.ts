@@ -1,6 +1,7 @@
 import { Prisma } from '@prisma/client';
 
 import { communityCandidates, findCommunityRecord } from './community';
+import { inferCategoryTags } from './recognition';
 import { GREAT_CONFIDENCE, recommendationQualityGate } from './dataQuality';
 import { safeDb } from './db';
 import {
@@ -197,6 +198,36 @@ function focusCategoryTags(raw: OpenFoodFactsProduct): string[] {
   const tags = categoryTagsFromRaw(raw);
   const specific = [...tags].reverse().filter((tag) => tag.startsWith('en:') && !BROAD_CATEGORY_TAGS.has(tag));
   return [...new Set(specific)].slice(0, 4);
+}
+
+/**
+ * Category tags for a product that carries none, remembered between requests.
+ *
+ * Failures are swallowed: an unclassified product simply stays unclassified,
+ * which is the behaviour without this function at all.
+ */
+async function resolveInferredCategories(barcode: string, facts: ProductFacts): Promise<string[]> {
+  const stored = await safeDb((db) => db.inferredCategory.findUnique({ where: { barcode }, select: { tags: true } }));
+  if (stored) {
+    const tags = stored.tags as unknown;
+    return Array.isArray(tags) ? (tags as string[]) : [];
+  }
+
+  try {
+    const tags = await inferCategoryTags({
+      name: facts.name,
+      brand: facts.brand,
+      ingredientsText: facts.ingredientsText,
+    });
+    await safeDb((db) =>
+      db.inferredCategory.upsert({ where: { barcode }, create: { barcode, tags }, update: { tags } }),
+    );
+    console.info(`[ingrefit] Inferred categories for ${barcode}: ${JSON.stringify(tags)}`);
+    return tags;
+  } catch (error) {
+    console.error('[ingrefit] Category inference failed', error);
+    return [];
+  }
 }
 
 /** Which store answered for the scanned product. Reported in the diagnostics. */
@@ -508,7 +539,16 @@ export async function findHealthierRecommendationsWithDiagnostics(input: {
   if (!sourceRaw) return done('unknown_source', []);
 
   const sourceTags = categoryTagsFromRaw(sourceRaw);
-  const focusTags = focusCategoryTags(sourceRaw);
+  const sourceFacts = productFactsFromRaw(sourceRaw, input.barcode, input.locale);
+  let focusTags = focusCategoryTags(sourceRaw);
+
+  // Nothing in the record itself: fall back to a stored inference, and make one
+  // if there is none. Cached forever per barcode, so the cost is one small
+  // text-only call the first time anybody scans an unclassified product.
+  if (!focusTags.length) {
+    focusTags = await resolveInferredCategories(input.barcode, sourceFacts);
+  }
+
   focusTagsSeen = focusTags;
   if (!focusTags.length) {
     // Log what the record actually carried, not only that nothing survived the
@@ -520,7 +560,6 @@ export async function findHealthierRecommendationsWithDiagnostics(input: {
     return done('no_category', []);
   }
 
-  const sourceFacts = productFactsFromRaw(sourceRaw, input.barcode, input.locale);
   // Nutrition only. Requiring a name here rejected products the user had just
   // been given a score for; candidates below are still held to the full check,
   // because those do have to be displayed.

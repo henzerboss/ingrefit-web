@@ -58,6 +58,21 @@ model ExplanationCache {
   @@index([lastUsedAt])
 }
 
+/// Category tags inferred by the model for products that have none.
+///
+/// Roughly 57% of the Open Food Facts export carries no `categories_tags`, and
+/// without a category a product can never be compared to anything. Rather than
+/// writing a guess into the mirror — where the next `--delta` import would
+/// overwrite it, and where it would be indistinguishable from curated data —
+/// inferences live here and are consulted only when the record itself has
+/// nothing.
+model InferredCategory {
+  barcode   String   @id
+  /// Canonical `en:` tags drawn from the same closed list the label reader uses.
+  tags      Json
+  createdAt DateTime @default(now())
+}
+
 /// Products contributed by users, stored beside the Open Food Facts mirror.
 ///
 /// `data` deliberately uses the SAME field names as an Open Food Facts record

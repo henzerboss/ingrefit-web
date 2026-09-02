@@ -515,6 +515,48 @@ async function communityFacts(barcode: string, locale: string): Promise<FactsLoo
   return { facts: productFactsFromRaw(record, barcode, locale), origin: 'community' };
 }
 
+/**
+ * Fill gaps in an upstream record from a contributed one.
+ *
+ * A contributed record is a fresh reading of the package somebody was holding,
+ * so it often has an ingredient statement or a nutrition panel that Open Food
+ * Facts is missing. It is not, however, better than curated upstream data: it
+ * has been read once by a model and reviewed by nobody.
+ *
+ * So neither wins outright. Upstream keeps every field it has, and the
+ * contribution supplies only what is absent. Blanket priority either way would
+ * throw away real information.
+ */
+async function fillGapsFromCommunity(lookup: FactsLookup, barcode: string): Promise<FactsLookup> {
+  const facts = lookup.facts;
+  if (!facts) return lookup;
+  const needsIngredients = !facts.ingredientsText && !facts.ingredients.length;
+  const needsNutrition = nutritionFieldCount(facts) < 4;
+  const needsCategories = facts.categories.length === 0;
+  const needsName = !facts.name;
+  if (!needsIngredients && !needsNutrition && !needsCategories && !needsName) return lookup;
+
+  const record = await findCommunityRecord(barcode);
+  if (!record) return lookup;
+  const contributed = productFactsFromRaw(record, barcode, 'en');
+
+  const merged: ProductFacts = {
+    ...facts,
+    name: facts.name ?? contributed.name,
+    brand: facts.brand ?? contributed.brand,
+    quantity: facts.quantity ?? contributed.quantity,
+    ingredientsText: needsIngredients ? contributed.ingredientsText : facts.ingredientsText,
+    ingredients: needsIngredients ? contributed.ingredients : facts.ingredients,
+    allergenTags: facts.allergenTags.length ? facts.allergenTags : contributed.allergenTags,
+    allergensVerified: facts.allergensVerified || contributed.allergensVerified,
+    categories: needsCategories ? contributed.categories : facts.categories,
+    nutrition: needsNutrition ? contributed.nutrition : facts.nutrition,
+    nutritionReference: needsNutrition ? contributed.nutritionReference : facts.nutritionReference,
+  };
+  console.info(`[ingrefit] Filled gaps in ${barcode} from a contributed record`);
+  return { facts: merged, origin: lookup.origin };
+}
+
 export async function findProductByBarcode(barcode: string, locale = 'en'): Promise<FactsLookup> {
   const cached = await readCachedRaw(barcode);
   if (cached) return { facts: productFactsFromRaw(cached, barcode, locale), origin: 'cache' };
@@ -530,7 +572,7 @@ export async function findProductByBarcode(barcode: string, locale = 'en'): Prom
     // every scan into "insufficient data", so an unusable local record counts as
     // a miss and the request falls through to the API. The thin record is still
     // kept as a last resort if the network then fails.
-    if (hasEnoughFacts(localFacts)) return { facts: localFacts, origin: 'mirror' };
+    if (hasEnoughFacts(localFacts)) return fillGapsFromCommunity({ facts: localFacts, origin: 'mirror' }, barcode);
     if (localOnly) return { facts: localFacts, origin: 'mirror_thin' };
   }
 
@@ -561,7 +603,7 @@ export async function findProductByBarcode(barcode: string, locale = 'en'): Prom
   }
 
   if (response.status === 404) {
-    if (localFacts) return { facts: localFacts, origin: 'mirror_thin' };
+    if (localFacts) return fillGapsFromCommunity({ facts: localFacts, origin: 'mirror_thin' }, barcode);
     return (await communityFacts(barcode, locale)) ?? { facts: null, origin: null };
   }
   if (!response.ok) {
@@ -572,10 +614,13 @@ export async function findProductByBarcode(barcode: string, locale = 'en'): Prom
 
   const payload = (await response.json()) as OpenFoodFactsResponse;
   if (!payload.product || payload.status === 0 || payload.status === 'failure') {
-    if (localFacts) return { facts: localFacts, origin: 'mirror_thin' };
+    if (localFacts) return fillGapsFromCommunity({ facts: localFacts, origin: 'mirror_thin' }, barcode);
     return (await communityFacts(barcode, locale)) ?? { facts: null, origin: null };
   }
 
   await writeCachedRaw(barcode, payload.product);
-  return { facts: productFactsFromRaw(payload.product, barcode, locale), origin: 'network' };
+  return fillGapsFromCommunity(
+    { facts: productFactsFromRaw(payload.product, barcode, locale), origin: 'network' },
+    barcode,
+  );
 }
