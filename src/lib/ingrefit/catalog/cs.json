@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "Open Food Facts pro tento výrobek zveřejňuje Nutri-Score {grade}; ten určuje výchozí nutriční kvalitu před zohledněním vašich cílů."
+      "evidence": "Nutri-Score {grade} pro tento produkt; je to základní nutriční kvalita před zohledněním vašich cílů."
     },
     "base.nutrition_profile": {
       "label": "Nutriční profil",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts řadí tento výrobek do skupiny NOVA {group}."
+      "evidence": "Zařazen do skupiny zpracování NOVA {group}."
     },
     "base.additive_high": {
       "label": "Přídatná látka vyžadující pozornost",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "Obsah ovoce, zeleniny a ořechů",
-      "evidence": "Open Food Facts odhaduje podle seznamu složek {percent}% ovoce, zeleniny, luštěnin a ořechů."
+      "evidence": "Podíl ovoce, zeleniny, luštěnin a ořechů odhadnut na {percent}% podle složení."
     },
     "base.palm_oil": {
       "label": "Obsahuje palmový olej",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "Nedostatek údajů pro vaše cíle",
       "evidence": "Není k dispozici žádná z hodnot potřebných pro vaše vybrané cíle, takže skóre odráží pouze obecnou kvalitu výrobku."
+    },
+    "evidence": {
+      "ingredient_analysis": "analýza složení",
+      "declared_allergens": "deklarované alergeny"
     }
   },
   "summary": {

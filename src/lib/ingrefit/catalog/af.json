@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "Open Food Facts publiseer Nutri-Score {grade} vir hierdie produk; dit bepaal die basiese voedingsgehalte voordat jou doelwitte toegepas word."
+      "evidence": "Nutri-Score {grade} vir hierdie produk; dit is die basiese voedingsgehalte voor jou doelwitte."
     },
     "base.nutrition_profile": {
       "label": "Voedingsprofiel",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts klassifiseer hierdie produk in NOVA-groep {group}."
+      "evidence": "Geklassifiseer in NOVA-verwerkingsgroep {group}."
     },
     "base.additive_high": {
       "label": "Bymiddel wat aandag verg",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "Vrugte-, groente- en neutinhoud",
-      "evidence": "Open Food Facts skat {percent}% vrugte-, groente-, peulgewas- en neutinhoud uit die bestanddeellys."
+      "evidence": "Vrugte-, groente-, peulgewas- en neutinhoud op {percent}% geskat uit die bestanddelelys."
     },
     "base.palm_oil": {
       "label": "Bevat palmolie",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "Nie genoeg data vir jou doelwitte nie",
       "evidence": "Geen van die waardes wat vir jou gekose doelwitte nodig is, is beskikbaar nie, daarom weerspieël die telling net die algemene produkgehalte."
+    },
+    "evidence": {
+      "ingredient_analysis": "bestanddeleontleding",
+      "declared_allergens": "verklaarde allergene"
     }
   },
   "summary": {

@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "Open Food Facts offentliggør Nutri-Score {grade} for dette produkt; den fastlægger den grundlæggende ernæringskvalitet, før dine mål anvendes."
+      "evidence": "Nutri-Score {grade} for dette produkt; det er basiskvaliteten før dine mål."
     },
     "base.nutrition_profile": {
       "label": "Ernæringsprofil",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts klassificerer dette produkt i NOVA-gruppe {group}."
+      "evidence": "Klassificeret i NOVA-forarbejdningsgruppe {group}."
     },
     "base.additive_high": {
       "label": "Tilsætningsstof der kræver opmærksomhed",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "Indhold af frugt, grønt og nødder",
-      "evidence": "Open Food Facts anslår {percent}% frugt, grøntsager, bælgfrugter og nødder ud fra ingredienslisten."
+      "evidence": "Indhold af frugt, grønt, bælgfrugter og nødder anslået til {percent}% ud fra ingredienserne."
     },
     "base.palm_oil": {
       "label": "Indeholder palmeolie",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "Ikke nok data til dine mål",
       "evidence": "Ingen af de værdier, der er nødvendige for dine valgte mål, er tilgængelige, så scoren afspejler kun produktets generelle kvalitet."
+    },
+    "evidence": {
+      "ingredient_analysis": "ingrediensanalyse",
+      "declared_allergens": "deklarerede allergener"
     }
   },
   "summary": {

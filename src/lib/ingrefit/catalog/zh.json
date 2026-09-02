@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "Open Food Facts发布该产品的Nutri-Score {grade}；它用于确定应用您的目标之前的基础营养质量。"
+      "evidence": "该产品的 Nutri-Score 为 {grade}，这是在计入你的目标之前的基础营养质量。"
     },
     "base.nutrition_profile": {
       "label": "营养概况",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts将该产品归入NOVA第{group}组。"
+      "evidence": "被归入 NOVA 加工分组 {group}。"
     },
     "base.additive_high": {
       "label": "需要关注的添加剂",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "水果、蔬菜、豆类和坚果含量",
-      "evidence": "Open Food Facts根据配料表估算水果、蔬菜、豆类和坚果占{percent}%。"
+      "evidence": "根据配料表估算水果、蔬菜、豆类和坚果含量为 {percent}%。"
     },
     "base.palm_oil": {
       "label": "含棕榈油",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "没有足够数据评估您的目标",
       "evidence": "您所选目标需要的数值均不可用，因此评分仅反映产品的一般质量。"
+    },
+    "evidence": {
+      "ingredient_analysis": "配料分析",
+      "declared_allergens": "标示的过敏原"
     }
   },
   "summary": {

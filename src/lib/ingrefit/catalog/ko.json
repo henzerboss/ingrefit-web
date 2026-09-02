@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "Open Food Facts는 이 제품의 Nutri-Score {grade}를 게시합니다. 이는 목표를 적용하기 전 기본 영양 품질을 정합니다."
+      "evidence": "이 제품의 Nutri-Score는 {grade}입니다. 목표를 반영하기 전의 기본 영양 품질입니다."
     },
     "base.nutrition_profile": {
       "label": "영양 프로필",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts는 이 제품을 NOVA 그룹 {group}로 분류합니다."
+      "evidence": "NOVA 가공 분류 {group}군으로 분류되었습니다."
     },
     "base.additive_high": {
       "label": "주의가 필요한 첨가물",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "과일·채소·콩류·견과류 함량",
-      "evidence": "Open Food Facts는 원재료 목록을 바탕으로 과일, 채소, 콩류, 견과류 함량을 {percent}%로 추정합니다."
+      "evidence": "원재료를 바탕으로 과일·채소·콩류·견과 함량을 {percent}%로 추정합니다."
     },
     "base.palm_oil": {
       "label": "팜유 함유",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "목표 평가에 필요한 데이터 부족",
       "evidence": "선택한 목표에 필요한 값이 하나도 없어 점수에는 제품의 전반적인 품질만 반영됩니다."
+    },
+    "evidence": {
+      "ingredient_analysis": "원재료 분석",
+      "declared_allergens": "표시된 알레르기 유발 물질"
     }
   },
   "summary": {

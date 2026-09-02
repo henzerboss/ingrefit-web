@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "Open Food Facts publicē šim produktam Nutri-Score {grade}; tas nosaka pamata uzturvērtības kvalitāti pirms jūsu mērķu piemērošanas."
+      "evidence": "Šī produkta Nutri-Score {grade}; tā ir pamata uzturvērtība pirms jūsu mērķiem."
     },
     "base.nutrition_profile": {
       "label": "Uzturvērtības profils",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts klasificē šo produktu NOVA {group}. grupā."
+      "evidence": "Klasificēts NOVA apstrādes grupā {group}."
     },
     "base.additive_high": {
       "label": "Piedeva, kam jāpievērš uzmanība",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "Augļu, dārzeņu un riekstu saturs",
-      "evidence": "Open Food Facts pēc sastāvdaļu saraksta lēš {percent}% augļu, dārzeņu, pākšaugu un riekstu."
+      "evidence": "Augļu, dārzeņu, pākšaugu un riekstu saturs pēc sastāva novērtēts {percent}%."
     },
     "base.palm_oil": {
       "label": "Satur palmu eļļu",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "Nepietiek datu jūsu mērķiem",
       "evidence": "Neviena no atlasītajiem mērķiem nepieciešamajām vērtībām nav pieejama, tāpēc vērtējums atspoguļo tikai produkta vispārējo kvalitāti."
+    },
+    "evidence": {
+      "ingredient_analysis": "sastāva analīze",
+      "declared_allergens": "deklarētie alergēni"
     }
   },
   "summary": {

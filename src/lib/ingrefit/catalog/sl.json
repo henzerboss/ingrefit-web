@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "Open Food Facts za ta izdelek objavlja Nutri-Score {grade}; ta določa osnovno prehransko kakovost pred upoštevanjem vaših ciljev."
+      "evidence": "Nutri-Score {grade} za ta izdelek; to je osnovna hranilna kakovost pred vašimi cilji."
     },
     "base.nutrition_profile": {
       "label": "Prehranski profil",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts ta izdelek razvršča v skupino NOVA {group}."
+      "evidence": "Uvrščen v NOVA skupino predelave {group}."
     },
     "base.additive_high": {
       "label": "Aditiv, ki zahteva pozornost",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "Vsebnost sadja, zelenjave in oreškov",
-      "evidence": "Open Food Facts na podlagi seznama sestavin ocenjuje {percent}% sadja, zelenjave, stročnic in oreškov."
+      "evidence": "Delež sadja, zelenjave, stročnic in oreškov ocenjen na {percent}% po sestavinah."
     },
     "base.palm_oil": {
       "label": "Vsebuje palmovo olje",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "Ni dovolj podatkov za vaše cilje",
       "evidence": "Nobena od vrednosti, potrebnih za izbrane cilje, ni na voljo, zato ocena odraža le splošno kakovost izdelka."
+    },
+    "evidence": {
+      "ingredient_analysis": "analiza sestavin",
+      "declared_allergens": "navedeni alergeni"
     }
   },
   "summary": {

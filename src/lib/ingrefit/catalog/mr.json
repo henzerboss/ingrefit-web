@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "Open Food Facts या उत्पादनासाठी Nutri-Score {grade} प्रकाशित करते; तुमची उद्दिष्टे लागू करण्यापूर्वी तो मूलभूत पोषण गुणवत्ता ठरवतो."
+      "evidence": "या उत्पादनाचा Nutri-Score {grade}; ही तुमच्या उद्दिष्टांपूर्वीची मूलभूत पोषण गुणवत्ता आहे."
     },
     "base.nutrition_profile": {
       "label": "पोषण प्रोफाइल",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts या उत्पादनाला NOVA गट {group}मध्ये वर्गीकृत करते."
+      "evidence": "NOVA प्रक्रिया गट {group} मध्ये वर्गीकृत."
     },
     "base.additive_high": {
       "label": "लक्ष देण्याजोगा अॅडिटिव्ह",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "फळे, भाज्या, कडधान्ये आणि नट्सचे प्रमाण",
-      "evidence": "Open Food Facts घटक यादीवरून फळे, भाज्या, कडधान्ये आणि नट्सचे प्रमाण {percent}% असल्याचा अंदाज करते."
+      "evidence": "घटकांवरून फळे, भाज्या, कडधान्ये आणि सुकामेव्याचे प्रमाण {percent}% अंदाजित."
     },
     "base.palm_oil": {
       "label": "पाम तेल आहे",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "तुमच्या उद्दिष्टांसाठी पुरेसा डेटा नाही",
       "evidence": "तुमच्या निवडलेल्या उद्दिष्टांसाठी लागणारी कोणतीही मूल्ये उपलब्ध नाहीत, त्यामुळे स्कोर फक्त उत्पादनाची सामान्य गुणवत्ता दर्शवतो."
+    },
+    "evidence": {
+      "ingredient_analysis": "घटक विश्लेषण",
+      "declared_allergens": "घोषित अ‍ॅलर्जन"
     }
   },
   "summary": {

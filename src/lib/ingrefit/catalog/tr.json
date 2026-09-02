@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "Open Food Facts bu ürün için Nutri-Score {grade} yayımlıyor; bu, hedefleriniz uygulanmadan önceki temel beslenme kalitesini belirler."
+      "evidence": "Bu ürün için Nutri-Score {grade}; hedefleriniz uygulanmadan önceki temel beslenme kalitesi."
     },
     "base.nutrition_profile": {
       "label": "Beslenme profili",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts bu ürünü NOVA {group}. grupta sınıflandırıyor."
+      "evidence": "NOVA işleme grubu {group} olarak sınıflandırıldı."
     },
     "base.additive_high": {
       "label": "Dikkat gerektiren katkı maddesi",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "Meyve, sebze ve kuruyemiş içeriği",
-      "evidence": "Open Food Facts içindekiler listesine göre meyve, sebze, bakliyat ve kuruyemiş oranını %{percent} olarak tahmin ediyor."
+      "evidence": "Meyve, sebze, baklagil ve kuruyemiş oranı içindekilere göre %{percent} olarak tahmin edildi."
     },
     "base.palm_oil": {
       "label": "Palmiye yağı içerir",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "Hedefleriniz için yeterli veri yok",
       "evidence": "Seçtiğiniz hedefler için gereken değerlerin hiçbiri mevcut değil; bu nedenle puan yalnızca ürünün genel kalitesini yansıtır."
+    },
+    "evidence": {
+      "ingredient_analysis": "içindekiler analizi",
+      "declared_allergens": "beyan edilen alerjenler"
     }
   },
   "summary": {

@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "Open Food Facts publikuje dla tego produktu Nutri-Score {grade}; określa on bazową jakość odżywczą przed zastosowaniem Twoich celów."
+      "evidence": "Nutri-Score {grade} dla tego produktu; to bazowa jakość odżywcza przed uwzględnieniem Twoich celów."
     },
     "base.nutrition_profile": {
       "label": "Profil odżywczy",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts klasyfikuje ten produkt w grupie NOVA {group}."
+      "evidence": "Zaklasyfikowany do grupy przetworzenia NOVA {group}."
     },
     "base.additive_high": {
       "label": "Dodatek wymagający uwagi",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "Zawartość owoców, warzyw i orzechów",
-      "evidence": "Open Food Facts szacuje na podstawie listy składników {percent}% owoców, warzyw, roślin strączkowych i orzechów."
+      "evidence": "Zawartość owoców, warzyw, roślin strączkowych i orzechów szacowana na {percent}% według składu."
     },
     "base.palm_oil": {
       "label": "Zawiera olej palmowy",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "Za mało danych dla Twoich celów",
       "evidence": "Żadna z wartości potrzebnych dla wybranych celów nie jest dostępna, więc wynik odzwierciedla tylko ogólną jakość produktu."
+    },
+    "evidence": {
+      "ingredient_analysis": "analiza składu",
+      "declared_allergens": "deklarowane alergeny"
     }
   },
   "summary": {

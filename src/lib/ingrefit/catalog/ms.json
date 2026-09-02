@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "Open Food Facts menerbitkan Nutri-Score {grade} untuk produk ini; ia menetapkan kualiti pemakanan asas sebelum matlamat anda digunakan."
+      "evidence": "Nutri-Score {grade} untuk produk ini; kualiti pemakanan asas sebelum matlamat anda."
     },
     "base.nutrition_profile": {
       "label": "Profil pemakanan",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts mengklasifikasikan produk ini dalam kumpulan NOVA {group}."
+      "evidence": "Dikelaskan dalam kumpulan pemprosesan NOVA {group}."
     },
     "base.additive_high": {
       "label": "Bahan tambahan yang perlu diberi perhatian",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "Kandungan buah, sayur, kekacang dan kacang",
-      "evidence": "Open Food Facts menganggarkan {percent}% kandungan buah, sayur, kekacang dan kacang daripada senarai ramuan."
+      "evidence": "Kandungan buah, sayur, kekacang dan kacang dianggarkan {percent}% daripada senarai ramuan."
     },
     "base.palm_oil": {
       "label": "Mengandungi minyak sawit",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "Data tidak mencukupi untuk matlamat anda",
       "evidence": "Tiada nilai yang diperlukan untuk matlamat pilihan anda tersedia, jadi skor hanya mencerminkan kualiti umum produk."
+    },
+    "evidence": {
+      "ingredient_analysis": "analisis ramuan",
+      "declared_allergens": "alergen yang diisytihar"
     }
   },
   "summary": {

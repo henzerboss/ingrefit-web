@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "Open Food Facts publică Nutri-Score {grade} pentru acest produs; acesta stabilește calitatea nutrițională de bază înainte de aplicarea obiectivelor tale."
+      "evidence": "Nutri-Score {grade} pentru acest produs; este calitatea nutrițională de bază înainte de obiectivele tale."
     },
     "base.nutrition_profile": {
       "label": "Profil nutrițional",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts clasifică acest produs în grupa NOVA {group}."
+      "evidence": "Clasificat în grupa de procesare NOVA {group}."
     },
     "base.additive_high": {
       "label": "Aditiv care necesită atenție",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "Conținut de fructe, legume și nuci",
-      "evidence": "Open Food Facts estimează {percent}% conținut de fructe, legume, leguminoase și nuci pe baza listei de ingrediente."
+      "evidence": "Conținutul de fructe, legume, leguminoase și nuci estimat la {percent}% după ingrediente."
     },
     "base.palm_oil": {
       "label": "Conține ulei de palmier",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "Nu sunt suficiente date pentru obiectivele tale",
       "evidence": "Niciuna dintre valorile necesare pentru obiectivele selectate nu este disponibilă, astfel că scorul reflectă numai calitatea generală a produsului."
+    },
+    "evidence": {
+      "ingredient_analysis": "analiza ingredientelor",
+      "declared_allergens": "alergeni declarați"
     }
   },
   "summary": {

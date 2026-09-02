@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "Open Food Factsはこの商品にNutri-Score {grade}を掲載しています。これは、あなたの目標を反映する前の基本的な栄養品質を定めます。"
+      "evidence": "この商品の Nutri-Score は {grade} です。目標を反映する前の基礎的な栄養品質です。"
     },
     "base.nutrition_profile": {
       "label": "栄養プロファイル",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Factsはこの商品をNOVAグループ{group}に分類しています。"
+      "evidence": "NOVA 加工分類のグループ {group} に分類されています。"
     },
     "base.additive_high": {
       "label": "注意が必要な添加物",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "果物・野菜・豆類・ナッツの割合",
-      "evidence": "Open Food Factsは原材料一覧から、果物・野菜・豆類・ナッツの割合を{percent}%と推定しています。"
+      "evidence": "原材料から果物・野菜・豆類・ナッツの割合を {percent}% と推定しています。"
     },
     "base.palm_oil": {
       "label": "パーム油を含む",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "目標に必要なデータが不足",
       "evidence": "選択した目標に必要な値がどれも利用できないため、スコアには商品の一般的な品質のみが反映されています。"
+    },
+    "evidence": {
+      "ingredient_analysis": "原材料の分析",
+      "declared_allergens": "表示されたアレルゲン"
     }
   },
   "summary": {

@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "Open Food Facts เผยแพร่ Nutri-Score {grade} สำหรับผลิตภัณฑ์นี้ ซึ่งกำหนดคุณภาพทางโภชนาการพื้นฐานก่อนนำเป้าหมายของคุณมาพิจารณา"
+      "evidence": "สินค้านี้มี Nutri-Score {grade} ซึ่งเป็นคุณภาพโภชนาการพื้นฐานก่อนคิดเป้าหมายของคุณ"
     },
     "base.nutrition_profile": {
       "label": "โปรไฟล์โภชนาการ",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts จัดผลิตภัณฑ์นี้อยู่ในกลุ่ม NOVA {group}"
+      "evidence": "จัดอยู่ในกลุ่มการแปรรูป NOVA {group}"
     },
     "base.additive_high": {
       "label": "วัตถุเจือปนที่ควรใส่ใจ",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "ปริมาณผลไม้ ผัก ถั่วเมล็ดแห้ง และถั่วเปลือกแข็ง",
-      "evidence": "Open Food Facts ประเมินจากรายการส่วนผสมว่ามีผลไม้ ผัก พืชตระกูลถั่ว และถั่วเปลือกแข็ง {percent}%"
+      "evidence": "ประเมินสัดส่วนผลไม้ ผัก ถั่ว และนัต ที่ {percent}% จากรายการส่วนประกอบ"
     },
     "base.palm_oil": {
       "label": "มีน้ำมันปาล์ม",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "ข้อมูลไม่เพียงพอสำหรับเป้าหมายของคุณ",
       "evidence": "ไม่มีค่าที่จำเป็นสำหรับเป้าหมายที่คุณเลือก จึงสะท้อนในคะแนนเฉพาะคุณภาพโดยรวมของผลิตภัณฑ์"
+    },
+    "evidence": {
+      "ingredient_analysis": "การวิเคราะห์ส่วนประกอบ",
+      "declared_allergens": "สารก่อภูมิแพ้ที่ระบุ"
     }
   },
   "summary": {

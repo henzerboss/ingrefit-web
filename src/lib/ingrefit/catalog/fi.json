@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "Open Food Facts julkaisee tälle tuotteelle Nutri-Score-arvosanan {grade}; se määrittää ravitsemuksellisen peruslaadun ennen tavoitteidesi huomioimista."
+      "evidence": "Tämän tuotteen Nutri-Score on {grade}; se on perusravintolaatu ennen tavoitteitasi."
     },
     "base.nutrition_profile": {
       "label": "Ravintoprofiili",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts luokittelee tämän tuotteen NOVA-ryhmään {group}."
+      "evidence": "Luokiteltu NOVA-käsittelyryhmään {group}."
     },
     "base.additive_high": {
       "label": "Huomiota vaativa lisäaine",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "Hedelmien, vihannesten ja pähkinöiden osuus",
-      "evidence": "Open Food Facts arvioi ainesosaluettelon perusteella hedelmien, vihannesten, palkokasvien ja pähkinöiden osuudeksi {percent}%."
+      "evidence": "Hedelmien, vihannesten, palkokasvien ja pähkinöiden osuus arviolta {percent}% ainesosien perusteella."
     },
     "base.palm_oil": {
       "label": "Sisältää palmuöljyä",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "Ei riittävästi tietoja tavoitteisiisi",
       "evidence": "Yhtäkään valitsemiesi tavoitteiden edellyttämistä arvoista ei ole saatavilla, joten pisteet kuvaavat vain tuotteen yleistä laatua."
+    },
+    "evidence": {
+      "ingredient_analysis": "ainesosien analyysi",
+      "declared_allergens": "ilmoitetut allergeenit"
     }
   },
   "summary": {

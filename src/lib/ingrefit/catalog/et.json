@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "Open Food Facts avaldab selle toote kohta Nutri-Score {grade}; see määrab baas-toiteväärtuse kvaliteedi enne sinu eesmärkide rakendamist."
+      "evidence": "Selle toote Nutri-Score on {grade}; see on põhiline toiteväärtus enne teie eesmärke."
     },
     "base.nutrition_profile": {
       "label": "Toitumisprofiil",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts liigitab selle toote NOVA rühma {group}."
+      "evidence": "Liigitatud NOVA töötlusrühma {group}."
     },
     "base.additive_high": {
       "label": "Tähelepanu vajav lisaaine",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "Puuviljade, köögiviljade ja pähklite sisaldus",
-      "evidence": "Open Food Facts hindab koostisosade loendi põhjal puuviljade, köögiviljade, kaunviljade ja pähklite osakaaluks {percent}%."
+      "evidence": "Puuvilja, köögivilja, kaunvilja ja pähkli sisaldus hinnanguliselt {percent}% koostisosade järgi."
     },
     "base.palm_oil": {
       "label": "Sisaldab palmiõli",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "Sinu eesmärkide jaoks pole piisavalt andmeid",
       "evidence": "Ükski valitud eesmärkide jaoks vajalik väärtus pole saadaval, seega kajastab hinne ainult toote üldist kvaliteeti."
+    },
+    "evidence": {
+      "ingredient_analysis": "koostise analüüs",
+      "declared_allergens": "deklareeritud allergeenid"
     }
   },
   "summary": {

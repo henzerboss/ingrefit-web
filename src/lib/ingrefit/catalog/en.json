@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "Open Food Facts publishes Nutri-Score {grade} for this product; it sets the baseline nutritional quality before your goals are applied."
+      "evidence": "Nutri-Score {grade} for this product; it sets the baseline nutritional quality before your goals are applied."
     },
     "base.nutrition_profile": {
       "label": "Nutritional profile",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts classifies this product in NOVA group {group}."
+      "evidence": "Classified in NOVA processing group {group}."
     },
     "base.additive_high": {
       "label": "Additive of concern",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "Fruit, vegetable and nut content",
-      "evidence": "Open Food Facts estimates {percent}% fruit, vegetable, pulse and nut content from the ingredient list."
+      "evidence": "Fruit, vegetable, pulse and nut content estimated at {percent}% from the ingredient list."
     },
     "base.palm_oil": {
       "label": "Contains palm oil",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "Not enough data for your goals",
       "evidence": "None of the values needed for your selected goals are available, so the score reflects general product quality only."
+    },
+    "evidence": {
+      "ingredient_analysis": "ingredient analysis",
+      "declared_allergens": "declared allergens"
     }
   },
   "summary": {

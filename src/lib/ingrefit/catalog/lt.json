@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "Open Food Facts skelbia šio produkto Nutri-Score {grade}; jis nustato bazinę maistinę kokybę prieš pritaikant jūsų tikslus."
+      "evidence": "Šio produkto Nutri-Score {grade}; tai bazinė maistinė kokybė prieš jūsų tikslus."
     },
     "base.nutrition_profile": {
       "label": "Mitybos profilis",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts priskiria šį produktą NOVA {group} grupei."
+      "evidence": "Priskirtas NOVA perdirbimo grupei {group}."
     },
     "base.additive_high": {
       "label": "Dėmesio reikalaujantis priedas",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "Vaisių, daržovių ir riešutų kiekis",
-      "evidence": "Open Food Facts pagal ingredientų sąrašą apskaičiuoja {percent}% vaisių, daržovių, ankštinių ir riešutų."
+      "evidence": "Vaisių, daržovių, ankštinių ir riešutų dalis pagal sudėtį įvertinta {percent}%."
     },
     "base.palm_oil": {
       "label": "Sudėtyje yra palmių aliejaus",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "Nepakanka duomenų jūsų tikslams",
       "evidence": "Nė viena jūsų pasirinktiems tikslams reikalinga vertė nėra prieinama, todėl balas atspindi tik bendrą produkto kokybę."
+    },
+    "evidence": {
+      "ingredient_analysis": "sudėties analizė",
+      "declared_allergens": "deklaruoti alergenai"
     }
   },
   "summary": {

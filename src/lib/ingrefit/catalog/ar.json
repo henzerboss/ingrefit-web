@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "ينشر Open Food Facts درجة Nutri-Score {grade} لهذا المنتج؛ وهي تحدد الجودة الغذائية الأساسية قبل تطبيق أهدافك."
+      "evidence": "Nutri-Score {grade} لهذا المنتج؛ وهو جودة التغذية الأساسية قبل تطبيق أهدافك."
     },
     "base.nutrition_profile": {
       "label": "الملف الغذائي",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "يصنف Open Food Facts هذا المنتج ضمن مجموعة NOVA {group}."
+      "evidence": "مُصنَّف ضمن مجموعة المعالجة NOVA {group}."
     },
     "base.additive_high": {
       "label": "مضاف يستحق الانتباه",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "محتوى الفاكهة والخضروات والبقول والمكسرات",
-      "evidence": "يقدّر Open Food Facts أن الفاكهة والخضروات والبقول والمكسرات تمثل {percent}% من قائمة المكونات."
+      "evidence": "نسبة الفواكه والخضروات والبقوليات والمكسرات مُقدَّرة بـ {percent}% من قائمة المكوّنات."
     },
     "base.palm_oil": {
       "label": "يحتوي على زيت النخيل",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "لا توجد بيانات كافية لأهدافك",
       "evidence": "لا تتوفر أي من القيم اللازمة لأهدافك المحددة، لذلك تعكس الدرجة الجودة العامة للمنتج فقط."
+    },
+    "evidence": {
+      "ingredient_analysis": "تحليل المكوّنات",
+      "declared_allergens": "مسببات الحساسية المُعلنة"
     }
   },
   "summary": {

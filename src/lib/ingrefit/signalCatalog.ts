@@ -1,5 +1,5 @@
 import type { AdditiveBasis } from './additives';
-import { CATALOG_LANGUAGES, fill, phrase, resolveCatalogLanguage } from './catalog';
+import { CATALOG_LANGUAGES, fill, optionalPhrase, phrase, resolveCatalogLanguage } from './catalog';
 import type { DietId, GoalId, ScoreSignal } from './types';
 
 /**
@@ -131,6 +131,11 @@ function renderNutrientDetail(detail: string, language: CatalogLanguage): string
     .join(', ');
 }
 
+/** Localized name for an evidence token; unknown tokens pass through unchanged. */
+function evidenceName(token: string, language: CatalogLanguage): string {
+  return optionalPhrase(language, `signals.evidence.${token}`) ?? token;
+}
+
 export function renderSignal(signal: ScoreSignal, language: CatalogLanguage): { label: string; evidence: string } {
   const params = signal.params;
   const nutrientRule = NUTRIENT_RULES[signal.code];
@@ -142,6 +147,7 @@ export function renderSignal(signal: ScoreSignal, language: CatalogLanguage): { 
     goal: params.goal === undefined ? undefined : goalName(String(params.goal) as GoalId, language),
     diet: params.diet === undefined ? undefined : dietName(String(params.diet) as DietId, language),
     allergen: params.allergen === undefined ? undefined : allergenName(String(params.allergen), language),
+    evidence: params.evidence === undefined ? undefined : evidenceName(String(params.evidence), language),
     allergens:
       params.allergens === undefined
         ? undefined

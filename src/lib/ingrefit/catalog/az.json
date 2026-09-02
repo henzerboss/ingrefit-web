@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "Open Food Facts bu məhsul üçün Nutri-Score {grade} dərc edir; bu, hədəfləriniz tətbiq olunmazdan əvvəl əsas qidalanma keyfiyyətini müəyyən edir."
+      "evidence": "Bu məhsul üçün Nutri-Score {grade}; məqsədləriniz nəzərə alınmadan əvvəlki əsas keyfiyyət."
     },
     "base.nutrition_profile": {
       "label": "Qidalanma profili",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts bu məhsulu NOVA {group} qrupuna aid edir."
+      "evidence": "NOVA emal qrupu {group} kimi təsnif edilib."
     },
     "base.additive_high": {
       "label": "Diqqət tələb edən əlavə",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "Meyvə, tərəvəz və çərəz tərkibi",
-      "evidence": "Open Food Facts inqrediyent siyahısına əsasən {percent}% meyvə, tərəvəz, paxlalı və çərəz tərkibi hesablayır."
+      "evidence": "Meyvə, tərəvəz, paxlalı və qoz nisbəti tərkibə görə {percent}% qiymətləndirilib."
     },
     "base.palm_oil": {
       "label": "Palma yağı ehtiva edir",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "Hədəfləriniz üçün kifayət qədər məlumat yoxdur",
       "evidence": "Seçdiyiniz hədəflər üçün lazım olan dəyərlərin heç biri mövcud deyil, buna görə bal yalnız məhsulun ümumi keyfiyyətini əks etdirir."
+    },
+    "evidence": {
+      "ingredient_analysis": "tərkib analizi",
+      "declared_allergens": "bəyan edilmiş allergenlər"
     }
   },
   "summary": {

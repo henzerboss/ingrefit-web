@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "Open Food Facts công bố Nutri-Score {grade} cho sản phẩm này; đây là mức chất lượng dinh dưỡng cơ sở trước khi áp dụng các mục tiêu của bạn."
+      "evidence": "Nutri-Score {grade} cho sản phẩm này; đây là chất lượng dinh dưỡng nền trước khi tính mục tiêu của bạn."
     },
     "base.nutrition_profile": {
       "label": "Hồ sơ dinh dưỡng",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts xếp sản phẩm này vào nhóm NOVA {group}."
+      "evidence": "Được xếp vào nhóm chế biến NOVA {group}."
     },
     "base.additive_high": {
       "label": "Phụ gia cần chú ý",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "Hàm lượng trái cây, rau, đậu và hạt",
-      "evidence": "Open Food Facts ước tính {percent}% hàm lượng trái cây, rau, đậu và hạt từ danh sách thành phần."
+      "evidence": "Hàm lượng trái cây, rau, đậu và hạt ước tính {percent}% từ danh sách thành phần."
     },
     "base.palm_oil": {
       "label": "Có dầu cọ",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "Không đủ dữ liệu cho mục tiêu của bạn",
       "evidence": "Không có giá trị nào cần cho các mục tiêu bạn chọn, nên điểm số chỉ phản ánh chất lượng chung của sản phẩm."
+    },
+    "evidence": {
+      "ingredient_analysis": "phân tích thành phần",
+      "declared_allergens": "chất gây dị ứng đã công bố"
     }
   },
   "summary": {

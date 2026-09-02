@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "Open Food Facts публікує для цього продукту Nutri-Score {grade}; він визначає базову поживну якість до врахування ваших цілей."
+      "evidence": "Для продукту вказано Nutri-Score {grade} — це базова якість харчування до врахування ваших цілей."
     },
     "base.nutrition_profile": {
       "label": "Поживний профіль",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts відносить цей продукт до групи NOVA {group}."
+      "evidence": "Продукт віднесено до групи обробки NOVA {group}."
     },
     "base.additive_high": {
       "label": "Добавка, що потребує уваги",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "Вміст фруктів, овочів і горіхів",
-      "evidence": "Open Food Facts оцінює частку фруктів, овочів, бобових і горіхів у {percent}% за списком інгредієнтів."
+      "evidence": "Частка фруктів, овочів, бобових і горіхів — {percent}%, оцінена за списком інгредієнтів."
     },
     "base.palm_oil": {
       "label": "Містить пальмову олію",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "Недостатньо даних для ваших цілей",
       "evidence": "Жодне зі значень, потрібних для вибраних цілей, недоступне, тому бал відображає лише загальну якість продукту."
+    },
+    "evidence": {
+      "ingredient_analysis": "аналіз складу",
+      "declared_allergens": "заявлені алергени"
     }
   },
   "summary": {

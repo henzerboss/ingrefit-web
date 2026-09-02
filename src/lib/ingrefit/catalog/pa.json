@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "Open Food Facts ਇਸ ਉਤਪਾਦ ਲਈ Nutri-Score {grade} ਪ੍ਰਕਾਸ਼ਿਤ ਕਰਦਾ ਹੈ; ਇਹ ਤੁਹਾਡੇ ਟੀਚੇ ਲਾਗੂ ਹੋਣ ਤੋਂ ਪਹਿਲਾਂ ਮੂਲ ਪੋਸ਼ਣ ਗੁਣਵੱਤਾ ਨਿਰਧਾਰਤ ਕਰਦਾ ਹੈ।"
+      "evidence": "ਇਸ ਉਤਪਾਦ ਦਾ Nutri-Score {grade}; ਇਹ ਤੁਹਾਡੇ ਟੀਚਿਆਂ ਤੋਂ ਪਹਿਲਾਂ ਦੀ ਬੁਨਿਆਦੀ ਪੋਸ਼ਣ ਗੁਣਵੱਤਾ ਹੈ।"
     },
     "base.nutrition_profile": {
       "label": "ਪੋਸ਼ਣ ਪ੍ਰੋਫਾਈਲ",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts ਇਸ ਉਤਪਾਦ ਨੂੰ NOVA ਸਮੂਹ {group} ਵਿੱਚ ਵਰਗੀਕ੍ਰਿਤ ਕਰਦਾ ਹੈ।"
+      "evidence": "NOVA ਪ੍ਰੋਸੈਸਿੰਗ ਗਰੁੱਪ {group} ਵਿੱਚ ਸ਼੍ਰੇਣੀਬੱਧ।"
     },
     "base.additive_high": {
       "label": "ਧਿਆਨ ਦੇਣ ਯੋਗ ਐਡੀਟਿਵ",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "ਫਲ, ਸਬਜ਼ੀਆਂ, ਦਾਲਾਂ ਅਤੇ ਨਟਸ ਦੀ ਮਾਤਰਾ",
-      "evidence": "Open Food Facts ਘਟਕ ਸੂਚੀ ਤੋਂ ਫਲ, ਸਬਜ਼ੀਆਂ, ਦਾਲਾਂ ਅਤੇ ਨਟਸ ਦੀ ਮਾਤਰਾ {percent}% ਅੰਦਾਜ਼ਾ ਕਰਦਾ ਹੈ।"
+      "evidence": "ਸਮੱਗਰੀ ਸੂਚੀ ਤੋਂ ਫਲ, ਸਬਜ਼ੀ, ਦਾਲ ਅਤੇ ਸੁੱਕੇ ਮੇਵੇ ਦੀ ਮਾਤਰਾ {percent}% ਅੰਦਾਜ਼ੀ।"
     },
     "base.palm_oil": {
       "label": "ਪਾਮ ਤੇਲ ਸ਼ਾਮਲ ਹੈ",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "ਤੁਹਾਡੇ ਟੀਚਿਆਂ ਲਈ ਕਾਫ਼ੀ ਡੇਟਾ ਨਹੀਂ",
       "evidence": "ਤੁਹਾਡੇ ਚੁਣੇ ਟੀਚਿਆਂ ਲਈ ਲੋੜੀਂਦਾ ਕੋਈ ਵੀ ਮੁੱਲ ਉਪਲਬਧ ਨਹੀਂ, ਇਸ ਲਈ ਸਕੋਰ ਕੇਵਲ ਉਤਪਾਦ ਦੀ ਆਮ ਗੁਣਵੱਤਾ ਦਿਖਾਉਂਦਾ ਹੈ।"
+    },
+    "evidence": {
+      "ingredient_analysis": "ਸਮੱਗਰੀ ਵਿਸ਼ਲੇਸ਼ਣ",
+      "declared_allergens": "ਘੋਸ਼ਿਤ ਐਲਰਜਨ"
     }
   },
   "summary": {

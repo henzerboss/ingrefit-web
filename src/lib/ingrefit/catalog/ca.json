@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "Open Food Facts publica un Nutri-Score {grade} per a aquest producte; estableix la qualitat nutricional de base abans d’aplicar els teus objectius."
+      "evidence": "Nutri-Score {grade} per a aquest producte; és la qualitat nutricional base abans dels teus objectius."
     },
     "base.nutrition_profile": {
       "label": "Perfil nutricional",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts classifica aquest producte en el grup NOVA {group}."
+      "evidence": "Classificat en el grup de processament NOVA {group}."
     },
     "base.additive_high": {
       "label": "Additiu que requereix atenció",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "Contingut de fruita, verdura i fruits de closca",
-      "evidence": "Open Food Facts estima un {percent}% de fruita, verdura, llegums i fruits de closca a partir de la llista d’ingredients."
+      "evidence": "Contingut de fruita, verdura, llegums i fruits secs estimat en un {percent}% pels ingredients."
     },
     "base.palm_oil": {
       "label": "Conté oli de palma",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "No hi ha prou dades per als teus objectius",
       "evidence": "No està disponible cap dels valors necessaris per als objectius seleccionats, de manera que la puntuació només reflecteix la qualitat general del producte."
+    },
+    "evidence": {
+      "ingredient_analysis": "anàlisi d’ingredients",
+      "declared_allergens": "al·lèrgens declarats"
     }
   },
   "summary": {

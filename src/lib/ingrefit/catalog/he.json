@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "Open Food Facts מפרסם Nutri-Score {grade} למוצר הזה; הוא קובע את איכות התזונה הבסיסית לפני החלת היעדים שלך."
+      "evidence": "Nutri-Score {grade} למוצר הזה; זו איכות התזונה הבסיסית לפני היעדים שלך."
     },
     "base.nutrition_profile": {
       "label": "פרופיל תזונתי",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts מסווג את המוצר הזה בקבוצת NOVA {group}."
+      "evidence": "מסווג בקבוצת עיבוד NOVA {group}."
     },
     "base.additive_high": {
       "label": "תוסף שדורש תשומת לב",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "תכולת פירות, ירקות, קטניות ואגוזים",
-      "evidence": "Open Food Facts מעריך {percent}% פירות, ירקות, קטניות ואגוזים על סמך רשימת הרכיבים."
+      "evidence": "תכולת פירות, ירקות, קטניות ואגוזים מוערכת ב-{percent}% לפי רשימת הרכיבים."
     },
     "base.palm_oil": {
       "label": "מכיל שמן דקלים",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "אין מספיק נתונים ליעדים שלך",
       "evidence": "אף אחד מהערכים הדרושים ליעדים שבחרת אינו זמין, ולכן הציון משקף רק את האיכות הכללית של המוצר."
+    },
+    "evidence": {
+      "ingredient_analysis": "ניתוח רכיבים",
+      "declared_allergens": "אלרגנים מוצהרים"
     }
   },
   "summary": {

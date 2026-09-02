@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "Open Food Facts указывает для продукта Nutri-Score {grade} — это базовое качество питания до учёта ваших целей."
+      "evidence": "Для продукта указан Nutri-Score {grade} — это базовое качество питания до учёта ваших целей."
     },
     "base.nutrition_profile": {
       "label": "Профиль питательности",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts относит продукт к группе NOVA {group}."
+      "evidence": "Продукт отнесён к группе обработки NOVA {group}."
     },
     "base.additive_high": {
       "label": "Добавка повышенного внимания",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "Доля фруктов, овощей и орехов",
-      "evidence": "Open Food Facts оценивает долю фруктов, овощей, бобовых и орехов в {percent}% по списку ингредиентов."
+      "evidence": "Доля фруктов, овощей, бобовых и орехов — {percent}%, оценена по списку ингредиентов."
     },
     "base.palm_oil": {
       "label": "Содержит пальмовое масло",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "Недостаточно данных для ваших целей",
       "evidence": "Значений, нужных для ваших целей, нет, поэтому балл отражает только общее качество продукта."
+    },
+    "evidence": {
+      "ingredient_analysis": "анализ состава",
+      "declared_allergens": "заявленные аллергены"
     }
   },
   "summary": {

@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "Inilalathala ng Open Food Facts ang Nutri-Score {grade} para sa produktong ito; ito ang nagtatakda ng batayang kalidad ng nutrisyon bago ilapat ang mga layunin mo."
+      "evidence": "Nutri-Score {grade} para sa produktong ito; ito ang batayang kalidad bago ang iyong mga layunin."
     },
     "base.nutrition_profile": {
       "label": "Profile ng nutrisyon",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Inuuri ng Open Food Facts ang produktong ito sa pangkat NOVA {group}."
+      "evidence": "Nauuri sa NOVA processing group {group}."
     },
     "base.additive_high": {
       "label": "Sangkap na pandagdag na dapat pagtuunan ng pansin",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "Nilalaman ng prutas, gulay at mani",
-      "evidence": "Tinataya ng Open Food Facts na {percent}% ang prutas, gulay, legume at mani batay sa listahan ng mga sangkap."
+      "evidence": "Tinatayang {percent}% ang laman na prutas, gulay, munggo at mani batay sa sangkap."
     },
     "base.palm_oil": {
       "label": "May langis ng palma",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "Kulang ang datos para sa mga layunin mo",
       "evidence": "Wala sa mga halagang kailangan para sa mga pinili mong layunin ang magagamit, kaya pangkalahatang kalidad ng produkto lamang ang nakikita sa marka."
+    },
+    "evidence": {
+      "ingredient_analysis": "pagsusuri ng sangkap",
+      "declared_allergens": "idineklarang allergen"
     }
   },
   "summary": {

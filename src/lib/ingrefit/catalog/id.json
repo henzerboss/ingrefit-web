@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "Open Food Facts menerbitkan Nutri-Score {grade} untuk produk ini; nilai tersebut menetapkan kualitas gizi dasar sebelum tujuan Anda diterapkan."
+      "evidence": "Nutri-Score {grade} untuk produk ini; kualitas gizi dasar sebelum tujuan Anda diterapkan."
     },
     "base.nutrition_profile": {
       "label": "Profil gizi",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Open Food Facts mengklasifikasikan produk ini dalam kelompok NOVA {group}."
+      "evidence": "Diklasifikasikan dalam kelompok pemrosesan NOVA {group}."
     },
     "base.additive_high": {
       "label": "Bahan tambahan yang perlu diperhatikan",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "Kandungan buah, sayur, kacang-kacangan, dan kacang pohon",
-      "evidence": "Open Food Facts memperkirakan {percent}% kandungan buah, sayur, polong-polongan, dan kacang dari daftar bahan."
+      "evidence": "Kandungan buah, sayur, kacang polong dan kacang diperkirakan {percent}% dari daftar bahan."
     },
     "base.palm_oil": {
       "label": "Mengandung minyak sawit",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "Data tidak cukup untuk tujuan Anda",
       "evidence": "Tidak ada nilai yang dibutuhkan untuk tujuan yang Anda pilih, sehingga skor hanya mencerminkan kualitas umum produk."
+    },
+    "evidence": {
+      "ingredient_analysis": "analisis bahan",
+      "declared_allergens": "alergen yang dinyatakan"
     }
   },
   "summary": {

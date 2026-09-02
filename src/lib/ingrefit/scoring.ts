@@ -856,29 +856,36 @@ const DIET_FALLBACK_TERMS: Partial<Record<DietId, string[]>> = {
 
 type DietVerdict = { status: 'conflict' | 'uncertain'; evidence: string } | null;
 
+/**
+ * `evidence` is a token, not a sentence.
+ *
+ * It used to be the literal string "Open Food Facts ingredient analysis", which
+ * was then interpolated into a translated sentence — so a Russian user read an
+ * English clause in brackets, and a contributed product was credited to a
+ * database it never came from. signalCatalog turns the token into words.
+ */
 function evaluateDiet(facts: ProductFacts, diet: DietId): DietVerdict {
   const analysis = facts.ingredientAnalysis;
 
   if (diet === 'vegan') {
-    if (analysis.vegan === 'no') return { status: 'conflict', evidence: 'Open Food Facts ingredient analysis' };
-    if (analysis.vegan === 'maybe') return { status: 'uncertain', evidence: 'Open Food Facts ingredient analysis' };
+    if (analysis.vegan === 'no') return { status: 'conflict', evidence: 'ingredient_analysis' };
+    if (analysis.vegan === 'maybe') return { status: 'uncertain', evidence: 'ingredient_analysis' };
   }
   if (diet === 'vegetarian') {
-    if (analysis.vegetarian === 'no') return { status: 'conflict', evidence: 'Open Food Facts ingredient analysis' };
-    if (analysis.vegetarian === 'maybe')
-      return { status: 'uncertain', evidence: 'Open Food Facts ingredient analysis' };
+    if (analysis.vegetarian === 'no') return { status: 'conflict', evidence: 'ingredient_analysis' };
+    if (analysis.vegetarian === 'maybe') return { status: 'uncertain', evidence: 'ingredient_analysis' };
   }
   if (diet === 'gluten_free') {
-    if (facts.allergenTags.includes('en:gluten')) return { status: 'conflict', evidence: 'declared allergens' };
+    if (facts.allergenTags.includes('en:gluten')) return { status: 'conflict', evidence: 'declared_allergens' };
     if (facts.labelTags.some((tag) => tag.includes('gluten-free'))) return null;
   }
   if (diet === 'dairy_free') {
-    if (facts.allergenTags.includes('en:milk')) return { status: 'conflict', evidence: 'declared allergens' };
+    if (facts.allergenTags.includes('en:milk')) return { status: 'conflict', evidence: 'declared_allergens' };
   }
   if (diet === 'pescatarian') {
     const isFish = facts.allergenTags.includes('en:fish') || facts.allergenTags.includes('en:crustaceans');
     if (analysis.vegetarian === 'no' && !isFish) {
-      return { status: 'uncertain', evidence: 'Open Food Facts ingredient analysis' };
+      return { status: 'uncertain', evidence: 'ingredient_analysis' };
     }
   }
 

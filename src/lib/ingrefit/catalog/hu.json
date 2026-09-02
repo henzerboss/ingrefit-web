@@ -160,7 +160,7 @@
     },
     "base.nutriscore": {
       "label": "Nutri-Score {grade}",
-      "evidence": "Az Open Food Facts Nutri-Score {grade} besorolást közöl ehhez a termékhez; ez határozza meg az alapvető táplálkozási minőséget a céljai alkalmazása előtt."
+      "evidence": "Nutri-Score {grade} ehhez a termékhez; ez az alapvető tápérték a céljai előtt."
     },
     "base.nutrition_profile": {
       "label": "Táplálkozási profil",
@@ -172,7 +172,7 @@
     },
     "base.nova": {
       "label": "{novaLabel}",
-      "evidence": "Az Open Food Facts ezt a terméket a NOVA {group} csoportba sorolja."
+      "evidence": "A NOVA feldolgozási csoport {group} besorolású."
     },
     "base.additive_high": {
       "label": "Figyelmet igénylő adalékanyag",
@@ -188,7 +188,7 @@
     },
     "base.fruit_veg": {
       "label": "Gyümölcs-, zöldség- és diótartalom",
-      "evidence": "Az Open Food Facts az összetevők listája alapján {percent}% gyümölcs-, zöldség-, hüvelyes- és diótartalmat becsül."
+      "evidence": "A gyümölcs-, zöldség-, hüvelyes- és dióféle-tartalom az összetevők alapján {percent}%."
     },
     "base.palm_oil": {
       "label": "Pálmaolajat tartalmaz",
@@ -263,6 +263,10 @@
     "personal.no_data": {
       "label": "Nincs elég adat a céljaihoz",
       "evidence": "A kiválasztott céljaihoz szükséges értékek egyike sem érhető el, ezért a pontszám csak a termék általános minőségét tükrözi."
+    },
+    "evidence": {
+      "ingredient_analysis": "összetevő-elemzés",
+      "declared_allergens": "jelölt allergének"
     }
   },
   "summary": {
